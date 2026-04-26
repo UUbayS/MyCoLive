@@ -1,0 +1,212 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  PEMILIK
+  PENGELOLA
+  PENGHUNI
+}
+
+enum StatusKamar {
+  KOSONG
+  TERISI
+  MAINTENANCE
+}
+
+enum TipeKamar {
+  REGULER
+  VIP
+  STUDIO
+}
+
+enum StatusPemesanan {
+  MENUNGGU
+  DITERIMA
+  DITOLAK
+  SELESAI
+}
+
+enum StatusPembayaran {
+  MENUNGGU
+  DIVERIFIKASI
+  DITERIMA
+  DITOLAK
+}
+
+enum StatusKomplain {
+  BARU
+  DIPROSES
+  SELESAI
+}
+
+enum StatusDana {
+  MENUNGGU
+  DITERIMA
+  DITOLAK
+}
+
+enum StatusSewa {
+  AKTIF
+  BERAKHIR
+}
+
+model User {
+  id         String   @id @default(cuid())
+  username   String   @unique
+  email      String   @unique
+  password   String
+  nama       String
+  role       Role
+  no_telepon String?  @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  penghuni Penghuni?
+  operator Operator?
+
+  // Relation opposite: PEMILIK owns properti
+  properti Properti[]
+}
+
+model Properti {
+  id         String   @id @default(cuid())
+  nama       String
+  alamat     String
+  deskripsi  String?
+  fasilitas  String?
+  gambar     String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  admin_id String
+  admin    User   @relation(fields: [admin_id], references: [id])
+
+  kamar         Kamar[]
+  komplain      Komplain[]
+  operator      Operator[]
+  pemesanan     Pemesanan[]
+  pengajuanDana PengajuanDana[]
+}
+
+model Kamar {
+  id         String      @id @default(cuid())
+  nomor      String
+  tipe       TipeKamar   @default(REGULER)
+  harga      Int
+  status     StatusKamar @default(KOSONG)
+  deskripsi  String?
+  gambar     String?
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+
+  properti_id String
+  properti    Properti @relation(fields: [properti_id], references: [id])
+
+  pemesanan Pemesanan[]
+  penghuni  Penghuni?
+
+  @@unique([properti_id, nomor])
+}
+
+model Pemesanan {
+  id         String          @id @default(cuid())
+  tgl_masuk  DateTime
+  status     StatusPemesanan @default(MENUNGGU)
+  created_at DateTime        @default(now())
+  updated_at DateTime        @updatedAt
+
+  kamar_id String
+  kamar    Kamar  @relation(fields: [kamar_id], references: [id])
+
+  penghuni_id String
+  penghuni    Penghuni @relation(fields: [penghuni_id], references: [id])
+
+  properti_id String
+  properti    Properti @relation(fields: [properti_id], references: [id])
+
+  pembayaran Pembayaran?
+}
+
+model Pembayaran {
+  id         String           @id @default(cuid())
+  jumlah     Int
+  bukti      String?
+  status     StatusPembayaran @default(MENUNGGU)
+  tgl_bayar  DateTime?
+  created_at DateTime         @default(now())
+  updated_at DateTime         @updatedAt
+
+  pemesanan_id String    @unique
+  pemesanan    Pemesanan @relation(fields: [pemesanan_id], references: [id])
+}
+
+model Penghuni {
+  id           String     @id @default(cuid())
+  tgl_mulai    DateTime
+  tgl_berakhir DateTime?
+  status_sewa  StatusSewa @default(AKTIF)
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
+
+  kamar_id String? @unique
+  kamar    Kamar?  @relation(fields: [kamar_id], references: [id])
+
+  pemesanan Pemesanan[]
+  komplain  Komplain[]
+}
+
+model Operator {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
+
+  properti_id String
+  properti    Properti @relation(fields: [properti_id], references: [id])
+
+  // Relation opposite
+  pengajuanDana PengajuanDana[]
+
+  @@unique([user_id, properti_id])
+}
+
+model Komplain {
+  id         String         @id @default(cuid())
+  judul      String
+  deskripsi  String
+  status     StatusKomplain @default(BARU)
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt
+
+  penghuni_id String
+  penghuni    Penghuni @relation(fields: [penghuni_id], references: [id])
+
+  properti_id String
+  properti    Properti @relation(fields: [properti_id], references: [id])
+}
+
+model PengajuanDana {
+  id         String     @id @default(cuid())
+  jumlah     Int
+  deskripsi  String
+  status     StatusDana @default(MENUNGGU)
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+
+  operator_id String
+  operator    Operator @relation(fields: [operator_id], references: [id])
+
+  properti_id String
+  properti    Properti @relation(fields: [properti_id], references: [id])
+}
