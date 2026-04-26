@@ -90,6 +90,15 @@ export const TipeKamar: {
 export type TipeKamar = (typeof TipeKamar)[keyof typeof TipeKamar]
 
 
+export const JenisProperti: {
+  LAKI_LAKI: 'LAKI_LAKI',
+  PEREMPUAN: 'PEREMPUAN',
+  CAMPUR: 'CAMPUR'
+};
+
+export type JenisProperti = (typeof JenisProperti)[keyof typeof JenisProperti]
+
+
 export const StatusPemesanan: {
   MENUNGGU: 'MENUNGGU',
   DITERIMA: 'DITERIMA',
@@ -148,6 +157,10 @@ export const StatusKamar: typeof $Enums.StatusKamar
 export type TipeKamar = $Enums.TipeKamar
 
 export const TipeKamar: typeof $Enums.TipeKamar
+
+export type JenisProperti = $Enums.JenisProperti
+
+export const JenisProperti: typeof $Enums.JenisProperti
 
 export type StatusPemesanan = $Enums.StatusPemesanan
 
@@ -3090,9 +3103,9 @@ export namespace Prisma {
     id: string | null
     nama: string | null
     alamat: string | null
+    jenis: $Enums.JenisProperti | null
     deskripsi: string | null
-    fasilitas: string | null
-    gambar: string | null
+    kebijakan: string | null
     created_at: Date | null
     updated_at: Date | null
     admin_id: string | null
@@ -3102,9 +3115,9 @@ export namespace Prisma {
     id: string | null
     nama: string | null
     alamat: string | null
+    jenis: $Enums.JenisProperti | null
     deskripsi: string | null
-    fasilitas: string | null
-    gambar: string | null
+    kebijakan: string | null
     created_at: Date | null
     updated_at: Date | null
     admin_id: string | null
@@ -3114,8 +3127,9 @@ export namespace Prisma {
     id: number
     nama: number
     alamat: number
+    jenis: number
     deskripsi: number
-    fasilitas: number
+    kebijakan: number
     gambar: number
     created_at: number
     updated_at: number
@@ -3128,9 +3142,9 @@ export namespace Prisma {
     id?: true
     nama?: true
     alamat?: true
+    jenis?: true
     deskripsi?: true
-    fasilitas?: true
-    gambar?: true
+    kebijakan?: true
     created_at?: true
     updated_at?: true
     admin_id?: true
@@ -3140,9 +3154,9 @@ export namespace Prisma {
     id?: true
     nama?: true
     alamat?: true
+    jenis?: true
     deskripsi?: true
-    fasilitas?: true
-    gambar?: true
+    kebijakan?: true
     created_at?: true
     updated_at?: true
     admin_id?: true
@@ -3152,8 +3166,9 @@ export namespace Prisma {
     id?: true
     nama?: true
     alamat?: true
+    jenis?: true
     deskripsi?: true
-    fasilitas?: true
+    kebijakan?: true
     gambar?: true
     created_at?: true
     updated_at?: true
@@ -3237,9 +3252,10 @@ export namespace Prisma {
     id: string
     nama: string
     alamat: string
+    jenis: $Enums.JenisProperti | null
     deskripsi: string | null
-    fasilitas: string | null
-    gambar: string | null
+    kebijakan: string | null
+    gambar: string[]
     created_at: Date
     updated_at: Date
     admin_id: string
@@ -3266,8 +3282,9 @@ export namespace Prisma {
     id?: boolean
     nama?: boolean
     alamat?: boolean
+    jenis?: boolean
     deskripsi?: boolean
-    fasilitas?: boolean
+    kebijakan?: boolean
     gambar?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -3285,8 +3302,9 @@ export namespace Prisma {
     id?: boolean
     nama?: boolean
     alamat?: boolean
+    jenis?: boolean
     deskripsi?: boolean
-    fasilitas?: boolean
+    kebijakan?: boolean
     gambar?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -3298,8 +3316,9 @@ export namespace Prisma {
     id?: boolean
     nama?: boolean
     alamat?: boolean
+    jenis?: boolean
     deskripsi?: boolean
-    fasilitas?: boolean
+    kebijakan?: boolean
     gambar?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -3311,15 +3330,16 @@ export namespace Prisma {
     id?: boolean
     nama?: boolean
     alamat?: boolean
+    jenis?: boolean
     deskripsi?: boolean
-    fasilitas?: boolean
+    kebijakan?: boolean
     gambar?: boolean
     created_at?: boolean
     updated_at?: boolean
     admin_id?: boolean
   }
 
-  export type PropertiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nama" | "alamat" | "deskripsi" | "fasilitas" | "gambar" | "created_at" | "updated_at" | "admin_id", ExtArgs["result"]["properti"]>
+  export type PropertiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nama" | "alamat" | "jenis" | "deskripsi" | "kebijakan" | "gambar" | "created_at" | "updated_at" | "admin_id", ExtArgs["result"]["properti"]>
   export type PropertiInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | UserDefaultArgs<ExtArgs>
     kamar?: boolean | Properti$kamarArgs<ExtArgs>
@@ -3350,9 +3370,10 @@ export namespace Prisma {
       id: string
       nama: string
       alamat: string
+      jenis: $Enums.JenisProperti | null
       deskripsi: string | null
-      fasilitas: string | null
-      gambar: string | null
+      kebijakan: string | null
+      gambar: string[]
       created_at: Date
       updated_at: Date
       admin_id: string
@@ -3788,9 +3809,10 @@ export namespace Prisma {
     readonly id: FieldRef<"Properti", 'String'>
     readonly nama: FieldRef<"Properti", 'String'>
     readonly alamat: FieldRef<"Properti", 'String'>
+    readonly jenis: FieldRef<"Properti", 'JenisProperti'>
     readonly deskripsi: FieldRef<"Properti", 'String'>
-    readonly fasilitas: FieldRef<"Properti", 'String'>
-    readonly gambar: FieldRef<"Properti", 'String'>
+    readonly kebijakan: FieldRef<"Properti", 'String'>
+    readonly gambar: FieldRef<"Properti", 'String[]'>
     readonly created_at: FieldRef<"Properti", 'DateTime'>
     readonly updated_at: FieldRef<"Properti", 'DateTime'>
     readonly admin_id: FieldRef<"Properti", 'String'>
@@ -12400,8 +12422,9 @@ export namespace Prisma {
     id: 'id',
     nama: 'nama',
     alamat: 'alamat',
+    jenis: 'jenis',
     deskripsi: 'deskripsi',
-    fasilitas: 'fasilitas',
+    kebijakan: 'kebijakan',
     gambar: 'gambar',
     created_at: 'created_at',
     updated_at: 'updated_at',
@@ -12576,6 +12599,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'JenisProperti'
+   */
+  export type EnumJenisPropertiFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JenisProperti'>
+    
+
+
+  /**
+   * Reference to a field of type 'JenisProperti[]'
+   */
+  export type ListEnumJenisPropertiFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JenisProperti[]'>
     
 
 
@@ -12796,9 +12833,10 @@ export namespace Prisma {
     id?: StringFilter<"Properti"> | string
     nama?: StringFilter<"Properti"> | string
     alamat?: StringFilter<"Properti"> | string
+    jenis?: EnumJenisPropertiNullableFilter<"Properti"> | $Enums.JenisProperti | null
     deskripsi?: StringNullableFilter<"Properti"> | string | null
-    fasilitas?: StringNullableFilter<"Properti"> | string | null
-    gambar?: StringNullableFilter<"Properti"> | string | null
+    kebijakan?: StringNullableFilter<"Properti"> | string | null
+    gambar?: StringNullableListFilter<"Properti">
     created_at?: DateTimeFilter<"Properti"> | Date | string
     updated_at?: DateTimeFilter<"Properti"> | Date | string
     admin_id?: StringFilter<"Properti"> | string
@@ -12814,9 +12852,10 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    jenis?: SortOrderInput | SortOrder
     deskripsi?: SortOrderInput | SortOrder
-    fasilitas?: SortOrderInput | SortOrder
-    gambar?: SortOrderInput | SortOrder
+    kebijakan?: SortOrderInput | SortOrder
+    gambar?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     admin_id?: SortOrder
@@ -12835,9 +12874,10 @@ export namespace Prisma {
     NOT?: PropertiWhereInput | PropertiWhereInput[]
     nama?: StringFilter<"Properti"> | string
     alamat?: StringFilter<"Properti"> | string
+    jenis?: EnumJenisPropertiNullableFilter<"Properti"> | $Enums.JenisProperti | null
     deskripsi?: StringNullableFilter<"Properti"> | string | null
-    fasilitas?: StringNullableFilter<"Properti"> | string | null
-    gambar?: StringNullableFilter<"Properti"> | string | null
+    kebijakan?: StringNullableFilter<"Properti"> | string | null
+    gambar?: StringNullableListFilter<"Properti">
     created_at?: DateTimeFilter<"Properti"> | Date | string
     updated_at?: DateTimeFilter<"Properti"> | Date | string
     admin_id?: StringFilter<"Properti"> | string
@@ -12853,9 +12893,10 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    jenis?: SortOrderInput | SortOrder
     deskripsi?: SortOrderInput | SortOrder
-    fasilitas?: SortOrderInput | SortOrder
-    gambar?: SortOrderInput | SortOrder
+    kebijakan?: SortOrderInput | SortOrder
+    gambar?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     admin_id?: SortOrder
@@ -12871,9 +12912,10 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Properti"> | string
     nama?: StringWithAggregatesFilter<"Properti"> | string
     alamat?: StringWithAggregatesFilter<"Properti"> | string
+    jenis?: EnumJenisPropertiNullableWithAggregatesFilter<"Properti"> | $Enums.JenisProperti | null
     deskripsi?: StringNullableWithAggregatesFilter<"Properti"> | string | null
-    fasilitas?: StringNullableWithAggregatesFilter<"Properti"> | string | null
-    gambar?: StringNullableWithAggregatesFilter<"Properti"> | string | null
+    kebijakan?: StringNullableWithAggregatesFilter<"Properti"> | string | null
+    gambar?: StringNullableListFilter<"Properti">
     created_at?: DateTimeWithAggregatesFilter<"Properti"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Properti"> | Date | string
     admin_id?: StringWithAggregatesFilter<"Properti"> | string
@@ -13508,9 +13550,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin: UserCreateNestedOneWithoutPropertiInput
@@ -13525,9 +13568,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin_id: string
@@ -13542,9 +13586,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
@@ -13559,9 +13604,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -13576,9 +13622,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin_id: string
@@ -13588,9 +13635,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13599,9 +13647,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -14319,6 +14368,21 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumJenisPropertiNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisProperti | EnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    in?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumJenisPropertiNullableFilter<$PrismaModel> | $Enums.JenisProperti | null
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -14378,8 +14442,9 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    jenis?: SortOrder
     deskripsi?: SortOrder
-    fasilitas?: SortOrder
+    kebijakan?: SortOrder
     gambar?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -14390,9 +14455,9 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    jenis?: SortOrder
     deskripsi?: SortOrder
-    fasilitas?: SortOrder
-    gambar?: SortOrder
+    kebijakan?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     admin_id?: SortOrder
@@ -14402,12 +14467,22 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    jenis?: SortOrder
     deskripsi?: SortOrder
-    fasilitas?: SortOrder
-    gambar?: SortOrder
+    kebijakan?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     admin_id?: SortOrder
+  }
+
+  export type EnumJenisPropertiNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisProperti | EnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    in?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumJenisPropertiNullableWithAggregatesFilter<$PrismaModel> | $Enums.JenisProperti | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumJenisPropertiNullableFilter<$PrismaModel>
+    _max?: NestedEnumJenisPropertiNullableFilter<$PrismaModel>
   }
 
   export type EnumTipeKamarFilter<$PrismaModel = never> = {
@@ -15000,6 +15075,10 @@ export namespace Prisma {
     deleteMany?: PropertiScalarWhereInput | PropertiScalarWhereInput[]
   }
 
+  export type PropertiCreategambarInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutPropertiInput = {
     create?: XOR<UserCreateWithoutPropertiInput, UserUncheckedCreateWithoutPropertiInput>
     connectOrCreate?: UserCreateOrConnectWithoutPropertiInput
@@ -15074,6 +15153,15 @@ export namespace Prisma {
     connectOrCreate?: PengajuanDanaCreateOrConnectWithoutPropertiInput | PengajuanDanaCreateOrConnectWithoutPropertiInput[]
     createMany?: PengajuanDanaCreateManyPropertiInputEnvelope
     connect?: PengajuanDanaWhereUniqueInput | PengajuanDanaWhereUniqueInput[]
+  }
+
+  export type NullableEnumJenisPropertiFieldUpdateOperationsInput = {
+    set?: $Enums.JenisProperti | null
+  }
+
+  export type PropertiUpdategambarInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type UserUpdateOneRequiredWithoutPropertiNestedInput = {
@@ -15806,6 +15894,23 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumJenisPropertiNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisProperti | EnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    in?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumJenisPropertiNullableFilter<$PrismaModel> | $Enums.JenisProperti | null
+  }
+
+  export type NestedEnumJenisPropertiNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisProperti | EnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    in?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumJenisPropertiNullableWithAggregatesFilter<$PrismaModel> | $Enums.JenisProperti | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumJenisPropertiNullableFilter<$PrismaModel>
+    _max?: NestedEnumJenisPropertiNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumTipeKamarFilter<$PrismaModel = never> = {
     equals?: $Enums.TipeKamar | EnumTipeKamarFieldRefInput<$PrismaModel>
     in?: $Enums.TipeKamar[] | ListEnumTipeKamarFieldRefInput<$PrismaModel>
@@ -16031,9 +16136,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     kamar?: KamarCreateNestedManyWithoutPropertiInput
@@ -16047,9 +16153,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
@@ -16154,9 +16261,10 @@ export namespace Prisma {
     id?: StringFilter<"Properti"> | string
     nama?: StringFilter<"Properti"> | string
     alamat?: StringFilter<"Properti"> | string
+    jenis?: EnumJenisPropertiNullableFilter<"Properti"> | $Enums.JenisProperti | null
     deskripsi?: StringNullableFilter<"Properti"> | string | null
-    fasilitas?: StringNullableFilter<"Properti"> | string | null
-    gambar?: StringNullableFilter<"Properti"> | string | null
+    kebijakan?: StringNullableFilter<"Properti"> | string | null
+    gambar?: StringNullableListFilter<"Properti">
     created_at?: DateTimeFilter<"Properti"> | Date | string
     updated_at?: DateTimeFilter<"Properti"> | Date | string
     admin_id?: StringFilter<"Properti"> | string
@@ -16543,9 +16651,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin: UserCreateNestedOneWithoutPropertiInput
@@ -16559,9 +16668,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin_id: string
@@ -16652,9 +16762,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
@@ -16668,9 +16779,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -16797,9 +16909,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin: UserCreateNestedOneWithoutPropertiInput
@@ -16813,9 +16926,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin_id: string
@@ -16944,9 +17058,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
@@ -16960,9 +17075,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -17338,9 +17454,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin: UserCreateNestedOneWithoutPropertiInput
@@ -17354,9 +17471,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin_id: string
@@ -17455,9 +17573,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
@@ -17471,9 +17590,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -17532,9 +17652,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin: UserCreateNestedOneWithoutPropertiInput
@@ -17548,9 +17669,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin_id: string
@@ -17615,9 +17737,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
@@ -17631,9 +17754,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -17668,9 +17792,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin: UserCreateNestedOneWithoutPropertiInput
@@ -17684,9 +17809,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     admin_id: string
@@ -17743,9 +17869,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
@@ -17759,9 +17886,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -17775,9 +17903,10 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
-    fasilitas?: string | null
-    gambar?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -17786,9 +17915,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
@@ -17802,9 +17932,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
@@ -17818,9 +17949,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: NullableStringFieldUpdateOperationsInput | string | null
-    gambar?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

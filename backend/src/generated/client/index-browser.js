@@ -136,8 +136,9 @@ exports.Prisma.PropertiScalarFieldEnum = {
   id: 'id',
   nama: 'nama',
   alamat: 'alamat',
+  jenis: 'jenis',
   deskripsi: 'deskripsi',
-  fasilitas: 'fasilitas',
+  kebijakan: 'kebijakan',
   gambar: 'gambar',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -238,6 +239,12 @@ exports.Role = exports.$Enums.Role = {
   PEMILIK: 'PEMILIK',
   PENGELOLA: 'PENGELOLA',
   PENGHUNI: 'PENGHUNI'
+};
+
+exports.JenisProperti = exports.$Enums.JenisProperti = {
+  LAKI_LAKI: 'LAKI_LAKI',
+  PEREMPUAN: 'PEREMPUAN',
+  CAMPUR: 'CAMPUR'
 };
 
 exports.TipeKamar = exports.$Enums.TipeKamar = {

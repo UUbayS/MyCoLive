@@ -25,6 +25,12 @@ enum TipeKamar {
   STUDIO
 }
 
+enum JenisProperti {
+  LAKI_LAKI
+  PEREMPUAN
+  CAMPUR
+}
+
 enum StatusPemesanan {
   MENUNGGU
   DITERIMA
@@ -78,9 +84,10 @@ model Properti {
   id          String   @id @default(cuid())
   nama        String
   alamat      String
+  jenis       JenisProperti?
   deskripsi   String?
-  fasilitas  String?
-  gambar     String?
+  kebijakan  String?
+  gambar     String[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
