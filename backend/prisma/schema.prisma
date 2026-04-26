@@ -105,10 +105,12 @@ model Kamar {
   id          String   @id @default(cuid())
   nomor       String
   tipe        TipeKamar @default(REGULER)
-  harga       Int
-  status      StatusKamar @default(KOSONG)
+  luas        String?
+  fasilitas  String[]
   deskripsi   String?
-  gambar     String?
+  tarif      Json?
+  gambar     String[]
+  status     StatusKamar @default(KOSONG)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
