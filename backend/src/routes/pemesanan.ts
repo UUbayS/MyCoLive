@@ -233,6 +233,24 @@ app.get("/:id", async (c) => {
       );
     }
 
+    const isOwner = pemesanan.properti.admin_id === user.userId;
+    const isPenghuni = pemesanan.penghuni.user_id === user.userId;
+    
+    let isPengelola = false;
+    if (user.role === "PENGELOLA") {
+      const operator = await prisma.user.findFirst({
+        where: { id: user.userId, properti_ids: { has: pemesanan.properti_id } }
+      });
+      isPengelola = !!operator;
+    }
+
+    if (!isOwner && !isPenghuni && !isPengelola) {
+      return c.json(
+        { status: "error", message: "Akses ditolak" },
+        403
+      );
+    }
+
     return c.json({
       status: "success",
       data: pemesanan,
