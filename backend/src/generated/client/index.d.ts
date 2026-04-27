@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model AdminSettings
+ * 
+ */
+export type AdminSettings = $Result.DefaultSelection<Prisma.$AdminSettingsPayload>
+/**
  * Model Properti
  * 
  */
@@ -312,6 +317,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adminSettings`: Exposes CRUD operations for the **AdminSettings** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminSettings
+    * const adminSettings = await prisma.adminSettings.findMany()
+    * ```
+    */
+  get adminSettings(): Prisma.AdminSettingsDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.properti`: Exposes CRUD operations for the **Properti** model.
@@ -827,6 +842,7 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    AdminSettings: 'AdminSettings',
     Properti: 'Properti',
     Kamar: 'Kamar',
     Pemesanan: 'Pemesanan',
@@ -850,7 +866,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "properti" | "kamar" | "pemesanan" | "pembayaran" | "penghuni" | "operator" | "komplain" | "pengajuanDana"
+      modelProps: "user" | "adminSettings" | "properti" | "kamar" | "pemesanan" | "pembayaran" | "penghuni" | "operator" | "komplain" | "pengajuanDana"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -925,6 +941,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdminSettings: {
+        payload: Prisma.$AdminSettingsPayload<ExtArgs>
+        fields: Prisma.AdminSettingsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminSettingsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminSettingsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminSettingsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminSettingsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload>
+          }
+          findMany: {
+            args: Prisma.AdminSettingsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload>[]
+          }
+          create: {
+            args: Prisma.AdminSettingsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload>
+          }
+          createMany: {
+            args: Prisma.AdminSettingsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminSettingsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminSettingsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload>
+          }
+          update: {
+            args: Prisma.AdminSettingsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminSettingsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminSettingsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminSettingsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminSettingsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSettingsPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminSettingsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminSettings>
+          }
+          groupBy: {
+            args: Prisma.AdminSettingsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminSettingsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminSettingsCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminSettingsCountAggregateOutputType> | number
           }
         }
       }
@@ -1629,6 +1719,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    adminSettings?: AdminSettingsOmit
     properti?: PropertiOmit
     kamar?: KamarOmit
     pemesanan?: PemesananOmit
@@ -2115,6 +2206,7 @@ export namespace Prisma {
     penghuni?: boolean | User$penghuniArgs<ExtArgs>
     operator?: boolean | User$operatorArgs<ExtArgs>
     properti?: boolean | User$propertiArgs<ExtArgs>
+    settings?: boolean | User$settingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2159,6 +2251,7 @@ export namespace Prisma {
     penghuni?: boolean | User$penghuniArgs<ExtArgs>
     operator?: boolean | User$operatorArgs<ExtArgs>
     properti?: boolean | User$propertiArgs<ExtArgs>
+    settings?: boolean | User$settingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2170,6 +2263,7 @@ export namespace Prisma {
       penghuni: Prisma.$PenghuniPayload<ExtArgs> | null
       operator: Prisma.$OperatorPayload<ExtArgs> | null
       properti: Prisma.$PropertiPayload<ExtArgs>[]
+      settings: Prisma.$AdminSettingsPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2578,6 +2672,7 @@ export namespace Prisma {
     penghuni<T extends User$penghuniArgs<ExtArgs> = {}>(args?: Subset<T, User$penghuniArgs<ExtArgs>>): Prisma__PenghuniClient<$Result.GetResult<Prisma.$PenghuniPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     operator<T extends User$operatorArgs<ExtArgs> = {}>(args?: Subset<T, User$operatorArgs<ExtArgs>>): Prisma__OperatorClient<$Result.GetResult<Prisma.$OperatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     properti<T extends User$propertiArgs<ExtArgs> = {}>(args?: Subset<T, User$propertiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3071,6 +3166,25 @@ export namespace Prisma {
   }
 
   /**
+   * User.settings
+   */
+  export type User$settingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    where?: AdminSettingsWhereInput
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3086,6 +3200,1095 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdminSettings
+   */
+
+  export type AggregateAdminSettings = {
+    _count: AdminSettingsCountAggregateOutputType | null
+    _min: AdminSettingsMinAggregateOutputType | null
+    _max: AdminSettingsMaxAggregateOutputType | null
+  }
+
+  export type AdminSettingsMinAggregateOutputType = {
+    id: string | null
+    nama_rekening: string | null
+    nomor_rekening: string | null
+    bank: string | null
+    qris_image: string | null
+    updated_at: Date | null
+    user_id: string | null
+  }
+
+  export type AdminSettingsMaxAggregateOutputType = {
+    id: string | null
+    nama_rekening: string | null
+    nomor_rekening: string | null
+    bank: string | null
+    qris_image: string | null
+    updated_at: Date | null
+    user_id: string | null
+  }
+
+  export type AdminSettingsCountAggregateOutputType = {
+    id: number
+    nama_rekening: number
+    nomor_rekening: number
+    bank: number
+    qris_image: number
+    updated_at: number
+    user_id: number
+    _all: number
+  }
+
+
+  export type AdminSettingsMinAggregateInputType = {
+    id?: true
+    nama_rekening?: true
+    nomor_rekening?: true
+    bank?: true
+    qris_image?: true
+    updated_at?: true
+    user_id?: true
+  }
+
+  export type AdminSettingsMaxAggregateInputType = {
+    id?: true
+    nama_rekening?: true
+    nomor_rekening?: true
+    bank?: true
+    qris_image?: true
+    updated_at?: true
+    user_id?: true
+  }
+
+  export type AdminSettingsCountAggregateInputType = {
+    id?: true
+    nama_rekening?: true
+    nomor_rekening?: true
+    bank?: true
+    qris_image?: true
+    updated_at?: true
+    user_id?: true
+    _all?: true
+  }
+
+  export type AdminSettingsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminSettings to aggregate.
+     */
+    where?: AdminSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSettings to fetch.
+     */
+    orderBy?: AdminSettingsOrderByWithRelationInput | AdminSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminSettings
+    **/
+    _count?: true | AdminSettingsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminSettingsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminSettingsMaxAggregateInputType
+  }
+
+  export type GetAdminSettingsAggregateType<T extends AdminSettingsAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminSettings]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminSettings[P]>
+      : GetScalarType<T[P], AggregateAdminSettings[P]>
+  }
+
+
+
+
+  export type AdminSettingsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminSettingsWhereInput
+    orderBy?: AdminSettingsOrderByWithAggregationInput | AdminSettingsOrderByWithAggregationInput[]
+    by: AdminSettingsScalarFieldEnum[] | AdminSettingsScalarFieldEnum
+    having?: AdminSettingsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminSettingsCountAggregateInputType | true
+    _min?: AdminSettingsMinAggregateInputType
+    _max?: AdminSettingsMaxAggregateInputType
+  }
+
+  export type AdminSettingsGroupByOutputType = {
+    id: string
+    nama_rekening: string | null
+    nomor_rekening: string | null
+    bank: string | null
+    qris_image: string | null
+    updated_at: Date
+    user_id: string
+    _count: AdminSettingsCountAggregateOutputType | null
+    _min: AdminSettingsMinAggregateOutputType | null
+    _max: AdminSettingsMaxAggregateOutputType | null
+  }
+
+  type GetAdminSettingsGroupByPayload<T extends AdminSettingsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminSettingsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminSettingsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminSettingsGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminSettingsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminSettingsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nama_rekening?: boolean
+    nomor_rekening?: boolean
+    bank?: boolean
+    qris_image?: boolean
+    updated_at?: boolean
+    user_id?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminSettings"]>
+
+  export type AdminSettingsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nama_rekening?: boolean
+    nomor_rekening?: boolean
+    bank?: boolean
+    qris_image?: boolean
+    updated_at?: boolean
+    user_id?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminSettings"]>
+
+  export type AdminSettingsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nama_rekening?: boolean
+    nomor_rekening?: boolean
+    bank?: boolean
+    qris_image?: boolean
+    updated_at?: boolean
+    user_id?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminSettings"]>
+
+  export type AdminSettingsSelectScalar = {
+    id?: boolean
+    nama_rekening?: boolean
+    nomor_rekening?: boolean
+    bank?: boolean
+    qris_image?: boolean
+    updated_at?: boolean
+    user_id?: boolean
+  }
+
+  export type AdminSettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nama_rekening" | "nomor_rekening" | "bank" | "qris_image" | "updated_at" | "user_id", ExtArgs["result"]["adminSettings"]>
+  export type AdminSettingsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AdminSettingsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AdminSettingsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AdminSettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminSettings"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      nama_rekening: string | null
+      nomor_rekening: string | null
+      bank: string | null
+      qris_image: string | null
+      updated_at: Date
+      user_id: string
+    }, ExtArgs["result"]["adminSettings"]>
+    composites: {}
+  }
+
+  type AdminSettingsGetPayload<S extends boolean | null | undefined | AdminSettingsDefaultArgs> = $Result.GetResult<Prisma.$AdminSettingsPayload, S>
+
+  type AdminSettingsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminSettingsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminSettingsCountAggregateInputType | true
+    }
+
+  export interface AdminSettingsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminSettings'], meta: { name: 'AdminSettings' } }
+    /**
+     * Find zero or one AdminSettings that matches the filter.
+     * @param {AdminSettingsFindUniqueArgs} args - Arguments to find a AdminSettings
+     * @example
+     * // Get one AdminSettings
+     * const adminSettings = await prisma.adminSettings.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminSettingsFindUniqueArgs>(args: SelectSubset<T, AdminSettingsFindUniqueArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminSettings that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminSettingsFindUniqueOrThrowArgs} args - Arguments to find a AdminSettings
+     * @example
+     * // Get one AdminSettings
+     * const adminSettings = await prisma.adminSettings.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminSettingsFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminSettingsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSettingsFindFirstArgs} args - Arguments to find a AdminSettings
+     * @example
+     * // Get one AdminSettings
+     * const adminSettings = await prisma.adminSettings.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminSettingsFindFirstArgs>(args?: SelectSubset<T, AdminSettingsFindFirstArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminSettings that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSettingsFindFirstOrThrowArgs} args - Arguments to find a AdminSettings
+     * @example
+     * // Get one AdminSettings
+     * const adminSettings = await prisma.adminSettings.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminSettingsFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminSettingsFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSettingsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminSettings
+     * const adminSettings = await prisma.adminSettings.findMany()
+     * 
+     * // Get first 10 AdminSettings
+     * const adminSettings = await prisma.adminSettings.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminSettingsWithIdOnly = await prisma.adminSettings.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminSettingsFindManyArgs>(args?: SelectSubset<T, AdminSettingsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminSettings.
+     * @param {AdminSettingsCreateArgs} args - Arguments to create a AdminSettings.
+     * @example
+     * // Create one AdminSettings
+     * const AdminSettings = await prisma.adminSettings.create({
+     *   data: {
+     *     // ... data to create a AdminSettings
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminSettingsCreateArgs>(args: SelectSubset<T, AdminSettingsCreateArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminSettings.
+     * @param {AdminSettingsCreateManyArgs} args - Arguments to create many AdminSettings.
+     * @example
+     * // Create many AdminSettings
+     * const adminSettings = await prisma.adminSettings.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminSettingsCreateManyArgs>(args?: SelectSubset<T, AdminSettingsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminSettings and returns the data saved in the database.
+     * @param {AdminSettingsCreateManyAndReturnArgs} args - Arguments to create many AdminSettings.
+     * @example
+     * // Create many AdminSettings
+     * const adminSettings = await prisma.adminSettings.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminSettings and only return the `id`
+     * const adminSettingsWithIdOnly = await prisma.adminSettings.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminSettingsCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminSettingsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminSettings.
+     * @param {AdminSettingsDeleteArgs} args - Arguments to delete one AdminSettings.
+     * @example
+     * // Delete one AdminSettings
+     * const AdminSettings = await prisma.adminSettings.delete({
+     *   where: {
+     *     // ... filter to delete one AdminSettings
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminSettingsDeleteArgs>(args: SelectSubset<T, AdminSettingsDeleteArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminSettings.
+     * @param {AdminSettingsUpdateArgs} args - Arguments to update one AdminSettings.
+     * @example
+     * // Update one AdminSettings
+     * const adminSettings = await prisma.adminSettings.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminSettingsUpdateArgs>(args: SelectSubset<T, AdminSettingsUpdateArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminSettings.
+     * @param {AdminSettingsDeleteManyArgs} args - Arguments to filter AdminSettings to delete.
+     * @example
+     * // Delete a few AdminSettings
+     * const { count } = await prisma.adminSettings.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminSettingsDeleteManyArgs>(args?: SelectSubset<T, AdminSettingsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSettingsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminSettings
+     * const adminSettings = await prisma.adminSettings.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminSettingsUpdateManyArgs>(args: SelectSubset<T, AdminSettingsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminSettings and returns the data updated in the database.
+     * @param {AdminSettingsUpdateManyAndReturnArgs} args - Arguments to update many AdminSettings.
+     * @example
+     * // Update many AdminSettings
+     * const adminSettings = await prisma.adminSettings.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminSettings and only return the `id`
+     * const adminSettingsWithIdOnly = await prisma.adminSettings.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminSettingsUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminSettingsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminSettings.
+     * @param {AdminSettingsUpsertArgs} args - Arguments to update or create a AdminSettings.
+     * @example
+     * // Update or create a AdminSettings
+     * const adminSettings = await prisma.adminSettings.upsert({
+     *   create: {
+     *     // ... data to create a AdminSettings
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminSettings we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminSettingsUpsertArgs>(args: SelectSubset<T, AdminSettingsUpsertArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSettingsCountArgs} args - Arguments to filter AdminSettings to count.
+     * @example
+     * // Count the number of AdminSettings
+     * const count = await prisma.adminSettings.count({
+     *   where: {
+     *     // ... the filter for the AdminSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminSettingsCountArgs>(
+      args?: Subset<T, AdminSettingsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminSettingsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSettingsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminSettingsAggregateArgs>(args: Subset<T, AdminSettingsAggregateArgs>): Prisma.PrismaPromise<GetAdminSettingsAggregateType<T>>
+
+    /**
+     * Group by AdminSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSettingsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminSettingsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminSettingsGroupByArgs['orderBy'] }
+        : { orderBy?: AdminSettingsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminSettingsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminSettingsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminSettings model
+   */
+  readonly fields: AdminSettingsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminSettings.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminSettingsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminSettings model
+   */
+  interface AdminSettingsFieldRefs {
+    readonly id: FieldRef<"AdminSettings", 'String'>
+    readonly nama_rekening: FieldRef<"AdminSettings", 'String'>
+    readonly nomor_rekening: FieldRef<"AdminSettings", 'String'>
+    readonly bank: FieldRef<"AdminSettings", 'String'>
+    readonly qris_image: FieldRef<"AdminSettings", 'String'>
+    readonly updated_at: FieldRef<"AdminSettings", 'DateTime'>
+    readonly user_id: FieldRef<"AdminSettings", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminSettings findUnique
+   */
+  export type AdminSettingsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSettings to fetch.
+     */
+    where: AdminSettingsWhereUniqueInput
+  }
+
+  /**
+   * AdminSettings findUniqueOrThrow
+   */
+  export type AdminSettingsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSettings to fetch.
+     */
+    where: AdminSettingsWhereUniqueInput
+  }
+
+  /**
+   * AdminSettings findFirst
+   */
+  export type AdminSettingsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSettings to fetch.
+     */
+    where?: AdminSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSettings to fetch.
+     */
+    orderBy?: AdminSettingsOrderByWithRelationInput | AdminSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminSettings.
+     */
+    cursor?: AdminSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminSettings.
+     */
+    distinct?: AdminSettingsScalarFieldEnum | AdminSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSettings findFirstOrThrow
+   */
+  export type AdminSettingsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSettings to fetch.
+     */
+    where?: AdminSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSettings to fetch.
+     */
+    orderBy?: AdminSettingsOrderByWithRelationInput | AdminSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminSettings.
+     */
+    cursor?: AdminSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminSettings.
+     */
+    distinct?: AdminSettingsScalarFieldEnum | AdminSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSettings findMany
+   */
+  export type AdminSettingsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSettings to fetch.
+     */
+    where?: AdminSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSettings to fetch.
+     */
+    orderBy?: AdminSettingsOrderByWithRelationInput | AdminSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminSettings.
+     */
+    cursor?: AdminSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminSettings.
+     */
+    distinct?: AdminSettingsScalarFieldEnum | AdminSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSettings create
+   */
+  export type AdminSettingsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminSettings.
+     */
+    data: XOR<AdminSettingsCreateInput, AdminSettingsUncheckedCreateInput>
+  }
+
+  /**
+   * AdminSettings createMany
+   */
+  export type AdminSettingsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminSettings.
+     */
+    data: AdminSettingsCreateManyInput | AdminSettingsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminSettings createManyAndReturn
+   */
+  export type AdminSettingsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminSettings.
+     */
+    data: AdminSettingsCreateManyInput | AdminSettingsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminSettings update
+   */
+  export type AdminSettingsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminSettings.
+     */
+    data: XOR<AdminSettingsUpdateInput, AdminSettingsUncheckedUpdateInput>
+    /**
+     * Choose, which AdminSettings to update.
+     */
+    where: AdminSettingsWhereUniqueInput
+  }
+
+  /**
+   * AdminSettings updateMany
+   */
+  export type AdminSettingsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminSettings.
+     */
+    data: XOR<AdminSettingsUpdateManyMutationInput, AdminSettingsUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminSettings to update
+     */
+    where?: AdminSettingsWhereInput
+    /**
+     * Limit how many AdminSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminSettings updateManyAndReturn
+   */
+  export type AdminSettingsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminSettings.
+     */
+    data: XOR<AdminSettingsUpdateManyMutationInput, AdminSettingsUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminSettings to update
+     */
+    where?: AdminSettingsWhereInput
+    /**
+     * Limit how many AdminSettings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminSettings upsert
+   */
+  export type AdminSettingsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminSettings to update in case it exists.
+     */
+    where: AdminSettingsWhereUniqueInput
+    /**
+     * In case the AdminSettings found by the `where` argument doesn't exist, create a new AdminSettings with this data.
+     */
+    create: XOR<AdminSettingsCreateInput, AdminSettingsUncheckedCreateInput>
+    /**
+     * In case the AdminSettings was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminSettingsUpdateInput, AdminSettingsUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminSettings delete
+   */
+  export type AdminSettingsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
+    /**
+     * Filter which AdminSettings to delete.
+     */
+    where: AdminSettingsWhereUniqueInput
+  }
+
+  /**
+   * AdminSettings deleteMany
+   */
+  export type AdminSettingsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminSettings to delete
+     */
+    where?: AdminSettingsWhereInput
+    /**
+     * Limit how many AdminSettings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminSettings without action
+   */
+  export type AdminSettingsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSettings
+     */
+    select?: AdminSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSettings
+     */
+    omit?: AdminSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSettingsInclude<ExtArgs> | null
   }
 
 
@@ -5556,13 +6759,28 @@ export namespace Prisma {
 
   export type AggregatePemesanan = {
     _count: PemesananCountAggregateOutputType | null
+    _avg: PemesananAvgAggregateOutputType | null
+    _sum: PemesananSumAggregateOutputType | null
     _min: PemesananMinAggregateOutputType | null
     _max: PemesananMaxAggregateOutputType | null
   }
 
+  export type PemesananAvgAggregateOutputType = {
+    durasi_sewa: number | null
+    total_bayar: number | null
+  }
+
+  export type PemesananSumAggregateOutputType = {
+    durasi_sewa: number | null
+    total_bayar: number | null
+  }
+
   export type PemesananMinAggregateOutputType = {
     id: string | null
+    durasi_sewa: number | null
     tgl_masuk: Date | null
+    metode_bayar: string | null
+    total_bayar: number | null
     status: $Enums.StatusPemesanan | null
     created_at: Date | null
     updated_at: Date | null
@@ -5573,7 +6791,10 @@ export namespace Prisma {
 
   export type PemesananMaxAggregateOutputType = {
     id: string | null
+    durasi_sewa: number | null
     tgl_masuk: Date | null
+    metode_bayar: string | null
+    total_bayar: number | null
     status: $Enums.StatusPemesanan | null
     created_at: Date | null
     updated_at: Date | null
@@ -5584,7 +6805,10 @@ export namespace Prisma {
 
   export type PemesananCountAggregateOutputType = {
     id: number
+    durasi_sewa: number
     tgl_masuk: number
+    metode_bayar: number
+    total_bayar: number
     status: number
     created_at: number
     updated_at: number
@@ -5595,9 +6819,22 @@ export namespace Prisma {
   }
 
 
+  export type PemesananAvgAggregateInputType = {
+    durasi_sewa?: true
+    total_bayar?: true
+  }
+
+  export type PemesananSumAggregateInputType = {
+    durasi_sewa?: true
+    total_bayar?: true
+  }
+
   export type PemesananMinAggregateInputType = {
     id?: true
+    durasi_sewa?: true
     tgl_masuk?: true
+    metode_bayar?: true
+    total_bayar?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -5608,7 +6845,10 @@ export namespace Prisma {
 
   export type PemesananMaxAggregateInputType = {
     id?: true
+    durasi_sewa?: true
     tgl_masuk?: true
+    metode_bayar?: true
+    total_bayar?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -5619,7 +6859,10 @@ export namespace Prisma {
 
   export type PemesananCountAggregateInputType = {
     id?: true
+    durasi_sewa?: true
     tgl_masuk?: true
+    metode_bayar?: true
+    total_bayar?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -5667,6 +6910,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PemesananAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PemesananSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PemesananMinAggregateInputType
@@ -5697,13 +6952,18 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PemesananCountAggregateInputType | true
+    _avg?: PemesananAvgAggregateInputType
+    _sum?: PemesananSumAggregateInputType
     _min?: PemesananMinAggregateInputType
     _max?: PemesananMaxAggregateInputType
   }
 
   export type PemesananGroupByOutputType = {
     id: string
+    durasi_sewa: number
     tgl_masuk: Date
+    metode_bayar: string
+    total_bayar: number
     status: $Enums.StatusPemesanan
     created_at: Date
     updated_at: Date
@@ -5711,6 +6971,8 @@ export namespace Prisma {
     penghuni_id: string
     properti_id: string
     _count: PemesananCountAggregateOutputType | null
+    _avg: PemesananAvgAggregateOutputType | null
+    _sum: PemesananSumAggregateOutputType | null
     _min: PemesananMinAggregateOutputType | null
     _max: PemesananMaxAggregateOutputType | null
   }
@@ -5731,7 +6993,10 @@ export namespace Prisma {
 
   export type PemesananSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    durasi_sewa?: boolean
     tgl_masuk?: boolean
+    metode_bayar?: boolean
+    total_bayar?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -5746,7 +7011,10 @@ export namespace Prisma {
 
   export type PemesananSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    durasi_sewa?: boolean
     tgl_masuk?: boolean
+    metode_bayar?: boolean
+    total_bayar?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -5760,7 +7028,10 @@ export namespace Prisma {
 
   export type PemesananSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    durasi_sewa?: boolean
     tgl_masuk?: boolean
+    metode_bayar?: boolean
+    total_bayar?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -5774,7 +7045,10 @@ export namespace Prisma {
 
   export type PemesananSelectScalar = {
     id?: boolean
+    durasi_sewa?: boolean
     tgl_masuk?: boolean
+    metode_bayar?: boolean
+    total_bayar?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -5783,7 +7057,7 @@ export namespace Prisma {
     properti_id?: boolean
   }
 
-  export type PemesananOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tgl_masuk" | "status" | "created_at" | "updated_at" | "kamar_id" | "penghuni_id" | "properti_id", ExtArgs["result"]["pemesanan"]>
+  export type PemesananOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "durasi_sewa" | "tgl_masuk" | "metode_bayar" | "total_bayar" | "status" | "created_at" | "updated_at" | "kamar_id" | "penghuni_id" | "properti_id", ExtArgs["result"]["pemesanan"]>
   export type PemesananInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     kamar?: boolean | KamarDefaultArgs<ExtArgs>
     penghuni?: boolean | PenghuniDefaultArgs<ExtArgs>
@@ -5811,7 +7085,10 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      durasi_sewa: number
       tgl_masuk: Date
+      metode_bayar: string
+      total_bayar: number
       status: $Enums.StatusPemesanan
       created_at: Date
       updated_at: Date
@@ -6246,7 +7523,10 @@ export namespace Prisma {
    */
   interface PemesananFieldRefs {
     readonly id: FieldRef<"Pemesanan", 'String'>
+    readonly durasi_sewa: FieldRef<"Pemesanan", 'Int'>
     readonly tgl_masuk: FieldRef<"Pemesanan", 'DateTime'>
+    readonly metode_bayar: FieldRef<"Pemesanan", 'String'>
+    readonly total_bayar: FieldRef<"Pemesanan", 'Int'>
     readonly status: FieldRef<"Pemesanan", 'StatusPemesanan'>
     readonly created_at: FieldRef<"Pemesanan", 'DateTime'>
     readonly updated_at: FieldRef<"Pemesanan", 'DateTime'>
@@ -6697,23 +7977,13 @@ export namespace Prisma {
 
   export type AggregatePembayaran = {
     _count: PembayaranCountAggregateOutputType | null
-    _avg: PembayaranAvgAggregateOutputType | null
-    _sum: PembayaranSumAggregateOutputType | null
     _min: PembayaranMinAggregateOutputType | null
     _max: PembayaranMaxAggregateOutputType | null
   }
 
-  export type PembayaranAvgAggregateOutputType = {
-    jumlah: number | null
-  }
-
-  export type PembayaranSumAggregateOutputType = {
-    jumlah: number | null
-  }
-
   export type PembayaranMinAggregateOutputType = {
     id: string | null
-    jumlah: number | null
+    metode_bayar: string | null
     bukti: string | null
     status: $Enums.StatusPembayaran | null
     tgl_bayar: Date | null
@@ -6724,7 +7994,7 @@ export namespace Prisma {
 
   export type PembayaranMaxAggregateOutputType = {
     id: string | null
-    jumlah: number | null
+    metode_bayar: string | null
     bukti: string | null
     status: $Enums.StatusPembayaran | null
     tgl_bayar: Date | null
@@ -6735,7 +8005,7 @@ export namespace Prisma {
 
   export type PembayaranCountAggregateOutputType = {
     id: number
-    jumlah: number
+    metode_bayar: number
     bukti: number
     status: number
     tgl_bayar: number
@@ -6746,17 +8016,9 @@ export namespace Prisma {
   }
 
 
-  export type PembayaranAvgAggregateInputType = {
-    jumlah?: true
-  }
-
-  export type PembayaranSumAggregateInputType = {
-    jumlah?: true
-  }
-
   export type PembayaranMinAggregateInputType = {
     id?: true
-    jumlah?: true
+    metode_bayar?: true
     bukti?: true
     status?: true
     tgl_bayar?: true
@@ -6767,7 +8029,7 @@ export namespace Prisma {
 
   export type PembayaranMaxAggregateInputType = {
     id?: true
-    jumlah?: true
+    metode_bayar?: true
     bukti?: true
     status?: true
     tgl_bayar?: true
@@ -6778,7 +8040,7 @@ export namespace Prisma {
 
   export type PembayaranCountAggregateInputType = {
     id?: true
-    jumlah?: true
+    metode_bayar?: true
     bukti?: true
     status?: true
     tgl_bayar?: true
@@ -6826,18 +8088,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: PembayaranAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PembayaranSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: PembayaranMinAggregateInputType
@@ -6868,15 +8118,13 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PembayaranCountAggregateInputType | true
-    _avg?: PembayaranAvgAggregateInputType
-    _sum?: PembayaranSumAggregateInputType
     _min?: PembayaranMinAggregateInputType
     _max?: PembayaranMaxAggregateInputType
   }
 
   export type PembayaranGroupByOutputType = {
     id: string
-    jumlah: number
+    metode_bayar: string
     bukti: string | null
     status: $Enums.StatusPembayaran
     tgl_bayar: Date | null
@@ -6884,8 +8132,6 @@ export namespace Prisma {
     updated_at: Date
     pemesanan_id: string
     _count: PembayaranCountAggregateOutputType | null
-    _avg: PembayaranAvgAggregateOutputType | null
-    _sum: PembayaranSumAggregateOutputType | null
     _min: PembayaranMinAggregateOutputType | null
     _max: PembayaranMaxAggregateOutputType | null
   }
@@ -6906,7 +8152,7 @@ export namespace Prisma {
 
   export type PembayaranSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    jumlah?: boolean
+    metode_bayar?: boolean
     bukti?: boolean
     status?: boolean
     tgl_bayar?: boolean
@@ -6918,7 +8164,7 @@ export namespace Prisma {
 
   export type PembayaranSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    jumlah?: boolean
+    metode_bayar?: boolean
     bukti?: boolean
     status?: boolean
     tgl_bayar?: boolean
@@ -6930,7 +8176,7 @@ export namespace Prisma {
 
   export type PembayaranSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    jumlah?: boolean
+    metode_bayar?: boolean
     bukti?: boolean
     status?: boolean
     tgl_bayar?: boolean
@@ -6942,7 +8188,7 @@ export namespace Prisma {
 
   export type PembayaranSelectScalar = {
     id?: boolean
-    jumlah?: boolean
+    metode_bayar?: boolean
     bukti?: boolean
     status?: boolean
     tgl_bayar?: boolean
@@ -6951,7 +8197,7 @@ export namespace Prisma {
     pemesanan_id?: boolean
   }
 
-  export type PembayaranOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jumlah" | "bukti" | "status" | "tgl_bayar" | "created_at" | "updated_at" | "pemesanan_id", ExtArgs["result"]["pembayaran"]>
+  export type PembayaranOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "metode_bayar" | "bukti" | "status" | "tgl_bayar" | "created_at" | "updated_at" | "pemesanan_id", ExtArgs["result"]["pembayaran"]>
   export type PembayaranInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pemesanan?: boolean | PemesananDefaultArgs<ExtArgs>
   }
@@ -6969,7 +8215,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      jumlah: number
+      metode_bayar: string
       bukti: string | null
       status: $Enums.StatusPembayaran
       tgl_bayar: Date | null
@@ -7401,7 +8647,7 @@ export namespace Prisma {
    */
   interface PembayaranFieldRefs {
     readonly id: FieldRef<"Pembayaran", 'String'>
-    readonly jumlah: FieldRef<"Pembayaran", 'Int'>
+    readonly metode_bayar: FieldRef<"Pembayaran", 'String'>
     readonly bukti: FieldRef<"Pembayaran", 'String'>
     readonly status: FieldRef<"Pembayaran", 'StatusPembayaran'>
     readonly tgl_bayar: FieldRef<"Pembayaran", 'DateTime'>
@@ -12398,6 +13644,19 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const AdminSettingsScalarFieldEnum: {
+    id: 'id',
+    nama_rekening: 'nama_rekening',
+    nomor_rekening: 'nomor_rekening',
+    bank: 'bank',
+    qris_image: 'qris_image',
+    updated_at: 'updated_at',
+    user_id: 'user_id'
+  };
+
+  export type AdminSettingsScalarFieldEnum = (typeof AdminSettingsScalarFieldEnum)[keyof typeof AdminSettingsScalarFieldEnum]
+
+
   export const PropertiScalarFieldEnum: {
     id: 'id',
     nama: 'nama',
@@ -12434,7 +13693,10 @@ export namespace Prisma {
 
   export const PemesananScalarFieldEnum: {
     id: 'id',
+    durasi_sewa: 'durasi_sewa',
     tgl_masuk: 'tgl_masuk',
+    metode_bayar: 'metode_bayar',
+    total_bayar: 'total_bayar',
     status: 'status',
     created_at: 'created_at',
     updated_at: 'updated_at',
@@ -12448,7 +13710,7 @@ export namespace Prisma {
 
   export const PembayaranScalarFieldEnum: {
     id: 'id',
-    jumlah: 'jumlah',
+    metode_bayar: 'metode_bayar',
     bukti: 'bukti',
     status: 'status',
     tgl_bayar: 'tgl_bayar',
@@ -12658,20 +13920,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'StatusPemesanan'
-   */
-  export type EnumStatusPemesananFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusPemesanan'>
-    
-
-
-  /**
-   * Reference to a field of type 'StatusPemesanan[]'
-   */
-  export type ListEnumStatusPemesananFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusPemesanan[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -12682,6 +13930,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'StatusPemesanan'
+   */
+  export type EnumStatusPemesananFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusPemesanan'>
+    
+
+
+  /**
+   * Reference to a field of type 'StatusPemesanan[]'
+   */
+  export type ListEnumStatusPemesananFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusPemesanan[]'>
     
 
 
@@ -12774,6 +14036,7 @@ export namespace Prisma {
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
     operator?: XOR<OperatorNullableScalarRelationFilter, OperatorWhereInput> | null
     properti?: PropertiListRelationFilter
+    settings?: XOR<AdminSettingsNullableScalarRelationFilter, AdminSettingsWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -12789,6 +14052,7 @@ export namespace Prisma {
     penghuni?: PenghuniOrderByWithRelationInput
     operator?: OperatorOrderByWithRelationInput
     properti?: PropertiOrderByRelationAggregateInput
+    settings?: AdminSettingsOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -12807,6 +14071,7 @@ export namespace Prisma {
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
     operator?: XOR<OperatorNullableScalarRelationFilter, OperatorWhereInput> | null
     properti?: PropertiListRelationFilter
+    settings?: XOR<AdminSettingsNullableScalarRelationFilter, AdminSettingsWhereInput> | null
   }, "id" | "username" | "email" | "no_telepon">
 
   export type UserOrderByWithAggregationInput = {
@@ -12837,6 +14102,71 @@ export namespace Prisma {
     no_telepon?: StringNullableWithAggregatesFilter<"User"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type AdminSettingsWhereInput = {
+    AND?: AdminSettingsWhereInput | AdminSettingsWhereInput[]
+    OR?: AdminSettingsWhereInput[]
+    NOT?: AdminSettingsWhereInput | AdminSettingsWhereInput[]
+    id?: StringFilter<"AdminSettings"> | string
+    nama_rekening?: StringNullableFilter<"AdminSettings"> | string | null
+    nomor_rekening?: StringNullableFilter<"AdminSettings"> | string | null
+    bank?: StringNullableFilter<"AdminSettings"> | string | null
+    qris_image?: StringNullableFilter<"AdminSettings"> | string | null
+    updated_at?: DateTimeFilter<"AdminSettings"> | Date | string
+    user_id?: StringFilter<"AdminSettings"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AdminSettingsOrderByWithRelationInput = {
+    id?: SortOrder
+    nama_rekening?: SortOrderInput | SortOrder
+    nomor_rekening?: SortOrderInput | SortOrder
+    bank?: SortOrderInput | SortOrder
+    qris_image?: SortOrderInput | SortOrder
+    updated_at?: SortOrder
+    user_id?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type AdminSettingsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    user_id?: string
+    AND?: AdminSettingsWhereInput | AdminSettingsWhereInput[]
+    OR?: AdminSettingsWhereInput[]
+    NOT?: AdminSettingsWhereInput | AdminSettingsWhereInput[]
+    nama_rekening?: StringNullableFilter<"AdminSettings"> | string | null
+    nomor_rekening?: StringNullableFilter<"AdminSettings"> | string | null
+    bank?: StringNullableFilter<"AdminSettings"> | string | null
+    qris_image?: StringNullableFilter<"AdminSettings"> | string | null
+    updated_at?: DateTimeFilter<"AdminSettings"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "user_id">
+
+  export type AdminSettingsOrderByWithAggregationInput = {
+    id?: SortOrder
+    nama_rekening?: SortOrderInput | SortOrder
+    nomor_rekening?: SortOrderInput | SortOrder
+    bank?: SortOrderInput | SortOrder
+    qris_image?: SortOrderInput | SortOrder
+    updated_at?: SortOrder
+    user_id?: SortOrder
+    _count?: AdminSettingsCountOrderByAggregateInput
+    _max?: AdminSettingsMaxOrderByAggregateInput
+    _min?: AdminSettingsMinOrderByAggregateInput
+  }
+
+  export type AdminSettingsScalarWhereWithAggregatesInput = {
+    AND?: AdminSettingsScalarWhereWithAggregatesInput | AdminSettingsScalarWhereWithAggregatesInput[]
+    OR?: AdminSettingsScalarWhereWithAggregatesInput[]
+    NOT?: AdminSettingsScalarWhereWithAggregatesInput | AdminSettingsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdminSettings"> | string
+    nama_rekening?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    nomor_rekening?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    bank?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    qris_image?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    updated_at?: DateTimeWithAggregatesFilter<"AdminSettings"> | Date | string
+    user_id?: StringWithAggregatesFilter<"AdminSettings"> | string
   }
 
   export type PropertiWhereInput = {
@@ -13036,7 +14366,10 @@ export namespace Prisma {
     OR?: PemesananWhereInput[]
     NOT?: PemesananWhereInput | PemesananWhereInput[]
     id?: StringFilter<"Pemesanan"> | string
+    durasi_sewa?: IntFilter<"Pemesanan"> | number
     tgl_masuk?: DateTimeFilter<"Pemesanan"> | Date | string
+    metode_bayar?: StringFilter<"Pemesanan"> | string
+    total_bayar?: IntFilter<"Pemesanan"> | number
     status?: EnumStatusPemesananFilter<"Pemesanan"> | $Enums.StatusPemesanan
     created_at?: DateTimeFilter<"Pemesanan"> | Date | string
     updated_at?: DateTimeFilter<"Pemesanan"> | Date | string
@@ -13051,7 +14384,10 @@ export namespace Prisma {
 
   export type PemesananOrderByWithRelationInput = {
     id?: SortOrder
+    durasi_sewa?: SortOrder
     tgl_masuk?: SortOrder
+    metode_bayar?: SortOrder
+    total_bayar?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -13069,7 +14405,10 @@ export namespace Prisma {
     AND?: PemesananWhereInput | PemesananWhereInput[]
     OR?: PemesananWhereInput[]
     NOT?: PemesananWhereInput | PemesananWhereInput[]
+    durasi_sewa?: IntFilter<"Pemesanan"> | number
     tgl_masuk?: DateTimeFilter<"Pemesanan"> | Date | string
+    metode_bayar?: StringFilter<"Pemesanan"> | string
+    total_bayar?: IntFilter<"Pemesanan"> | number
     status?: EnumStatusPemesananFilter<"Pemesanan"> | $Enums.StatusPemesanan
     created_at?: DateTimeFilter<"Pemesanan"> | Date | string
     updated_at?: DateTimeFilter<"Pemesanan"> | Date | string
@@ -13084,7 +14423,10 @@ export namespace Prisma {
 
   export type PemesananOrderByWithAggregationInput = {
     id?: SortOrder
+    durasi_sewa?: SortOrder
     tgl_masuk?: SortOrder
+    metode_bayar?: SortOrder
+    total_bayar?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -13092,8 +14434,10 @@ export namespace Prisma {
     penghuni_id?: SortOrder
     properti_id?: SortOrder
     _count?: PemesananCountOrderByAggregateInput
+    _avg?: PemesananAvgOrderByAggregateInput
     _max?: PemesananMaxOrderByAggregateInput
     _min?: PemesananMinOrderByAggregateInput
+    _sum?: PemesananSumOrderByAggregateInput
   }
 
   export type PemesananScalarWhereWithAggregatesInput = {
@@ -13101,7 +14445,10 @@ export namespace Prisma {
     OR?: PemesananScalarWhereWithAggregatesInput[]
     NOT?: PemesananScalarWhereWithAggregatesInput | PemesananScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Pemesanan"> | string
+    durasi_sewa?: IntWithAggregatesFilter<"Pemesanan"> | number
     tgl_masuk?: DateTimeWithAggregatesFilter<"Pemesanan"> | Date | string
+    metode_bayar?: StringWithAggregatesFilter<"Pemesanan"> | string
+    total_bayar?: IntWithAggregatesFilter<"Pemesanan"> | number
     status?: EnumStatusPemesananWithAggregatesFilter<"Pemesanan"> | $Enums.StatusPemesanan
     created_at?: DateTimeWithAggregatesFilter<"Pemesanan"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Pemesanan"> | Date | string
@@ -13115,7 +14462,7 @@ export namespace Prisma {
     OR?: PembayaranWhereInput[]
     NOT?: PembayaranWhereInput | PembayaranWhereInput[]
     id?: StringFilter<"Pembayaran"> | string
-    jumlah?: IntFilter<"Pembayaran"> | number
+    metode_bayar?: StringFilter<"Pembayaran"> | string
     bukti?: StringNullableFilter<"Pembayaran"> | string | null
     status?: EnumStatusPembayaranFilter<"Pembayaran"> | $Enums.StatusPembayaran
     tgl_bayar?: DateTimeNullableFilter<"Pembayaran"> | Date | string | null
@@ -13127,7 +14474,7 @@ export namespace Prisma {
 
   export type PembayaranOrderByWithRelationInput = {
     id?: SortOrder
-    jumlah?: SortOrder
+    metode_bayar?: SortOrder
     bukti?: SortOrderInput | SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrderInput | SortOrder
@@ -13143,7 +14490,7 @@ export namespace Prisma {
     AND?: PembayaranWhereInput | PembayaranWhereInput[]
     OR?: PembayaranWhereInput[]
     NOT?: PembayaranWhereInput | PembayaranWhereInput[]
-    jumlah?: IntFilter<"Pembayaran"> | number
+    metode_bayar?: StringFilter<"Pembayaran"> | string
     bukti?: StringNullableFilter<"Pembayaran"> | string | null
     status?: EnumStatusPembayaranFilter<"Pembayaran"> | $Enums.StatusPembayaran
     tgl_bayar?: DateTimeNullableFilter<"Pembayaran"> | Date | string | null
@@ -13154,7 +14501,7 @@ export namespace Prisma {
 
   export type PembayaranOrderByWithAggregationInput = {
     id?: SortOrder
-    jumlah?: SortOrder
+    metode_bayar?: SortOrder
     bukti?: SortOrderInput | SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrderInput | SortOrder
@@ -13162,10 +14509,8 @@ export namespace Prisma {
     updated_at?: SortOrder
     pemesanan_id?: SortOrder
     _count?: PembayaranCountOrderByAggregateInput
-    _avg?: PembayaranAvgOrderByAggregateInput
     _max?: PembayaranMaxOrderByAggregateInput
     _min?: PembayaranMinOrderByAggregateInput
-    _sum?: PembayaranSumOrderByAggregateInput
   }
 
   export type PembayaranScalarWhereWithAggregatesInput = {
@@ -13173,7 +14518,7 @@ export namespace Prisma {
     OR?: PembayaranScalarWhereWithAggregatesInput[]
     NOT?: PembayaranScalarWhereWithAggregatesInput | PembayaranScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Pembayaran"> | string
-    jumlah?: IntWithAggregatesFilter<"Pembayaran"> | number
+    metode_bayar?: StringWithAggregatesFilter<"Pembayaran"> | string
     bukti?: StringNullableWithAggregatesFilter<"Pembayaran"> | string | null
     status?: EnumStatusPembayaranWithAggregatesFilter<"Pembayaran"> | $Enums.StatusPembayaran
     tgl_bayar?: DateTimeNullableWithAggregatesFilter<"Pembayaran"> | Date | string | null
@@ -13484,6 +14829,7 @@ export namespace Prisma {
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     operator?: OperatorCreateNestedOneWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
+    settings?: AdminSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -13499,6 +14845,7 @@ export namespace Prisma {
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     operator?: OperatorUncheckedCreateNestedOneWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
+    settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -13514,6 +14861,7 @@ export namespace Prisma {
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     operator?: OperatorUpdateOneWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
+    settings?: AdminSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -13529,6 +14877,7 @@ export namespace Prisma {
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     operator?: OperatorUncheckedUpdateOneWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
+    settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -13565,6 +14914,75 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSettingsCreateInput = {
+    id?: string
+    nama_rekening?: string | null
+    nomor_rekening?: string | null
+    bank?: string | null
+    qris_image?: string | null
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutSettingsInput
+  }
+
+  export type AdminSettingsUncheckedCreateInput = {
+    id?: string
+    nama_rekening?: string | null
+    nomor_rekening?: string | null
+    bank?: string | null
+    qris_image?: string | null
+    updated_at?: Date | string
+    user_id: string
+  }
+
+  export type AdminSettingsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    nomor_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    bank?: NullableStringFieldUpdateOperationsInput | string | null
+    qris_image?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSettingsNestedInput
+  }
+
+  export type AdminSettingsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    nomor_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    bank?: NullableStringFieldUpdateOperationsInput | string | null
+    qris_image?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AdminSettingsCreateManyInput = {
+    id?: string
+    nama_rekening?: string | null
+    nomor_rekening?: string | null
+    bank?: string | null
+    qris_image?: string | null
+    updated_at?: Date | string
+    user_id: string
+  }
+
+  export type AdminSettingsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    nomor_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    bank?: NullableStringFieldUpdateOperationsInput | string | null
+    qris_image?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSettingsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    nomor_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    bank?: NullableStringFieldUpdateOperationsInput | string | null
+    qris_image?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type PropertiCreateInput = {
@@ -13791,7 +15209,10 @@ export namespace Prisma {
 
   export type PemesananCreateInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -13803,7 +15224,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedCreateInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -13815,7 +15239,10 @@ export namespace Prisma {
 
   export type PemesananUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13827,7 +15254,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13839,7 +15269,10 @@ export namespace Prisma {
 
   export type PemesananCreateManyInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -13850,7 +15283,10 @@ export namespace Prisma {
 
   export type PemesananUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13858,7 +15294,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13869,7 +15308,7 @@ export namespace Prisma {
 
   export type PembayaranCreateInput = {
     id?: string
-    jumlah: number
+    metode_bayar: string
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
@@ -13880,7 +15319,7 @@ export namespace Prisma {
 
   export type PembayaranUncheckedCreateInput = {
     id?: string
-    jumlah: number
+    metode_bayar: string
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
@@ -13891,7 +15330,7 @@ export namespace Prisma {
 
   export type PembayaranUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    jumlah?: IntFieldUpdateOperationsInput | number
+    metode_bayar?: StringFieldUpdateOperationsInput | string
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13902,7 +15341,7 @@ export namespace Prisma {
 
   export type PembayaranUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    jumlah?: IntFieldUpdateOperationsInput | number
+    metode_bayar?: StringFieldUpdateOperationsInput | string
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13913,7 +15352,7 @@ export namespace Prisma {
 
   export type PembayaranCreateManyInput = {
     id?: string
-    jumlah: number
+    metode_bayar: string
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
@@ -13924,7 +15363,7 @@ export namespace Prisma {
 
   export type PembayaranUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    jumlah?: IntFieldUpdateOperationsInput | number
+    metode_bayar?: StringFieldUpdateOperationsInput | string
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13934,7 +15373,7 @@ export namespace Prisma {
 
   export type PembayaranUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    jumlah?: IntFieldUpdateOperationsInput | number
+    metode_bayar?: StringFieldUpdateOperationsInput | string
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14298,6 +15737,11 @@ export namespace Prisma {
     none?: PropertiWhereInput
   }
 
+  export type AdminSettingsNullableScalarRelationFilter = {
+    is?: AdminSettingsWhereInput | null
+    isNot?: AdminSettingsWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -14403,6 +15847,41 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type AdminSettingsCountOrderByAggregateInput = {
+    id?: SortOrder
+    nama_rekening?: SortOrder
+    nomor_rekening?: SortOrder
+    bank?: SortOrder
+    qris_image?: SortOrder
+    updated_at?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type AdminSettingsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nama_rekening?: SortOrder
+    nomor_rekening?: SortOrder
+    bank?: SortOrder
+    qris_image?: SortOrder
+    updated_at?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type AdminSettingsMinOrderByAggregateInput = {
+    id?: SortOrder
+    nama_rekening?: SortOrder
+    nomor_rekening?: SortOrder
+    bank?: SortOrder
+    qris_image?: SortOrder
+    updated_at?: SortOrder
+    user_id?: SortOrder
+  }
+
   export type EnumJenisPropertiNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.JenisProperti | EnumJenisPropertiFieldRefInput<$PrismaModel> | null
     in?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
@@ -14416,11 +15895,6 @@ export namespace Prisma {
     hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
     hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
     isEmpty?: boolean
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type KamarListRelationFilter = {
@@ -14652,6 +16126,17 @@ export namespace Prisma {
     _max?: NestedEnumStatusKamarFilter<$PrismaModel>
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type EnumStatusPemesananFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusPemesanan | EnumStatusPemesananFieldRefInput<$PrismaModel>
     in?: $Enums.StatusPemesanan[] | ListEnumStatusPemesananFieldRefInput<$PrismaModel>
@@ -14676,7 +16161,10 @@ export namespace Prisma {
 
   export type PemesananCountOrderByAggregateInput = {
     id?: SortOrder
+    durasi_sewa?: SortOrder
     tgl_masuk?: SortOrder
+    metode_bayar?: SortOrder
+    total_bayar?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -14685,9 +16173,17 @@ export namespace Prisma {
     properti_id?: SortOrder
   }
 
+  export type PemesananAvgOrderByAggregateInput = {
+    durasi_sewa?: SortOrder
+    total_bayar?: SortOrder
+  }
+
   export type PemesananMaxOrderByAggregateInput = {
     id?: SortOrder
+    durasi_sewa?: SortOrder
     tgl_masuk?: SortOrder
+    metode_bayar?: SortOrder
+    total_bayar?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -14698,13 +16194,37 @@ export namespace Prisma {
 
   export type PemesananMinOrderByAggregateInput = {
     id?: SortOrder
+    durasi_sewa?: SortOrder
     tgl_masuk?: SortOrder
+    metode_bayar?: SortOrder
+    total_bayar?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     kamar_id?: SortOrder
     penghuni_id?: SortOrder
     properti_id?: SortOrder
+  }
+
+  export type PemesananSumOrderByAggregateInput = {
+    durasi_sewa?: SortOrder
+    total_bayar?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumStatusPemesananWithAggregatesFilter<$PrismaModel = never> = {
@@ -14715,17 +16235,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStatusPemesananFilter<$PrismaModel>
     _max?: NestedEnumStatusPemesananFilter<$PrismaModel>
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type EnumStatusPembayaranFilter<$PrismaModel = never> = {
@@ -14753,7 +16262,7 @@ export namespace Prisma {
 
   export type PembayaranCountOrderByAggregateInput = {
     id?: SortOrder
-    jumlah?: SortOrder
+    metode_bayar?: SortOrder
     bukti?: SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrder
@@ -14762,13 +16271,9 @@ export namespace Prisma {
     pemesanan_id?: SortOrder
   }
 
-  export type PembayaranAvgOrderByAggregateInput = {
-    jumlah?: SortOrder
-  }
-
   export type PembayaranMaxOrderByAggregateInput = {
     id?: SortOrder
-    jumlah?: SortOrder
+    metode_bayar?: SortOrder
     bukti?: SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrder
@@ -14779,33 +16284,13 @@ export namespace Prisma {
 
   export type PembayaranMinOrderByAggregateInput = {
     id?: SortOrder
-    jumlah?: SortOrder
+    metode_bayar?: SortOrder
     bukti?: SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     pemesanan_id?: SortOrder
-  }
-
-  export type PembayaranSumOrderByAggregateInput = {
-    jumlah?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumStatusPembayaranWithAggregatesFilter<$PrismaModel = never> = {
@@ -15048,6 +16533,12 @@ export namespace Prisma {
     connect?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
   }
 
+  export type AdminSettingsCreateNestedOneWithoutUserInput = {
+    create?: XOR<AdminSettingsCreateWithoutUserInput, AdminSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: AdminSettingsCreateOrConnectWithoutUserInput
+    connect?: AdminSettingsWhereUniqueInput
+  }
+
   export type PenghuniUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<PenghuniCreateWithoutUserInput, PenghuniUncheckedCreateWithoutUserInput>
     connectOrCreate?: PenghuniCreateOrConnectWithoutUserInput
@@ -15065,6 +16556,12 @@ export namespace Prisma {
     connectOrCreate?: PropertiCreateOrConnectWithoutAdminInput | PropertiCreateOrConnectWithoutAdminInput[]
     createMany?: PropertiCreateManyAdminInputEnvelope
     connect?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+  }
+
+  export type AdminSettingsUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<AdminSettingsCreateWithoutUserInput, AdminSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: AdminSettingsCreateOrConnectWithoutUserInput
+    connect?: AdminSettingsWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -15117,6 +16614,16 @@ export namespace Prisma {
     deleteMany?: PropertiScalarWhereInput | PropertiScalarWhereInput[]
   }
 
+  export type AdminSettingsUpdateOneWithoutUserNestedInput = {
+    create?: XOR<AdminSettingsCreateWithoutUserInput, AdminSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: AdminSettingsCreateOrConnectWithoutUserInput
+    upsert?: AdminSettingsUpsertWithoutUserInput
+    disconnect?: AdminSettingsWhereInput | boolean
+    delete?: AdminSettingsWhereInput | boolean
+    connect?: AdminSettingsWhereUniqueInput
+    update?: XOR<XOR<AdminSettingsUpdateToOneWithWhereWithoutUserInput, AdminSettingsUpdateWithoutUserInput>, AdminSettingsUncheckedUpdateWithoutUserInput>
+  }
+
   export type PenghuniUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<PenghuniCreateWithoutUserInput, PenghuniUncheckedCreateWithoutUserInput>
     connectOrCreate?: PenghuniCreateOrConnectWithoutUserInput
@@ -15149,6 +16656,30 @@ export namespace Prisma {
     update?: PropertiUpdateWithWhereUniqueWithoutAdminInput | PropertiUpdateWithWhereUniqueWithoutAdminInput[]
     updateMany?: PropertiUpdateManyWithWhereWithoutAdminInput | PropertiUpdateManyWithWhereWithoutAdminInput[]
     deleteMany?: PropertiScalarWhereInput | PropertiScalarWhereInput[]
+  }
+
+  export type AdminSettingsUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<AdminSettingsCreateWithoutUserInput, AdminSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: AdminSettingsCreateOrConnectWithoutUserInput
+    upsert?: AdminSettingsUpsertWithoutUserInput
+    disconnect?: AdminSettingsWhereInput | boolean
+    delete?: AdminSettingsWhereInput | boolean
+    connect?: AdminSettingsWhereUniqueInput
+    update?: XOR<XOR<AdminSettingsUpdateToOneWithWhereWithoutUserInput, AdminSettingsUpdateWithoutUserInput>, AdminSettingsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserCreateNestedOneWithoutSettingsInput = {
+    create?: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSettingsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutSettingsNestedInput = {
+    create?: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSettingsInput
+    upsert?: UserUpsertWithoutSettingsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSettingsInput, UserUpdateWithoutSettingsInput>, UserUncheckedUpdateWithoutSettingsInput>
   }
 
   export type PropertiCreategambarInput = {
@@ -15532,6 +17063,14 @@ export namespace Prisma {
     connect?: PembayaranWhereUniqueInput
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EnumStatusPemesananFieldUpdateOperationsInput = {
     set?: $Enums.StatusPemesanan
   }
@@ -15584,14 +17123,6 @@ export namespace Prisma {
     create?: XOR<PemesananCreateWithoutPembayaranInput, PemesananUncheckedCreateWithoutPembayaranInput>
     connectOrCreate?: PemesananCreateOrConnectWithoutPembayaranInput
     connect?: PemesananWhereUniqueInput
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EnumStatusPembayaranFieldUpdateOperationsInput = {
@@ -16069,6 +17600,33 @@ export namespace Prisma {
     not?: NestedEnumStatusPemesananFilter<$PrismaModel> | $Enums.StatusPemesanan
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumStatusPemesananWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusPemesanan | EnumStatusPemesananFieldRefInput<$PrismaModel>
     in?: $Enums.StatusPemesanan[] | ListEnumStatusPemesananFieldRefInput<$PrismaModel>
@@ -16095,33 +17653,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedEnumStatusPembayaranWithAggregatesFilter<$PrismaModel = never> = {
@@ -16293,6 +17824,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AdminSettingsCreateWithoutUserInput = {
+    id?: string
+    nama_rekening?: string | null
+    nomor_rekening?: string | null
+    bank?: string | null
+    qris_image?: string | null
+    updated_at?: Date | string
+  }
+
+  export type AdminSettingsUncheckedCreateWithoutUserInput = {
+    id?: string
+    nama_rekening?: string | null
+    nomor_rekening?: string | null
+    bank?: string | null
+    qris_image?: string | null
+    updated_at?: Date | string
+  }
+
+  export type AdminSettingsCreateOrConnectWithoutUserInput = {
+    where: AdminSettingsWhereUniqueInput
+    create: XOR<AdminSettingsCreateWithoutUserInput, AdminSettingsUncheckedCreateWithoutUserInput>
+  }
+
   export type PenghuniUpsertWithoutUserInput = {
     update: XOR<PenghuniUpdateWithoutUserInput, PenghuniUncheckedUpdateWithoutUserInput>
     create: XOR<PenghuniCreateWithoutUserInput, PenghuniUncheckedCreateWithoutUserInput>
@@ -16387,6 +17941,111 @@ export namespace Prisma {
     admin_id?: StringFilter<"Properti"> | string
   }
 
+  export type AdminSettingsUpsertWithoutUserInput = {
+    update: XOR<AdminSettingsUpdateWithoutUserInput, AdminSettingsUncheckedUpdateWithoutUserInput>
+    create: XOR<AdminSettingsCreateWithoutUserInput, AdminSettingsUncheckedCreateWithoutUserInput>
+    where?: AdminSettingsWhereInput
+  }
+
+  export type AdminSettingsUpdateToOneWithWhereWithoutUserInput = {
+    where?: AdminSettingsWhereInput
+    data: XOR<AdminSettingsUpdateWithoutUserInput, AdminSettingsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AdminSettingsUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    nomor_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    bank?: NullableStringFieldUpdateOperationsInput | string | null
+    qris_image?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSettingsUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    nomor_rekening?: NullableStringFieldUpdateOperationsInput | string | null
+    bank?: NullableStringFieldUpdateOperationsInput | string | null
+    qris_image?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutSettingsInput = {
+    id?: string
+    username: string
+    email: string
+    password: string
+    nama: string
+    role: $Enums.Role
+    no_telepon?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni?: PenghuniCreateNestedOneWithoutUserInput
+    operator?: OperatorCreateNestedOneWithoutUserInput
+    properti?: PropertiCreateNestedManyWithoutAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutSettingsInput = {
+    id?: string
+    username: string
+    email: string
+    password: string
+    nama: string
+    role: $Enums.Role
+    no_telepon?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
+    operator?: OperatorUncheckedCreateNestedOneWithoutUserInput
+    properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutSettingsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+  }
+
+  export type UserUpsertWithoutSettingsInput = {
+    update: XOR<UserUpdateWithoutSettingsInput, UserUncheckedUpdateWithoutSettingsInput>
+    create: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSettingsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSettingsInput, UserUncheckedUpdateWithoutSettingsInput>
+  }
+
+  export type UserUpdateWithoutSettingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni?: PenghuniUpdateOneWithoutUserNestedInput
+    operator?: OperatorUpdateOneWithoutUserNestedInput
+    properti?: PropertiUpdateManyWithoutAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSettingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
+    operator?: OperatorUncheckedUpdateOneWithoutUserNestedInput
+    properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
+  }
+
   export type UserCreateWithoutPropertiInput = {
     id?: string
     username: string
@@ -16399,6 +18058,7 @@ export namespace Prisma {
     updated_at?: Date | string
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     operator?: OperatorCreateNestedOneWithoutUserInput
+    settings?: AdminSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPropertiInput = {
@@ -16413,6 +18073,7 @@ export namespace Prisma {
     updated_at?: Date | string
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     operator?: OperatorUncheckedCreateNestedOneWithoutUserInput
+    settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPropertiInput = {
@@ -16520,7 +18181,10 @@ export namespace Prisma {
 
   export type PemesananCreateWithoutPropertiInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -16531,7 +18195,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedCreateWithoutPropertiInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -16603,6 +18270,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     operator?: OperatorUpdateOneWithoutUserNestedInput
+    settings?: AdminSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPropertiInput = {
@@ -16617,6 +18285,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     operator?: OperatorUncheckedUpdateOneWithoutUserNestedInput
+    settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type KamarUpsertWithWhereUniqueWithoutPropertiInput = {
@@ -16731,7 +18400,10 @@ export namespace Prisma {
     OR?: PemesananScalarWhereInput[]
     NOT?: PemesananScalarWhereInput | PemesananScalarWhereInput[]
     id?: StringFilter<"Pemesanan"> | string
+    durasi_sewa?: IntFilter<"Pemesanan"> | number
     tgl_masuk?: DateTimeFilter<"Pemesanan"> | Date | string
+    metode_bayar?: StringFilter<"Pemesanan"> | string
+    total_bayar?: IntFilter<"Pemesanan"> | number
     status?: EnumStatusPemesananFilter<"Pemesanan"> | $Enums.StatusPemesanan
     created_at?: DateTimeFilter<"Pemesanan"> | Date | string
     updated_at?: DateTimeFilter<"Pemesanan"> | Date | string
@@ -16811,7 +18483,10 @@ export namespace Prisma {
 
   export type PemesananCreateWithoutKamarInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -16822,7 +18497,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedCreateWithoutKamarInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -17073,7 +18751,7 @@ export namespace Prisma {
 
   export type PembayaranCreateWithoutPemesananInput = {
     id?: string
-    jumlah: number
+    metode_bayar: string
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
@@ -17083,7 +18761,7 @@ export namespace Prisma {
 
   export type PembayaranUncheckedCreateWithoutPemesananInput = {
     id?: string
-    jumlah: number
+    metode_bayar: string
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
@@ -17232,7 +18910,7 @@ export namespace Prisma {
 
   export type PembayaranUpdateWithoutPemesananInput = {
     id?: StringFieldUpdateOperationsInput | string
-    jumlah?: IntFieldUpdateOperationsInput | number
+    metode_bayar?: StringFieldUpdateOperationsInput | string
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17242,7 +18920,7 @@ export namespace Prisma {
 
   export type PembayaranUncheckedUpdateWithoutPemesananInput = {
     id?: StringFieldUpdateOperationsInput | string
-    jumlah?: IntFieldUpdateOperationsInput | number
+    metode_bayar?: StringFieldUpdateOperationsInput | string
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17252,7 +18930,10 @@ export namespace Prisma {
 
   export type PemesananCreateWithoutPembayaranInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -17263,7 +18944,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedCreateWithoutPembayaranInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -17290,7 +18974,10 @@ export namespace Prisma {
 
   export type PemesananUpdateWithoutPembayaranInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17301,7 +18988,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedUpdateWithoutPembayaranInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17322,6 +19012,7 @@ export namespace Prisma {
     updated_at?: Date | string
     operator?: OperatorCreateNestedOneWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
+    settings?: AdminSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPenghuniInput = {
@@ -17336,6 +19027,7 @@ export namespace Prisma {
     updated_at?: Date | string
     operator?: OperatorUncheckedCreateNestedOneWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
+    settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPenghuniInput = {
@@ -17382,7 +19074,10 @@ export namespace Prisma {
 
   export type PemesananCreateWithoutPenghuniInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -17393,7 +19088,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedCreateWithoutPenghuniInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -17465,6 +19163,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     operator?: OperatorUpdateOneWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
+    settings?: AdminSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPenghuniInput = {
@@ -17479,6 +19178,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     operator?: OperatorUncheckedUpdateOneWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
+    settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type KamarUpsertWithoutPenghuniInput = {
@@ -17568,6 +19268,7 @@ export namespace Prisma {
     updated_at?: Date | string
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
+    settings?: AdminSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOperatorInput = {
@@ -17582,6 +19283,7 @@ export namespace Prisma {
     updated_at?: Date | string
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
+    settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOperatorInput = {
@@ -17681,6 +19383,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
+    settings?: AdminSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOperatorInput = {
@@ -17695,6 +19398,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
+    settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PropertiUpsertWithoutOperatorInput = {
@@ -18129,7 +19833,10 @@ export namespace Prisma {
 
   export type PemesananCreateManyPropertiInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -18248,7 +19955,10 @@ export namespace Prisma {
 
   export type PemesananUpdateWithoutPropertiInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18259,7 +19969,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedUpdateWithoutPropertiInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18270,7 +19983,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedUpdateManyWithoutPropertiInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18310,7 +20026,10 @@ export namespace Prisma {
 
   export type PemesananCreateManyKamarInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -18320,7 +20039,10 @@ export namespace Prisma {
 
   export type PemesananUpdateWithoutKamarInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18331,7 +20053,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedUpdateWithoutKamarInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18342,7 +20067,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedUpdateManyWithoutKamarInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18352,7 +20080,10 @@ export namespace Prisma {
 
   export type PemesananCreateManyPenghuniInput = {
     id?: string
+    durasi_sewa: number
     tgl_masuk: Date | string
+    metode_bayar: string
+    total_bayar: number
     status?: $Enums.StatusPemesanan
     created_at?: Date | string
     updated_at?: Date | string
@@ -18372,7 +20103,10 @@ export namespace Prisma {
 
   export type PemesananUpdateWithoutPenghuniInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18383,7 +20117,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedUpdateWithoutPenghuniInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18394,7 +20131,10 @@ export namespace Prisma {
 
   export type PemesananUncheckedUpdateManyWithoutPenghuniInput = {
     id?: StringFieldUpdateOperationsInput | string
+    durasi_sewa?: IntFieldUpdateOperationsInput | number
     tgl_masuk?: DateTimeFieldUpdateOperationsInput | Date | string
+    metode_bayar?: StringFieldUpdateOperationsInput | string
+    total_bayar?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusPemesananFieldUpdateOperationsInput | $Enums.StatusPemesanan
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string

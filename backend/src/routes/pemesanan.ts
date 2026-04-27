@@ -1,0 +1,442 @@
+import { Hono } from "hono";
+import { prisma } from "../config/db";
+import { authMiddleware, requireRole } from "../middleware/auth";
+
+const app = new Hono();
+
+app.use("*", authMiddleware);
+
+// Get settings helper
+async function getSettings(adminId: string) {
+  return prisma.adminSettings.findUnique({
+    where: { user_id: adminId }
+  });
+}
+
+// Create pemesanan (PENGHUNI)
+app.post("/", requireRole("PENGHUNI"), async (c) => {
+  try {
+    const user = c.get("user");
+    const body = await c.req.json();
+    const { kamar_id, durasi_sewa, tgl_masuk, metode_bayar } = body;
+
+    if (!kamar_id || !durasi_sewa || !tgl_masuk || !metode_bayar) {
+      return c.json(
+        { status: "error", message: "Semua field wajib diisi" },
+        400
+      );
+    }
+
+    if (!["TRANSFER", "QRIS"].includes(metode_bayar)) {
+      return c.json(
+        { status: "error", message: "Metode pembayaran tidak valid" },
+        400
+      );
+    }
+
+    const kamar = await prisma.kamar.findUnique({
+      where: { id: kamar_id },
+      include: {
+        properti: true
+      }
+    });
+
+    if (!kamar) {
+      return c.json(
+        { status: "error", message: "Kamar tidak ditemukan" },
+        404
+      );
+    }
+
+    if (kamar.status !== "KOSONG") {
+      return c.json(
+        { status: "error", message: "Kamar tidak tersedia" },
+        400
+      );
+    }
+
+    const tarif = kamar.tarif as Record<string, number> || {};
+    const totalBayar = tarif[`${durasi_sewa}_bulan`] || 0;
+
+    if (totalBayar === 0) {
+      return c.json(
+        { status: "error", message: "Durasi tidak tersedia untuk kamar ini" },
+        400
+      );
+    }
+
+    const penghuni = await prisma.penghuni.findUnique({
+      where: { user_id: user.userId }
+    });
+
+    if (!penghuni) {
+      return c.json(
+        { status: "error", message: "Data penghuni tidak ditemukan" },
+        404
+      );
+    }
+
+    const settings = await getSettings(kamar.properti.admin_id);
+    const metodeInfo = metode_bayar === "TRANSFER" 
+      ? { rekening: settings?.nomor_rekening, atas_nama: settings?.nama_rekening, bank: settings?.bank }
+      : { qris_image: settings?.qris_image };
+
+    const pemesanan = await prisma.pemesanan.create({
+      data: {
+        kamar_id,
+        penghuni_id: penghuni.id,
+        properti_id: kamar.properti_id,
+        durasi_sewa,
+        tgl_masuk: new Date(tgl_masuk),
+        metode_bayar,
+        total_bayar: totalBayar,
+        status: "MENUNGGU",
+      },
+      include: {
+        kamar: {
+          select: {
+            id: true,
+            nomor: true,
+            tarif: true
+          }
+        },
+        properti: {
+          select: {
+            id: true,
+            nama: true,
+            alamat: true
+          }
+        }
+      }
+    });
+
+    const pembayaran = await prisma.pembayaran.create({
+      data: {
+        pemesanan_id: pemesanan.id,
+        metode_bayar,
+        status: "MENUNGGU",
+      }
+    });
+
+    return c.json({
+      status: "success",
+      data: {
+        ...pemesanan,
+        pembayaran: {
+          metode_bayar: pembayaran.metode_bayar,
+          status: pembayaran.status,
+          rekening: metodeInfo.rekening,
+          atas_nama: metodeInfo.atas_nama,
+          bank: metodeInfo.bank,
+          qris_image: metodeInfo.qris_image,
+        }
+      },
+    }, 201);
+  } catch (error) {
+    console.error("Create pemesanan error:", error);
+    return c.json(
+      { status: "error", message: "Gagal membuat pesanan" },
+      500
+    );
+  }
+});
+
+// Get my pemesanan (PENGHUNI)
+app.get("/my", async (c) => {
+  try {
+    const user = c.get("user");
+    
+    if (user.role !== "PENGHUNI") {
+      return c.json(
+        { status: "error", message: "Akses tidak diizinkan" },
+        403
+      );
+    }
+
+    const penghuni = await prisma.penghuni.findUnique({
+      where: { user_id: user.userId }
+    });
+
+    if (!penghuni) {
+      return c.json({
+        status: "success",
+        data: [],
+      });
+    }
+
+    const pemesanan = await prisma.pemesanan.findMany({
+      where: { penghuni_id: penghuni.id },
+      include: {
+        kamar: {
+          select: {
+            id: true,
+            nomor: true,
+            tarif: true
+          }
+        },
+        properti: {
+          select: {
+            id: true,
+            nama: true,
+            alamat: true
+          }
+        },
+        pembayaran: true
+      },
+      orderBy: { created_at: "desc" }
+    });
+
+    return c.json({
+      status: "success",
+      data: pemesanan,
+    });
+  } catch (error) {
+    console.error("Get my pemesanan error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengambil data" },
+      500
+    );
+  }
+});
+
+// Get single pemesanan (by ID)
+app.get("/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const user = c.get("user");
+
+    const pemesanan = await prisma.pemesanan.findUnique({
+      where: { id },
+      include: {
+        kamar: true,
+        properti: true,
+        penghuni: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                nama: true,
+                email: true,
+                no_telepon: true
+              }
+            }
+          }
+        },
+        pembayaran: true
+      }
+    });
+
+    if (!pemesanan) {
+      return c.json(
+        { status: "error", message: "Pesanan tidak ditemukan" },
+        404
+      );
+    }
+
+    return c.json({
+      status: "success",
+      data: pemesanan,
+    });
+  } catch (error) {
+    console.error("Get pemesanan error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengambil data" },
+      500
+    );
+  }
+});
+
+// Upload bukti pembayaran (PENGHUNI)
+app.post("/:id/bayar", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const user = c.get("user");
+    const body = await c.req.json();
+    const { bukti } = body;
+
+    if (!bukti) {
+      return c.json(
+        { status: "error", message: "Bukti pembayaran wajib diisi" },
+        400
+      );
+    }
+
+    const pemesanan = await prisma.pemesanan.findUnique({
+      where: { id },
+      include: { pembayaran: true, penghuni: true }
+    });
+
+    if (!pemesanan) {
+      return c.json(
+        { status: "error", message: "Pesanan tidak ditemukan" },
+        404
+      );
+    }
+
+    if (pemesanan.penghuni.user_id !== user.userId) {
+      return c.json(
+        { status: "error", message: "Tidak punya akses" },
+        403
+      );
+    }
+
+    if (pemesanan.status !== "MENUNGGU") {
+      return c.json(
+        { status: "error", message: "Pesanan sudah diproses" },
+        400
+      );
+    }
+
+    const pembayaran = await prisma.pembayaran.update({
+      where: { pemesanan_id: id },
+      data: {
+        bukti,
+        status: "DIVERIFIKASI",
+        tgl_bayar: new Date(),
+      }
+    });
+
+    return c.json({
+      status: "success",
+      data: pembayaran,
+    });
+  } catch (error) {
+    console.error("Upload bukti error:", error);
+    return c.json(
+      { status: "error", message: "Gagal upload bukti" },
+      500
+    );
+  }
+});
+
+// Get all pemesanan (PEMILIK)
+app.get("/", requireRole("PEMILIK"), async (c) => {
+  try {
+    const user = c.get("user");
+
+    const pemesanan = await prisma.pemesanan.findMany({
+      where: {
+        properti: {
+          admin_id: user.userId
+        }
+      },
+      include: {
+        kamar: {
+          select: {
+            id: true,
+            nomor: true
+          }
+        },
+        properti: {
+          select: {
+            id: true,
+            nama: true
+          }
+        },
+        penghuni: {
+          include: {
+            user: {
+              select: {
+                nama: true,
+                email: true,
+                no_telepon: true
+              }
+            }
+          }
+        },
+        pembayaran: true
+      },
+      orderBy: { created_at: "desc" }
+    });
+
+    return c.json({
+      status: "success",
+      data: pemesanan,
+    });
+  } catch (error) {
+    console.error("Get all pemesanan error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengambil data" },
+      500
+    );
+  }
+});
+
+// Verifikasi pemesanan (PEMILIK)
+app.put("/:id/verifikasi", requireRole("PEMILIK"), async (c) => {
+  try {
+    const id = c.req.param("id");
+    const user = c.get("user");
+    const body = await c.req.json();
+    const { status } = body;
+
+    if (!["DITERIMA", "DITOLAK"].includes(status)) {
+      return c.json(
+        { status: "error", message: "Status harus DITERIMA atau DITOLAK" },
+        400
+      );
+    }
+
+    const pemesanan = await prisma.pemesanan.findUnique({
+      where: { id },
+      include: {
+        properti: true,
+        kamar: true,
+        pembayaran: true
+      }
+    });
+
+    if (!pemesanan) {
+      return c.json(
+        { status: "error", message: "Pesanan tidak ditemukan" },
+        404
+      );
+    }
+
+    if (pemesanan.properti.admin_id !== user.userId) {
+      return c.json(
+        { status: "error", message: "Tidak punya akses" },
+        403
+      );
+    }
+
+    const updatedPemesanan = await prisma.pemesanan.update({
+      where: { id },
+      data: { status: status as any }
+    });
+
+    if (status === "DITERIMA") {
+      await prisma.pembayaran.update({
+        where: { pemesanan_id: id },
+        data: { status: "DITERIMA" }
+      });
+
+      await prisma.kamar.update({
+        where: { id: pemesanan.kamar_id },
+        data: { status: "TERISI" }
+      });
+
+      await prisma.penghuni.update({
+        where: { id: pemesanan.penghuni_id },
+        data: {
+          kamar_id: pemesanan.kamar_id,
+          tgl_mulai: pemesanan.tgl_masuk,
+          tgl_berakhir: new Date(pemesanan.tgl_masuk.getTime() + pemesanan.durasi_sewa * 30 * 24 * 60 * 60 * 1000)
+        }
+      });
+    }
+
+    return c.json({
+      status: "success",
+      data: updatedPemesanan,
+    });
+  } catch (error) {
+    console.error("Verifikasi error:", error);
+    return c.json(
+      { status: "error", message: "Gagal verifikasi" },
+      500
+    );
+  }
+});
+
+export default app;
