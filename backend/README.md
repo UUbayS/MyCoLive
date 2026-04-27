@@ -54,6 +54,9 @@ Server akan running di `http://localhost:3000`
 |--------|----------|-------|-----------|
 | GET | `/api/users` | PEMILIK | List semua user |
 | POST | `/api/users` | PEMILIK | Buat user/operator |
+| GET | `/api/users/:id` | PEMILIK | Detail user |
+| PUT | `/api/users/:id` | PEMILIK | Update user (tidak bisa ubah role) |
+| DELETE | `/api/users/:id` | PEMILIK | Hapus user (tidak bisa hapus diri sendiri) |
 
 ### Properti
 
@@ -63,7 +66,7 @@ Server akan running di `http://localhost:3000`
 | POST | `/api/properti` | PEMILIK | Tambah properti |
 | GET | `/api/properti/:id` | PEMILIK/PENGELOLA | Detail properti |
 | PUT | `/api/properti/:id` | PEMILIK | Update properti |
-| DELETE | `/api/properti/:id` | PEMILIK | Hapus properti |
+| DELETE | `/api/properti/:id` | PEMILIK | Hapus properti (cek dependencies) |
 
 ### Katalog (Public)
 
@@ -82,12 +85,20 @@ Server akan running di `http://localhost:3000`
 | PUT | `/api/kamar/:id` | PEMILIK | Update kamar |
 | DELETE | `/api/kamar/:id` | PEMILIK | Hapus kamar |
 
+### Tempat Pembayaran
+
+| Method | Endpoint | Akses | Keterangan |
+|--------|----------|-------|-----------|
+| GET | `/api/tempatpembayaran` | PEMILIK | Get rekening/QRIS |
+| PUT | `/api/tempatpembayaran` | PEMILIK | Update rekening/QRIS |
+
 ### Pemesanan
 
 | Method | Endpoint | Akses | Keterangan |
 |--------|----------|-------|-----------|
 | POST | `/api/pemesanan` | PENGHUNI | Buat pesanan |
 | GET | `/api/pemesanan/my` | PENGHUNI | Riwayat pesanan saya |
+| GET | `/api/pemesanan/:id` | PEMILIK/PENGELOLA/PENGHUNI | Detail pesanan (ownership check) |
 | POST | `/api/pemesanan/:id/bayar` | PENGHUNI | Upload bukti |
 | GET | `/api/pemesanan` | PEMILIK | List semua pesanan |
 | PUT | `/api/pemesanan/:id/verifikasi` | PEMILIK | Verifikasi pesanan |
@@ -97,29 +108,79 @@ Server akan running di `http://localhost:3000`
 | Method | Endpoint | Akses | Keterangan |
 |--------|----------|-------|-----------|
 | GET | `/api/penghuni` | PEMILIK/PENGELOLA | List penghuni |
+| GET | `/api/penghuni/:id` | PEMILIK/PENGELOLA | Detail penghuni (ownership check) |
 
-### Settings Admin
+### Pengajuan Dana
 
 | Method | Endpoint | Akses | Keterangan |
 |--------|----------|-------|-----------|
-| GET | `/api/settings` | PEMILIK | Get settings |
-| PUT | `/api/settings` | PEMILIK | Update settings |
+| POST | `/api/dana` | PENGELOLA | Ajukan dana |
+| GET | `/api/dana/my` | PENGELOLA | Riwayat pengajuan saya |
+| GET | `/api/dana` | PEMILIK | Lihat semua pengajuan |
+| GET | `/api/dana/:id` | PEMILIK/PENGELOLA | Detail pengajuan |
+| PUT | `/api/dana/:id` | PEMILIK | Terima/Tolak pengajuan |
+
+### Komplain
+
+| Method | Endpoint | Akses | Keterangan |
+|--------|----------|-------|-----------|
+| POST | `/api/komplain` | PENGHUNI | Ajukan komplain |
+| GET | `/api/komplain/my` | PENGHUNI | Riwayat komplain saya |
+| GET | `/api/komplain` | PEMILIK/PENGELOLA | Lihat semua komplain |
+| GET | `/api/komplain/:id` | All (dengan ownership) | Detail komplain |
+| PUT | `/api/komplain/:id` | PEMILIK/PENGELOLA | Update status (DIPROSES/SELESAI) |
+
+### Laporan Keuangan
+
+| Method | Endpoint | Akses | Keterangan |
+|--------|----------|-------|-----------|
+| GET | `/api/laporan/keuangan?bulan=YYYY-MM&properti_id=xxx` | PEMILIK | Laporan bulanan |
+
+### WhatsApp Broadcast
+
+| Method | Endpoint | Akses | Keterangan |
+|--------|----------|-------|-----------|
+| POST | `/api/whatsapp/broadcast` | PEMILIK | Kirim broadcast WA |
+
+---
+
+## 🔐 Role Permissions
+
+| Feature | PEMILIK | PENGELOLA | PENGHUNI |
+|---------|---------|-----------|----------|
+| Users Management | ✅ CRUD | ❌ | ❌ |
+| Properti | ✅ CRUD | ✅ Read/Update | ❌ |
+| Kamar | ✅ CRUD | ✅ CRUD | ❌ |
+| Tempat Pembayaran | ✅ R/W | ❌ | ❌ |
+| Pemesanan | ✅ CRUD | ❌ | ✅ Create/Read own |
+| Penghuni | ✅ Read | ✅ Read own | ❌ |
+| Pengajuan Dana | ✅ Approve | ✅ Create/Read | ❌ |
+| Komplain | ✅ View/Resolve | ✅ View/Resolve | ✅ Create/View own |
+| Laporan Keuangan | ✅ View | ❌ | ❌ |
+| WhatsApp Broadcast | ✅ Send | ❌ | ❌ |
 
 ---
 
 ## 🔧 Configuration
 
-Buat file `.env` berdasarkan `.env`:
+Buat file `.env`:
 
 ```env
+# Database
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=your_password
 DB_NAME=comprodb
-
 DATABASE_URL="postgresql://postgres:your_password@localhost:5432/comprodb?schema=public"
-JWT_SECRET=your_secret_key
+
+# JWT (WAJIB - harus ada!)
+JWT_SECRET=your-random-secret-key
+
+# WhatsApp Broadcast (Opsional - untuk fitur broadcast)
+WHATSAPP_PROVIDER=whapi
+WHATSAPP_API_KEY=your-whapi-api-key
+WHATSAPP_CHANNEL_ID=your-whapi-channel-id
 ```
 
 ---
@@ -132,7 +193,7 @@ curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "budi123",
-    "nama_lengkap": "Budi Santoso",
+    "nama": "Budi Santoso",
     "no_telepon": "081234567890",
     "email": "budi@test.com",
     "password": "password123"
@@ -163,33 +224,48 @@ curl -X POST http://localhost:3000/api/properti \
   }'
 ```
 
-### Tambah Kamar (PEMILIK only)
+### Ajukan Komplain (PENGHUNI)
 ```bash
-curl -X POST http://localhost:3000/api/properti/PROPERTI_ID/kamar \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "nomor": "101",
-    "luas": "3x4",
-    "fasilitas": ["AC", "KM Dalam", "Kasur"],
-    "tarif": {
-      "1_bulan": 500000,
-      "3_bulan": 1400000,
-      "6_bulan": 2500000
-    }
-  }'
-```
-
-### Buat Pesanan (PENGHUNI)
-```bash
-curl -X POST http://localhost:3000/api/pemesanan \
+curl -X POST http://localhost:3000/api/komplain \
   -H "Authorization: Bearer USER_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "kamar_id": "KAMAR_ID",
-    "durasi_sewa": 3,
-    "tgl_masuk": "2024-06-01",
-    "metode_bayar": "TRANSFER"
+    "masalah": "WC rusak",
+    "jenis": "FASILITAS",
+    "deskripsi": "WC di kamar 3 tidak bisa flush",
+    "foto": "data:image/jpeg;base64,...",
+    "properti_id": "PROPERTI_ID"
+  }'
+```
+
+### Ajukan Dana (PENGELOLA)
+```bash
+curl -X POST http://localhost:3000/api/dana \
+  -H "Authorization: Bearer OPERATOR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tujuan": "Perbaikan WC",
+    "jumlah": 500000,
+    "no_rekening": "1234567890",
+    "foto": "data:image/jpeg;base64,...",
+    "properti_id": "PROPERTI_ID"
+  }'
+```
+
+### Laporan Keuangan (PEMILIK)
+```bash
+curl "http://localhost:3000/api/laporan/keuangan?bulan=2024-06" \
+  -H "Authorization: Bearer PEMILIK_TOKEN"
+```
+
+### WhatsApp Broadcast (PEMILIK)
+```bash
+curl -X POST http://localhost:3000/api/whatsapp/broadcast \
+  -H "Authorization: Bearer PEMILIK_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nomor": ["6281234567890", "6289876543210"],
+    "pesan": "Halo! Ini pemberitahuan dari MyCoLive"
   }'
 ```
 
@@ -199,16 +275,18 @@ curl -X POST http://localhost:3000/api/pemesanan \
 
 ### Models
 
-- **User** - user dengan role (PEMILIK, PENGELOLA, PENGHUNI)
-- **Properti** - data kos
-- **Kamar** - kamar per properti
-- **Pemesanan** - pemesanan kamar
-- **Pembayaran** - bukti pembayaran
-- **Penghuni** - profile penghuni
-- **Operator** - relasi user-operator-properti
-- **Komplain** - pelaporan komplain
-- **PengajuanDana** - request dana dari operator
-- **AdminSettings** - settings rekening admin
+| Model | Deskripsi |
+|-------|-----------|
+| **User** | User dengan role (PEMILIK, PENGELOLA, PENGHUNI) |
+| **Properti** | Data kos |
+| **Kamar** | Kamar per properti |
+| **Pemesanan** | Pemesanan kamar |
+| **Pembayaran** | Bukti pembayaran |
+| **Penghuni** | Profile penghuni |
+| **Operator** | Relasi user-operator-properti |
+| **Komplain** | Pelaporan komplain (masalah, jenis, foto) |
+| **PengajuanDana** | Request dana dari operator (tujuan, jumlah, no_rekening, foto) |
+| **AdminSettings** | Settings rekening admin (nama_rekening, nomor_rekening, bank, qris_image) |
 
 ---
 
@@ -236,13 +314,24 @@ Setelah running seed:
 
 ---
 
+## 🔒 Security Notes
+
+- JWT_SECRET wajib ada di .env (app tidak akan jalan jika kosong)
+- Semua endpoint sensitif sudah ada access control
+- Properti deletion akan dicek untuk dependencies (kamar, penghuni aktif, pemesanan aktif)
+- User tidak bisa hapus diri sendiri
+- Role modification sudah dinonaktifkan
+
+---
+
 ## 📦 Tech Stack
 
 - **Runtime**: Bun
 - **Framework**: Hono
-- **ORM**: Prisma
+- **ORM**: Prisma v7
 - **Database**: PostgreSQL
 - **Auth**: JWT + bcryptjs
+- **WhatsApp**: Whapi.Cloud (configurable)
 
 ---
 
