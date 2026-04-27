@@ -11,6 +11,7 @@ import pemesananRoutes from "./routes/pemesanan";
 import penghuniRoutes from "./routes/penghuni";
 import danaRoutes from "./routes/dana";
 import komplainRoutes from "./routes/komplain";
+import laporanRoutes from "./routes/laporan";
 
 const app = new Hono();
 
@@ -36,5 +37,6 @@ app.route("/api/pemesanan", pemesananRoutes);
 app.route("/api/penghuni", penghuniRoutes);
 app.route("/api/dana", danaRoutes);
 app.route("/api/komplain", komplainRoutes);
+app.route("/api/laporan", laporanRoutes);
 
 export default app;
