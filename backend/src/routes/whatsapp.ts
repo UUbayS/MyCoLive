@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { authMiddleware, requireRole } from "../../middleware/auth";
-import { sendWhatsAppBroadcast, isValidNomorWA } from "../../services/whatsapp";
+import { authMiddleware, requireRole } from "../middleware/auth";
+import { sendWhatsAppBroadcast, isValidNomorWA } from "../services/whatsapp";
 
 const app = new Hono();
 
