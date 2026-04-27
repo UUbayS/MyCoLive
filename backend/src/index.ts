@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { errorMiddleware } from "./middleware/error";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
@@ -11,6 +12,12 @@ import penghuniRoutes from "./routes/penghuni";
 import danaRoutes from "./routes/dana";
 
 const app = new Hono();
+
+app.use("*", cors({
+  origin: "*",
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowHeaders: ["Content-Type", "Authorization"],
+}));
 
 app.use("*", errorMiddleware);
 
