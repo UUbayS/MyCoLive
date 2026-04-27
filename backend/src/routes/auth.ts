@@ -98,7 +98,7 @@ app.post("/login", async (c) => {
   }
 });
 
-app.post("/register-penghuni", async (c) => {
+app.post("/register", async (c) => {
   try {
     const body = await c.req.json();
     const { username, nama_lengkap, no_telepon, email, password } = body;
