@@ -8,6 +8,7 @@ import kamarRoutes from "./routes/kamar";
 import settingsRoutes from "./routes/settings";
 import pemesananRoutes from "./routes/pemesanan";
 import penghuniRoutes from "./routes/penghuni";
+import danaRoutes from "./routes/dana";
 
 const app = new Hono();
 
@@ -25,5 +26,6 @@ app.route("/api", kamarRoutes);
 app.route("/api/settings", settingsRoutes);
 app.route("/api/pemesanan", pemesananRoutes);
 app.route("/api/penghuni", penghuniRoutes);
+app.route("/api/dana", danaRoutes);
 
 export default app;
