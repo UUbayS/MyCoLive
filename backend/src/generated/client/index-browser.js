@@ -216,8 +216,10 @@ exports.Prisma.OperatorScalarFieldEnum = {
 
 exports.Prisma.KomplainScalarFieldEnum = {
   id: 'id',
-  judul: 'judul',
+  masalah: 'masalah',
+  jenis: 'jenis',
   deskripsi: 'deskripsi',
+  foto: 'foto',
   status: 'status',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -304,6 +306,13 @@ exports.StatusPembayaran = exports.$Enums.StatusPembayaran = {
 exports.StatusSewa = exports.$Enums.StatusSewa = {
   AKTIF: 'AKTIF',
   BERAKHIR: 'BERAKHIR'
+};
+
+exports.JenisKomplain = exports.$Enums.JenisKomplain = {
+  FASILITAS: 'FASILITAS',
+  LINGKUNGAN: 'LINGKUNGAN',
+  PENGHUNI_LAIN: 'PENGHUNI_LAIN',
+  LAINNYA: 'LAINNYA'
 };
 
 exports.StatusKomplain = exports.$Enums.StatusKomplain = {
