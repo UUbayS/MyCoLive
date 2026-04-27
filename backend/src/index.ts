@@ -6,10 +6,13 @@ import userRoutes from "./routes/users";
 import propertiRoutes from "./routes/properti";
 import katalogRoutes from "./routes/katalog";
 import kamarRoutes from "./routes/kamar";
-import settingsRoutes from "./routes/settings";
+import tempatpembayaranRoutes from "./routes/tempatpembayaran";
 import pemesananRoutes from "./routes/pemesanan";
 import penghuniRoutes from "./routes/penghuni";
 import danaRoutes from "./routes/dana";
+import komplainRoutes from "./routes/komplain";
+import laporanRoutes from "./routes/laporan";
+import whatsappRoutes from "./routes/whatsapp";
 
 const app = new Hono();
 
@@ -30,9 +33,12 @@ app.route("/api/users", userRoutes);
 app.route("/api/properti", propertiRoutes);
 app.route("/api/katalog", katalogRoutes);
 app.route("/api", kamarRoutes);
-app.route("/api/settings", settingsRoutes);
+app.route("/api/tempatpembayaran", tempatpembayaranRoutes);
 app.route("/api/pemesanan", pemesananRoutes);
 app.route("/api/penghuni", penghuniRoutes);
 app.route("/api/dana", danaRoutes);
+app.route("/api/komplain", komplainRoutes);
+app.route("/api/laporan", laporanRoutes);
+app.route("/api/whatsapp", whatsappRoutes);
 
 export default app;

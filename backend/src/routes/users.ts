@@ -265,7 +265,7 @@ app.put("/:id", async (c) => {
   try {
     const id = c.req.param("id");
     const body = await c.req.json();
-    const { username, nama, no_telepon, role } = body;
+    const { username, nama, no_telepon } = body;
 
     const existingUser = await prisma.user.findUnique({
       where: { id },
@@ -282,9 +282,6 @@ app.put("/:id", async (c) => {
     if (username) updateData.username = username.trim();
     if (nama) updateData.nama = nama;
     if (no_telepon) updateData.no_telepon = convertPhone(no_telepon);
-    if (role && ["PEMILIK", "PENGELOLA", "PENGHUNI"].includes(role)) {
-      updateData.role = role;
-    }
 
     const user = await prisma.user.update({
       where: { id },
@@ -316,6 +313,14 @@ app.put("/:id", async (c) => {
 app.delete("/:id", async (c) => {
   try {
     const id = c.req.param("id");
+    const user = c.get("user");
+
+    if (id === user.userId) {
+      return c.json(
+        { status: "error", message: "Tidak bisa menghapus diri sendiri" },
+        400
+      );
+    }
 
     const existingUser = await prisma.user.findUnique({
       where: { id },

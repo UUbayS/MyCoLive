@@ -133,6 +133,16 @@ export const StatusKomplain: {
 export type StatusKomplain = (typeof StatusKomplain)[keyof typeof StatusKomplain]
 
 
+export const JenisKomplain: {
+  FASILITAS: 'FASILITAS',
+  LINGKUNGAN: 'LINGKUNGAN',
+  PENGHUNI_LAIN: 'PENGHUNI_LAIN',
+  LAINNYA: 'LAINNYA'
+};
+
+export type JenisKomplain = (typeof JenisKomplain)[keyof typeof JenisKomplain]
+
+
 export const StatusDana: {
   MENUNGGU: 'MENUNGGU',
   DITERIMA: 'DITERIMA',
@@ -178,6 +188,10 @@ export const StatusPembayaran: typeof $Enums.StatusPembayaran
 export type StatusKomplain = $Enums.StatusKomplain
 
 export const StatusKomplain: typeof $Enums.StatusKomplain
+
+export type JenisKomplain = $Enums.JenisKomplain
+
+export const JenisKomplain: typeof $Enums.JenisKomplain
 
 export type StatusDana = $Enums.StatusDana
 
@@ -11373,8 +11387,10 @@ export namespace Prisma {
 
   export type KomplainMinAggregateOutputType = {
     id: string | null
-    judul: string | null
+    masalah: string | null
+    jenis: $Enums.JenisKomplain | null
     deskripsi: string | null
+    foto: string | null
     status: $Enums.StatusKomplain | null
     created_at: Date | null
     updated_at: Date | null
@@ -11384,8 +11400,10 @@ export namespace Prisma {
 
   export type KomplainMaxAggregateOutputType = {
     id: string | null
-    judul: string | null
+    masalah: string | null
+    jenis: $Enums.JenisKomplain | null
     deskripsi: string | null
+    foto: string | null
     status: $Enums.StatusKomplain | null
     created_at: Date | null
     updated_at: Date | null
@@ -11395,8 +11413,10 @@ export namespace Prisma {
 
   export type KomplainCountAggregateOutputType = {
     id: number
-    judul: number
+    masalah: number
+    jenis: number
     deskripsi: number
+    foto: number
     status: number
     created_at: number
     updated_at: number
@@ -11408,8 +11428,10 @@ export namespace Prisma {
 
   export type KomplainMinAggregateInputType = {
     id?: true
-    judul?: true
+    masalah?: true
+    jenis?: true
     deskripsi?: true
+    foto?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -11419,8 +11441,10 @@ export namespace Prisma {
 
   export type KomplainMaxAggregateInputType = {
     id?: true
-    judul?: true
+    masalah?: true
+    jenis?: true
     deskripsi?: true
+    foto?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -11430,8 +11454,10 @@ export namespace Prisma {
 
   export type KomplainCountAggregateInputType = {
     id?: true
-    judul?: true
+    masalah?: true
+    jenis?: true
     deskripsi?: true
+    foto?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -11514,8 +11540,10 @@ export namespace Prisma {
 
   export type KomplainGroupByOutputType = {
     id: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto: string | null
     status: $Enums.StatusKomplain
     created_at: Date
     updated_at: Date
@@ -11542,8 +11570,10 @@ export namespace Prisma {
 
   export type KomplainSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    judul?: boolean
+    masalah?: boolean
+    jenis?: boolean
     deskripsi?: boolean
+    foto?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -11555,8 +11585,10 @@ export namespace Prisma {
 
   export type KomplainSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    judul?: boolean
+    masalah?: boolean
+    jenis?: boolean
     deskripsi?: boolean
+    foto?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -11568,8 +11600,10 @@ export namespace Prisma {
 
   export type KomplainSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    judul?: boolean
+    masalah?: boolean
+    jenis?: boolean
     deskripsi?: boolean
+    foto?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -11581,8 +11615,10 @@ export namespace Prisma {
 
   export type KomplainSelectScalar = {
     id?: boolean
-    judul?: boolean
+    masalah?: boolean
+    jenis?: boolean
     deskripsi?: boolean
+    foto?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -11590,7 +11626,7 @@ export namespace Prisma {
     properti_id?: boolean
   }
 
-  export type KomplainOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "judul" | "deskripsi" | "status" | "created_at" | "updated_at" | "penghuni_id" | "properti_id", ExtArgs["result"]["komplain"]>
+  export type KomplainOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "masalah" | "jenis" | "deskripsi" | "foto" | "status" | "created_at" | "updated_at" | "penghuni_id" | "properti_id", ExtArgs["result"]["komplain"]>
   export type KomplainInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     penghuni?: boolean | PenghuniDefaultArgs<ExtArgs>
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
@@ -11612,8 +11648,10 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      judul: string
+      masalah: string
+      jenis: $Enums.JenisKomplain
       deskripsi: string
+      foto: string | null
       status: $Enums.StatusKomplain
       created_at: Date
       updated_at: Date
@@ -12045,8 +12083,10 @@ export namespace Prisma {
    */
   interface KomplainFieldRefs {
     readonly id: FieldRef<"Komplain", 'String'>
-    readonly judul: FieldRef<"Komplain", 'String'>
+    readonly masalah: FieldRef<"Komplain", 'String'>
+    readonly jenis: FieldRef<"Komplain", 'JenisKomplain'>
     readonly deskripsi: FieldRef<"Komplain", 'String'>
+    readonly foto: FieldRef<"Komplain", 'String'>
     readonly status: FieldRef<"Komplain", 'StatusKomplain'>
     readonly created_at: FieldRef<"Komplain", 'DateTime'>
     readonly updated_at: FieldRef<"Komplain", 'DateTime'>
@@ -13775,8 +13815,10 @@ export namespace Prisma {
 
   export const KomplainScalarFieldEnum: {
     id: 'id',
-    judul: 'judul',
+    masalah: 'masalah',
+    jenis: 'jenis',
     deskripsi: 'deskripsi',
+    foto: 'foto',
     status: 'status',
     created_at: 'created_at',
     updated_at: 'updated_at',
@@ -14000,6 +14042,20 @@ export namespace Prisma {
    * Reference to a field of type 'StatusSewa[]'
    */
   export type ListEnumStatusSewaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusSewa[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'JenisKomplain'
+   */
+  export type EnumJenisKomplainFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JenisKomplain'>
+    
+
+
+  /**
+   * Reference to a field of type 'JenisKomplain[]'
+   */
+  export type ListEnumJenisKomplainFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JenisKomplain[]'>
     
 
 
@@ -14701,8 +14757,10 @@ export namespace Prisma {
     OR?: KomplainWhereInput[]
     NOT?: KomplainWhereInput | KomplainWhereInput[]
     id?: StringFilter<"Komplain"> | string
-    judul?: StringFilter<"Komplain"> | string
+    masalah?: StringFilter<"Komplain"> | string
+    jenis?: EnumJenisKomplainFilter<"Komplain"> | $Enums.JenisKomplain
     deskripsi?: StringFilter<"Komplain"> | string
+    foto?: StringNullableFilter<"Komplain"> | string | null
     status?: EnumStatusKomplainFilter<"Komplain"> | $Enums.StatusKomplain
     created_at?: DateTimeFilter<"Komplain"> | Date | string
     updated_at?: DateTimeFilter<"Komplain"> | Date | string
@@ -14714,8 +14772,10 @@ export namespace Prisma {
 
   export type KomplainOrderByWithRelationInput = {
     id?: SortOrder
-    judul?: SortOrder
+    masalah?: SortOrder
+    jenis?: SortOrder
     deskripsi?: SortOrder
+    foto?: SortOrderInput | SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -14730,8 +14790,10 @@ export namespace Prisma {
     AND?: KomplainWhereInput | KomplainWhereInput[]
     OR?: KomplainWhereInput[]
     NOT?: KomplainWhereInput | KomplainWhereInput[]
-    judul?: StringFilter<"Komplain"> | string
+    masalah?: StringFilter<"Komplain"> | string
+    jenis?: EnumJenisKomplainFilter<"Komplain"> | $Enums.JenisKomplain
     deskripsi?: StringFilter<"Komplain"> | string
+    foto?: StringNullableFilter<"Komplain"> | string | null
     status?: EnumStatusKomplainFilter<"Komplain"> | $Enums.StatusKomplain
     created_at?: DateTimeFilter<"Komplain"> | Date | string
     updated_at?: DateTimeFilter<"Komplain"> | Date | string
@@ -14743,8 +14805,10 @@ export namespace Prisma {
 
   export type KomplainOrderByWithAggregationInput = {
     id?: SortOrder
-    judul?: SortOrder
+    masalah?: SortOrder
+    jenis?: SortOrder
     deskripsi?: SortOrder
+    foto?: SortOrderInput | SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -14760,8 +14824,10 @@ export namespace Prisma {
     OR?: KomplainScalarWhereWithAggregatesInput[]
     NOT?: KomplainScalarWhereWithAggregatesInput | KomplainScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Komplain"> | string
-    judul?: StringWithAggregatesFilter<"Komplain"> | string
+    masalah?: StringWithAggregatesFilter<"Komplain"> | string
+    jenis?: EnumJenisKomplainWithAggregatesFilter<"Komplain"> | $Enums.JenisKomplain
     deskripsi?: StringWithAggregatesFilter<"Komplain"> | string
+    foto?: StringNullableWithAggregatesFilter<"Komplain"> | string | null
     status?: EnumStatusKomplainWithAggregatesFilter<"Komplain"> | $Enums.StatusKomplain
     created_at?: DateTimeWithAggregatesFilter<"Komplain"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Komplain"> | Date | string
@@ -15563,8 +15629,10 @@ export namespace Prisma {
 
   export type KomplainCreateInput = {
     id?: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto?: string | null
     status?: $Enums.StatusKomplain
     created_at?: Date | string
     updated_at?: Date | string
@@ -15574,8 +15642,10 @@ export namespace Prisma {
 
   export type KomplainUncheckedCreateInput = {
     id?: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto?: string | null
     status?: $Enums.StatusKomplain
     created_at?: Date | string
     updated_at?: Date | string
@@ -15585,8 +15655,10 @@ export namespace Prisma {
 
   export type KomplainUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15596,8 +15668,10 @@ export namespace Prisma {
 
   export type KomplainUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15607,8 +15681,10 @@ export namespace Prisma {
 
   export type KomplainCreateManyInput = {
     id?: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto?: string | null
     status?: $Enums.StatusKomplain
     created_at?: Date | string
     updated_at?: Date | string
@@ -15618,8 +15694,10 @@ export namespace Prisma {
 
   export type KomplainUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15627,8 +15705,10 @@ export namespace Prisma {
 
   export type KomplainUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16453,6 +16533,13 @@ export namespace Prisma {
     properti_id?: SortOrder
   }
 
+  export type EnumJenisKomplainFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisKomplain | EnumJenisKomplainFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisKomplain[] | ListEnumJenisKomplainFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisKomplain[] | ListEnumJenisKomplainFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisKomplainFilter<$PrismaModel> | $Enums.JenisKomplain
+  }
+
   export type EnumStatusKomplainFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusKomplain | EnumStatusKomplainFieldRefInput<$PrismaModel>
     in?: $Enums.StatusKomplain[] | ListEnumStatusKomplainFieldRefInput<$PrismaModel>
@@ -16462,8 +16549,10 @@ export namespace Prisma {
 
   export type KomplainCountOrderByAggregateInput = {
     id?: SortOrder
-    judul?: SortOrder
+    masalah?: SortOrder
+    jenis?: SortOrder
     deskripsi?: SortOrder
+    foto?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -16473,8 +16562,10 @@ export namespace Prisma {
 
   export type KomplainMaxOrderByAggregateInput = {
     id?: SortOrder
-    judul?: SortOrder
+    masalah?: SortOrder
+    jenis?: SortOrder
     deskripsi?: SortOrder
+    foto?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -16484,13 +16575,25 @@ export namespace Prisma {
 
   export type KomplainMinOrderByAggregateInput = {
     id?: SortOrder
-    judul?: SortOrder
+    masalah?: SortOrder
+    jenis?: SortOrder
     deskripsi?: SortOrder
+    foto?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     penghuni_id?: SortOrder
     properti_id?: SortOrder
+  }
+
+  export type EnumJenisKomplainWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisKomplain | EnumJenisKomplainFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisKomplain[] | ListEnumJenisKomplainFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisKomplain[] | ListEnumJenisKomplainFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisKomplainWithAggregatesFilter<$PrismaModel> | $Enums.JenisKomplain
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumJenisKomplainFilter<$PrismaModel>
+    _max?: NestedEnumJenisKomplainFilter<$PrismaModel>
   }
 
   export type EnumStatusKomplainWithAggregatesFilter<$PrismaModel = never> = {
@@ -17399,6 +17502,10 @@ export namespace Prisma {
     connect?: PropertiWhereUniqueInput
   }
 
+  export type EnumJenisKomplainFieldUpdateOperationsInput = {
+    set?: $Enums.JenisKomplain
+  }
+
   export type EnumStatusKomplainFieldUpdateOperationsInput = {
     set?: $Enums.StatusKomplain
   }
@@ -17754,11 +17861,28 @@ export namespace Prisma {
     _max?: NestedEnumStatusSewaFilter<$PrismaModel>
   }
 
+  export type NestedEnumJenisKomplainFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisKomplain | EnumJenisKomplainFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisKomplain[] | ListEnumJenisKomplainFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisKomplain[] | ListEnumJenisKomplainFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisKomplainFilter<$PrismaModel> | $Enums.JenisKomplain
+  }
+
   export type NestedEnumStatusKomplainFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusKomplain | EnumStatusKomplainFieldRefInput<$PrismaModel>
     in?: $Enums.StatusKomplain[] | ListEnumStatusKomplainFieldRefInput<$PrismaModel>
     notIn?: $Enums.StatusKomplain[] | ListEnumStatusKomplainFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusKomplainFilter<$PrismaModel> | $Enums.StatusKomplain
+  }
+
+  export type NestedEnumJenisKomplainWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisKomplain | EnumJenisKomplainFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisKomplain[] | ListEnumJenisKomplainFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisKomplain[] | ListEnumJenisKomplainFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisKomplainWithAggregatesFilter<$PrismaModel> | $Enums.JenisKomplain
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumJenisKomplainFilter<$PrismaModel>
+    _max?: NestedEnumJenisKomplainFilter<$PrismaModel>
   }
 
   export type NestedEnumStatusKomplainWithAggregatesFilter<$PrismaModel = never> = {
@@ -18183,8 +18307,10 @@ export namespace Prisma {
 
   export type KomplainCreateWithoutPropertiInput = {
     id?: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto?: string | null
     status?: $Enums.StatusKomplain
     created_at?: Date | string
     updated_at?: Date | string
@@ -18193,8 +18319,10 @@ export namespace Prisma {
 
   export type KomplainUncheckedCreateWithoutPropertiInput = {
     id?: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto?: string | null
     status?: $Enums.StatusKomplain
     created_at?: Date | string
     updated_at?: Date | string
@@ -18405,8 +18533,10 @@ export namespace Prisma {
     OR?: KomplainScalarWhereInput[]
     NOT?: KomplainScalarWhereInput | KomplainScalarWhereInput[]
     id?: StringFilter<"Komplain"> | string
-    judul?: StringFilter<"Komplain"> | string
+    masalah?: StringFilter<"Komplain"> | string
+    jenis?: EnumJenisKomplainFilter<"Komplain"> | $Enums.JenisKomplain
     deskripsi?: StringFilter<"Komplain"> | string
+    foto?: StringNullableFilter<"Komplain"> | string | null
     status?: EnumStatusKomplainFilter<"Komplain"> | $Enums.StatusKomplain
     created_at?: DateTimeFilter<"Komplain"> | Date | string
     updated_at?: DateTimeFilter<"Komplain"> | Date | string
@@ -19176,8 +19306,10 @@ export namespace Prisma {
 
   export type KomplainCreateWithoutPenghuniInput = {
     id?: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto?: string | null
     status?: $Enums.StatusKomplain
     created_at?: Date | string
     updated_at?: Date | string
@@ -19186,8 +19318,10 @@ export namespace Prisma {
 
   export type KomplainUncheckedCreateWithoutPenghuniInput = {
     id?: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto?: string | null
     status?: $Enums.StatusKomplain
     created_at?: Date | string
     updated_at?: Date | string
@@ -19884,8 +20018,10 @@ export namespace Prisma {
 
   export type KomplainCreateManyPropertiInput = {
     id?: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto?: string | null
     status?: $Enums.StatusKomplain
     created_at?: Date | string
     updated_at?: Date | string
@@ -19972,8 +20108,10 @@ export namespace Prisma {
 
   export type KomplainUpdateWithoutPropertiInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19982,8 +20120,10 @@ export namespace Prisma {
 
   export type KomplainUncheckedUpdateWithoutPropertiInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19992,8 +20132,10 @@ export namespace Prisma {
 
   export type KomplainUncheckedUpdateManyWithoutPropertiInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20169,8 +20311,10 @@ export namespace Prisma {
 
   export type KomplainCreateManyPenghuniInput = {
     id?: string
-    judul: string
+    masalah: string
+    jenis: $Enums.JenisKomplain
     deskripsi: string
+    foto?: string | null
     status?: $Enums.StatusKomplain
     created_at?: Date | string
     updated_at?: Date | string
@@ -20220,8 +20364,10 @@ export namespace Prisma {
 
   export type KomplainUpdateWithoutPenghuniInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20230,8 +20376,10 @@ export namespace Prisma {
 
   export type KomplainUncheckedUpdateWithoutPenghuniInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20240,8 +20388,10 @@ export namespace Prisma {
 
   export type KomplainUncheckedUpdateManyWithoutPenghuniInput = {
     id?: StringFieldUpdateOperationsInput | string
-    judul?: StringFieldUpdateOperationsInput | string
+    masalah?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisKomplainFieldUpdateOperationsInput | $Enums.JenisKomplain
     deskripsi?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusKomplainFieldUpdateOperationsInput | $Enums.StatusKomplain
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
