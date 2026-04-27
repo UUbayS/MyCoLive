@@ -224,8 +224,10 @@ model Komplain {
 
 model PengajuanDana {
   id          String   @id @default(cuid())
+  tujuan      String
   jumlah      Int
-  deskripsi   String
+  no_rekening String
+  foto        String?
   status      StatusDana @default(MENUNGGU)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

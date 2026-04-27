@@ -227,8 +227,10 @@ exports.Prisma.KomplainScalarFieldEnum = {
 
 exports.Prisma.PengajuanDanaScalarFieldEnum = {
   id: 'id',
+  tujuan: 'tujuan',
   jumlah: 'jumlah',
-  deskripsi: 'deskripsi',
+  no_rekening: 'no_rekening',
+  foto: 'foto',
   status: 'status',
   created_at: 'created_at',
   updated_at: 'updated_at',
