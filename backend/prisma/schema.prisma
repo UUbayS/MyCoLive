@@ -78,6 +78,20 @@ model User {
   
   // Relation opposite: PEMILIK owns properti
   properti  Properti[]
+  // Relation opposite: settings
+  settings   AdminSettings?
+}
+
+model AdminSettings {
+  id            String   @id @default(cuid())
+  nama_rekening String?
+  nomor_rekening String?
+  bank          String?
+  qris_image    String?
+  updated_at   DateTime @updatedAt
+
+  user_id       String   @unique
+  user         User     @relation(fields: [user_id], references: [id])
 }
 
 model Properti {
@@ -124,11 +138,14 @@ model Kamar {
 }
 
 model Pemesanan {
-  id          String   @id @default(cuid())
-  tgl_masuk   DateTime
-  status      StatusPemesanan @default(MENUNGGU)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id              String   @id @default(cuid())
+  durasi_sewa     Int
+  tgl_masuk       DateTime
+  metode_bayar   String
+  total_bayar    Int
+  status          StatusPemesanan @default(MENUNGGU)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
 
   kamar_id    String
   kamar       Kamar    @relation(fields: [kamar_id], references: [id])
@@ -143,13 +160,13 @@ model Pemesanan {
 }
 
 model Pembayaran {
-  id          String   @id @default(cuid())
-  jumlah      Int
-  bukti       String?
-  status      StatusPembayaran @default(MENUNGGU)
-  tgl_bayar   DateTime?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id              String   @id @default(cuid())
+  metode_bayar    String
+  bukti           String?
+  status          StatusPembayaran @default(MENUNGGU)
+  tgl_bayar       DateTime?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
 
   pemesanan_id String   @unique
   pemesanan   Pemesanan @relation(fields: [pemesanan_id], references: [id])
