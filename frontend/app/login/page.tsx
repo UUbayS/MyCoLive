@@ -42,7 +42,8 @@ export default function LoginPage() {
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("user", JSON.stringify(user));
 
-      router.push("/");
+      // Redirect to katalog properti setelah login
+      router.push("/katalog-properti");
     } catch {
       setError("Tidak dapat terhubung ke server. Pastikan backend sedang berjalan.");
     } finally {

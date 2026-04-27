@@ -80,7 +80,8 @@ export default function RegisterPage() {
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("user", JSON.stringify(user));
 
-      router.push("/");
+      // Redirect ke halaman login setelah registrasi berhasil
+      router.push("/login");
     } catch {
       setError("Tidak dapat terhubung ke server. Pastikan backend sedang berjalan.");
     } finally {
