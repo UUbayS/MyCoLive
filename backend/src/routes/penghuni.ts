@@ -19,39 +19,35 @@ app.get("/", async (c) => {
       );
     }
 
-    let propertiFilter = {};
+    // Get properti IDs yang boleh diakses
+    let propertiIds: string[] = [];
     
     if (user.role === "PEMILIK") {
-      propertiFilter = { admin_id: user.userId };
+      const properti = await prisma.properti.findMany({
+        where: { admin_id: user.userId },
+        select: { id: true }
+      });
+      propertiIds = properti.map(p => p.id);
     } else if (user.role === "PENGELOLA") {
       const operators = await prisma.operator.findMany({
         where: { user_id: user.userId },
         select: { properti_id: true }
       });
-      const propertiIds = operators.map(op => op.properti_id);
-      propertiFilter = { id: { in: propertiIds } };
+      propertiIds = operators.map(op => op.properti_id);
     }
 
-    const allProperti = await prisma.properti.findMany({
-      where: propertiFilter,
-      select: { id: true }
-    });
-    const propertiIds = allProperti.map(p => p.id);
+    if (propertiIds.length === 0) {
+      return c.json({
+        status: "success",
+        data: [],
+      });
+    }
 
-    const whereClause: any = {
-      kamar: {
-        properti_id: { in: propertiIds }
-      }
-    };
+    // Ambil SEMUA penghuni yang ada di properti ini (dengan atau tanpa kamar)
+    const whereClause: any = {};
 
     if (status && ["AKTIF", "BERAKHIR"].includes(status)) {
       whereClause.status_sewa = status;
-    }
-
-    if (properti_id) {
-      whereClause.kamar = {
-        properti_id: properti_id
-      };
     }
 
     const penghuni = await prisma.penghuni.findMany({
@@ -82,20 +78,42 @@ app.get("/", async (c) => {
       orderBy: { created_at: "desc" }
     });
 
-    const result = penghuni.map(p => ({
-      id: p.id,
-      tgl_mulai: p.tgl_mulai,
-      tgl_berakhir: p.tgl_berakhir,
-      status_sewa: p.status_sewa,
-      status_display: p.kamar ? (p.status_sewa === "AKTIF" ? "Menyewa" : "Sewa Berakhir") : "Belum Menyewa",
-      kamar: p.kamar ? {
-        id: p.kamar.id,
-        nomor: p.kamar.nomor,
-        properti: p.kamar.properti.nama,
-        alamat: p.kamar.properti.alamat
-      } : null,
-      user: p.user
-    }));
+    // Filter berdasarkan properti_ids (baik ada kamar maupun tidak)
+    const result = penghuni
+      .filter(p => {
+        // Jika ada kamar, cek apakah properti_id cocok
+        if (p.kamar) {
+          return propertiIds.includes(p.kamar.properti_id);
+        }
+        // Jika tidak ada kamar, tetap tampilkan (belum menyewa / baru register)
+        return true;
+      })
+      .filter(p => {
+        // Filter by properti_id jika ada
+        if (properti_id && p.kamar) {
+          return p.kamar.properti_id === properti_id;
+        }
+        if (properti_id && !p.kamar) {
+          return false; // Tidak bisa filter untuk yang belum punya kamar
+        }
+        return true;
+      })
+      .map(p => ({
+        id: p.id,
+        tgl_mulai: p.tgl_mulai,
+        tgl_berakhir: p.tgl_berakhir,
+        status_sewa: p.status_sewa,
+        status_display: !p.kamar 
+          ? "Belum Menyewa" 
+          : (p.status_sewa === "AKTIF" ? "Menyewa" : "Sewa Berakhir"),
+        kamar: p.kamar ? {
+          id: p.kamar.id,
+          nomor: p.kamar.nomor,
+          properti: p.kamar.properti.nama,
+          alamat: p.kamar.properti.alamat
+        } : null,
+        user: p.user
+      }));
 
     return c.json({
       status: "success",
