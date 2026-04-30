@@ -178,6 +178,27 @@ app.get("/:id", async (c) => {
       );
     }
 
+    const propertiId = penghuni.kamar?.properti_id;
+    
+    let isAllowed = false;
+    if (user.role === "PEMILIK") {
+      isAllowed = propertiId ? await prisma.properti.findFirst({
+        where: { id: propertiId, admin_id: user.userId }
+      }) : true;
+    } else if (user.role === "PENGELOLA") {
+      const operator = await prisma.operator.findFirst({
+        where: { user_id: user.userId, properti_ids: { has: propertiId || "" } }
+      });
+      isAllowed = !!operator;
+    }
+
+    if (!isAllowed && propertiId) {
+      return c.json(
+        { status: "error", message: "Akses ditolak" },
+        403
+      );
+    }
+
     return c.json({
       status: "success",
       data: penghuni,

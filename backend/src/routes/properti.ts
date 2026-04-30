@@ -273,6 +273,45 @@ app.delete("/:id", requireRole("PEMILIK"), async (c) => {
       );
     }
 
+    const kamarCount = await prisma.kamar.count({
+      where: { properti_id: id }
+    });
+
+    if (kamarCount > 0) {
+      return c.json(
+        { status: "error", message: "Tidak bisa hapus properti yang masih punya kamar" },
+        400
+      );
+    }
+
+    const penghuniAktif = await prisma.penghuni.count({
+      where: {
+        kamar: { properti_id: id },
+        status_sewa: "AKTIF"
+      }
+    });
+
+    if (penghuniAktif > 0) {
+      return c.json(
+        { status: "error", message: "Tidak bisa hapus properti yang masih punya penghuni aktif" },
+        400
+      );
+    }
+
+    const pemesananAktif = await prisma.pemesanan.count({
+      where: {
+        properti_id: id,
+        status: { in: ["MENUNGGU", "DITERIMA"] }
+      }
+    });
+
+    if (pemesananAktif > 0) {
+      return c.json(
+        { status: "error", message: "Tidak bisa hapus properti yang masih punya pemesanan aktif" },
+        400
+      );
+    }
+
     await prisma.properti.delete({
       where: { id }
     });

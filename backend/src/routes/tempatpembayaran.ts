@@ -6,8 +6,8 @@ const app = new Hono();
 
 app.use("*", authMiddleware);
 
-// Get settings (by logged in user - should be PEMILIK)
-app.get("/", async (c) => {
+// Get tempat pembayaran (PEMILIK only)
+app.get("/", requireRole("PEMILIK"), async (c) => {
   try {
     const user = c.get("user");
     
@@ -15,20 +15,28 @@ app.get("/", async (c) => {
       where: { user_id: user.userId }
     });
 
+    if (!settings) {
+      return c.json({
+        status: "success",
+        data: null,
+        message: "Tempat pembayaran belum di-configure",
+      });
+    }
+
     return c.json({
       status: "success",
-      data: settings || {},
+      data: settings,
     });
   } catch (error) {
-    console.error("Get settings error:", error);
+    console.error("Get tempat pembayaran error:", error);
     return c.json(
-      { status: "error", message: "Gagal mengambil settings" },
+      { status: "error", message: "Gagal mengambil data" },
       500
     );
   }
 });
 
-// Update settings
+// Update tempat pembayaran
 app.put("/", requireRole("PEMILIK"), async (c) => {
   try {
     const user = c.get("user");
@@ -57,9 +65,9 @@ app.put("/", requireRole("PEMILIK"), async (c) => {
       data: settings,
     });
   } catch (error) {
-    console.error("Update settings error:", error);
+    console.error("Update tempat pembayaran error:", error);
     return c.json(
-      { status: "error", message: "Gagal update settings" },
+      { status: "error", message: "Gagal update data" },
       500
     );
   }

@@ -51,6 +51,13 @@ enum StatusKomplain {
   SELESAI
 }
 
+enum JenisKomplain {
+  FASILITAS
+  LINGKUNGAN
+  PENGHUNI_LAIN
+  LAINNYA
+}
+
 enum StatusDana {
   MENUNGGU
   DITERIMA
@@ -208,12 +215,14 @@ model Operator {
 }
 
 model Komplain {
-  id          String   @id @default(cuid())
-  judul       String
+  id          String        @id @default(cuid())
+  masalah     String
+  jenis       JenisKomplain
   deskripsi   String
+  foto        String?
   status      StatusKomplain @default(BARU)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
 
   penghuni_id  String
   penghuni     Penghuni @relation(fields: [penghuni_id], references: [id])
