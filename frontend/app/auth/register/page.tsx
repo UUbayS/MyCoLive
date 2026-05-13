@@ -103,7 +103,7 @@ export default function RegisterPage() {
           </div>
         )}
 
-        <div className="space-y-3 flex-1 overflow-y-auto">
+        <div className="space-y-3 flex-1">
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
               <User size={20} />
