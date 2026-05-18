@@ -162,6 +162,18 @@ app.get("/kamar/:id", async (c) => {
             nama: true,
             alamat: true
           }
+        },
+        penghuni: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                nama: true,
+                email: true,
+                no_telepon: true
+              }
+            }
+          }
         }
       }
     });

@@ -2,95 +2,140 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import PropertyList from "./components/PropertyList";
-import PropertyCard, { PropertyData } from "./components/PropertyCard";
+import Link from "next/link";
+import { Plus, Building2 } from "lucide-react";
+import PropertyList from "../../../components/PropertyList";
+import { PropertyData } from "../../../components/PropertyCard";
+import StatsWidget from "../../../components/StatsWidget";
 import { getUser } from "../../../lib/auth";
-
-// Dummy data untuk placeholder saat API belum tersedia
-const dummyProperties: PropertyData[] = [
-  {
-    id: "1",
-    nama: "Kosan A",
-    alamat: "Jl Parakan Ayu III No 8, Bandung",
-    total_kamar: 7,
-    kamar_kosong: 3,
-  },
-  {
-    id: "2",
-    nama: "Kosan B",
-    alamat: "Jl Parakan Ayu III No 7, Bandung",
-    total_kamar: 10,
-    kamar_kosong: 0,
-  },
-];
+import { getKatalogProperti, getPropertiList } from "../../../lib/api";
+import MainLayout from "../../../components/Layout/MainLayout";
 
 export default function KatalogPropertiPage() {
   const router = useRouter();
   const [properties, setProperties] = useState<PropertyData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState({ totalProperti: 0, totalKamar: 0, totalTerisi: 0 });
 
-  // Ambil peran user untuk menampilkan tombol tambahkan properti jika perlu
   const user = getUser();
-  const showTambah = !!user && (user!.role === "PEMILIK" || user!.role === "PENGELOLA");
+  const isPemilik = user?.role === "PEMILIK";
+  const isPengelola = user?.role === "PENGELOLA";
+  const showTambah = isPemilik || isPengelola;
+  const showStats = isPemilik;
 
   useEffect(() => {
-    // Guard autentikasi: jika tidak login, redirect ke login
     if (typeof window !== "undefined" && !user) {
-      router.push("/login");
+      router.push("/auth/login");
       return;
     }
 
     const fetchProperties = async () => {
       try {
-        const res = await fetch("/api/katalog", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        if (data && data.status === "success" && Array.isArray(data.data)) {
-          if (data.data.length > 0) {
-            setProperties(data.data as PropertyData[]);
-          } else {
-            // fallback dummy jika API ada tapi kosong
-            setProperties(dummyProperties);
+        let data: PropertyData[] = [];
+
+        if (isPemilik || isPengelola) {
+          const result = await getPropertiList();
+          data = result.map((p) => ({
+            id: p.id,
+            nama: p.nama,
+            alamat: p.alamat,
+            total_kamar: p.total_kamar,
+            kamar_kosong: p.kamar_kosong,
+            gambar: p.gambar?.[0],
+          }));
+
+          if (isPemilik) {
+            const totalKamar = result.reduce((sum, p) => sum + (p.total_kamar || 0), 0);
+            const totalTerisi = result.reduce((sum, p) => {
+              const kosong = p.kamar_kosong || 0;
+              const total = p.total_kamar || 0;
+              return sum + (total - kosong);
+            }, 0);
+            setStats({
+              totalProperti: result.length,
+              totalKamar,
+              totalTerisi,
+            });
           }
         } else {
-          setProperties(dummyProperties);
+          const result = await getKatalogProperti();
+          data = result.map((p) => ({
+            id: p.id,
+            nama: p.nama,
+            alamat: p.alamat,
+            total_kamar: p.total_kamar,
+            kamar_kosong: p.kamar_kosong,
+            gambar: p.gambar?.[0],
+          }));
         }
+
+        setProperties(data);
       } catch {
-        // fallback dummy data saat gagal fetch
-        setProperties(dummyProperties);
+        setProperties([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProperties();
-  }, [router, user]);
+  }, [router, user, isPemilik, isPengelola]);
 
   return (
-    <div className="min-h-screen bg-white text-black px-4 pt-6 pb-20">
+    <MainLayout>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-semibold">Katalog Properti</h1>
         {showTambah && (
-          <button
-            className="bg-emerald-500 text-white px-5 py-2 rounded-full shadow-sm opacity-80 hover:opacity-100 cursor-default"
-            onClick={() => {}}
-            aria-label="Tambah Properti"
+          <Link
+            href="/pengelola/properti/tambah"
+            className="hidden md:flex bg-[#84CC16] text-white px-5 py-2 rounded-full shadow-sm hover:bg-[#73b814] transition-colors items-center gap-2"
           >
-            + Tambah Properti
-          </button>
+            <Plus className="w-4 h-4" />
+            Tambah Properti
+          </Link>
         )}
       </div>
+
+      {showStats && (
+        <StatsWidget
+          totalProperti={stats.totalProperti}
+          totalKamar={stats.totalKamar}
+          totalTerisi={stats.totalTerisi}
+        />
+      )}
 
       <div className="mb-4 text-sm text-gray-600">Daftar Properti</div>
 
       {loading ? (
-        <div className="h-48 bg-gray-100 rounded-xl animate-pulse" />
-      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-64 bg-gray-100 rounded-xl animate-pulse" />
+          ))}
+        </div>
+      ) : properties.length > 0 ? (
         <PropertyList properties={properties} />
+      ) : (
+        <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+          <Building2 className="w-16 h-16 mb-4 text-gray-300" />
+          <p className="text-lg font-medium mb-1">Belum ada properti</p>
+          <p className="text-center text-sm">
+            {showTambah ? (
+              <>Klik tombol <strong>Tambah Properti</strong> untuk menambahkan properti baru.</>
+            ) : (
+              "Properti akan muncul di sini setelah ditambahkan oleh pemilik."
+            )}
+          </p>
+        </div>
       )}
-    </div>
+
+      {showTambah && (
+        <Link
+          href="/pengelola/properti/tambah"
+          className="md:hidden fixed bottom-20 right-4 w-14 h-14 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
+          aria-label="Tambah Properti"
+        >
+          <Plus className="w-6 h-6" />
+        </Link>
+      )}
+    </MainLayout>
   );
 }
