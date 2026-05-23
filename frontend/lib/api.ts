@@ -209,3 +209,56 @@ export async function deleteFasilitas(id: string): Promise<boolean> {
     return false;
   }
 }
+
+export type ProfileData = {
+  id: string;
+  username: string;
+  email: string;
+  nama: string;
+  role: string;
+  no_telepon?: string | null;
+  created_at?: string;
+};
+
+export async function getProfile(): Promise<ProfileData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: ProfileData }>("/api/auth/me");
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateProfile(
+  userId: string,
+  data: {
+    nama: string;
+    email: string;
+    no_telepon?: string | null;
+  }
+): Promise<ProfileData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: ProfileData }>("/api/users/" + userId, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function changePassword(
+  currentPassword: string,
+  newPassword: string
+): Promise<{ status: string; message: string } | null> {
+  try {
+    const res = await apiFetch<{ status: string; message: string }>("/api/auth/change-password", {
+      method: "PUT",
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+    return res;
+  } catch (error: any) {
+    throw error;
+  }
+}

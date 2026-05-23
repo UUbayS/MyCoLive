@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+﻿import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { hashPassword, verifyPassword } from "../utils/password";
 import { generateAccessToken, generateRefreshToken, verifyToken } from "../utils/jwt";
@@ -405,6 +405,65 @@ app.get("/me", authMiddleware, async (c) => {
     console.error("Me error:", error);
     return c.json(
       { status: "error", message: "Gagal mengambil data user" },
+      500
+    );
+  }
+});
+
+app.put("/change-password", authMiddleware, async (c) => {
+  try {
+    const user = c.get("user");
+    const body = await c.req.json();
+    const { currentPassword, newPassword } = body;
+
+    if (!currentPassword || !newPassword) {
+      return c.json(
+        { status: "error", message: "Password lama dan password baru wajib diisi" },
+        400
+      );
+    }
+
+    if (newPassword.length < 8) {
+      return c.json(
+        { status: "error", message: "Password baru minimal 8 karakter" },
+        400
+      );
+    }
+
+    const fullUser = await prisma.user.findUnique({
+      where: { id: user.userId },
+    });
+
+    if (!fullUser) {
+      return c.json(
+        { status: "error", message: "User tidak ditemukan" },
+        404
+      );
+    }
+
+    const isValid = await verifyPassword(currentPassword, fullUser.password);
+    if (!isValid) {
+      return c.json(
+        { status: "error", message: "Password lama salah" },
+        401
+      );
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+
+    await prisma.user.update({
+      where: { id: user.userId },
+      data: { password: hashedPassword },
+    });
+
+    return c.json({
+      status: "success",
+      message: "Password berhasil diubah",
+    });
+  } catch (error) {
+    console.error("Change password error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengubah password" },
       500
     );
   }
