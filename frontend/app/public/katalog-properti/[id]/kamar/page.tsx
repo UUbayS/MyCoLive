@@ -6,11 +6,11 @@ import Link from "next/link";
 import { ArrowLeft, Search, SlidersHorizontal, Plus } from "lucide-react";
 import RoomList from "../../../../../components/RoomList";
 import { RoomCardData } from "../../../../../components/RoomCard";
-import { getUser } from "../../../../../lib/auth";
+import { getUser, isAuthenticated } from "../../../../../lib/auth";
 import { getKamarByProperti, getPropertiById, KamarData } from "../../../../../lib/api";
 import MainLayout from "../../../../../components/Layout/MainLayout";
 
-export default function DaftarRuanganPage() {
+export default function DaftarKamarPage() {
   const router = useRouter();
   const params = useParams();
   const propertiId = params.id as string;
@@ -28,6 +28,10 @@ export default function DaftarRuanganPage() {
   const showEdit = isPemilik || isPengelola;
 
   useEffect(() => {
+    if (typeof window !== "undefined" && !isAuthenticated()) {
+      router.push("/auth/login");
+      return;
+    }
     if (!propertiId) return;
 
     const fetchData = async () => {
@@ -65,7 +69,7 @@ export default function DaftarRuanganPage() {
     };
 
     fetchData();
-  }, [propertiId]);
+  }, [propertiId, router]);
 
   const filteredRooms = useMemo(() => {
     let result = rooms;
@@ -114,7 +118,7 @@ export default function DaftarRuanganPage() {
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-xl font-semibold">Daftar Ruangan</h1>
+            <h1 className="text-xl font-semibold">Daftar Kamar</h1>
             <p className="text-sm text-gray-500">{propertiNama}</p>
           </div>
         </div>
@@ -138,7 +142,7 @@ export default function DaftarRuanganPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Cari Ruangan"
+              placeholder="Cari Kamar"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16]"
@@ -183,9 +187,9 @@ export default function DaftarRuanganPage() {
 
       {showEdit && (
         <Link
-          href={`/pengelola/properti/${propertiId}/ruangan/tambah`}
+          href={`/pengelola/properti/${propertiId}/kamar/tambah`}
           className="md:hidden fixed bottom-20 right-4 w-14 h-14 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
-          aria-label="Tambah Ruangan"
+          aria-label="Tambah Kamar"
         >
           <Plus className="w-6 h-6" />
         </Link>

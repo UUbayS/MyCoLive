@@ -7,9 +7,21 @@ export type PropertyData = {
   id: string;
   nama: string;
   alamat: string;
+  provinsi?: string;
+  kota?: string;
+  kecamatan?: string;
+  kode_pos?: string;
+  detail_alamat?: string;
   total_kamar?: number;
   kamar_kosong?: number;
   gambar?: string;
+};
+
+const getDisplayAlamat = (p: PropertyData) => {
+  if (p.kota && p.provinsi) {
+    return `${p.kota}, ${p.provinsi}`;
+  }
+  return p.alamat;
 };
 
 const PropertyCard: React.FC<{ property: PropertyData }> = ({ property }) => {
@@ -35,7 +47,7 @@ const PropertyCard: React.FC<{ property: PropertyData }> = ({ property }) => {
           </div>
           <div className="flex items-center gap-1 text-sm text-gray-600 mb-1">
             <MapPin className="w-3 h-3" />
-            <p className="truncate">{property.alamat}</p>
+            <p className="truncate">{getDisplayAlamat(property)}</p>
           </div>
           <p className="text-sm text-gray-600">
             {property.total_kamar ?? 0} Kamar | {property.kamar_kosong ?? 0} Kosong

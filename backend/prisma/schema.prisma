@@ -105,6 +105,11 @@ model Properti {
   id          String   @id @default(cuid())
   nama        String
   alamat      String
+  provinsi    String?
+  kota        String?
+  kecamatan   String?
+  kode_pos    String?
+  detail_alamat String?
   jenis       JenisProperti?
   deskripsi   String?
   kebijakan  String?

@@ -1,11 +1,13 @@
-import { Context, Next } from "hono";
+import { Context, Next, Env } from "hono";
 import { verifyToken, TokenPayload } from "../utils/jwt";
 
-export interface AuthVariables {
-  user: TokenPayload;
+export interface AppEnv extends Env {
+  Variables: {
+    user: TokenPayload;
+  }
 }
 
-export async function authMiddleware(c: Context, next: Next) {
+export async function authMiddleware(c: Context<AppEnv>, next: Next) {
   const authHeader = c.req.header("Authorization");
   
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -30,8 +32,8 @@ export async function authMiddleware(c: Context, next: Next) {
 }
 
 export function requireRole(...roles: string[]) {
-  return async (c: Context, next: Next) => {
-    const user = c.get("user") as TokenPayload;
+  return async (c: Context<AppEnv>, next: Next) => {
+    const user = c.get("user");
     
     if (!user || !roles.includes(user.role)) {
       return c.json(

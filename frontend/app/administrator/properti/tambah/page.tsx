@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import ImageUploader from "../../../../components/ImageUploader";
+import AddressFields from "../../../../components/AddressFields";
 import { createProperti } from "../../../../lib/api";
+import { getUser, isAuthenticated } from "../../../../lib/auth";
 import MainLayout from "../../../../components/Layout/MainLayout";
 
 export default function TambahPropertiPage() {
@@ -12,9 +14,11 @@ export default function TambahPropertiPage() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     nama: "",
-    alamat: "",
+    provinsi: "",
     kota: "",
+    kecamatan: "",
     kodePos: "",
+    detailAlamat: "",
     jenis: "",
     deskripsi: "",
     kebijakan: "",
@@ -22,12 +26,27 @@ export default function TambahPropertiPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && !isAuthenticated()) {
+      router.push("/auth/login");
+      return;
+    }
+
+    const user = getUser();
+    if (user && user.role !== "PEMILIK" && user.role !== "PENGELOLA") {
+      router.push("/public/katalog-properti");
+    }
+  }, [router]);
+
+  const handleAddressChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.nama.trim()) newErrors.nama = "Nama properti wajib diisi";
-    if (!formData.alamat.trim()) newErrors.alamat = "Alamat wajib diisi";
-    if (!formData.kota.trim()) newErrors.kota = "Kota wajib diisi";
-    if (!formData.kodePos.trim()) newErrors.kodePos = "Kode pos wajib diisi";
+    if (!formData.detailAlamat.trim()) newErrors.detailAlamat = "Detail alamat wajib diisi";
+    if (!formData.provinsi.trim()) newErrors.provinsi = "Provinsi wajib diisi";
     if (!formData.jenis) newErrors.jenis = "Jenis properti wajib dipilih";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -39,10 +58,13 @@ export default function TambahPropertiPage() {
 
     setLoading(true);
     try {
-      const fullAlamat = `${formData.alamat}, ${formData.kota}, ${formData.kodePos}`;
       const result = await createProperti({
         nama: formData.nama,
-        alamat: fullAlamat,
+        provinsi: formData.provinsi,
+        kota: formData.kota,
+        kecamatan: formData.kecamatan,
+        kode_pos: formData.kodePos,
+        detail_alamat: formData.detailAlamat,
         jenis: formData.jenis,
         deskripsi: formData.deskripsi || undefined,
         kebijakan: formData.kebijakan || undefined,
@@ -92,50 +114,15 @@ export default function TambahPropertiPage() {
             {errors.nama && <p className="text-xs text-red-500 mt-1">{errors.nama}</p>}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Alamat Properti
-            </label>
-            <textarea
-              value={formData.alamat}
-              onChange={(e) => setFormData({ ...formData, alamat: e.target.value })}
-              placeholder="Jl. Kopo, Bandung"
-              rows={2}
-              className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#84CC16] resize-none ${
-                errors.alamat ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.alamat && <p className="text-xs text-red-500 mt-1">{errors.alamat}</p>}
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kota</label>
-              <input
-                type="text"
-                value={formData.kota}
-                onChange={(e) => setFormData({ ...formData, kota: e.target.value })}
-                placeholder="Bandung"
-                className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#84CC16] ${
-                  errors.kota ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.kota && <p className="text-xs text-red-500 mt-1">{errors.kota}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kode Pos</label>
-              <input
-                type="text"
-                value={formData.kodePos}
-                onChange={(e) => setFormData({ ...formData, kodePos: e.target.value })}
-                placeholder="44444"
-                className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#84CC16] ${
-                  errors.kodePos ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.kodePos && <p className="text-xs text-red-500 mt-1">{errors.kodePos}</p>}
-            </div>
-          </div>
+          <AddressFields
+            provinsi={formData.provinsi}
+            kota={formData.kota}
+            kecamatan={formData.kecamatan}
+            kodePos={formData.kodePos}
+            detailAlamat={formData.detailAlamat}
+            onChange={handleAddressChange}
+            errors={{ provinsi: errors.provinsi, detailAlamat: errors.detailAlamat }}
+          />
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">

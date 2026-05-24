@@ -5,11 +5,11 @@ import Link from "next/link";
 import { Search, SlidersHorizontal, Plus } from "lucide-react";
 import RoomList from "../../../../components/RoomList";
 import { RoomCardData } from "../../../../components/RoomCard";
-import { getUser } from "../../../../lib/auth";
+import { getUser, isAuthenticated } from "../../../../lib/auth";
 import { getPropertiList, KamarData } from "../../../../lib/api";
 import MainLayout from "../../../../components/Layout/MainLayout";
 
-export default function SemuaRuanganPage() {
+export default function SemuaKamarPage() {
   const [rooms, setRooms] = useState<RoomCardData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,6 +22,10 @@ export default function SemuaRuanganPage() {
   const showEdit = isPemilik || isPengelola;
 
   useEffect(() => {
+    if (typeof window !== "undefined" && !isAuthenticated()) {
+      window.location.href = "/auth/login";
+      return;
+    }
     const fetchData = async () => {
       try {
         const propertiList = await getPropertiList();
@@ -109,7 +113,7 @@ export default function SemuaRuanganPage() {
   return (
     <MainLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold mb-4">Daftar Ruangan</h1>
+        <h1 className="text-2xl font-semibold mb-4">Daftar Kamar</h1>
 
         <div className="flex items-center gap-2 mb-4 p-3 bg-gray-50 rounded-xl text-sm">
           <span>
@@ -130,7 +134,7 @@ export default function SemuaRuanganPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Cari Ruangan"
+              placeholder="Cari Kamar"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16]"

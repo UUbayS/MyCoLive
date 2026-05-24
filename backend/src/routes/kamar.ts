@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
-import { authMiddleware, requireRole } from "../middleware/auth";
+import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
 app.use("*", authMiddleware);
 
@@ -67,7 +67,7 @@ app.get("/properti/:propertiId/kamar", async (c) => {
 // Create kamar
 app.post("/properti/:propertiId/kamar", requireRole("PEMILIK"), async (c) => {
   try {
-    const propertiId = c.req.param("propertiId");
+    const propertiId = c.req.param("propertiId")!;
     const user = c.get("user");
     const body = await c.req.json();
     const { nomor, tipe, luas, fasilitas, deskripsi, tarif, foto } = body;

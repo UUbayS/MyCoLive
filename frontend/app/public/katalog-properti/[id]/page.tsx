@@ -10,7 +10,7 @@ import { getUser } from "../../../../lib/auth";
 import { getPropertiById, deleteProperti, PropertiData } from "../../../../lib/api";
 import MainLayout from "../../../../components/Layout/MainLayout";
 
-type TabType = "ruangan" | "fasilitas" | "deskripsi";
+type TabType = "kamar" | "fasilitas" | "deskripsi";
 
 export default function DetailPropertiPage() {
   const router = useRouter();
@@ -21,10 +21,11 @@ export default function DetailPropertiPage() {
   const [loading, setLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showFullKebijakan, setShowFullKebijakan] = useState(false);
-  const [activeTab, setActiveTab] = useState<TabType>("ruangan");
+  const [activeTab, setActiveTab] = useState<TabType>("kamar");
 
   const user = getUser();
-  const isPemilik = user?.role === "PEMILIK";
+  const isPemilik = user?.role ==="PEMILIK";
+  const isPengurus = user?.role === "PEMILIK" || user?.role === "PENGELOLA";
 
   useEffect(() => {
     if (!propertiId) return;
@@ -66,9 +67,26 @@ export default function DetailPropertiPage() {
     return `https://wa.me/${phone}?text=${message}`;
   };
 
+  const getDisplayAlamat = () => {
+    if (!properti) return "";
+    if (properti.detail_alamat) {
+      return [
+        properti.detail_alamat,
+        properti.kecamatan ? `Kec. ${properti.kecamatan}` : null,
+        properti.kota,
+        properti.provinsi,
+        properti.kode_pos,
+      ]
+        .filter(Boolean)
+        .join(", ");
+    }
+    return properti.alamat;
+  };
+
   const getGoogleMapsLink = () => {
-    if (!properti?.alamat) return "#";
-    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(properti.alamat)}`;
+    const alamat = getDisplayAlamat();
+    if (!alamat) return "#";
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(alamat)}`;
   };
 
   const kamarTersedia = properti?.kamar?.filter((k) => k.status === "KOSONG") || [];
@@ -81,7 +99,7 @@ export default function DetailPropertiPage() {
   const fasilitasList = Array.from(allFasilitas);
 
   const tabs: { key: TabType; label: string; icon: typeof DoorOpen; count?: number }[] = [
-    { key: "ruangan", label: "Ruangan", icon: DoorOpen, count: totalKamar },
+    { key: "kamar", label: "Kamar", icon: DoorOpen, count: totalKamar },
     { key: "fasilitas", label: "Fasilitas", icon: Wifi, count: fasilitasList.length },
     { key: "deskripsi", label: "Deskripsi", icon: MapPin },
   ];
@@ -138,7 +156,7 @@ export default function DetailPropertiPage() {
 
         <div className="flex items-center gap-1 text-sm text-gray-500 mb-4">
           <MapPin className="w-4 h-4" />
-          <span>{properti.alamat}</span>
+          <span>{getDisplayAlamat()}</span>
         </div>
 
         <ImageCarousel images={properti.gambar || []} alt={properti.nama} />
@@ -178,10 +196,10 @@ export default function DetailPropertiPage() {
         </div>
       </div>
 
-      {activeTab === "ruangan" && (
+      {activeTab === "kamar" && (
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold">Daftar Ruangan</h2>
+            <h2 className="text-lg font-semibold">Daftar Kamar</h2>
             <span className="text-sm text-gray-500">
               {kamarTersedia.length} kosong / {totalKamar} total
             </span>
@@ -195,7 +213,7 @@ export default function DetailPropertiPage() {
                   return (
                     <Link
                       key={kamar.id}
-                      href={`/public/katalog-properti/${propertiId}/ruangan/${kamar.id}`}
+                      href={`/public/katalog-properti/${propertiId}/kamar/${kamar.id}`}
                       className="shrink-0 w-64 rounded-xl bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow"
                     >
                       <div className="h-32 bg-gray-200 relative">
@@ -235,16 +253,16 @@ export default function DetailPropertiPage() {
                 })}
               </div>
               <Link
-                href={`/public/katalog-properti/${propertiId}/ruangan`}
+                href={`/public/katalog-properti/${propertiId}/kamar`}
                 className="mt-3 w-full bg-[#84CC16] text-white py-2.5 rounded-xl text-sm font-medium text-center block hover:bg-[#73b814] transition-colors"
               >
-                Lihat Semua Ruangan
+                Lihat Semua Kamar
               </Link>
             </>
           ) : (
             <div className="text-center py-8 text-gray-500">
               <DoorOpen className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-              <p>Belum ada ruangan</p>
+              <p>Belum ada kamar</p>
             </div>
           )}
         </div>
@@ -310,13 +328,13 @@ export default function DetailPropertiPage() {
             <h2 className="text-lg font-semibold mb-2">Detail Lokasi</h2>
             <div className="flex items-start gap-2 text-sm text-gray-600 mb-3">
               <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>{properti.alamat}</span>
+              <span>{getDisplayAlamat()}</span>
             </div>
             <a
               href={getGoogleMapsLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full bg-gray-100 rounded-xl h-48 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"
+              className="w-full bg-gray-100 rounded-xl h-48 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"
             >
               <MapPin className="w-8 h-8 mb-2" />
               <span className="text-sm">Buka di Google Maps</span>
@@ -325,20 +343,22 @@ export default function DetailPropertiPage() {
         </div>
       )}
 
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-3">Kontak Pengurus</h2>
-        <a
-          href={getWhatsAppLink()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 w-full border-2 border-[#84CC16] text-[#84CC16] py-3 rounded-xl font-medium hover:bg-[#84CC16]/5 transition-colors"
-        >
-          <MessageCircle className="w-5 h-5" />
-          Chat via WhatsApp
-        </a>
-      </div>
+      {!isPengurus && (
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold mb-3">Kontak Pengurus</h2>
+          <a
+            href={getWhatsAppLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 w-full border-2 border-[#84CC16] text-[#84CC16] py-3 rounded-xl font-medium hover:bg-[#84CC16]/5 transition-colors"
+          >
+            <MessageCircle className="w-5 h-5" />
+            Chat via WhatsApp
+          </a>
+        </div>
+      )}
 
-      {isPemilik && (
+      {isPengurus && (
         <button
           onClick={() => setShowDeleteDialog(true)}
           className="w-full border-2 border-red-500 text-red-500 py-3 rounded-xl font-medium hover:bg-red-50 transition-colors"

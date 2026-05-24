@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
-import { authMiddleware, requireRole } from "../middleware/auth";
+import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
 app.use("*", authMiddleware);
 
@@ -170,11 +170,9 @@ app.get("/", async (c) => {
         where: { user_id: user.userId }
       });
       
-      if (operator && operator.properti_ids.length > 0) {
+      if (operator && operator.properti_id) {
         whereClause = {
-          properti_id: {
-            in: operator.properti_ids
-          }
+          properti_id: operator.properti_id
         };
       } else {
         return c.json({

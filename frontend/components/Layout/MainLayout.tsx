@@ -22,7 +22,7 @@ export default function MainLayout({ children, submenuTabs }: MainLayoutProps) {
           {submenuTabs && submenuTabs.length > 0 && (
             <SubmenuTabs tabs={submenuTabs} />
           )}
-          <main className="max-w-7xl mx-auto px-4 py-6 text-black">{children}</main>
+          <main className="max-w-7xl mx-auto px-6 py-12 text-black">{children}</main>
         </div>
       </div>
 

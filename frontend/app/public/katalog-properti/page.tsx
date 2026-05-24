@@ -8,7 +8,7 @@ import PropertyList from "../../../components/PropertyList";
 import { PropertyData } from "../../../components/PropertyCard";
 import StatsWidget from "../../../components/StatsWidget";
 import { getUser } from "../../../lib/auth";
-import { getKatalogProperti, getPropertiList } from "../../../lib/api";
+import { getKatalogProperti, getPropertiList, PropertiData } from "../../../lib/api";
 import MainLayout from "../../../components/Layout/MainLayout";
 
 export default function KatalogPropertiPage() {
@@ -35,7 +35,7 @@ export default function KatalogPropertiPage() {
 
         if (isPemilik || isPengelola) {
           const result = await getPropertiList();
-          data = result.map((p) => ({
+          data = result.map((p: PropertiData) => ({
             id: p.id,
             nama: p.nama,
             alamat: p.alamat,
@@ -45,8 +45,8 @@ export default function KatalogPropertiPage() {
           }));
 
           if (isPemilik) {
-            const totalKamar = result.reduce((sum, p) => sum + (p.total_kamar || 0), 0);
-            const totalTerisi = result.reduce((sum, p) => {
+            const totalKamar = result.reduce((sum, p: PropertiData) => sum + (p.total_kamar || 0), 0);
+            const totalTerisi = result.reduce((sum, p: PropertiData) => {
               const kosong = p.kamar_kosong || 0;
               const total = p.total_kamar || 0;
               return sum + (total - kosong);
@@ -59,7 +59,7 @@ export default function KatalogPropertiPage() {
           }
         } else {
           const result = await getKatalogProperti();
-          data = result.map((p) => ({
+          data = result.map((p: PropertiData) => ({
             id: p.id,
             nama: p.nama,
             alamat: p.alamat,

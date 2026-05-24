@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import ImageUploader from "../../../../../../components/ImageUploader";
 import FacilitySelector from "../../../../../../components/FacilitySelector";
 import { createKamar } from "../../../../../../lib/api";
+import { getUser, isAuthenticated } from "../../../../../../lib/auth";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
 
 const defaultFasilitas = [
@@ -25,7 +26,7 @@ const defaultFasilitas = [
   "Laundry",
 ];
 
-export default function TambahRuanganPage() {
+export default function TambahKamarPage() {
   const router = useRouter();
   const params = useParams();
   const propertiId = params.propertiId as string;
@@ -46,9 +47,21 @@ export default function TambahRuanganPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [availableFasilitas, setAvailableFasilitas] = useState(defaultFasilitas);
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && !isAuthenticated()) {
+      router.push("/auth/login");
+      return;
+    }
+
+    const user = getUser();
+    if (user && user.role !== "PEMILIK" && user.role !== "PENGELOLA") {
+      router.push("/public/katalog-properti");
+    }
+  }, [router]);
+
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.nomor.trim()) newErrors.nomor = "Nomor ruangan wajib diisi";
+    if (!formData.nomor.trim()) newErrors.nomor = "Nomor kamar wajib diisi";
     if (!formData.lantai.trim()) newErrors.lantai = "Lantai wajib diisi";
     if (!formData.tarif1Bulan.trim()) newErrors.tarif1Bulan = "Tarif bulanan wajib diisi";
     setErrors(newErrors);
@@ -80,13 +93,13 @@ export default function TambahRuanganPage() {
       });
 
       if (result) {
-        router.push(`/public/katalog-properti/${propertiId}/ruangan`);
+        router.push(`/public/katalog-properti/${propertiId}/kamar`);
       } else {
-        alert("Gagal menambahkan ruangan. Silakan coba lagi.");
+        alert("Gagal menambahkan kamar. Silakan coba lagi.");
       }
     } catch (error) {
       console.error("Create kamar error:", error);
-      alert("Terjadi kesalahan saat menambahkan ruangan.");
+      alert("Terjadi kesalahan saat menambahkan kamar.");
     } finally {
       setLoading(false);
     }
@@ -112,13 +125,13 @@ export default function TambahRuanganPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-xl font-semibold">Tambah Ruangan</h1>
+          <h1 className="text-xl font-semibold">Tambah Kamar</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex items-center gap-3">
             <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
-              No Ruangan:
+              No Kamar:
             </label>
             <input
               type="text"
@@ -147,7 +160,7 @@ export default function TambahRuanganPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Luas Ruangan:</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Luas Kamar:</label>
             <input
               type="text"
               value={formData.luas}
@@ -190,7 +203,7 @@ export default function TambahRuanganPage() {
           </div>
 
           <div>
-            <h3 className="text-base font-semibold mb-3">Tarif Ruangan</h3>
+            <h3 className="text-base font-semibold mb-3">Tarif Kamar</h3>
             <div className="space-y-3">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Bulanan:</label>

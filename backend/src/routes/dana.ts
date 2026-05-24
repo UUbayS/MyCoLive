@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
-import { authMiddleware, requireRole } from "../middleware/auth";
+import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
 app.use("*", authMiddleware);
 
@@ -49,7 +49,7 @@ app.post("/", requireRole("PENGELOLA"), async (c) => {
       );
     }
 
-    const isManaged = operator.properti_ids.includes(properti_id);
+    const isManaged = operator.properti_id === properti_id;
     if (!isManaged) {
       return c.json(
         { status: "error", message: "Anda tidak mengelola properti ini" },

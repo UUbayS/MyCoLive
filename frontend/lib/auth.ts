@@ -61,7 +61,7 @@ export async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const res = await fetch(`${API_URL}${endpoint}`, {
+  let res = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -69,6 +69,26 @@ export async function apiFetch<T>(
       ...(options.headers || {}),
     },
   });
+
+  if (res.status === 401) {
+    const refreshed = await refreshAccessToken();
+    if (refreshed) {
+      res = await fetch(`${API_URL}${endpoint}`, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          ...authHeader(),
+          ...(options.headers || {}),
+        },
+      });
+    } else {
+      if (typeof window !== "undefined") {
+        clearAuth();
+        window.location.href = "/auth/login";
+      }
+      throw new Error("Unauthorized");
+    }
+  }
 
   const data = await res.json();
 

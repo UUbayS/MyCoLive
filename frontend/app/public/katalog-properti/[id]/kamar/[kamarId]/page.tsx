@@ -7,11 +7,11 @@ import { ArrowLeft, MapPin, Edit, MessageCircle } from "lucide-react";
 import ImageCarousel from "../../../../../../components/ImageCarousel";
 import TarifSelector from "../../../../../../components/TarifSelector";
 import ConfirmDialog from "../../../../../../components/ConfirmDialog";
-import { getUser } from "../../../../../../lib/auth";
+import { getUser, isAuthenticated } from "../../../../../../lib/auth";
 import { getKamarById, deleteKamar, updateKamarStatus, KamarData } from "../../../../../../lib/api";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
 
-export default function DetailRuanganPage() {
+export default function DetailKamarPage() {
   const router = useRouter();
   const params = useParams();
   const kamarId = params.kamarId as string;
@@ -29,6 +29,11 @@ export default function DetailRuanganPage() {
   const isPengelola = user?.role === "PENGELOLA";
 
   useEffect(() => {
+    if (typeof window !== "undefined" && !isAuthenticated()) {
+      router.push("/auth/login");
+      return;
+    }
+
     if (!kamarId) return;
 
     const fetchKamar = async () => {
@@ -48,19 +53,19 @@ export default function DetailRuanganPage() {
     };
 
     fetchKamar();
-  }, [kamarId]);
+  }, [kamarId, router]);
 
   const handleDelete = async () => {
     try {
       const success = await deleteKamar(kamarId);
       if (success) {
-        router.push(`/public/katalog-properti/${propertiId}/ruangan`);
+        router.push(`/public/katalog-properti/${propertiId}/kamar`);
       } else {
-        alert("Gagal menghapus ruangan.");
+        alert("Gagal menghapus kamar.");
       }
     } catch (error) {
       console.error("Delete error:", error);
-      alert("Terjadi kesalahan saat menghapus ruangan.");
+      alert("Terjadi kesalahan saat menghapus kamar.");
     } finally {
       setShowDeleteDialog(false);
     }
@@ -83,7 +88,7 @@ export default function DetailRuanganPage() {
     if (!kamar?.properti) return "#";
     const phone = "6281234567890";
     const message = encodeURIComponent(
-      `Halo, saya tertarik dengan ruangan ${kamar.nomor} di ${kamar.properti.nama}`
+      `Halo, saya tertarik dengan kamar ${kamar.nomor} di ${kamar.properti.nama}`
     );
     return `https://wa.me/${phone}?text=${message}`;
   };
@@ -112,12 +117,12 @@ export default function DetailRuanganPage() {
     return (
       <MainLayout>
         <div className="text-center py-12">
-          <p className="text-lg text-gray-500">Ruangan tidak ditemukan</p>
+          <p className="text-lg text-gray-500">Kamar tidak ditemukan</p>
           <Link
-            href={`/public/katalog-properti/${propertiId}/ruangan`}
+            href={`/public/katalog-properti/${propertiId}/kamar`}
             className="mt-4 inline-block text-[#84CC16] hover:underline"
           >
-            Kembali ke Daftar Ruangan
+            Kembali ke Daftar Kamar
           </Link>
         </div>
       </MainLayout>
@@ -148,7 +153,7 @@ export default function DetailRuanganPage() {
           </div>
           {isPemilik && (
             <Link
-              href={`/pengelola/properti/${propertiId}/ruangan/${kamarId}/edit`}
+              href={`/pengelola/properti/${propertiId}/kamar/${kamarId}/edit`}
               className="flex items-center gap-1 text-[#84CC16] hover:text-[#73b814]"
             >
               <Edit className="w-4 h-4" />
@@ -174,7 +179,7 @@ export default function DetailRuanganPage() {
 
         {isPemilik && (
           <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-            <span className="text-sm text-gray-600">Aktifkan Ruangan</span>
+            <span className="text-sm text-gray-600">Aktifkan Kamar</span>
             <button
               onClick={handleToggleAktif}
               className={`w-12 h-6 rounded-full transition-colors relative ${
@@ -320,14 +325,14 @@ export default function DetailRuanganPage() {
           onClick={() => setShowDeleteDialog(true)}
           className="w-full border-2 border-red-500 text-red-500 py-3 rounded-xl font-medium hover:bg-red-50 transition-colors"
         >
-          Hapus Ruangan
+          Hapus Kamar
         </button>
       )}
 
       <ConfirmDialog
         isOpen={showDeleteDialog}
-        title="Hapus Ruangan"
-        message="Apakah Anda yakin ingin menghapus ruangan ini? Tindakan ini tidak dapat dibatalkan."
+        title="Hapus Kamar"
+        message="Apakah Anda yakin ingin menghapus kamar ini? Tindakan ini tidak dapat dibatalkan."
         confirmLabel="Hapus"
         cancelLabel="Batal"
         danger

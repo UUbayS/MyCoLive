@@ -2,11 +2,11 @@
 import { prisma } from "../config/db";
 import { hashPassword, verifyPassword } from "../utils/password";
 import { generateAccessToken, generateRefreshToken, verifyToken } from "../utils/jwt";
-import { authMiddleware } from "../middleware/auth";
+import { authMiddleware, AppEnv } from "../middleware/auth";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
-function convertPhone(phone: string): string {
+function convertPhone(phone: string): string | null {
   if (!phone) return null;
   phone = phone.replace(/\s/g, "");
   if (phone.startsWith("0")) {

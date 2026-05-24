@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
-import { authMiddleware, requireRole } from "../middleware/auth";
+import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
 app.use("*", authMiddleware);
 
@@ -50,22 +50,27 @@ app.get("/", async (c) => {
       );
     }
 
-    const result = properti.map(p => ({
+    const result = properti.map((p: any) => ({
       id: p.id,
       nama: p.nama,
       alamat: p.alamat,
+      provinsi: p.provinsi,
+      kota: p.kota,
+      kecamatan: p.kecamatan,
+      kode_pos: p.kode_pos,
+      detail_alamat: p.detail_alamat,
       jenis: p.jenis,
       deskripsi: p.deskripsi,
       kebijakan: p.kebijakan,
       gambar: p.gambar,
       created_at: p.created_at,
       total_kamar: p._count.kamar,
-      kamar_kosong: p.kamar.filter(k => k.status === "KOSONG").length,
-      kamar: p.kamar.map(k => ({
+      kamar_kosong: p.kamar.filter((k: any) => k.status === "KOSONG").length,
+      kamar: p.kamar.map((k: any) => ({
         id: k.id,
         nomor: k.nomor,
         tipe: k.tipe,
-        harga: k.harga,
+        tarif: k.tarif,
         status: k.status
       }))
     }));
@@ -87,11 +92,11 @@ app.post("/", requireRole("PEMILIK"), async (c) => {
   try {
     const user = c.get("user");
     const body = await c.req.json();
-    const { nama, alamat, jenis, deskripsi, kebijakan, gambar } = body;
+    const { nama, provinsi, kota, kecamatan, kode_pos, detail_alamat, jenis, deskripsi, kebijakan, gambar } = body;
 
-    if (!nama || !alamat) {
+    if (!nama || !detail_alamat) {
       return c.json(
-        { status: "error", message: "Nama dan alamat wajib diisi" },
+        { status: "error", message: "Nama dan detail alamat wajib diisi" },
         400
       );
     }
@@ -103,10 +108,23 @@ app.post("/", requireRole("PEMILIK"), async (c) => {
       );
     }
 
+    const fullAlamat = [
+      detail_alamat,
+      kecamatan ? `Kec. ${kecamatan}` : null,
+      kota,
+      provinsi,
+      kode_pos
+    ].filter(Boolean).join(", ");
+
     const properti = await prisma.properti.create({
       data: {
         nama,
-        alamat,
+        alamat: fullAlamat,
+        provinsi: provinsi || null,
+        kota: kota || null,
+        kecamatan: kecamatan || null,
+        kode_pos: kode_pos || null,
+        detail_alamat: detail_alamat || null,
         jenis: jenis as any,
         deskripsi: deskripsi || null,
         kebijakan: kebijakan || null,
@@ -193,7 +211,7 @@ app.put("/:id", requireRole("PEMILIK"), async (c) => {
     const id = c.req.param("id");
     const user = c.get("user");
     const body = await c.req.json();
-    const { nama, alamat, jenis, deskripsi, kebijakan, gambar } = body;
+    const { nama, provinsi, kota, kecamatan, kode_pos, detail_alamat, jenis, deskripsi, kebijakan, gambar } = body;
 
     const existing = await prisma.properti.findUnique({
       where: { id }
@@ -215,7 +233,21 @@ app.put("/:id", requireRole("PEMILIK"), async (c) => {
 
     const updateData: any = {};
     if (nama) updateData.nama = nama;
-    if (alamat) updateData.alamat = alamat;
+    if (provinsi !== undefined) updateData.provinsi = provinsi;
+    if (kota !== undefined) updateData.kota = kota;
+    if (kecamatan !== undefined) updateData.kecamatan = kecamatan;
+    if (kode_pos !== undefined) updateData.kode_pos = kode_pos;
+    if (detail_alamat !== undefined) {
+      updateData.detail_alamat = detail_alamat;
+      const fullAlamat = [
+        detail_alamat,
+        kecamatan ? `Kec. ${kecamatan}` : null,
+        kota,
+        provinsi,
+        kode_pos
+      ].filter(Boolean).join(", ");
+      updateData.alamat = fullAlamat;
+    }
     if (jenis && ["LAKI_LAKI", "PEREMPUAN", "CAMPUR"].includes(jenis)) {
       updateData.jenis = jenis;
     }

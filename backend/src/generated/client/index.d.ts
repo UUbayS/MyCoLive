@@ -4320,6 +4320,11 @@ export namespace Prisma {
     id: string | null
     nama: string | null
     alamat: string | null
+    provinsi: string | null
+    kota: string | null
+    kecamatan: string | null
+    kode_pos: string | null
+    detail_alamat: string | null
     jenis: $Enums.JenisProperti | null
     deskripsi: string | null
     kebijakan: string | null
@@ -4332,6 +4337,11 @@ export namespace Prisma {
     id: string | null
     nama: string | null
     alamat: string | null
+    provinsi: string | null
+    kota: string | null
+    kecamatan: string | null
+    kode_pos: string | null
+    detail_alamat: string | null
     jenis: $Enums.JenisProperti | null
     deskripsi: string | null
     kebijakan: string | null
@@ -4344,6 +4354,11 @@ export namespace Prisma {
     id: number
     nama: number
     alamat: number
+    provinsi: number
+    kota: number
+    kecamatan: number
+    kode_pos: number
+    detail_alamat: number
     jenis: number
     deskripsi: number
     kebijakan: number
@@ -4359,6 +4374,11 @@ export namespace Prisma {
     id?: true
     nama?: true
     alamat?: true
+    provinsi?: true
+    kota?: true
+    kecamatan?: true
+    kode_pos?: true
+    detail_alamat?: true
     jenis?: true
     deskripsi?: true
     kebijakan?: true
@@ -4371,6 +4391,11 @@ export namespace Prisma {
     id?: true
     nama?: true
     alamat?: true
+    provinsi?: true
+    kota?: true
+    kecamatan?: true
+    kode_pos?: true
+    detail_alamat?: true
     jenis?: true
     deskripsi?: true
     kebijakan?: true
@@ -4383,6 +4408,11 @@ export namespace Prisma {
     id?: true
     nama?: true
     alamat?: true
+    provinsi?: true
+    kota?: true
+    kecamatan?: true
+    kode_pos?: true
+    detail_alamat?: true
     jenis?: true
     deskripsi?: true
     kebijakan?: true
@@ -4469,6 +4499,11 @@ export namespace Prisma {
     id: string
     nama: string
     alamat: string
+    provinsi: string | null
+    kota: string | null
+    kecamatan: string | null
+    kode_pos: string | null
+    detail_alamat: string | null
     jenis: $Enums.JenisProperti | null
     deskripsi: string | null
     kebijakan: string | null
@@ -4499,6 +4534,11 @@ export namespace Prisma {
     id?: boolean
     nama?: boolean
     alamat?: boolean
+    provinsi?: boolean
+    kota?: boolean
+    kecamatan?: boolean
+    kode_pos?: boolean
+    detail_alamat?: boolean
     jenis?: boolean
     deskripsi?: boolean
     kebijakan?: boolean
@@ -4519,6 +4559,11 @@ export namespace Prisma {
     id?: boolean
     nama?: boolean
     alamat?: boolean
+    provinsi?: boolean
+    kota?: boolean
+    kecamatan?: boolean
+    kode_pos?: boolean
+    detail_alamat?: boolean
     jenis?: boolean
     deskripsi?: boolean
     kebijakan?: boolean
@@ -4533,6 +4578,11 @@ export namespace Prisma {
     id?: boolean
     nama?: boolean
     alamat?: boolean
+    provinsi?: boolean
+    kota?: boolean
+    kecamatan?: boolean
+    kode_pos?: boolean
+    detail_alamat?: boolean
     jenis?: boolean
     deskripsi?: boolean
     kebijakan?: boolean
@@ -4547,6 +4597,11 @@ export namespace Prisma {
     id?: boolean
     nama?: boolean
     alamat?: boolean
+    provinsi?: boolean
+    kota?: boolean
+    kecamatan?: boolean
+    kode_pos?: boolean
+    detail_alamat?: boolean
     jenis?: boolean
     deskripsi?: boolean
     kebijakan?: boolean
@@ -4556,7 +4611,7 @@ export namespace Prisma {
     admin_id?: boolean
   }
 
-  export type PropertiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nama" | "alamat" | "jenis" | "deskripsi" | "kebijakan" | "gambar" | "created_at" | "updated_at" | "admin_id", ExtArgs["result"]["properti"]>
+  export type PropertiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nama" | "alamat" | "provinsi" | "kota" | "kecamatan" | "kode_pos" | "detail_alamat" | "jenis" | "deskripsi" | "kebijakan" | "gambar" | "created_at" | "updated_at" | "admin_id", ExtArgs["result"]["properti"]>
   export type PropertiInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | UserDefaultArgs<ExtArgs>
     kamar?: boolean | Properti$kamarArgs<ExtArgs>
@@ -4587,6 +4642,11 @@ export namespace Prisma {
       id: string
       nama: string
       alamat: string
+      provinsi: string | null
+      kota: string | null
+      kecamatan: string | null
+      kode_pos: string | null
+      detail_alamat: string | null
       jenis: $Enums.JenisProperti | null
       deskripsi: string | null
       kebijakan: string | null
@@ -5026,6 +5086,11 @@ export namespace Prisma {
     readonly id: FieldRef<"Properti", 'String'>
     readonly nama: FieldRef<"Properti", 'String'>
     readonly alamat: FieldRef<"Properti", 'String'>
+    readonly provinsi: FieldRef<"Properti", 'String'>
+    readonly kota: FieldRef<"Properti", 'String'>
+    readonly kecamatan: FieldRef<"Properti", 'String'>
+    readonly kode_pos: FieldRef<"Properti", 'String'>
+    readonly detail_alamat: FieldRef<"Properti", 'String'>
     readonly jenis: FieldRef<"Properti", 'JenisProperti'>
     readonly deskripsi: FieldRef<"Properti", 'String'>
     readonly kebijakan: FieldRef<"Properti", 'String'>
@@ -13727,6 +13792,11 @@ export namespace Prisma {
     id: 'id',
     nama: 'nama',
     alamat: 'alamat',
+    provinsi: 'provinsi',
+    kota: 'kota',
+    kecamatan: 'kecamatan',
+    kode_pos: 'kode_pos',
+    detail_alamat: 'detail_alamat',
     jenis: 'jenis',
     deskripsi: 'deskripsi',
     kebijakan: 'kebijakan',
@@ -14260,6 +14330,11 @@ export namespace Prisma {
     id?: StringFilter<"Properti"> | string
     nama?: StringFilter<"Properti"> | string
     alamat?: StringFilter<"Properti"> | string
+    provinsi?: StringNullableFilter<"Properti"> | string | null
+    kota?: StringNullableFilter<"Properti"> | string | null
+    kecamatan?: StringNullableFilter<"Properti"> | string | null
+    kode_pos?: StringNullableFilter<"Properti"> | string | null
+    detail_alamat?: StringNullableFilter<"Properti"> | string | null
     jenis?: EnumJenisPropertiNullableFilter<"Properti"> | $Enums.JenisProperti | null
     deskripsi?: StringNullableFilter<"Properti"> | string | null
     kebijakan?: StringNullableFilter<"Properti"> | string | null
@@ -14279,6 +14354,11 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    provinsi?: SortOrderInput | SortOrder
+    kota?: SortOrderInput | SortOrder
+    kecamatan?: SortOrderInput | SortOrder
+    kode_pos?: SortOrderInput | SortOrder
+    detail_alamat?: SortOrderInput | SortOrder
     jenis?: SortOrderInput | SortOrder
     deskripsi?: SortOrderInput | SortOrder
     kebijakan?: SortOrderInput | SortOrder
@@ -14301,6 +14381,11 @@ export namespace Prisma {
     NOT?: PropertiWhereInput | PropertiWhereInput[]
     nama?: StringFilter<"Properti"> | string
     alamat?: StringFilter<"Properti"> | string
+    provinsi?: StringNullableFilter<"Properti"> | string | null
+    kota?: StringNullableFilter<"Properti"> | string | null
+    kecamatan?: StringNullableFilter<"Properti"> | string | null
+    kode_pos?: StringNullableFilter<"Properti"> | string | null
+    detail_alamat?: StringNullableFilter<"Properti"> | string | null
     jenis?: EnumJenisPropertiNullableFilter<"Properti"> | $Enums.JenisProperti | null
     deskripsi?: StringNullableFilter<"Properti"> | string | null
     kebijakan?: StringNullableFilter<"Properti"> | string | null
@@ -14320,6 +14405,11 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    provinsi?: SortOrderInput | SortOrder
+    kota?: SortOrderInput | SortOrder
+    kecamatan?: SortOrderInput | SortOrder
+    kode_pos?: SortOrderInput | SortOrder
+    detail_alamat?: SortOrderInput | SortOrder
     jenis?: SortOrderInput | SortOrder
     deskripsi?: SortOrderInput | SortOrder
     kebijakan?: SortOrderInput | SortOrder
@@ -14339,6 +14429,11 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Properti"> | string
     nama?: StringWithAggregatesFilter<"Properti"> | string
     alamat?: StringWithAggregatesFilter<"Properti"> | string
+    provinsi?: StringNullableWithAggregatesFilter<"Properti"> | string | null
+    kota?: StringNullableWithAggregatesFilter<"Properti"> | string | null
+    kecamatan?: StringNullableWithAggregatesFilter<"Properti"> | string | null
+    kode_pos?: StringNullableWithAggregatesFilter<"Properti"> | string | null
+    detail_alamat?: StringNullableWithAggregatesFilter<"Properti"> | string | null
     jenis?: EnumJenisPropertiNullableWithAggregatesFilter<"Properti"> | $Enums.JenisProperti | null
     deskripsi?: StringNullableWithAggregatesFilter<"Properti"> | string | null
     kebijakan?: StringNullableWithAggregatesFilter<"Properti"> | string | null
@@ -15093,6 +15188,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -15111,6 +15211,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -15129,6 +15234,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15147,6 +15257,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15165,6 +15280,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -15178,6 +15298,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15190,6 +15315,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16083,6 +16213,11 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    provinsi?: SortOrder
+    kota?: SortOrder
+    kecamatan?: SortOrder
+    kode_pos?: SortOrder
+    detail_alamat?: SortOrder
     jenis?: SortOrder
     deskripsi?: SortOrder
     kebijakan?: SortOrder
@@ -16096,6 +16231,11 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    provinsi?: SortOrder
+    kota?: SortOrder
+    kecamatan?: SortOrder
+    kode_pos?: SortOrder
+    detail_alamat?: SortOrder
     jenis?: SortOrder
     deskripsi?: SortOrder
     kebijakan?: SortOrder
@@ -16108,6 +16248,11 @@ export namespace Prisma {
     id?: SortOrder
     nama?: SortOrder
     alamat?: SortOrder
+    provinsi?: SortOrder
+    kota?: SortOrder
+    kecamatan?: SortOrder
+    kode_pos?: SortOrder
+    detail_alamat?: SortOrder
     jenis?: SortOrder
     deskripsi?: SortOrder
     kebijakan?: SortOrder
@@ -17966,6 +18111,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -17983,6 +18133,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -18114,6 +18269,11 @@ export namespace Prisma {
     id?: StringFilter<"Properti"> | string
     nama?: StringFilter<"Properti"> | string
     alamat?: StringFilter<"Properti"> | string
+    provinsi?: StringNullableFilter<"Properti"> | string | null
+    kota?: StringNullableFilter<"Properti"> | string | null
+    kecamatan?: StringNullableFilter<"Properti"> | string | null
+    kode_pos?: StringNullableFilter<"Properti"> | string | null
+    detail_alamat?: StringNullableFilter<"Properti"> | string | null
     jenis?: EnumJenisPropertiNullableFilter<"Properti"> | $Enums.JenisProperti | null
     deskripsi?: StringNullableFilter<"Properti"> | string | null
     kebijakan?: StringNullableFilter<"Properti"> | string | null
@@ -18640,6 +18800,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -18657,6 +18822,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -18757,6 +18927,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18774,6 +18949,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18908,6 +19088,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -18925,6 +19110,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -19061,6 +19251,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19078,6 +19273,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19493,6 +19693,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -19510,6 +19715,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -19618,6 +19828,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19635,6 +19850,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19697,6 +19917,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -19714,6 +19939,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -19782,6 +20012,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19799,6 +20034,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19837,6 +20077,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -19854,6 +20099,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -19914,6 +20164,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19931,6 +20186,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19948,6 +20208,11 @@ export namespace Prisma {
     id?: string
     nama: string
     alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
     jenis?: $Enums.JenisProperti | null
     deskripsi?: string | null
     kebijakan?: string | null
@@ -19960,6 +20225,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19977,6 +20247,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19994,6 +20269,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nama?: StringFieldUpdateOperationsInput | string
     alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
     jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     kebijakan?: NullableStringFieldUpdateOperationsInput | string | null

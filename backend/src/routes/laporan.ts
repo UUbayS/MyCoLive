@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
-import { authMiddleware, requireRole } from "../middleware/auth";
+import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
 app.use("*", authMiddleware);
 
@@ -84,7 +84,8 @@ app.get("/keuangan", requireRole("PEMILIK"), async (c) => {
       include: {
         pemesanan: {
           select: {
-            properti_id: true
+            properti_id: true,
+            total_bayar: true
           }
         }
       }

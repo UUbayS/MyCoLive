@@ -1,7 +1,8 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
+import { AppEnv } from "../middleware/auth";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
 app.get("/", async (c) => {
   try {
@@ -21,22 +22,27 @@ app.get("/", async (c) => {
       orderBy: { created_at: "desc" }
     });
 
-    const result = properti.map(p => ({
+    const result = properti.map((p: any) => ({
       id: p.id,
       nama: p.nama,
       alamat: p.alamat,
+      provinsi: p.provinsi,
+      kota: p.kota,
+      kecamatan: p.kecamatan,
+      kode_pos: p.kode_pos,
+      detail_alamat: p.detail_alamat,
       Jenis: p.jenis,
       deskripsi: p.deskripsi,
       kebijakan: p.kebijakan,
       gambar: p.gambar,
       total_kamar: p._count.kamar,
-      kamar_kosong: p.kamar.filter(k => k.status === "KOSONG").length,
+      kamar_kosong: p.kamar.filter((k: any) => k.status === "KOSONG").length,
       admin: p.admin,
-      kamar: p.kamar.filter(k => k.status === "KOSONG").map(k => ({
+      kamar: p.kamar.filter((k: any) => k.status === "KOSONG").map((k: any) => ({
         id: k.id,
         nomor: k.nomor,
         tipe: k.tipe,
-        harga: k.harga,
+        tarif: k.tarif,
         deskripsi: k.deskripsi,
         gambar: k.gambar
       }))

@@ -4,6 +4,11 @@ export type PropertiData = {
   id: string;
   nama: string;
   alamat: string;
+  provinsi?: string;
+  kota?: string;
+  kecamatan?: string;
+  kode_pos?: string;
+  detail_alamat?: string;
   jenis?: string;
   deskripsi?: string;
   kebijakan?: string;
@@ -81,7 +86,11 @@ export async function getPropertiList(): Promise<PropertiData[]> {
 
 export async function createProperti(data: {
   nama: string;
-  alamat: string;
+  provinsi: string;
+  kota: string;
+  kecamatan: string;
+  kode_pos: string;
+  detail_alamat: string;
   jenis: string;
   deskripsi?: string;
   kebijakan?: string;
@@ -106,6 +115,35 @@ export async function deleteProperti(id: string): Promise<boolean> {
     return true;
   } catch {
     return false;
+  }
+}
+
+export async function updateProperti(
+  id: string,
+  data: {
+    nama: string;
+    provinsi: string;
+    kota: string;
+    kecamatan: string;
+    kode_pos: string;
+    detail_alamat: string;
+    jenis: string;
+    deskripsi?: string;
+    kebijakan?: string;
+    gambar?: string[];
+  }
+): Promise<PropertiData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: PropertiData }>(
+      "/api/properti/" + id,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }
+    );
+    return res.data || null;
+  } catch {
+    return null;
   }
 }
 

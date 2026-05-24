@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
-import { authMiddleware, requireRole } from "../middleware/auth";
+import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
 app.use("*", authMiddleware);
 
@@ -182,9 +182,9 @@ app.get("/:id", async (c) => {
     
     let isAllowed = false;
     if (user.role === "PEMILIK") {
-      isAllowed = propertiId ? await prisma.properti.findFirst({
+      isAllowed = propertiId ? !!(await prisma.properti.findFirst({
         where: { id: propertiId, admin_id: user.userId }
-      }) : true;
+      })) : true;
     } else if (user.role === "PENGELOLA") {
       const operator = await prisma.operator.findFirst({
         where: { user_id: user.userId, properti_ids: { has: propertiId || "" } }

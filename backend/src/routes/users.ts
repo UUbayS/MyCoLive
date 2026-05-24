@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { hashPassword } from "../utils/password";
-import { authMiddleware, requireRole } from "../middleware/auth";
+import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
 function convertPhone(phone: string): string | null {
   if (!phone) return null;
@@ -52,9 +52,9 @@ app.get("/", async (c) => {
         },
       });
 
-      const result = users.map(u => ({
+      const result = users.map((u: any) => ({
         ...u,
-        properti: u.operator?.map(op => op.properti) || []
+        properti: u.operator?.map((op: any) => op.properti) || []
       }));
       
       return c.json({
