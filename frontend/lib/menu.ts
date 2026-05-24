@@ -8,6 +8,8 @@ import {
   Wallet,
   Shield,
   LayoutDashboard,
+  BedDouble,
+  Wrench,
 } from "lucide-react";
 
 export type SubMenuItem = {
@@ -34,6 +36,8 @@ export const iconMap: Record<string, typeof Building2> = {
   Wallet,
   Shield,
   LayoutDashboard,
+  BedDouble,
+  Wrench,
 };
 
 export const menuConfig: Record<Role, MenuItem[]> = {
@@ -47,6 +51,11 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       label: "Katalog Properti",
       href: "/public/katalog-properti",
       icon: "Building2",
+    },
+    {
+      label: "Semua Kamar",
+      href: "/public/katalog-properti/kamar",
+      icon: "BedDouble",
     },
     {
       label: "Riwayat Transaksi",
@@ -69,6 +78,11 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       label: "Katalog Properti",
       href: "/public/katalog-properti",
       icon: "Building2",
+    },
+    {
+      label: "Semua Kamar",
+      href: "/public/katalog-properti/kamar",
+      icon: "BedDouble",
     },
     {
       label: "Penghuni",
@@ -95,6 +109,11 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       label: "Katalog Properti",
       href: "/public/katalog-properti",
       icon: "Building2",
+    },
+    {
+      label: "Semua Kamar",
+      href: "/public/katalog-properti/kamar",
+      icon: "BedDouble",
     },
     {
       label: "Penghuni",

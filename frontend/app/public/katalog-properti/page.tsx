@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Plus, Building2 } from "lucide-react";
@@ -16,18 +16,20 @@ export default function KatalogPropertiPage() {
   const [properties, setProperties] = useState<PropertyData[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ totalProperti: 0, totalKamar: 0, totalTerisi: 0 });
-
-  const user = getUser();
-  const isPemilik = user?.role === "PEMILIK";
-  const isPengelola = user?.role === "PENGELOLA";
-  const showTambah = isPemilik || isPengelola;
-  const showStats = isPemilik;
+  const fetchedRef = useRef(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && !user) {
+    if (fetchedRef.current) return;
+    fetchedRef.current = true;
+
+    const user = getUser();
+    if (!user) {
       router.push("/auth/login");
       return;
     }
+
+    const isPemilik = user.role === "PEMILIK";
+    const isPengelola = user.role === "PENGELOLA";
 
     const fetchProperties = async () => {
       try {
@@ -78,7 +80,13 @@ export default function KatalogPropertiPage() {
     };
 
     fetchProperties();
-  }, [router, user, isPemilik, isPengelola]);
+  }, [router]);
+
+  const user = getUser();
+  const isPemilik = user?.role === "PEMILIK";
+  const isPengelola = user?.role === "PENGELOLA";
+  const showTambah = isPemilik || isPengelola;
+  const showStats = isPemilik;
 
   return (
     <MainLayout>

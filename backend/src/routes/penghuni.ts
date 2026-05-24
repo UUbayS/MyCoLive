@@ -6,6 +6,48 @@ const app = new Hono<AppEnv>();
 
 app.use("*", authMiddleware);
 
+// Get current penghuni data (PENGHUNI)
+app.get("/me", requireRole("PENGHUNI"), async (c) => {
+  try {
+    const user = c.get("user");
+
+    const penghuni = await prisma.penghuni.findUnique({
+      where: { user_id: user.userId },
+      include: {
+        kamar: {
+          include: {
+            properti: {
+              select: {
+                id: true,
+                nama: true,
+                alamat: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!penghuni) {
+      return c.json(
+        { status: "error", message: "Data penghuni tidak ditemukan" },
+        404
+      );
+    }
+
+    return c.json({
+      status: "success",
+      data: penghuni,
+    });
+  } catch (error) {
+    console.error("Get penghuni me error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengambil data penghuni" },
+      500
+    );
+  }
+});
+
 // Get all penghuni (PEMILIK/PENGELOLA)
 app.get("/", async (c) => {
   try {

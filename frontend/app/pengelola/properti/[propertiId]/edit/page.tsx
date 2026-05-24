@@ -37,7 +37,7 @@ export default function EditPropertiPage() {
     }
 
     const user = getUser();
-    if (user && user.role !== "PEMILIK") {
+    if (user && user.role !== "PEMILIK" && user.role !== "PENGELOLA") {
       router.push("/public/katalog-properti");
     }
   }, [router]);

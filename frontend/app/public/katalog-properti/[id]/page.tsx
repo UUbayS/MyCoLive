@@ -167,29 +167,46 @@ export default function DetailPropertiPage() {
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.key;
+            const baseClasses = `flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              isActive
+                ? "bg-white text-[#84CC16] shadow-sm"
+                : "text-gray-500 hover:text-gray-700"
+            }`;
+            const countBadge = tab.count !== undefined && (
+              <span
+                className={`px-1.5 py-0.5 rounded-full text-xs ${
+                  isActive
+                    ? "bg-[#84CC16]/10 text-[#84CC16]"
+                    : "bg-gray-200 text-gray-500"
+                }`}
+              >
+                {tab.count}
+              </span>
+            );
+
+            if (tab.key === "fasilitas") {
+              return (
+                <Link
+                  key={tab.key}
+                  href={`/public/katalog-properti/${propertiId}/fasilitas`}
+                  className={baseClasses}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                  {countBadge}
+                </Link>
+              );
+            }
+
             return (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-white text-[#84CC16] shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
+                className={baseClasses}
               >
                 <Icon className="w-4 h-4" />
                 <span>{tab.label}</span>
-                {tab.count !== undefined && (
-                  <span
-                    className={`px-1.5 py-0.5 rounded-full text-xs ${
-                      isActive
-                        ? "bg-[#84CC16]/10 text-[#84CC16]"
-                        : "bg-gray-200 text-gray-500"
-                    }`}
-                  >
-                    {tab.count}
-                  </span>
-                )}
+                {countBadge}
               </button>
             );
           })}
