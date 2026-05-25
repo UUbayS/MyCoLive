@@ -8,6 +8,20 @@ import { useRouter } from "next/navigation";
 import { getUser, clearAuth, isAuthenticated, AuthUser } from "../lib/auth";
 import logoMyCoLive from "../assets/myCoLive.svg";
 
+function getDashboardLink(user: AuthUser | null): string {
+  if (!user) return "/";
+  switch (user.role) {
+    case "PENGHUNI":
+      return "/penghuni/kamar-saya";
+    case "PEMILIK":
+      return "/public/katalog-properti";
+    case "PENGELOLA":
+      return "/public/katalog-properti";
+    default:
+      return "/";
+  }
+}
+
 export default function Header() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,7 +74,9 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-slate-100 pt-safe-top">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Image src={logoMyCoLive} alt="MyCoLive" width={130} height={40} />
+          <Link href={getDashboardLink(user)} className="flex items-center">
+            <Image src={logoMyCoLive} alt="MyCoLive" width={130} height={40} />
+          </Link>
         </div>
 
         <div className="flex items-center gap-2">

@@ -83,8 +83,19 @@ export default function Komplain() {
 
   return (
     <MainLayout>
-      <div className="max-w-md mx-auto px-4 py-6">
-        <h1 className="text-2xl font-bold mb-4">Komplain</h1>
+      <div className="mb-4 mb:mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold">Komplain</h1>
+          {!noRoom && (
+            <button
+              onClick={() => setShowModal(true)}
+              className="hidden md:flex items-center gap-2 bg-[#84CC16] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#84CC16]/90 transition-colors"
+            >
+              <Plus className="w-5 h-5" />
+              Tambah Komplain
+            </button>
+          )}
+        </div>
 
         {showSuccess && (
           <div className="flex items-center gap-3 bg-green-50 border-2 border-green-500 rounded-xl p-4 mb-4">
@@ -102,14 +113,6 @@ export default function Komplain() {
           </div>
         ) : (
           <>
-            <button
-              onClick={() => setShowModal(true)}
-              className="w-full flex items-center justify-center gap-2 border-2 border-[#84CC16] text-[#84CC16] font-semibold py-3 rounded-xl mb-6 hover:bg-[#84CC16]/10 transition-colors"
-            >
-              <Plus className="w-5 h-5" />
-              Tambah Komplain
-            </button>
-
             {activeKomplain.length > 0 && (
               <div className="space-y-3 mb-6">
                 {activeKomplain.map((k) => (
@@ -134,6 +137,14 @@ export default function Komplain() {
                 <p>Belum ada komplain</p>
               </div>
             )}
+
+            <button
+              onClick={() => setShowModal(true)}
+              className="md:hidden fixed bottom-24 right-4 bg-[#84CC16] text-white p-4 rounded-full shadow-lg z-40 flex items-center justify-center hover:bg-[#84CC16]/90 transition-colors"
+              aria-label="Tambah Komplain"
+            >
+              <Plus className="w-6 h-6" />
+            </button>
           </>
         )}
       </div>
