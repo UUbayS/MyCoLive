@@ -53,11 +53,6 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       icon: "Building2",
     },
     {
-      label: "Semua Kamar",
-      href: "/public/katalog-properti/kamar",
-      icon: "BedDouble",
-    },
-    {
       label: "Riwayat Transaksi",
       href: "/penghuni/transaksi",
       icon: "Receipt",
@@ -78,11 +73,6 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       label: "Katalog Properti",
       href: "/public/katalog-properti",
       icon: "Building2",
-    },
-    {
-      label: "Semua Kamar",
-      href: "/public/katalog-properti/kamar",
-      icon: "BedDouble",
     },
     {
       label: "Penghuni",
@@ -111,19 +101,9 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       icon: "Building2",
     },
     {
-      label: "Semua Kamar",
-      href: "/public/katalog-properti/kamar",
-      icon: "BedDouble",
-    },
-    {
       label: "Penghuni",
-      href: "/administrator/penghuni",
+      href: "/administrator/penghuni/daftar",
       icon: "Users",
-      submenu: [
-        { label: "Daftar Penghuni", href: "/administrator/penghuni/daftar" },
-        { label: "Validasi Pembayaran", href: "/administrator/penghuni/validasi" },
-        { label: "Komplain", href: "/administrator/penghuni/komplain" },
-      ],
     },
     {
       label: "Managemen Keuangan",

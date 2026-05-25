@@ -79,10 +79,18 @@ app.get("/", async (c) => {
     }
 
     if (propertiIds.length === 0) {
-      return c.json({
-        status: "success",
-        data: [],
-      });
+    return c.json({
+      status: "success",
+      data: {
+        ...penghuni,
+        kamar: penghuni.kamar ? {
+          id: penghuni.kamar.id,
+          nomor: penghuni.kamar.nomor,
+          properti: penghuni.kamar.properti.nama,
+          alamat: penghuni.kamar.properti.alamat
+        } : null
+      },
+    });
     }
 
     // Ambil SEMUA penghuni yang ada di properti ini (dengan atau tanpa kamar)
@@ -243,12 +251,137 @@ app.get("/:id", async (c) => {
 
     return c.json({
       status: "success",
-      data: penghuni,
+      data: {
+        ...penghuni,
+        kamar: penghuni.kamar ? {
+          id: penghuni.kamar.id,
+          nomor: penghuni.kamar.nomor,
+          properti: penghuni.kamar.properti.nama,
+          alamat: penghuni.kamar.properti.alamat
+        } : null
+      },
     });
   } catch (error) {
     console.error("Get penghuni detail error:", error);
     return c.json(
       { status: "error", message: "Gagal mengambil data penghuni" },
+      500
+    );
+  }
+});
+
+// Checkout penghuni (PEMILIK)
+app.put("/:id/checkout", requireRole("PEMILIK"), async (c) => {
+  try {
+    const id = c.req.param("id");
+    const user = c.get("user");
+
+    const penghuni = await prisma.penghuni.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            nama: true,
+            email: true,
+            no_telepon: true,
+            created_at: true
+          }
+        },
+        kamar: {
+          include: {
+            properti: true
+          }
+        }
+      }
+    });
+
+    if (!penghuni) {
+      return c.json(
+        { status: "error", message: "Penghuni tidak ditemukan" },
+        404
+      );
+    }
+
+    if (penghuni.status_sewa !== "AKTIF") {
+      return c.json(
+        { status: "error", message: "Penghuni sudah tidak aktif" },
+        400
+      );
+    }
+
+    if (!penghuni.kamar_id) {
+      return c.json(
+        { status: "error", message: "Penghuni tidak memiliki kamar" },
+        400
+      );
+    }
+
+    // Ownership check
+    const propertiId = penghuni.kamar?.properti_id;
+    if (propertiId) {
+      const isOwner = !!(await prisma.properti.findFirst({
+        where: { id: propertiId, admin_id: user.userId }
+      }));
+      if (!isOwner) {
+        return c.json(
+          { status: "error", message: "Akses ditolak" },
+          403
+        );
+      }
+    }
+
+    // Transaction: checkout penghuni + kosongkan kamar
+    const updated = await prisma.$transaction(async (tx) => {
+      await tx.kamar.update({
+        where: { id: penghuni.kamar_id! },
+        data: { status: "KOSONG" }
+      });
+
+      return tx.penghuni.update({
+        where: { id },
+        data: {
+          status_sewa: "BERAKHIR",
+          tgl_berakhir: new Date(),
+          kamar_id: null
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              nama: true,
+              email: true,
+              no_telepon: true,
+              created_at: true
+            }
+          },
+          kamar: {
+            include: {
+              properti: true
+            }
+          }
+        }
+      });
+    });
+
+    return c.json({
+      status: "success",
+      data: {
+        ...updated,
+        kamar: updated.kamar ? {
+          id: updated.kamar.id,
+          nomor: updated.kamar.nomor,
+          properti: updated.kamar.properti.nama,
+          alamat: updated.kamar.properti.alamat
+        } : null
+      }
+    });
+  } catch (error) {
+    console.error("Checkout error:", error);
+    return c.json(
+      { status: "error", message: "Gagal melakukan checkout" },
       500
     );
   }

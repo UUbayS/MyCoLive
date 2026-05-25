@@ -36,6 +36,64 @@ app.get("/", requireRole("PEMILIK"), async (c) => {
   }
 });
 
+// Get tempat pembayaran by properti ID (any authenticated user)
+app.get("/:propertiId", async (c) => {
+  try {
+    const propertiId = c.req.param("propertiId");
+    const user = c.get("user");
+
+    const properti = await prisma.properti.findUnique({
+      where: { id: propertiId },
+      include: {
+        admin: {
+          include: {
+            settings: true
+          }
+        }
+      }
+    });
+
+    if (!properti) {
+      return c.json(
+        { status: "error", message: "Properti tidak ditemukan" },
+        404
+      );
+    }
+
+    if (!properti.admin) {
+      return c.json(
+        { status: "error", message: "Pemilik properti tidak ditemukan" },
+        404
+      );
+    }
+
+    if (!properti.admin.settings) {
+      return c.json({
+        status: "success",
+        data: null,
+        message: "Informasi pembayaran belum diatur",
+      });
+    }
+
+    const settings = properti.admin.settings;
+    return c.json({
+      status: "success",
+      data: {
+        nama_rekening: settings.nama_rekening,
+        nomor_rekening: settings.nomor_rekening,
+        bank: settings.bank,
+        qris_image: settings.qris_image,
+      },
+    });
+  } catch (error) {
+    console.error("Get pembayaran info error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengambil data" },
+      500
+    );
+  }
+});
+
 // Update tempat pembayaran
 app.put("/", requireRole("PEMILIK"), async (c) => {
   try {

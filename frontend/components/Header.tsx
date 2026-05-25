@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Bell, User, LogOut, ChevronDown } from "lucide-react";
+import { Bell, LogOut, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getUser, clearAuth, isAuthenticated, AuthUser } from "../lib/auth";
@@ -111,27 +111,12 @@ export default function Header() {
                       </span>
                     </div>
 
-                    <Link
-                      href={
-                        user?.role === "PEMILIK"
-                          ? "/administrator/profile"
-                          : user?.role === "PENGELOLA"
-                          ? "/pengelola/profile"
-                          : "/penghuni/profile"
-                      }
-                      className="flex items-center gap-3 px-4 py-2.5 text-slate-700 hover:bg-slate-50 transition-colors"
-                      onClick={() => setShowDropdown(false)}
-                    >
-                      <User className="w-4 h-4" />
-                      <span className="text-sm">Profil Saya</span>
-                    </Link>
-
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-3 w-full px-4 py-2.5 text-red-600 hover:bg-red-50 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span className="text-sm">Keluar</span>
+                      <span className="text-sm">Log Out</span>
                     </button>
                   </div>
                 )}

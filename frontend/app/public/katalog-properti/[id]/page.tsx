@@ -21,10 +21,10 @@ export default function DetailPropertiPage() {
   const [loading, setLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showFullKebijakan, setShowFullKebijakan] = useState(false);
-  const [activeTab, setActiveTab] = useState<TabType>("kamar");
+  const [activeTab, setActiveTab] = useState<TabType>("deskripsi");
 
   const user = getUser();
-  const isPemilik = user?.role ==="PEMILIK";
+  const isPemilik = user?.role === "PEMILIK";
   const isPengurus = user?.role === "PEMILIK" || user?.role === "PENGELOLA";
 
   useEffect(() => {
@@ -89,7 +89,6 @@ export default function DetailPropertiPage() {
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(alamat)}`;
   };
 
-  const kamarTersedia = properti?.kamar?.filter((k) => k.status === "KOSONG") || [];
   const totalKamar = properti?.total_kamar || 0;
 
   const allFasilitas = new Set<string>();
@@ -98,10 +97,10 @@ export default function DetailPropertiPage() {
   });
   const fasilitasList = Array.from(allFasilitas);
 
-  const tabs: { key: TabType; label: string; icon: typeof DoorOpen; count?: number }[] = [
-    { key: "kamar", label: "Kamar", icon: DoorOpen, count: totalKamar },
-    { key: "fasilitas", label: "Fasilitas", icon: Wifi, count: fasilitasList.length },
+  const tabs: { key: TabType; label: string; icon: typeof DoorOpen; count?: number; href?: string }[] = [
     { key: "deskripsi", label: "Deskripsi", icon: MapPin },
+    { key: "kamar", label: "Kamar", icon: DoorOpen, count: totalKamar, href: `/public/katalog-properti/${propertiId}/kamar` },
+    { key: "fasilitas", label: "Fasilitas", icon: Wifi, count: fasilitasList.length, href: `/public/katalog-properti/${propertiId}/fasilitas` },
   ];
 
   if (loading) {
@@ -134,8 +133,8 @@ export default function DetailPropertiPage() {
 
   return (
     <MainLayout>
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
+      <div className="mb-4 md:mb-6">
+        <div className="flex items-center justify-between">
           <button
             onClick={() => router.back()}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
@@ -145,7 +144,7 @@ export default function DetailPropertiPage() {
           <h1 className="text-xl font-semibold text-center flex-1">{properti.nama}</h1>
           {isPemilik && (
             <Link
-              href={`/pengelola/properti/${propertiId}/edit`}
+              href={`/administrator/properti/${propertiId}/edit`}
               className="flex items-center gap-1 text-[#84CC16] hover:text-[#73b814]"
             >
               <Edit className="w-4 h-4" />
@@ -154,7 +153,7 @@ export default function DetailPropertiPage() {
           )}
         </div>
 
-        <div className="flex items-center gap-1 text-sm text-gray-500 mb-4">
+        <div className="flex justify-center items-center gap-1 text-sm text-gray-500 mb-4">
           <MapPin className="w-4 h-4" />
           <span>{getDisplayAlamat()}</span>
         </div>
@@ -162,12 +161,12 @@ export default function DetailPropertiPage() {
         <ImageCarousel images={properti.gambar || []} alt={properti.nama} />
       </div>
 
-      <div className="mb-6">
+      <div className="mb-4 md:mb-6">
         <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.key;
-            const baseClasses = `flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+            const baseClasses = `flex-1 flex items-center justify-center gap-2 py-3 md:py-2.5 rounded-lg text-sm font-medium transition-colors ${
               isActive
                 ? "bg-white text-[#84CC16] shadow-sm"
                 : "text-gray-500 hover:text-gray-700"
@@ -184,11 +183,11 @@ export default function DetailPropertiPage() {
               </span>
             );
 
-            if (tab.key === "fasilitas") {
+            if (tab.href) {
               return (
                 <Link
                   key={tab.key}
-                  href={`/public/katalog-properti/${propertiId}/fasilitas`}
+                  href={tab.href}
                   className={baseClasses}
                 >
                   <Icon className="w-4 h-4" />
@@ -212,104 +211,6 @@ export default function DetailPropertiPage() {
           })}
         </div>
       </div>
-
-      {activeTab === "kamar" && (
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold">Daftar Kamar</h2>
-            <span className="text-sm text-gray-500">
-              {kamarTersedia.length} kosong / {totalKamar} total
-            </span>
-          </div>
-
-          {totalKamar > 0 ? (
-            <>
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                {(properti.kamar || []).slice(0, 5).map((kamar) => {
-                  const isKosong = kamar.status === "KOSONG";
-                  return (
-                    <Link
-                      key={kamar.id}
-                      href={`/public/katalog-properti/${propertiId}/kamar/${kamar.id}`}
-                      className="shrink-0 w-64 rounded-xl bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-                    >
-                      <div className="h-32 bg-gray-200 relative">
-                        {kamar.gambar?.[0] ? (
-                          <img
-                            src={kamar.gambar[0]}
-                            alt={kamar.nomor}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
-                            No Image
-                          </div>
-                        )}
-                        <span
-                          className={`absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
-                            isKosong
-                              ? "bg-green-500 text-white"
-                              : "bg-red-500 text-white"
-                          }`}
-                        >
-                          {isKosong ? "Kosong" : "Terisi"}
-                        </span>
-                      </div>
-                      <div className="p-3">
-                        <span className="font-medium text-sm">{kamar.nomor}</span>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {(() => {
-                            const tarifObj = typeof kamar.tarif === "object" && kamar.tarif ? kamar.tarif as Record<string, number> : {};
-                            const hargaBulanan = tarifObj["1_bulan"] || Object.values(tarifObj)[0];
-                            return hargaBulanan ? `Rp ${Number(hargaBulanan).toLocaleString("id-ID")}/bln` : "";
-                          })()}
-                        </p>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-              <Link
-                href={`/public/katalog-properti/${propertiId}/kamar`}
-                className="mt-3 w-full bg-[#84CC16] text-white py-2.5 rounded-xl text-sm font-medium text-center block hover:bg-[#73b814] transition-colors"
-              >
-                Lihat Semua Kamar
-              </Link>
-            </>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              <DoorOpen className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-              <p>Belum ada kamar</p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {activeTab === "fasilitas" && (
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-3">Daftar Fasilitas</h2>
-          {fasilitasList.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3">
-              {fasilitasList.map((f) => (
-                <div
-                  key={f}
-                  className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm"
-                >
-                  <div className="w-8 h-8 bg-[#84CC16]/10 rounded-full flex items-center justify-center shrink-0">
-                    <Wifi className="w-4 h-4 text-[#84CC16]" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-700 truncate">{f}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              <Wifi className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-              <p>Belum ada fasilitas</p>
-            </div>
-          )}
-        </div>
-      )}
 
       {activeTab === "deskripsi" && (
         <div className="mb-6 space-y-6">
@@ -351,7 +252,7 @@ export default function DetailPropertiPage() {
               href={getGoogleMapsLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-gray-100 rounded-xl h-48 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"
+              className="w-full bg-gray-100 rounded-xl h-48 flex flex-col items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"
             >
               <MapPin className="w-8 h-8 mb-2" />
               <span className="text-sm">Buka di Google Maps</span>

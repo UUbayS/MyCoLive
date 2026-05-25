@@ -1,9 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Header from "../Header";
 import SidebarMenu from "../Menu/SidebarMenu";
 import BottomNav from "../Menu/BottomNav";
 import SubmenuTabs from "../Menu/SubmenuTabs";
+import { setupInactivityTimer } from "../../lib/auth";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -11,6 +14,15 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({ children, submenuTabs }: MainLayoutProps) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const cleanup = setupInactivityTimer(() => {
+      router.push("/auth/login");
+    });
+    return cleanup;
+  }, [router]);
+
   return (
     <div className="min-h-screen bg-slate-50">
       <Header />
@@ -22,7 +34,7 @@ export default function MainLayout({ children, submenuTabs }: MainLayoutProps) {
           {submenuTabs && submenuTabs.length > 0 && (
             <SubmenuTabs tabs={submenuTabs} />
           )}
-          <main className="max-w-7xl mx-auto px-6 py-12 text-black">{children}</main>
+          <main className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-10 lg:py-12 text-black">{children}</main>
         </div>
       </div>
 

@@ -23,13 +23,8 @@ export default function KatalogPropertiPage() {
     fetchedRef.current = true;
 
     const user = getUser();
-    if (!user) {
-      router.push("/auth/login");
-      return;
-    }
-
-    const isPemilik = user.role === "PEMILIK";
-    const isPengelola = user.role === "PENGELOLA";
+    const isPemilik = user?.role === "PEMILIK";
+    const isPengelola = user?.role === "PENGELOLA";
 
     const fetchProperties = async () => {
       try {
@@ -80,12 +75,12 @@ export default function KatalogPropertiPage() {
     };
 
     fetchProperties();
-  }, [router]);
+  }, []);
 
   const user = getUser();
   const isPemilik = user?.role === "PEMILIK";
   const isPengelola = user?.role === "PENGELOLA";
-  const showTambah = isPemilik || isPengelola;
+  const showTambah = isPemilik;
   const showStats = isPemilik;
 
   return (
@@ -94,7 +89,7 @@ export default function KatalogPropertiPage() {
         <h1 className="text-2xl font-semibold">Katalog Properti</h1>
         {showTambah && (
           <Link
-            href="/pengelola/properti/tambah"
+            href="/administrator/properti/tambah"
             className="hidden md:flex bg-[#84CC16] text-white px-5 py-2 rounded-full shadow-sm hover:bg-[#73b814] transition-colors items-center gap-2"
           >
             <Plus className="w-4 h-4" />
@@ -137,8 +132,8 @@ export default function KatalogPropertiPage() {
 
       {showTambah && (
         <Link
-          href="/pengelola/properti/tambah"
-          className="md:hidden fixed bottom-20 right-4 w-14 h-14 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
+          href="/administrator/properti/tambah"
+          className="md:hidden fixed bottom-24 right-4 w-14 h-14 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
           aria-label="Tambah Properti"
         >
           <Plus className="w-6 h-6" />

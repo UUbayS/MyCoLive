@@ -1,21 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import ImageUploader from "../../../../../components/ImageUploader";
-import AddressFields from "../../../../../components/AddressFields";
-import { getPropertiById, updateProperti } from "../../../../../lib/api";
-import { getUser, isAuthenticated } from "../../../../../lib/auth";
-import MainLayout from "../../../../../components/Layout/MainLayout";
+import ImageUploader from "../../../../components/ImageUploader";
+import AddressFields from "../../../../components/AddressFields";
+import { createProperti } from "../../../../lib/api";
+import { getUser, isAuthenticated } from "../../../../lib/auth";
+import MainLayout from "../../../../components/Layout/MainLayout";
 
-export default function EditPropertiPage() {
+export default function TambahPropertiPage() {
   const router = useRouter();
-  const params = useParams();
-  const propertiId = params.propertiId as string;
-
   const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
   const [formData, setFormData] = useState({
     nama: "",
     provinsi: "",
@@ -37,40 +33,10 @@ export default function EditPropertiPage() {
     }
 
     const user = getUser();
-    if (user && user.role !== "PEMILIK" && user.role !== "PENGELOLA") {
+    if (user && user.role !== "PEMILIK") {
       router.push("/public/katalog-properti");
     }
   }, [router]);
-
-  useEffect(() => {
-    if (!propertiId) return;
-
-    const fetchProperti = async () => {
-      try {
-        const data = await getPropertiById(propertiId);
-        if (data) {
-          setFormData({
-            nama: data.nama,
-            provinsi: data.provinsi || "",
-            kota: data.kota || "",
-            kecamatan: data.kecamatan || "",
-            kodePos: data.kode_pos || "",
-            detailAlamat: data.detail_alamat || data.alamat || "",
-            jenis: data.jenis || "",
-            deskripsi: data.deskripsi || "",
-            kebijakan: data.kebijakan || "",
-            gambar: data.gambar || [],
-          });
-        }
-      } catch (error) {
-        console.error("Failed to fetch properti:", error);
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    fetchProperti();
-  }, [propertiId]);
 
   const handleAddressChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -92,7 +58,7 @@ export default function EditPropertiPage() {
 
     setLoading(true);
     try {
-      const result = await updateProperti(propertiId, {
+      const result = await createProperti({
         nama: formData.nama,
         provinsi: formData.provinsi,
         kota: formData.kota,
@@ -106,32 +72,17 @@ export default function EditPropertiPage() {
       });
 
       if (result) {
-        router.push(`/public/katalog-properti/${propertiId}`);
+        router.push("/public/katalog-properti");
       } else {
-        alert("Gagal mengupdate properti. Silakan coba lagi.");
+        alert("Gagal menambahkan properti. Silakan coba lagi.");
       }
     } catch (error) {
-      console.error("Update properti error:", error);
-      alert("Terjadi kesalahan saat mengupdate properti.");
+      console.error("Create properti error:", error);
+      alert("Terjadi kesalahan saat menambahkan properti.");
     } finally {
       setLoading(false);
     }
   };
-
-  if (fetching) {
-    return (
-      <MainLayout>
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 w-48 bg-gray-200 rounded" />
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-12 bg-gray-200 rounded-xl" />
-            ))}
-          </div>
-        </div>
-      </MainLayout>
-    );
-  }
 
   return (
     <MainLayout>
@@ -143,7 +94,7 @@ export default function EditPropertiPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-xl font-semibold">Edit Properti</h1>
+          <h1 className="text-xl font-semibold">Tambah Properti</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -229,7 +180,7 @@ export default function EditPropertiPage() {
             disabled={loading}
             className="w-full bg-[#84CC16] text-white py-3 rounded-xl font-medium hover:bg-[#73b814] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Menyimpan..." : "Simpan Perubahan"}
+            {loading ? "Menyimpan..." : "Tambahkan Properti"}
           </button>
         </form>
       </div>

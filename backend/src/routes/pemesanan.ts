@@ -175,10 +175,19 @@ app.get("/my", async (c) => {
           }
         },
         properti: {
-          select: {
-            id: true,
-            nama: true,
-            alamat: true
+          include: {
+            admin: {
+              include: {
+                settings: {
+                  select: {
+                    nama_rekening: true,
+                    nomor_rekening: true,
+                    bank: true,
+                    qris_image: true,
+                  }
+                }
+              }
+            }
           }
         },
         pembayaran: true
@@ -209,7 +218,22 @@ app.get("/:id", async (c) => {
       where: { id },
       include: {
         kamar: true,
-        properti: true,
+        properti: {
+          include: {
+            admin: {
+              include: {
+                settings: {
+                  select: {
+                    nama_rekening: true,
+                    nomor_rekening: true,
+                    bank: true,
+                    qris_image: true,
+                  }
+                }
+              }
+            }
+          }
+        },
         penghuni: {
           include: {
             user: {

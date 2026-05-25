@@ -22,6 +22,8 @@ const formatRupiah = (num?: number) => {
 
 const RoomCard: React.FC<{ room: RoomCardData }> = ({ room }) => {
   const isKosong = room.status === "KOSONG";
+  const isTerisi = room.status === "TERISI";
+  const isMaintenance = room.status === "MAINTENANCE";
   return (
     <Link href={`/public/katalog-properti/${room.propertiId}/kamar/${room.id}`}>
       <div className="rounded-2xl bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow">
@@ -33,10 +35,14 @@ const RoomCard: React.FC<{ room: RoomCardData }> = ({ room }) => {
           )}
           <span
             className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${
-              isKosong ? "bg-green-500 text-white" : "bg-red-500 text-white"
+              isKosong
+                ? "bg-green-500 text-white"
+                : isTerisi
+                ? "bg-blue-500 text-white"
+                : "bg-gray-500 text-white"
             }`}
           >
-            {isKosong ? "Kosong" : "Terisi"}
+            {isKosong ? "Kosong" : isTerisi ? "Terisi" : "Non-Aktif"}
           </span>
         </div>
         <div className="p-4">

@@ -7,7 +7,7 @@ import { ArrowLeft, MapPin, Edit, MessageCircle } from "lucide-react";
 import ImageCarousel from "../../../../../../components/ImageCarousel";
 import TarifSelector from "../../../../../../components/TarifSelector";
 import ConfirmDialog from "../../../../../../components/ConfirmDialog";
-import { getUser, isAuthenticated } from "../../../../../../lib/auth";
+import { getUser } from "../../../../../../lib/auth";
 import { getKamarById, deleteKamar, updateKamarStatus, KamarData } from "../../../../../../lib/api";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
 
@@ -29,22 +29,13 @@ export default function DetailKamarPage() {
   const isPengelola = user?.role === "PENGELOLA";
 
   useEffect(() => {
-    if (typeof window !== "undefined" && !isAuthenticated()) {
-      router.push("/auth/login");
-      return;
-    }
-
     if (!kamarId) return;
 
     const fetchKamar = async () => {
       try {
         const data = await getKamarById(kamarId);
         setKamar(data);
-        if (data?.status === "KOSONG") {
-          setIsAktif(true);
-        } else {
-          setIsAktif(false);
-        }
+        setIsAktif(data?.status === "KOSONG");
       } catch (error) {
         console.error("Failed to fetch kamar:", error);
       } finally {
@@ -53,7 +44,7 @@ export default function DetailKamarPage() {
     };
 
     fetchKamar();
-  }, [kamarId, router]);
+  }, [kamarId]);
 
   const handleDelete = async () => {
     try {
@@ -130,11 +121,30 @@ export default function DetailKamarPage() {
   }
 
   const isKosong = kamar.status === "KOSONG";
+  const isTerisi = kamar.status === "TERISI";
+  const isMaintenance = kamar.status === "MAINTENANCE";
   const tarif = (typeof kamar.tarif === "object" && kamar.tarif ? kamar.tarif : {}) as Record<string, number>;
+
+  if (!isPemilik && isMaintenance) {
+    return (
+      <MainLayout>
+        <div className="text-center py-12">
+          <p className="text-lg text-gray-500">Kamar tidak tersedia</p>
+          <Link
+            href={`/public/katalog-properti/${propertiId}/kamar`}
+            className="mt-4 inline-block text-[#84CC16] hover:underline"
+          >
+            Kembali ke Daftar Kamar
+          </Link>
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
-      <div className="mb-6">
+      {/* Header - full width */}
+      <div className="mb-4 md:mb-6">
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => router.back()}
@@ -153,7 +163,7 @@ export default function DetailKamarPage() {
           </div>
           {isPemilik && (
             <Link
-              href={`/pengelola/properti/${propertiId}/kamar/${kamarId}/edit`}
+              href={`/administrator/properti/${propertiId}/kamar/${kamarId}/edit`}
               className="flex items-center gap-1 text-[#84CC16] hover:text-[#73b814]"
             >
               <Edit className="w-4 h-4" />
@@ -161,143 +171,159 @@ export default function DetailKamarPage() {
             </Link>
           )}
         </div>
-
-        <ImageCarousel images={kamar.gambar || []} alt={kamar.nomor} />
       </div>
 
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-3">
-          <span className="font-medium">Status:</span>
-          <span
-            className={`px-3 py-1 rounded-full text-sm font-semibold ${
-              isKosong ? "bg-red-500 text-white" : "bg-green-500 text-white"
-            }`}
-          >
-            {isKosong ? "Kosong" : "Terisi"}
-          </span>
+      {/* Desktop: 2 kolom | Mobile: 1 kolom */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        {/* Kolom Kiri - Gambar */}
+        <div>
+          <ImageCarousel images={kamar.gambar || []} alt={kamar.nomor} />
         </div>
 
-        {isPemilik && (
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-            <span className="text-sm text-gray-600">Aktifkan Kamar</span>
-            <button
-              onClick={handleToggleAktif}
-              className={`w-12 h-6 rounded-full transition-colors relative ${
-                isAktif ? "bg-[#84CC16]" : "bg-gray-300"
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${
-                  isAktif ? "left-6" : "left-0.5"
-                }`}
-              />
-            </button>
-          </div>
-        )}
-      </div>
-
-      {kamar.penghuni && (
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-3">Penghuni Aktif</h2>
-          <div className="bg-white rounded-xl shadow-sm p-4">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-lg font-semibold text-gray-600">
-                  {kamar.penghuni.user.nama.charAt(0)}
-                </span>
-              </div>
-              <div>
-                <p className="font-semibold">{kamar.penghuni.user.nama}</p>
-                <p className="text-sm text-gray-500">
-                  {kamar.penghuni.user.email} | {kamar.penghuni.user.no_telepon || "-"}
-                </p>
-              </div>
-            </div>
-
-            <div className="text-sm text-gray-600 space-y-1 mb-3">
-              <p>
-                Aktif dari:{" "}
-                {kamar.penghuni.tgl_mulai
-                  ? new Date(kamar.penghuni.tgl_mulai).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
-                  : "-"}
-              </p>
-              <p>
-                Jatuh Tempo:{" "}
-                {kamar.penghuni.tgl_berakhir
-                  ? new Date(kamar.penghuni.tgl_berakhir).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
-                  : "-"}
-              </p>
-            </div>
-
+        {/* Kolom Kanan - Detail */}
+        <div className="space-y-4 md:space-y-6">
+          {/* Status */}
+          <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-green-600 font-medium">
-                {getSisaHari()} Hari tersisa
+              <span className="font-medium">Status:</span>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                  isKosong
+                    ? "bg-green-500 text-white"
+                    : isTerisi
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-500 text-white"
+                }`}
+              >
+                {isKosong ? "Kosong" : isTerisi ? "Terisi" : "Non-Aktif"}
               </span>
             </div>
 
-            <div className="flex gap-3">
-              <button className="flex-1 border-2 border-red-500 text-red-500 py-2 rounded-xl text-sm font-medium hover:bg-red-50 transition-colors">
-                Check-Out
-              </button>
-              <Link
-                href={`/pengelola/penghuni/${kamar.penghuni.id}`}
-                className="flex-1 border-2 border-[#84CC16] text-[#84CC16] py-2 rounded-xl text-sm font-medium text-center hover:bg-[#84CC16]/5 transition-colors"
-              >
-                Lihat Detail
-              </Link>
+            {isPemilik && (isKosong || isMaintenance) && (
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                <span className="text-sm text-gray-600">Kamar Aktif</span>
+                <button
+                  onClick={handleToggleAktif}
+                  className={`w-12 h-6 rounded-full transition-colors relative ${
+                    isAktif ? "bg-[#84CC16]" : "bg-gray-300"
+                  }`}
+                >
+                  <span
+                    className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${
+                      isAktif ? "left-6" : "left-0.5"
+                    }`}
+                  />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Penghuni Aktif - hanya PEMILIK */}
+          {isPemilik && kamar.penghuni && (
+            <div>
+              <h2 className="text-lg font-semibold mb-3">Penghuni Aktif</h2>
+              <div className="bg-white rounded-xl shadow-sm p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                    <span className="text-lg font-semibold text-gray-600">
+                      {kamar.penghuni.user.nama.charAt(0)}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="font-semibold">{kamar.penghuni.user.nama}</p>
+                    <p className="text-sm text-gray-500">
+                      {kamar.penghuni.user.email} | {kamar.penghuni.user.no_telepon || "-"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-sm text-gray-600 space-y-1 mb-3">
+                  <p>
+                    Aktif dari:{" "}
+                    {kamar.penghuni.tgl_mulai
+                      ? new Date(kamar.penghuni.tgl_mulai).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "-"}
+                  </p>
+                  <p>
+                    Jatuh Tempo:{" "}
+                    {kamar.penghuni.tgl_berakhir
+                      ? new Date(kamar.penghuni.tgl_berakhir).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "-"}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm text-green-600 font-medium">
+                    {getSisaHari()} Hari tersisa
+                  </span>
+                </div>
+
+                <div className="flex gap-3">
+                  <button className="flex-1 border-2 border-red-500 text-red-500 py-2 rounded-xl text-sm font-medium hover:bg-red-50 transition-colors">
+                    Check-Out
+                  </button>
+                  <Link
+                    href={`/pengelola/penghuni/${kamar.penghuni.id}`}
+                    className="flex-1 border-2 border-[#84CC16] text-[#84CC16] py-2 rounded-xl text-sm font-medium text-center hover:bg-[#84CC16]/5 transition-colors"
+                  >
+                    Lihat Detail
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Deskripsi Kamar */}
+          <div>
+            <h2 className="text-lg font-semibold mb-2">Deskripsi Kamar</h2>
+            <div className="space-y-2 text-sm text-gray-600">
+              <p>Lantai: {kamar.luas?.split(" - ")[0] || "1"}</p>
+              <p>Ukuran: {kamar.luas?.split(" - ")[1] || kamar.luas || "-"}</p>
             </div>
           </div>
-        </div>
-      )}
 
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">Deskripsi Kamar</h2>
-        <div className="space-y-2 text-sm text-gray-600">
-          <p>
-            Lantai: {kamar.luas?.split(" - ")[0] || "1"}
-          </p>
-          <p>
-            Ukuran: {kamar.luas?.split(" - ")[1] || kamar.luas || "-"}
-          </p>
+          {/* Fasilitas */}
+          {kamar.fasilitas && kamar.fasilitas.length > 0 && (
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Fasilitas</h2>
+              <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                {kamar.fasilitas.map((f, idx) => (
+                  <li key={idx}>{f}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Keterangan Tambahan */}
+          {kamar.deskripsi && (
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Keterangan Tambahan</h2>
+              <p className="text-sm text-gray-600">{kamar.deskripsi}</p>
+            </div>
+          )}
+
+          {/* Tarif */}
+          {Object.keys(tarif).length > 0 && (
+            <div>
+              <TarifSelector
+                tarif={tarif}
+                selectedDuration={selectedDuration}
+                onSelect={setSelectedDuration}
+              />
+            </div>
+          )}
         </div>
       </div>
 
-      {kamar.fasilitas && kamar.fasilitas.length > 0 && (
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-2">Fasilitas</h2>
-          <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-            {kamar.fasilitas.map((f, idx) => (
-              <li key={idx}>{f}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {kamar.deskripsi && (
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-2">Keterangan Tambahan</h2>
-          <p className="text-sm text-gray-600">{kamar.deskripsi}</p>
-        </div>
-      )}
-
-      {Object.keys(tarif).length > 0 && (
-        <div className="mb-6">
-          <TarifSelector
-            tarif={tarif}
-            selectedDuration={selectedDuration}
-            onSelect={setSelectedDuration}
-          />
-        </div>
-      )}
-
+      {/* Tombol Aksi - full width */}
       {(isPenghuni || isPengelola) && (
         <div className="flex gap-3 mb-6">
           <a

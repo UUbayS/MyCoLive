@@ -4,13 +4,10 @@ import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
 const app = new Hono<AppEnv>();
 
-app.use("*", authMiddleware);
-
-// List kamar by properti
+// List kamar by properti (public)
 app.get("/properti/:propertiId/kamar", async (c) => {
   try {
     const propertiId = c.req.param("propertiId");
-    const user = c.get("user");
 
     const properti = await prisma.properti.findUnique({
       where: { id: propertiId }
@@ -20,29 +17,6 @@ app.get("/properti/:propertiId/kamar", async (c) => {
       return c.json(
         { status: "error", message: "Properti tidak ditemukan" },
         404
-      );
-    }
-
-    if (user.role === "PENGELOLA") {
-      const operator = await prisma.operator.findFirst({
-        where: {
-          user_id: user.userId,
-          properti_id: propertiId
-        }
-      });
-
-      if (!operator) {
-        return c.json(
-          { status: "error", message: "Tidak punya akses ke properti ini" },
-          403
-        );
-      }
-    }
-
-    if (user.role === "PEMILIK" && properti.admin_id !== user.userId) {
-      return c.json(
-        { status: "error", message: "Tidak punya akses" },
-        403
       );
     }
 
@@ -64,8 +38,8 @@ app.get("/properti/:propertiId/kamar", async (c) => {
   }
 });
 
-// Create kamar
-app.post("/properti/:propertiId/kamar", requireRole("PEMILIK"), async (c) => {
+// Create kamar (requires auth)
+app.post("/properti/:propertiId/kamar", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {
     const propertiId = c.req.param("propertiId")!;
     const user = c.get("user");
@@ -198,8 +172,8 @@ app.get("/kamar/:id", async (c) => {
   }
 });
 
-// Update kamar
-app.put("/kamar/:id", requireRole("PEMILIK"), async (c) => {
+// Update kamar (requires auth)
+app.put("/kamar/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {
     const id = c.req.param("id");
     const user = c.get("user");
@@ -246,7 +220,8 @@ app.put("/kamar/:id", requireRole("PEMILIK"), async (c) => {
         properti: {
           select: {
             id: true,
-            nama: true
+            nama: true,
+            alamat: true
           }
         }
       }
@@ -265,8 +240,8 @@ app.put("/kamar/:id", requireRole("PEMILIK"), async (c) => {
   }
 });
 
-// Delete kamar
-app.delete("/kamar/:id", requireRole("PEMILIK"), async (c) => {
+// Delete kamar (requires auth)
+app.delete("/kamar/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {
     const id = c.req.param("id");
     const user = c.get("user");
