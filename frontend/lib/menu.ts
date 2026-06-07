@@ -70,6 +70,11 @@ export const menuConfig: Record<Role, MenuItem[]> = {
   ],
   PENGELOLA: [
     {
+      label: "Properti Saya",
+      href: "/pengelola/properti",
+      icon: "Building2",
+    },
+    {
       label: "Katalog Properti",
       href: "/public/katalog-properti",
       icon: "Building2",
@@ -96,8 +101,8 @@ export const menuConfig: Record<Role, MenuItem[]> = {
   ],
   PEMILIK: [
     {
-      label: "Katalog Properti",
-      href: "/public/katalog-properti",
+      label: "Properti Saya",
+      href: "/administrator/properti",
       icon: "Building2",
     },
     {

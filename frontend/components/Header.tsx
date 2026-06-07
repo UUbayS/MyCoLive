@@ -14,9 +14,9 @@ function getDashboardLink(user: AuthUser | null): string {
     case "PENGHUNI":
       return "/penghuni/kamar-saya";
     case "PEMILIK":
-      return "/public/katalog-properti";
+      return "/administrator/properti";
     case "PENGELOLA":
-      return "/public/katalog-properti";
+      return "/pengelola/properti";
     default:
       return "/";
   }

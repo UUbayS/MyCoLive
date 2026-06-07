@@ -153,7 +153,7 @@ export default function DetailKamarPage() {
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="text-center flex-1">
-            <h1 className="text-xl font-semibold">{kamar.nomor}</h1>
+            <h1 className="text-xl font-semibold">Kamar {kamar.nomor}</h1>
             {kamar.properti && (
               <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
                 <MapPin className="w-3 h-3" />

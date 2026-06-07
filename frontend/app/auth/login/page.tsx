@@ -44,7 +44,13 @@ export default function LoginPage() {
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("user", JSON.stringify(user));
 
-      router.push("/penghuni/kamar-saya");
+      if (user.role === "PEMILIK") {
+        router.push("/administrator/properti");
+      } else if (user.role === "PENGELOLA") {
+        router.push("/pengelola/properti");
+      } else {
+        router.push("/penghuni/kamar-saya");
+      }
     } catch {
       setError("Tidak dapat terhubung ke server. Pastikan backend sedang berjalan.");
     } finally {

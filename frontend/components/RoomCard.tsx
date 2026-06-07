@@ -47,7 +47,7 @@ const RoomCard: React.FC<{ room: RoomCardData }> = ({ room }) => {
         </div>
         <div className="p-4">
           <div className="flex items-center justify-between mb-1">
-            <h3 className="text-base font-semibold">{room.nomor}</h3>
+            <h3 className="text-base font-semibold">Kamar {room.nomor}</h3>
           </div>
           <p className="text-sm text-gray-500 mb-1">
             Lantai {room.lantai || "1"} {room.luas ? `- ${room.luas}` : ""}
