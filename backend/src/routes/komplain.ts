@@ -259,7 +259,7 @@ app.get("/:id", async (c) => {
     let isPengelola = false;
     if (user.role === "PENGELOLA") {
       const operator = await prisma.operator.findFirst({
-        where: { user_id: user.userId, properti_ids: { has: komplain.properti_id } }
+        where: { user_id: user.userId, properti_id: komplain.properti_id }
       });
       isPengelola = !!operator;
     }
@@ -323,7 +323,7 @@ app.put("/:id", async (c) => {
     let isPengelola = false;
     if (user.role === "PENGELOLA") {
       const operator = await prisma.operator.findFirst({
-        where: { user_id: user.userId, properti_ids: { has: komplain.properti_id } }
+        where: { user_id: user.userId, properti_id: komplain.properti_id }
       });
       isPengelola = !!operator;
     }

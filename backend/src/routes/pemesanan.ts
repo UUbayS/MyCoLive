@@ -403,8 +403,8 @@ app.get("/:id", async (c) => {
     
     let isPengelola = false;
     if (user.role === "PENGELOLA") {
-      const operator = await prisma.user.findFirst({
-        where: { id: user.userId, properti_ids: { has: pemesanan.properti_id } }
+      const operator = await prisma.operator.findFirst({
+        where: { user_id: user.userId, properti_id: pemesanan.properti_id }
       });
       isPengelola = !!operator;
     }

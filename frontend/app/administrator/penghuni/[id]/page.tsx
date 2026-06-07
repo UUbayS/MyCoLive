@@ -141,14 +141,17 @@ export default function DetailPenghuniPage() {
       <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
         {/* Header: Back + Title */}
         <div className="flex items-center justify-between mb-4">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <h1 className="text-xl md:text-2xl font-bold text-gray-900">Detail Penghuni</h1>
-          <div></div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.back()}
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div>
+              <h1 className="text-xl font-semibold">Detail Penghuni</h1>
+            </div>
+          </div>
         </div>
 
         {/* Profile Card */}

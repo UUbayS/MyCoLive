@@ -81,7 +81,7 @@ model User {
   updated_at DateTime @updatedAt
 
   penghuni    Penghuni?
-  operator   Operator?
+  operator   Operator[]
   
   // Relation opposite: PEMILIK owns properti
   properti  Properti[]
@@ -97,8 +97,8 @@ model AdminSettings {
   qris_image    String?
   updated_at   DateTime @updatedAt
 
-  user_id       String   @unique
-  user         User     @relation(fields: [user_id], references: [id])
+  user_id     String   @unique
+  user        User     @relation(fields: [user_id], references: [id])
 }
 
 model Properti {
@@ -207,7 +207,7 @@ model Operator {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user_id     String   @unique
+  user_id     String
   user        User     @relation(fields: [user_id], references: [id])
 
   properti_id String
@@ -251,4 +251,16 @@ model PengajuanDana {
 
   properti_id String
   properti  Properti  @relation(fields: [properti_id], references: [id])
+}
+
+model Notifikasi {
+  id          String   @id @default(cuid())
+  user_id     String
+  judul       String
+  pesan       String
+  is_read     Boolean  @default(false)
+  tipe        String?
+  related_id  String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 }

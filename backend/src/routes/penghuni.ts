@@ -243,7 +243,7 @@ app.get("/:id", async (c) => {
       })) : true;
     } else if (user.role === "PENGELOLA") {
       const operator = await prisma.operator.findFirst({
-        where: { user_id: user.userId, properti_ids: { has: propertiId || "" } }
+        where: { user_id: user.userId, properti_id: propertiId || "" }
       });
       isAllowed = !!operator;
     }

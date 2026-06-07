@@ -123,7 +123,7 @@ export const menuConfig: Record<Role, MenuItem[]> = {
     {
       label: "Operator",
       href: "/administrator/operator",
-      icon: "Shield",
+      icon: "Wrench",
       submenu: [
         { label: "Daftar Operator", href: "/administrator/operator/daftar" },
         { label: "Request", href: "/administrator/operator/request" },

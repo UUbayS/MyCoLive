@@ -16,50 +16,68 @@ export default function SidebarMenu() {
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    const init = () => {
-      const currentUser = getUser();
-      setUser(currentUser);
+    const currentUser = getUser();
+    setUser(currentUser);
 
-      if (currentUser?.role) {
-        const items = getMenuByRole(currentUser.role);
-        setMenuItems(items);
+    if (currentUser?.role) {
+      const items = getMenuByRole(currentUser.role);
+      setMenuItems(items);
 
-        // Restore saved expanded state from localStorage
-        try {
-          const saved = localStorage.getItem(STORAGE_KEY);
-          if (saved) {
-            setExpandedMenus(JSON.parse(saved));
-          } else {
-            // Auto-expand active menu group on first load
-            const initial: Record<string, boolean> = {};
-            items.forEach((item) => {
-              if (item.submenu && item.submenu.length > 0) {
-                const isGroupActive = item.submenu.some((sub) =>
-                  pathname === sub.href || pathname.startsWith(sub.href + "/")
-                );
-                if (isGroupActive) {
-                  initial[item.href] = true;
-                }
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          setExpandedMenus(JSON.parse(saved));
+        } else {
+          const initial: Record<string, boolean> = {};
+          items.forEach((item) => {
+            if (item.submenu && item.submenu.length > 0) {
+              const isGroupActive = item.submenu.some(
+                (sub) => pathname === sub.href || pathname.startsWith(sub.href + "/")
+              );
+              if (isGroupActive) {
+                initial[item.href] = true;
               }
-            });
-            setExpandedMenus(initial);
-          }
-        } catch {
-          // ignore localStorage errors
+            }
+          });
+          setExpandedMenus(initial);
         }
+      } catch {
+        // ignore localStorage errors
       }
-    };
-    init();
-  }, [pathname]);
-
-  // Persist expanded state to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(expandedMenus));
-    } catch {
-      // ignore localStorage errors
     }
-  }, [expandedMenus]);
+  }, []); 
+
+  useEffect(() => {
+    if (menuItems.length === 0) return;
+
+    setExpandedMenus((prev) => {
+      let needsUpdate = false;
+      const nextState = { ...prev };
+
+      menuItems.forEach((item) => {
+        if (item.submenu && item.submenu.length > 0) {
+          const isGroupActive = item.submenu.some(
+            (sub) => pathname === sub.href || pathname.startsWith(sub.href + "/")
+          );
+          if (isGroupActive && !nextState[item.href]) {
+            nextState[item.href] = true;
+            needsUpdate = true;
+          }
+        }
+      });
+      return needsUpdate ? nextState : prev;
+    });
+  }, [pathname, menuItems]);
+
+  useEffect(() => {
+    if (Object.keys(expandedMenus).length > 0 || menuItems.length > 0) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(expandedMenus));
+      } catch {
+        // ignore localStorage errors
+      }
+    }
+  }, [expandedMenus, menuItems]);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";

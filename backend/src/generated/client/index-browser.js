@@ -245,6 +245,18 @@ exports.Prisma.PengajuanDanaScalarFieldEnum = {
   properti_id: 'properti_id'
 };
 
+exports.Prisma.NotifikasiScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  judul: 'judul',
+  pesan: 'pesan',
+  is_read: 'is_read',
+  tipe: 'tipe',
+  related_id: 'related_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -342,7 +354,8 @@ exports.Prisma.ModelName = {
   Penghuni: 'Penghuni',
   Operator: 'Operator',
   Komplain: 'Komplain',
-  PengajuanDana: 'PengajuanDana'
+  PengajuanDana: 'PengajuanDana',
+  Notifikasi: 'Notifikasi'
 };
 
 /**

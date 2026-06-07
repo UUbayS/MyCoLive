@@ -63,6 +63,11 @@ export type Komplain = $Result.DefaultSelection<Prisma.$KomplainPayload>
  * 
  */
 export type PengajuanDana = $Result.DefaultSelection<Prisma.$PengajuanDanaPayload>
+/**
+ * Model Notifikasi
+ * 
+ */
+export type Notifikasi = $Result.DefaultSelection<Prisma.$NotifikasiPayload>
 
 /**
  * Enums
@@ -421,6 +426,16 @@ export class PrismaClient<
     * ```
     */
   get pengajuanDana(): Prisma.PengajuanDanaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notifikasi`: Exposes CRUD operations for the **Notifikasi** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Notifikasis
+    * const notifikasis = await prisma.notifikasi.findMany()
+    * ```
+    */
+  get notifikasi(): Prisma.NotifikasiDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -864,7 +879,8 @@ export namespace Prisma {
     Penghuni: 'Penghuni',
     Operator: 'Operator',
     Komplain: 'Komplain',
-    PengajuanDana: 'PengajuanDana'
+    PengajuanDana: 'PengajuanDana',
+    Notifikasi: 'Notifikasi'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -880,7 +896,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "adminSettings" | "properti" | "kamar" | "pemesanan" | "pembayaran" | "penghuni" | "operator" | "komplain" | "pengajuanDana"
+      modelProps: "user" | "adminSettings" | "properti" | "kamar" | "pemesanan" | "pembayaran" | "penghuni" | "operator" | "komplain" | "pengajuanDana" | "notifikasi"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1624,6 +1640,80 @@ export namespace Prisma {
           }
         }
       }
+      Notifikasi: {
+        payload: Prisma.$NotifikasiPayload<ExtArgs>
+        fields: Prisma.NotifikasiFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotifikasiFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotifikasiFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload>
+          }
+          findFirst: {
+            args: Prisma.NotifikasiFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotifikasiFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload>
+          }
+          findMany: {
+            args: Prisma.NotifikasiFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload>[]
+          }
+          create: {
+            args: Prisma.NotifikasiCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload>
+          }
+          createMany: {
+            args: Prisma.NotifikasiCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotifikasiCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload>[]
+          }
+          delete: {
+            args: Prisma.NotifikasiDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload>
+          }
+          update: {
+            args: Prisma.NotifikasiUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotifikasiDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotifikasiUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotifikasiUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotifikasiUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotifikasiPayload>
+          }
+          aggregate: {
+            args: Prisma.NotifikasiAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotifikasi>
+          }
+          groupBy: {
+            args: Prisma.NotifikasiGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotifikasiGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotifikasiCountArgs<ExtArgs>
+            result: $Utils.Optional<NotifikasiCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1742,6 +1832,7 @@ export namespace Prisma {
     operator?: OperatorOmit
     komplain?: KomplainOmit
     pengajuanDana?: PengajuanDanaOmit
+    notifikasi?: NotifikasiOmit
   }
 
   /* Types for Logging */
@@ -1822,10 +1913,12 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    operator: number
     properti: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    operator?: boolean | UserCountOutputTypeCountOperatorArgs
     properti?: boolean | UserCountOutputTypeCountPropertiArgs
   }
 
@@ -1838,6 +1931,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOperatorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OperatorWhereInput
   }
 
   /**
@@ -2275,7 +2375,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       penghuni: Prisma.$PenghuniPayload<ExtArgs> | null
-      operator: Prisma.$OperatorPayload<ExtArgs> | null
+      operator: Prisma.$OperatorPayload<ExtArgs>[]
       properti: Prisma.$PropertiPayload<ExtArgs>[]
       settings: Prisma.$AdminSettingsPayload<ExtArgs> | null
     }
@@ -2684,7 +2784,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     penghuni<T extends User$penghuniArgs<ExtArgs> = {}>(args?: Subset<T, User$penghuniArgs<ExtArgs>>): Prisma__PenghuniClient<$Result.GetResult<Prisma.$PenghuniPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    operator<T extends User$operatorArgs<ExtArgs> = {}>(args?: Subset<T, User$operatorArgs<ExtArgs>>): Prisma__OperatorClient<$Result.GetResult<Prisma.$OperatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    operator<T extends User$operatorArgs<ExtArgs> = {}>(args?: Subset<T, User$operatorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     properti<T extends User$propertiArgs<ExtArgs> = {}>(args?: Subset<T, User$propertiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -3153,6 +3253,11 @@ export namespace Prisma {
      */
     include?: OperatorInclude<ExtArgs> | null
     where?: OperatorWhereInput
+    orderBy?: OperatorOrderByWithRelationInput | OperatorOrderByWithRelationInput[]
+    cursor?: OperatorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OperatorScalarFieldEnum | OperatorScalarFieldEnum[]
   }
 
   /**
@@ -13747,6 +13852,1058 @@ export namespace Prisma {
 
 
   /**
+   * Model Notifikasi
+   */
+
+  export type AggregateNotifikasi = {
+    _count: NotifikasiCountAggregateOutputType | null
+    _min: NotifikasiMinAggregateOutputType | null
+    _max: NotifikasiMaxAggregateOutputType | null
+  }
+
+  export type NotifikasiMinAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    judul: string | null
+    pesan: string | null
+    is_read: boolean | null
+    tipe: string | null
+    related_id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type NotifikasiMaxAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    judul: string | null
+    pesan: string | null
+    is_read: boolean | null
+    tipe: string | null
+    related_id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type NotifikasiCountAggregateOutputType = {
+    id: number
+    user_id: number
+    judul: number
+    pesan: number
+    is_read: number
+    tipe: number
+    related_id: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type NotifikasiMinAggregateInputType = {
+    id?: true
+    user_id?: true
+    judul?: true
+    pesan?: true
+    is_read?: true
+    tipe?: true
+    related_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type NotifikasiMaxAggregateInputType = {
+    id?: true
+    user_id?: true
+    judul?: true
+    pesan?: true
+    is_read?: true
+    tipe?: true
+    related_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type NotifikasiCountAggregateInputType = {
+    id?: true
+    user_id?: true
+    judul?: true
+    pesan?: true
+    is_read?: true
+    tipe?: true
+    related_id?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type NotifikasiAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notifikasi to aggregate.
+     */
+    where?: NotifikasiWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifikasis to fetch.
+     */
+    orderBy?: NotifikasiOrderByWithRelationInput | NotifikasiOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotifikasiWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifikasis from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifikasis.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Notifikasis
+    **/
+    _count?: true | NotifikasiCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotifikasiMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotifikasiMaxAggregateInputType
+  }
+
+  export type GetNotifikasiAggregateType<T extends NotifikasiAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotifikasi]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotifikasi[P]>
+      : GetScalarType<T[P], AggregateNotifikasi[P]>
+  }
+
+
+
+
+  export type NotifikasiGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotifikasiWhereInput
+    orderBy?: NotifikasiOrderByWithAggregationInput | NotifikasiOrderByWithAggregationInput[]
+    by: NotifikasiScalarFieldEnum[] | NotifikasiScalarFieldEnum
+    having?: NotifikasiScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotifikasiCountAggregateInputType | true
+    _min?: NotifikasiMinAggregateInputType
+    _max?: NotifikasiMaxAggregateInputType
+  }
+
+  export type NotifikasiGroupByOutputType = {
+    id: string
+    user_id: string
+    judul: string
+    pesan: string
+    is_read: boolean
+    tipe: string | null
+    related_id: string | null
+    created_at: Date
+    updated_at: Date
+    _count: NotifikasiCountAggregateOutputType | null
+    _min: NotifikasiMinAggregateOutputType | null
+    _max: NotifikasiMaxAggregateOutputType | null
+  }
+
+  type GetNotifikasiGroupByPayload<T extends NotifikasiGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotifikasiGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotifikasiGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotifikasiGroupByOutputType[P]>
+            : GetScalarType<T[P], NotifikasiGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotifikasiSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    judul?: boolean
+    pesan?: boolean
+    is_read?: boolean
+    tipe?: boolean
+    related_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["notifikasi"]>
+
+  export type NotifikasiSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    judul?: boolean
+    pesan?: boolean
+    is_read?: boolean
+    tipe?: boolean
+    related_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["notifikasi"]>
+
+  export type NotifikasiSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    judul?: boolean
+    pesan?: boolean
+    is_read?: boolean
+    tipe?: boolean
+    related_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["notifikasi"]>
+
+  export type NotifikasiSelectScalar = {
+    id?: boolean
+    user_id?: boolean
+    judul?: boolean
+    pesan?: boolean
+    is_read?: boolean
+    tipe?: boolean
+    related_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type NotifikasiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "judul" | "pesan" | "is_read" | "tipe" | "related_id" | "created_at" | "updated_at", ExtArgs["result"]["notifikasi"]>
+
+  export type $NotifikasiPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notifikasi"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      user_id: string
+      judul: string
+      pesan: string
+      is_read: boolean
+      tipe: string | null
+      related_id: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["notifikasi"]>
+    composites: {}
+  }
+
+  type NotifikasiGetPayload<S extends boolean | null | undefined | NotifikasiDefaultArgs> = $Result.GetResult<Prisma.$NotifikasiPayload, S>
+
+  type NotifikasiCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotifikasiFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotifikasiCountAggregateInputType | true
+    }
+
+  export interface NotifikasiDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notifikasi'], meta: { name: 'Notifikasi' } }
+    /**
+     * Find zero or one Notifikasi that matches the filter.
+     * @param {NotifikasiFindUniqueArgs} args - Arguments to find a Notifikasi
+     * @example
+     * // Get one Notifikasi
+     * const notifikasi = await prisma.notifikasi.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotifikasiFindUniqueArgs>(args: SelectSubset<T, NotifikasiFindUniqueArgs<ExtArgs>>): Prisma__NotifikasiClient<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Notifikasi that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotifikasiFindUniqueOrThrowArgs} args - Arguments to find a Notifikasi
+     * @example
+     * // Get one Notifikasi
+     * const notifikasi = await prisma.notifikasi.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotifikasiFindUniqueOrThrowArgs>(args: SelectSubset<T, NotifikasiFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotifikasiClient<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notifikasi that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotifikasiFindFirstArgs} args - Arguments to find a Notifikasi
+     * @example
+     * // Get one Notifikasi
+     * const notifikasi = await prisma.notifikasi.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotifikasiFindFirstArgs>(args?: SelectSubset<T, NotifikasiFindFirstArgs<ExtArgs>>): Prisma__NotifikasiClient<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notifikasi that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotifikasiFindFirstOrThrowArgs} args - Arguments to find a Notifikasi
+     * @example
+     * // Get one Notifikasi
+     * const notifikasi = await prisma.notifikasi.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotifikasiFindFirstOrThrowArgs>(args?: SelectSubset<T, NotifikasiFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotifikasiClient<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Notifikasis that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotifikasiFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifikasis
+     * const notifikasis = await prisma.notifikasi.findMany()
+     * 
+     * // Get first 10 Notifikasis
+     * const notifikasis = await prisma.notifikasi.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notifikasiWithIdOnly = await prisma.notifikasi.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotifikasiFindManyArgs>(args?: SelectSubset<T, NotifikasiFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Notifikasi.
+     * @param {NotifikasiCreateArgs} args - Arguments to create a Notifikasi.
+     * @example
+     * // Create one Notifikasi
+     * const Notifikasi = await prisma.notifikasi.create({
+     *   data: {
+     *     // ... data to create a Notifikasi
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotifikasiCreateArgs>(args: SelectSubset<T, NotifikasiCreateArgs<ExtArgs>>): Prisma__NotifikasiClient<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Notifikasis.
+     * @param {NotifikasiCreateManyArgs} args - Arguments to create many Notifikasis.
+     * @example
+     * // Create many Notifikasis
+     * const notifikasi = await prisma.notifikasi.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotifikasiCreateManyArgs>(args?: SelectSubset<T, NotifikasiCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Notifikasis and returns the data saved in the database.
+     * @param {NotifikasiCreateManyAndReturnArgs} args - Arguments to create many Notifikasis.
+     * @example
+     * // Create many Notifikasis
+     * const notifikasi = await prisma.notifikasi.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Notifikasis and only return the `id`
+     * const notifikasiWithIdOnly = await prisma.notifikasi.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotifikasiCreateManyAndReturnArgs>(args?: SelectSubset<T, NotifikasiCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Notifikasi.
+     * @param {NotifikasiDeleteArgs} args - Arguments to delete one Notifikasi.
+     * @example
+     * // Delete one Notifikasi
+     * const Notifikasi = await prisma.notifikasi.delete({
+     *   where: {
+     *     // ... filter to delete one Notifikasi
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotifikasiDeleteArgs>(args: SelectSubset<T, NotifikasiDeleteArgs<ExtArgs>>): Prisma__NotifikasiClient<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Notifikasi.
+     * @param {NotifikasiUpdateArgs} args - Arguments to update one Notifikasi.
+     * @example
+     * // Update one Notifikasi
+     * const notifikasi = await prisma.notifikasi.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotifikasiUpdateArgs>(args: SelectSubset<T, NotifikasiUpdateArgs<ExtArgs>>): Prisma__NotifikasiClient<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Notifikasis.
+     * @param {NotifikasiDeleteManyArgs} args - Arguments to filter Notifikasis to delete.
+     * @example
+     * // Delete a few Notifikasis
+     * const { count } = await prisma.notifikasi.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotifikasiDeleteManyArgs>(args?: SelectSubset<T, NotifikasiDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifikasis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotifikasiUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifikasis
+     * const notifikasi = await prisma.notifikasi.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotifikasiUpdateManyArgs>(args: SelectSubset<T, NotifikasiUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifikasis and returns the data updated in the database.
+     * @param {NotifikasiUpdateManyAndReturnArgs} args - Arguments to update many Notifikasis.
+     * @example
+     * // Update many Notifikasis
+     * const notifikasi = await prisma.notifikasi.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Notifikasis and only return the `id`
+     * const notifikasiWithIdOnly = await prisma.notifikasi.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotifikasiUpdateManyAndReturnArgs>(args: SelectSubset<T, NotifikasiUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Notifikasi.
+     * @param {NotifikasiUpsertArgs} args - Arguments to update or create a Notifikasi.
+     * @example
+     * // Update or create a Notifikasi
+     * const notifikasi = await prisma.notifikasi.upsert({
+     *   create: {
+     *     // ... data to create a Notifikasi
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notifikasi we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotifikasiUpsertArgs>(args: SelectSubset<T, NotifikasiUpsertArgs<ExtArgs>>): Prisma__NotifikasiClient<$Result.GetResult<Prisma.$NotifikasiPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Notifikasis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotifikasiCountArgs} args - Arguments to filter Notifikasis to count.
+     * @example
+     * // Count the number of Notifikasis
+     * const count = await prisma.notifikasi.count({
+     *   where: {
+     *     // ... the filter for the Notifikasis we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotifikasiCountArgs>(
+      args?: Subset<T, NotifikasiCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotifikasiCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Notifikasi.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotifikasiAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotifikasiAggregateArgs>(args: Subset<T, NotifikasiAggregateArgs>): Prisma.PrismaPromise<GetNotifikasiAggregateType<T>>
+
+    /**
+     * Group by Notifikasi.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotifikasiGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotifikasiGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotifikasiGroupByArgs['orderBy'] }
+        : { orderBy?: NotifikasiGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotifikasiGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotifikasiGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Notifikasi model
+   */
+  readonly fields: NotifikasiFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notifikasi.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotifikasiClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Notifikasi model
+   */
+  interface NotifikasiFieldRefs {
+    readonly id: FieldRef<"Notifikasi", 'String'>
+    readonly user_id: FieldRef<"Notifikasi", 'String'>
+    readonly judul: FieldRef<"Notifikasi", 'String'>
+    readonly pesan: FieldRef<"Notifikasi", 'String'>
+    readonly is_read: FieldRef<"Notifikasi", 'Boolean'>
+    readonly tipe: FieldRef<"Notifikasi", 'String'>
+    readonly related_id: FieldRef<"Notifikasi", 'String'>
+    readonly created_at: FieldRef<"Notifikasi", 'DateTime'>
+    readonly updated_at: FieldRef<"Notifikasi", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Notifikasi findUnique
+   */
+  export type NotifikasiFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * Filter, which Notifikasi to fetch.
+     */
+    where: NotifikasiWhereUniqueInput
+  }
+
+  /**
+   * Notifikasi findUniqueOrThrow
+   */
+  export type NotifikasiFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * Filter, which Notifikasi to fetch.
+     */
+    where: NotifikasiWhereUniqueInput
+  }
+
+  /**
+   * Notifikasi findFirst
+   */
+  export type NotifikasiFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * Filter, which Notifikasi to fetch.
+     */
+    where?: NotifikasiWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifikasis to fetch.
+     */
+    orderBy?: NotifikasiOrderByWithRelationInput | NotifikasiOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifikasis.
+     */
+    cursor?: NotifikasiWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifikasis from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifikasis.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifikasis.
+     */
+    distinct?: NotifikasiScalarFieldEnum | NotifikasiScalarFieldEnum[]
+  }
+
+  /**
+   * Notifikasi findFirstOrThrow
+   */
+  export type NotifikasiFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * Filter, which Notifikasi to fetch.
+     */
+    where?: NotifikasiWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifikasis to fetch.
+     */
+    orderBy?: NotifikasiOrderByWithRelationInput | NotifikasiOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifikasis.
+     */
+    cursor?: NotifikasiWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifikasis from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifikasis.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifikasis.
+     */
+    distinct?: NotifikasiScalarFieldEnum | NotifikasiScalarFieldEnum[]
+  }
+
+  /**
+   * Notifikasi findMany
+   */
+  export type NotifikasiFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * Filter, which Notifikasis to fetch.
+     */
+    where?: NotifikasiWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifikasis to fetch.
+     */
+    orderBy?: NotifikasiOrderByWithRelationInput | NotifikasiOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Notifikasis.
+     */
+    cursor?: NotifikasiWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifikasis from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifikasis.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifikasis.
+     */
+    distinct?: NotifikasiScalarFieldEnum | NotifikasiScalarFieldEnum[]
+  }
+
+  /**
+   * Notifikasi create
+   */
+  export type NotifikasiCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Notifikasi.
+     */
+    data: XOR<NotifikasiCreateInput, NotifikasiUncheckedCreateInput>
+  }
+
+  /**
+   * Notifikasi createMany
+   */
+  export type NotifikasiCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Notifikasis.
+     */
+    data: NotifikasiCreateManyInput | NotifikasiCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Notifikasi createManyAndReturn
+   */
+  export type NotifikasiCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * The data used to create many Notifikasis.
+     */
+    data: NotifikasiCreateManyInput | NotifikasiCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Notifikasi update
+   */
+  export type NotifikasiUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Notifikasi.
+     */
+    data: XOR<NotifikasiUpdateInput, NotifikasiUncheckedUpdateInput>
+    /**
+     * Choose, which Notifikasi to update.
+     */
+    where: NotifikasiWhereUniqueInput
+  }
+
+  /**
+   * Notifikasi updateMany
+   */
+  export type NotifikasiUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Notifikasis.
+     */
+    data: XOR<NotifikasiUpdateManyMutationInput, NotifikasiUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifikasis to update
+     */
+    where?: NotifikasiWhereInput
+    /**
+     * Limit how many Notifikasis to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notifikasi updateManyAndReturn
+   */
+  export type NotifikasiUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * The data used to update Notifikasis.
+     */
+    data: XOR<NotifikasiUpdateManyMutationInput, NotifikasiUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifikasis to update
+     */
+    where?: NotifikasiWhereInput
+    /**
+     * Limit how many Notifikasis to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notifikasi upsert
+   */
+  export type NotifikasiUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Notifikasi to update in case it exists.
+     */
+    where: NotifikasiWhereUniqueInput
+    /**
+     * In case the Notifikasi found by the `where` argument doesn't exist, create a new Notifikasi with this data.
+     */
+    create: XOR<NotifikasiCreateInput, NotifikasiUncheckedCreateInput>
+    /**
+     * In case the Notifikasi was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotifikasiUpdateInput, NotifikasiUncheckedUpdateInput>
+  }
+
+  /**
+   * Notifikasi delete
+   */
+  export type NotifikasiDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+    /**
+     * Filter which Notifikasi to delete.
+     */
+    where: NotifikasiWhereUniqueInput
+  }
+
+  /**
+   * Notifikasi deleteMany
+   */
+  export type NotifikasiDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notifikasis to delete
+     */
+    where?: NotifikasiWhereInput
+    /**
+     * Limit how many Notifikasis to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notifikasi without action
+   */
+  export type NotifikasiDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notifikasi
+     */
+    select?: NotifikasiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notifikasi
+     */
+    omit?: NotifikasiOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -13913,6 +15070,21 @@ export namespace Prisma {
   };
 
   export type PengajuanDanaScalarFieldEnum = (typeof PengajuanDanaScalarFieldEnum)[keyof typeof PengajuanDanaScalarFieldEnum]
+
+
+  export const NotifikasiScalarFieldEnum: {
+    id: 'id',
+    user_id: 'user_id',
+    judul: 'judul',
+    pesan: 'pesan',
+    is_read: 'is_read',
+    tipe: 'tipe',
+    related_id: 'related_id',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type NotifikasiScalarFieldEnum = (typeof NotifikasiScalarFieldEnum)[keyof typeof NotifikasiScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -14158,6 +15330,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -14188,7 +15367,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
-    operator?: XOR<OperatorNullableScalarRelationFilter, OperatorWhereInput> | null
+    operator?: OperatorListRelationFilter
     properti?: PropertiListRelationFilter
     settings?: XOR<AdminSettingsNullableScalarRelationFilter, AdminSettingsWhereInput> | null
   }
@@ -14204,7 +15383,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     penghuni?: PenghuniOrderByWithRelationInput
-    operator?: OperatorOrderByWithRelationInput
+    operator?: OperatorOrderByRelationAggregateInput
     properti?: PropertiOrderByRelationAggregateInput
     settings?: AdminSettingsOrderByWithRelationInput
   }
@@ -14223,7 +15402,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
-    operator?: XOR<OperatorNullableScalarRelationFilter, OperatorWhereInput> | null
+    operator?: OperatorListRelationFilter
     properti?: PropertiListRelationFilter
     settings?: XOR<AdminSettingsNullableScalarRelationFilter, AdminSettingsWhereInput> | null
   }, "id" | "username" | "email" | "no_telepon">
@@ -14812,18 +15991,18 @@ export namespace Prisma {
 
   export type OperatorWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    user_id?: string
     user_id_properti_id?: OperatorUser_idProperti_idCompoundUniqueInput
     AND?: OperatorWhereInput | OperatorWhereInput[]
     OR?: OperatorWhereInput[]
     NOT?: OperatorWhereInput | OperatorWhereInput[]
     created_at?: DateTimeFilter<"Operator"> | Date | string
     updated_at?: DateTimeFilter<"Operator"> | Date | string
+    user_id?: StringFilter<"Operator"> | string
     properti_id?: StringFilter<"Operator"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     properti?: XOR<PropertiScalarRelationFilter, PropertiWhereInput>
     pengajuanDana?: PengajuanDanaListRelationFilter
-  }, "id" | "user_id" | "user_id_properti_id">
+  }, "id" | "user_id_properti_id">
 
   export type OperatorOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15015,6 +16194,78 @@ export namespace Prisma {
     properti_id?: StringWithAggregatesFilter<"PengajuanDana"> | string
   }
 
+  export type NotifikasiWhereInput = {
+    AND?: NotifikasiWhereInput | NotifikasiWhereInput[]
+    OR?: NotifikasiWhereInput[]
+    NOT?: NotifikasiWhereInput | NotifikasiWhereInput[]
+    id?: StringFilter<"Notifikasi"> | string
+    user_id?: StringFilter<"Notifikasi"> | string
+    judul?: StringFilter<"Notifikasi"> | string
+    pesan?: StringFilter<"Notifikasi"> | string
+    is_read?: BoolFilter<"Notifikasi"> | boolean
+    tipe?: StringNullableFilter<"Notifikasi"> | string | null
+    related_id?: StringNullableFilter<"Notifikasi"> | string | null
+    created_at?: DateTimeFilter<"Notifikasi"> | Date | string
+    updated_at?: DateTimeFilter<"Notifikasi"> | Date | string
+  }
+
+  export type NotifikasiOrderByWithRelationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    judul?: SortOrder
+    pesan?: SortOrder
+    is_read?: SortOrder
+    tipe?: SortOrderInput | SortOrder
+    related_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type NotifikasiWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotifikasiWhereInput | NotifikasiWhereInput[]
+    OR?: NotifikasiWhereInput[]
+    NOT?: NotifikasiWhereInput | NotifikasiWhereInput[]
+    user_id?: StringFilter<"Notifikasi"> | string
+    judul?: StringFilter<"Notifikasi"> | string
+    pesan?: StringFilter<"Notifikasi"> | string
+    is_read?: BoolFilter<"Notifikasi"> | boolean
+    tipe?: StringNullableFilter<"Notifikasi"> | string | null
+    related_id?: StringNullableFilter<"Notifikasi"> | string | null
+    created_at?: DateTimeFilter<"Notifikasi"> | Date | string
+    updated_at?: DateTimeFilter<"Notifikasi"> | Date | string
+  }, "id">
+
+  export type NotifikasiOrderByWithAggregationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    judul?: SortOrder
+    pesan?: SortOrder
+    is_read?: SortOrder
+    tipe?: SortOrderInput | SortOrder
+    related_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: NotifikasiCountOrderByAggregateInput
+    _max?: NotifikasiMaxOrderByAggregateInput
+    _min?: NotifikasiMinOrderByAggregateInput
+  }
+
+  export type NotifikasiScalarWhereWithAggregatesInput = {
+    AND?: NotifikasiScalarWhereWithAggregatesInput | NotifikasiScalarWhereWithAggregatesInput[]
+    OR?: NotifikasiScalarWhereWithAggregatesInput[]
+    NOT?: NotifikasiScalarWhereWithAggregatesInput | NotifikasiScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Notifikasi"> | string
+    user_id?: StringWithAggregatesFilter<"Notifikasi"> | string
+    judul?: StringWithAggregatesFilter<"Notifikasi"> | string
+    pesan?: StringWithAggregatesFilter<"Notifikasi"> | string
+    is_read?: BoolWithAggregatesFilter<"Notifikasi"> | boolean
+    tipe?: StringNullableWithAggregatesFilter<"Notifikasi"> | string | null
+    related_id?: StringNullableWithAggregatesFilter<"Notifikasi"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"Notifikasi"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Notifikasi"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -15026,7 +16277,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
-    operator?: OperatorCreateNestedOneWithoutUserInput
+    operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
   }
@@ -15042,7 +16293,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
-    operator?: OperatorUncheckedCreateNestedOneWithoutUserInput
+    operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
   }
@@ -15058,7 +16309,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
-    operator?: OperatorUpdateOneWithoutUserNestedInput
+    operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
   }
@@ -15074,7 +16325,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
-    operator?: OperatorUncheckedUpdateOneWithoutUserNestedInput
+    operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -15935,6 +17186,90 @@ export namespace Prisma {
     properti_id?: StringFieldUpdateOperationsInput | string
   }
 
+  export type NotifikasiCreateInput = {
+    id?: string
+    user_id: string
+    judul: string
+    pesan: string
+    is_read?: boolean
+    tipe?: string | null
+    related_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type NotifikasiUncheckedCreateInput = {
+    id?: string
+    user_id: string
+    judul: string
+    pesan: string
+    is_read?: boolean
+    tipe?: string | null
+    related_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type NotifikasiUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    judul?: StringFieldUpdateOperationsInput | string
+    pesan?: StringFieldUpdateOperationsInput | string
+    is_read?: BoolFieldUpdateOperationsInput | boolean
+    tipe?: NullableStringFieldUpdateOperationsInput | string | null
+    related_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotifikasiUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    judul?: StringFieldUpdateOperationsInput | string
+    pesan?: StringFieldUpdateOperationsInput | string
+    is_read?: BoolFieldUpdateOperationsInput | boolean
+    tipe?: NullableStringFieldUpdateOperationsInput | string | null
+    related_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotifikasiCreateManyInput = {
+    id?: string
+    user_id: string
+    judul: string
+    pesan: string
+    is_read?: boolean
+    tipe?: string | null
+    related_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type NotifikasiUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    judul?: StringFieldUpdateOperationsInput | string
+    pesan?: StringFieldUpdateOperationsInput | string
+    is_read?: BoolFieldUpdateOperationsInput | boolean
+    tipe?: NullableStringFieldUpdateOperationsInput | string | null
+    related_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotifikasiUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    judul?: StringFieldUpdateOperationsInput | string
+    pesan?: StringFieldUpdateOperationsInput | string
+    is_read?: BoolFieldUpdateOperationsInput | boolean
+    tipe?: NullableStringFieldUpdateOperationsInput | string | null
+    related_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -15988,9 +17323,10 @@ export namespace Prisma {
     isNot?: PenghuniWhereInput | null
   }
 
-  export type OperatorNullableScalarRelationFilter = {
-    is?: OperatorWhereInput | null
-    isNot?: OperatorWhereInput | null
+  export type OperatorListRelationFilter = {
+    every?: OperatorWhereInput
+    some?: OperatorWhereInput
+    none?: OperatorWhereInput
   }
 
   export type PropertiListRelationFilter = {
@@ -16007,6 +17343,10 @@ export namespace Prisma {
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type OperatorOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type PropertiOrderByRelationAggregateInput = {
@@ -16171,12 +17511,6 @@ export namespace Prisma {
     none?: KomplainWhereInput
   }
 
-  export type OperatorListRelationFilter = {
-    every?: OperatorWhereInput
-    some?: OperatorWhereInput
-    none?: OperatorWhereInput
-  }
-
   export type PemesananListRelationFilter = {
     every?: PemesananWhereInput
     some?: PemesananWhereInput
@@ -16194,10 +17528,6 @@ export namespace Prisma {
   }
 
   export type KomplainOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type OperatorOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16820,16 +18150,66 @@ export namespace Prisma {
     _max?: NestedEnumStatusDanaFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NotifikasiCountOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    judul?: SortOrder
+    pesan?: SortOrder
+    is_read?: SortOrder
+    tipe?: SortOrder
+    related_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type NotifikasiMaxOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    judul?: SortOrder
+    pesan?: SortOrder
+    is_read?: SortOrder
+    tipe?: SortOrder
+    related_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type NotifikasiMinOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    judul?: SortOrder
+    pesan?: SortOrder
+    is_read?: SortOrder
+    tipe?: SortOrder
+    related_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type PenghuniCreateNestedOneWithoutUserInput = {
     create?: XOR<PenghuniCreateWithoutUserInput, PenghuniUncheckedCreateWithoutUserInput>
     connectOrCreate?: PenghuniCreateOrConnectWithoutUserInput
     connect?: PenghuniWhereUniqueInput
   }
 
-  export type OperatorCreateNestedOneWithoutUserInput = {
-    create?: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput>
-    connectOrCreate?: OperatorCreateOrConnectWithoutUserInput
-    connect?: OperatorWhereUniqueInput
+  export type OperatorCreateNestedManyWithoutUserInput = {
+    create?: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput> | OperatorCreateWithoutUserInput[] | OperatorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OperatorCreateOrConnectWithoutUserInput | OperatorCreateOrConnectWithoutUserInput[]
+    createMany?: OperatorCreateManyUserInputEnvelope
+    connect?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
   }
 
   export type PropertiCreateNestedManyWithoutAdminInput = {
@@ -16851,10 +18231,11 @@ export namespace Prisma {
     connect?: PenghuniWhereUniqueInput
   }
 
-  export type OperatorUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput>
-    connectOrCreate?: OperatorCreateOrConnectWithoutUserInput
-    connect?: OperatorWhereUniqueInput
+  export type OperatorUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput> | OperatorCreateWithoutUserInput[] | OperatorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OperatorCreateOrConnectWithoutUserInput | OperatorCreateOrConnectWithoutUserInput[]
+    createMany?: OperatorCreateManyUserInputEnvelope
+    connect?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
   }
 
   export type PropertiUncheckedCreateNestedManyWithoutAdminInput = {
@@ -16896,14 +18277,18 @@ export namespace Prisma {
     update?: XOR<XOR<PenghuniUpdateToOneWithWhereWithoutUserInput, PenghuniUpdateWithoutUserInput>, PenghuniUncheckedUpdateWithoutUserInput>
   }
 
-  export type OperatorUpdateOneWithoutUserNestedInput = {
-    create?: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput>
-    connectOrCreate?: OperatorCreateOrConnectWithoutUserInput
-    upsert?: OperatorUpsertWithoutUserInput
-    disconnect?: OperatorWhereInput | boolean
-    delete?: OperatorWhereInput | boolean
-    connect?: OperatorWhereUniqueInput
-    update?: XOR<XOR<OperatorUpdateToOneWithWhereWithoutUserInput, OperatorUpdateWithoutUserInput>, OperatorUncheckedUpdateWithoutUserInput>
+  export type OperatorUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput> | OperatorCreateWithoutUserInput[] | OperatorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OperatorCreateOrConnectWithoutUserInput | OperatorCreateOrConnectWithoutUserInput[]
+    upsert?: OperatorUpsertWithWhereUniqueWithoutUserInput | OperatorUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OperatorCreateManyUserInputEnvelope
+    set?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
+    disconnect?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
+    delete?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
+    connect?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
+    update?: OperatorUpdateWithWhereUniqueWithoutUserInput | OperatorUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OperatorUpdateManyWithWhereWithoutUserInput | OperatorUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OperatorScalarWhereInput | OperatorScalarWhereInput[]
   }
 
   export type PropertiUpdateManyWithoutAdminNestedInput = {
@@ -16940,14 +18325,18 @@ export namespace Prisma {
     update?: XOR<XOR<PenghuniUpdateToOneWithWhereWithoutUserInput, PenghuniUpdateWithoutUserInput>, PenghuniUncheckedUpdateWithoutUserInput>
   }
 
-  export type OperatorUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput>
-    connectOrCreate?: OperatorCreateOrConnectWithoutUserInput
-    upsert?: OperatorUpsertWithoutUserInput
-    disconnect?: OperatorWhereInput | boolean
-    delete?: OperatorWhereInput | boolean
-    connect?: OperatorWhereUniqueInput
-    update?: XOR<XOR<OperatorUpdateToOneWithWhereWithoutUserInput, OperatorUpdateWithoutUserInput>, OperatorUncheckedUpdateWithoutUserInput>
+  export type OperatorUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput> | OperatorCreateWithoutUserInput[] | OperatorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OperatorCreateOrConnectWithoutUserInput | OperatorCreateOrConnectWithoutUserInput[]
+    upsert?: OperatorUpsertWithWhereUniqueWithoutUserInput | OperatorUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OperatorCreateManyUserInputEnvelope
+    set?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
+    disconnect?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
+    delete?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
+    connect?: OperatorWhereUniqueInput | OperatorWhereUniqueInput[]
+    update?: OperatorUpdateWithWhereUniqueWithoutUserInput | OperatorUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OperatorUpdateManyWithWhereWithoutUserInput | OperatorUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OperatorScalarWhereInput | OperatorScalarWhereInput[]
   }
 
   export type PropertiUncheckedUpdateManyWithoutAdminNestedInput = {
@@ -17703,6 +19092,10 @@ export namespace Prisma {
     update?: XOR<XOR<PropertiUpdateToOneWithWhereWithoutPengajuanDanaInput, PropertiUpdateWithoutPengajuanDanaInput>, PropertiUncheckedUpdateWithoutPengajuanDanaInput>
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -18057,6 +19450,19 @@ export namespace Prisma {
     _max?: NestedEnumStatusDanaFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type PenghuniCreateWithoutUserInput = {
     id?: string
     tgl_mulai: Date | string
@@ -18105,6 +19511,11 @@ export namespace Prisma {
   export type OperatorCreateOrConnectWithoutUserInput = {
     where: OperatorWhereUniqueInput
     create: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput>
+  }
+
+  export type OperatorCreateManyUserInputEnvelope = {
+    data: OperatorCreateManyUserInput | OperatorCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type PropertiCreateWithoutAdminInput = {
@@ -18219,31 +19630,31 @@ export namespace Prisma {
     komplain?: KomplainUncheckedUpdateManyWithoutPenghuniNestedInput
   }
 
-  export type OperatorUpsertWithoutUserInput = {
+  export type OperatorUpsertWithWhereUniqueWithoutUserInput = {
+    where: OperatorWhereUniqueInput
     update: XOR<OperatorUpdateWithoutUserInput, OperatorUncheckedUpdateWithoutUserInput>
     create: XOR<OperatorCreateWithoutUserInput, OperatorUncheckedCreateWithoutUserInput>
-    where?: OperatorWhereInput
   }
 
-  export type OperatorUpdateToOneWithWhereWithoutUserInput = {
-    where?: OperatorWhereInput
+  export type OperatorUpdateWithWhereUniqueWithoutUserInput = {
+    where: OperatorWhereUniqueInput
     data: XOR<OperatorUpdateWithoutUserInput, OperatorUncheckedUpdateWithoutUserInput>
   }
 
-  export type OperatorUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    properti?: PropertiUpdateOneRequiredWithoutOperatorNestedInput
-    pengajuanDana?: PengajuanDanaUpdateManyWithoutOperatorNestedInput
+  export type OperatorUpdateManyWithWhereWithoutUserInput = {
+    where: OperatorScalarWhereInput
+    data: XOR<OperatorUpdateManyMutationInput, OperatorUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type OperatorUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    properti_id?: StringFieldUpdateOperationsInput | string
-    pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutOperatorNestedInput
+  export type OperatorScalarWhereInput = {
+    AND?: OperatorScalarWhereInput | OperatorScalarWhereInput[]
+    OR?: OperatorScalarWhereInput[]
+    NOT?: OperatorScalarWhereInput | OperatorScalarWhereInput[]
+    id?: StringFilter<"Operator"> | string
+    created_at?: DateTimeFilter<"Operator"> | Date | string
+    updated_at?: DateTimeFilter<"Operator"> | Date | string
+    user_id?: StringFilter<"Operator"> | string
+    properti_id?: StringFilter<"Operator"> | string
   }
 
   export type PropertiUpsertWithWhereUniqueWithoutAdminInput = {
@@ -18323,7 +19734,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
-    operator?: OperatorCreateNestedOneWithoutUserInput
+    operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
   }
 
@@ -18338,7 +19749,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
-    operator?: OperatorUncheckedCreateNestedOneWithoutUserInput
+    operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
   }
 
@@ -18369,7 +19780,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
-    operator?: OperatorUpdateOneWithoutUserNestedInput
+    operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
   }
 
@@ -18384,7 +19795,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
-    operator?: OperatorUncheckedUpdateOneWithoutUserNestedInput
+    operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
   }
 
@@ -18399,7 +19810,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
-    operator?: OperatorCreateNestedOneWithoutUserInput
+    operator?: OperatorCreateNestedManyWithoutUserInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
   }
 
@@ -18414,7 +19825,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
-    operator?: OperatorUncheckedCreateNestedOneWithoutUserInput
+    operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -18619,7 +20030,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
-    operator?: OperatorUpdateOneWithoutUserNestedInput
+    operator?: OperatorUpdateManyWithoutUserNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -18634,7 +20045,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
-    operator?: OperatorUncheckedUpdateOneWithoutUserNestedInput
+    operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -18718,17 +20129,6 @@ export namespace Prisma {
   export type OperatorUpdateManyWithWhereWithoutPropertiInput = {
     where: OperatorScalarWhereInput
     data: XOR<OperatorUpdateManyMutationInput, OperatorUncheckedUpdateManyWithoutPropertiInput>
-  }
-
-  export type OperatorScalarWhereInput = {
-    AND?: OperatorScalarWhereInput | OperatorScalarWhereInput[]
-    OR?: OperatorScalarWhereInput[]
-    NOT?: OperatorScalarWhereInput | OperatorScalarWhereInput[]
-    id?: StringFilter<"Operator"> | string
-    created_at?: DateTimeFilter<"Operator"> | Date | string
-    updated_at?: DateTimeFilter<"Operator"> | Date | string
-    user_id?: StringFilter<"Operator"> | string
-    properti_id?: StringFilter<"Operator"> | string
   }
 
   export type PemesananUpsertWithWhereUniqueWithoutPropertiInput = {
@@ -19404,7 +20804,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    operator?: OperatorCreateNestedOneWithoutUserInput
+    operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
   }
@@ -19419,7 +20819,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    operator?: OperatorUncheckedCreateNestedOneWithoutUserInput
+    operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
   }
@@ -19559,7 +20959,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    operator?: OperatorUpdateOneWithoutUserNestedInput
+    operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
   }
@@ -19574,7 +20974,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    operator?: OperatorUncheckedUpdateOneWithoutUserNestedInput
+    operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -20204,6 +21604,13 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
+  export type OperatorCreateManyUserInput = {
+    id?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    properti_id: string
+  }
+
   export type PropertiCreateManyAdminInput = {
     id?: string
     nama: string
@@ -20219,6 +21626,29 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+  }
+
+  export type OperatorUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti?: PropertiUpdateOneRequiredWithoutOperatorNestedInput
+    pengajuanDana?: PengajuanDanaUpdateManyWithoutOperatorNestedInput
+  }
+
+  export type OperatorUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+    pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutOperatorNestedInput
+  }
+
+  export type OperatorUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type PropertiUpdateWithoutAdminInput = {

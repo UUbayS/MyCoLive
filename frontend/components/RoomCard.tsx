@@ -56,16 +56,18 @@ const RoomCard: React.FC<{ room: RoomCardData }> = ({ room }) => {
             <p className="text-sm font-semibold text-gray-800">
               {formatRupiah(room.harga)}/bln
             </p>
-            {room.showEdit && (
+          </div>
+          {room.showEdit && (
+            <div className="mt-3 pt-3 border-t border-gray-100">
               <button
-                className="flex items-center gap-1 px-2 py-1 border border-gray-300 rounded-md text-xs text-gray-600 hover:bg-gray-50"
+                className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg text-sm font-medium transition-colors"
                 onClick={(e) => e.preventDefault()}
               >
                 <Edit className="w-3 h-3" />
                 Edit
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </Link>

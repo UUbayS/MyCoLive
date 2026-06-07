@@ -660,3 +660,159 @@ export async function updateKomplainStatus(id: string, status: "DIPROSES" | "SEL
     return null;
   }
 }
+
+// ─── USERS ───
+
+export type OperatorUserData = {
+  id: string;
+  username: string;
+  email: string;
+  nama: string;
+  role: string;
+  no_telepon?: string | null;
+  created_at: string;
+  operator?: {
+    id: string;
+    properti_id: string;
+    properti: {
+      id: string;
+      nama: string;
+    };
+  }[];
+  properti?: {
+    id: string;
+    nama: string;
+  }[];
+};
+
+export async function getUserList(): Promise<OperatorUserData[]> {
+  try {
+    const res = await apiFetch<{ status: string; data: OperatorUserData[] }>("/api/users");
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function deleteUser(id: string): Promise<boolean> {
+  try {
+    await apiFetch<{ status: string }>("/api/users/" + id, {
+      method: "DELETE",
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function createOperator(data: {
+  username: string;
+  nama: string;
+  email: string;
+  no_telepon?: string | null;
+  password: string;
+  properti_ids: string[];
+}): Promise<OperatorUserData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: OperatorUserData }>("/api/users", {
+      method: "POST",
+      body: JSON.stringify({ ...data, role: "PENGELOLA" }),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+// ─── PENGAJUAN DANA ───
+
+export type PengajuanDanaData = {
+  id: string;
+  tujuan: string;
+  jumlah: number;
+  no_rekening: string;
+  foto?: string | null;
+  status: string;
+  created_at: string;
+  updated_at?: string;
+  operator_id: string;
+  operator?: {
+    id: string;
+    user: {
+      nama: string;
+      email: string;
+      no_telepon?: string | null;
+    };
+  };
+  properti?: {
+    id: string;
+    nama: string;
+    alamat: string;
+  };
+};
+
+export async function getPengajuanDanaList(): Promise<PengajuanDanaData[]> {
+  try {
+    const res = await apiFetch<{ status: string; data: PengajuanDanaData[] }>("/api/dana");
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function updatePengajuanDanaStatus(id: string, status: "DITERIMA" | "DITOLAK"): Promise<PengajuanDanaData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: PengajuanDanaData }>("/api/dana/" + id, {
+      method: "PUT",
+      body: JSON.stringify({ status }),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+// ─── NOTIFIKASI ───
+
+export type NotifikasiData = {
+  id: string;
+  user_id: string;
+  judul: string;
+  pesan: string;
+  is_read: boolean;
+  tipe?: string | null;
+  related_id?: string | null;
+  created_at: string;
+  updated_at?: string;
+};
+
+export async function getNotifikasiList(): Promise<NotifikasiData[]> {
+  try {
+    const res = await apiFetch<{ status: string; data: NotifikasiData[] }>("/api/notifikasi");
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function markNotifikasiAsRead(id: string): Promise<NotifikasiData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: NotifikasiData }>("/api/notifikasi/" + id + "/read", {
+      method: "PUT",
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function markAllNotifikasiAsRead(): Promise<{ count: number } | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: { count: number } }>("/api/notifikasi/read-all", {
+      method: "PUT",
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}

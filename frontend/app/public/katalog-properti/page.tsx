@@ -85,7 +85,7 @@ export default function KatalogPropertiPage() {
 
   return (
     <MainLayout>
-      <div className="flex items-center justify-between mb-4">
+      <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
         <h1 className="text-2xl font-semibold">Katalog Properti</h1>
         {showTambah && (
           <Link
