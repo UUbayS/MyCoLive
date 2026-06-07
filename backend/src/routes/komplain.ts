@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
+import { createNotifikasi } from "../utils/notifikasi";
 
 const app = new Hono<AppEnv>();
 
@@ -81,6 +82,36 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
         }
       }
     });
+
+    // Notifikasi ke PEMILIK
+    const propertiData = await prisma.properti.findUnique({
+      where: { id: properti_id },
+      select: { admin_id: true, nama: true }
+    });
+    if (propertiData) {
+      await createNotifikasi(
+        propertiData.admin_id,
+        "Komplain Baru",
+        `${penghuni.user.nama} mengajukan komplain "${masalah}" di ${propertiData.nama}`,
+        "KOMPLAIN",
+        komplain.id
+      );
+
+      // Notifikasi ke PENGELOLA properti terkait
+      const operators = await prisma.operator.findMany({
+        where: { properti_id },
+        include: { user: { select: { id: true } } }
+      });
+      for (const op of operators) {
+        await createNotifikasi(
+          op.user.id,
+          "Komplain Baru",
+          `${penghuni.user.nama} mengajukan komplain "${masalah}" di ${propertiData.nama}`,
+          "KOMPLAIN",
+          komplain.id
+        );
+      }
+    }
 
     return c.json({
       status: "success",
@@ -339,6 +370,24 @@ app.put("/:id", async (c) => {
       where: { id },
       data: { status: status as any }
     });
+
+    // Notifikasi ke PENGHUNI
+    const komplainData = await prisma.komplain.findUnique({
+      where: { id },
+      include: {
+        penghuni: { include: { user: { select: { id: true } } } }
+      }
+    });
+    if (komplainData?.penghuni?.user) {
+      const label = status === "DIPROSES" ? "sedang diproses" : "telah selesai";
+      await createNotifikasi(
+        komplainData.penghuni.user.id,
+        `Komplain ${status === "DIPROSES" ? "Diproses" : "Selesai"}`,
+        `Komplain Anda "${komplainData.masalah}" ${label}`,
+        "KOMPLAIN",
+        id
+      );
+    }
 
     return c.json({
       status: "success",

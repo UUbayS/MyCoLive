@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
+import { createNotifikasi } from "../utils/notifikasi";
 
 const app = new Hono<AppEnv>();
 
@@ -371,6 +372,21 @@ app.put("/:id/checkout", requireRole("PEMILIK"), async (c) => {
         }
       });
     });
+
+    // Notifikasi ke PENGHUNI
+    const penghuniUser = await prisma.penghuni.findUnique({
+      where: { id },
+      include: { user: { select: { id: true } } }
+    });
+    if (penghuniUser?.user) {
+      await createNotifikasi(
+        penghuniUser.user.id,
+        "Checkout",
+        `Anda telah checkout dari Kamar ${penghuni.kamar?.nomor || "-"}`,
+        "CHECKOUT",
+        id
+      );
+    }
 
     return c.json({
       status: "success",

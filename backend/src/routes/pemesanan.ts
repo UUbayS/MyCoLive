@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
+import { createNotifikasi } from "../utils/notifikasi";
 
 const app = new Hono<AppEnv>();
 
@@ -117,6 +118,21 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
         status: "MENUNGGU",
       }
     });
+
+    // Notifikasi ke PEMILIK
+    const penghuniUser = await prisma.penghuni.findUnique({
+      where: { user_id: user.userId },
+      include: { user: { select: { nama: true } } }
+    });
+    if (penghuniUser?.user?.nama) {
+      await createNotifikasi(
+        kamar.properti.admin_id,
+        "Pemesanan Baru",
+        `${penghuniUser.user.nama} memesan Kamar ${kamar.nomor} di ${kamar.properti.nama}`,
+        "PEMESANAN",
+        pemesanan.id
+      );
+    }
 
     return c.json({
       status: "success",
@@ -258,6 +274,21 @@ app.post("/perpanjang", requireRole("PENGHUNI"), async (c) => {
         status: "MENUNGGU",
       }
     });
+
+    // Notifikasi ke PEMILIK
+    const penghuniUser = await prisma.penghuni.findUnique({
+      where: { user_id: user.userId },
+      include: { user: { select: { nama: true } } }
+    });
+    if (penghuniUser?.user?.nama) {
+      await createNotifikasi(
+        kamar.properti.admin_id,
+        "Perpanjang Sewa",
+        `${penghuniUser.user.nama} memperpanjang sewa Kamar ${kamar.nomor} di ${kamar.properti.nama}`,
+        "PEMESANAN",
+        pemesanan.id
+      );
+    }
 
     return c.json({
       status: "success",
@@ -479,6 +510,25 @@ app.post("/:id/bayar", async (c) => {
       }
     });
 
+    // Notifikasi ke PEMILIK
+    const pemesananData = await prisma.pemesanan.findUnique({
+      where: { id },
+      include: {
+        properti: { select: { admin_id: true, nama: true } },
+        kamar: { select: { nomor: true } },
+        penghuni: { include: { user: { select: { nama: true } } } }
+      }
+    });
+    if (pemesananData) {
+      await createNotifikasi(
+        pemesananData.properti.admin_id,
+        "Bukti Pembayaran",
+        `${pemesananData.penghuni?.user?.nama || "Penghuni"} mengupload bukti pembayaran untuk Kamar ${pemesananData.kamar?.nomor || "-"} di ${pemesananData.properti.nama}`,
+        "PEMBAYARAN",
+        id
+      );
+    }
+
     return c.json({
       status: "success",
       data: pembayaran,
@@ -607,6 +657,22 @@ app.put("/:id/verifikasi", requireRole("PEMILIK"), async (c) => {
           tgl_berakhir: new Date(pemesanan.tgl_masuk.getTime() + pemesanan.durasi_sewa * 30 * 24 * 60 * 60 * 1000)
         }
       });
+    }
+
+    // Notifikasi ke PENGHUNI
+    const penghuniData = await prisma.penghuni.findUnique({
+      where: { id: pemesanan.penghuni_id },
+      include: { user: { select: { id: true, nama: true } } }
+    });
+    if (penghuniData?.user) {
+      const label = status === "DITERIMA" ? "diterima" : "ditolak";
+      await createNotifikasi(
+        penghuniData.user.id,
+        `Pesanan ${status === "DITERIMA" ? "Diterima" : "Ditolak"}`,
+        `Pesanan Anda untuk Kamar ${pemesanan.kamar?.nomor || "-"} di ${pemesanan.properti.nama} telah ${label}`,
+        "PEMESANAN",
+        id
+      );
     }
 
     return c.json({

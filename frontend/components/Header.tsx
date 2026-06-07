@@ -6,6 +6,7 @@ import { Bell, LogOut, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getUser, clearAuth, isAuthenticated, AuthUser } from "../lib/auth";
+import { getNotifikasiList } from "../lib/api";
 import logoMyCoLive from "../assets/myCoLive.svg";
 
 function getDashboardLink(user: AuthUser | null): string {
@@ -27,6 +28,7 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,6 +44,24 @@ export default function Header() {
     window.addEventListener("storage", checkAuth);
     return () => window.removeEventListener("storage", checkAuth);
   }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    const fetchUnread = async () => {
+      try {
+        const data = await getNotifikasiList();
+        const count = data.filter((n) => !n.is_read).length;
+        setUnreadCount(count);
+      } catch (err) {
+        console.error("Failed to fetch notification count:", err);
+      }
+    };
+
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 30000);
+    return () => clearInterval(interval);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -101,7 +121,9 @@ export default function Header() {
                 aria-label="Notifikasi"
               >
                 <Bell className="w-6 h-6" />
-                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                {unreadCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                )}
               </Link>
 
               <div className="hidden md:block relative" ref={dropdownRef}>

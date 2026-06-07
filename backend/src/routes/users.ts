@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { hashPassword } from "../utils/password";
 import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
+import { createNotifikasi } from "../utils/notifikasi";
 
 const app = new Hono<AppEnv>();
 
@@ -175,6 +176,15 @@ app.post("/", async (c) => {
           }
         });
       }
+
+      // Notifikasi ke PENGELOLA baru
+      await createNotifikasi(
+        newUser.id,
+        "Akun Operator Baru",
+        `Selamat datang! Anda telah ditambahkan sebagai operator. Silakan login dengan username dan password yang diberikan.`,
+        "OPERATOR",
+        newUser.id
+      );
 
       return c.json({
         status: "success",

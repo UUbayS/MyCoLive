@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
+import { createNotifikasi } from "../utils/notifikasi";
 
 const app = new Hono<AppEnv>();
 
@@ -87,6 +88,15 @@ app.post("/", requireRole("PENGELOLA"), async (c) => {
         }
       }
     });
+
+    // Notifikasi ke PEMILIK
+    await createNotifikasi(
+      properti.admin_id,
+      "Pengajuan Dana Baru",
+      `${pengajuan.operator.user.nama} mengajukan dana sebesar Rp ${jumlah.toLocaleString("id-ID")} untuk ${tujuan} di ${properti.nama}`,
+      "DANA",
+      pengajuan.id
+    );
 
     return c.json({
       status: "success",
@@ -298,6 +308,22 @@ app.put("/:id", requireRole("PEMILIK"), async (c) => {
       where: { id },
       data: { status: status as any }
     });
+
+    // Notifikasi ke PENGELOLA
+    const pengajuanData = await prisma.pengajuanDana.findUnique({
+      where: { id },
+      include: { operator: { include: { user: { select: { id: true } } } } }
+    });
+    if (pengajuanData?.operator?.user) {
+      const label = status === "DITERIMA" ? "diterima" : "ditolak";
+      await createNotifikasi(
+        pengajuanData.operator.user.id,
+        `Pengajuan Dana ${status === "DITERIMA" ? "Diterima" : "Ditolak"}`,
+        `Pengajuan dana Anda untuk ${pengajuan.tujuan} telah ${label}`,
+        "DANA",
+        id
+      );
+    }
 
     return c.json({
       status: "success",

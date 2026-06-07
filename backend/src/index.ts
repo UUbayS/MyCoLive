@@ -14,6 +14,7 @@ import danaRoutes from "./routes/dana";
 import komplainRoutes from "./routes/komplain";
 import laporanRoutes from "./routes/laporan";
 import whatsappRoutes from "./routes/whatsapp";
+import notifikasiRoutes from "./routes/notifikasi";
 
 const app = new Hono();
 
@@ -42,5 +43,6 @@ app.route("/api/dana", danaRoutes);
 app.route("/api/komplain", komplainRoutes);
 app.route("/api/laporan", laporanRoutes);
 app.route("/api/whatsapp", whatsappRoutes);
+app.route("/api/notifikasi", notifikasiRoutes);
 
 export default app;
