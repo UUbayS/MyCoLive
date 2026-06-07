@@ -107,8 +107,13 @@ export const menuConfig: Record<Role, MenuItem[]> = {
     },
     {
       label: "Penghuni",
-      href: "/administrator/penghuni/daftar",
+      href: "/administrator/penghuni",
       icon: "Users",
+      submenu: [
+        { label: "Daftar Penghuni", href: "/administrator/penghuni/daftar" },
+        { label: "Validasi Bayar", href: "/administrator/penghuni/validasi" },
+        { label: "Komplain", href: "/administrator/penghuni/komplain" },
+      ],
     },
     {
       label: "Managemen Keuangan",

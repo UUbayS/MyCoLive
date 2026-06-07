@@ -141,6 +141,147 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
   }
 });
 
+// Perpanjang sewa (PENGHUNI) - reuse kamar yang sedang ditempati
+app.post("/perpanjang", requireRole("PENGHUNI"), async (c) => {
+  try {
+    const user = c.get("user");
+    const body = await c.req.json();
+    const { durasi_sewa, tgl_masuk, metode_bayar } = body;
+
+    if (!durasi_sewa || !tgl_masuk || !metode_bayar) {
+      return c.json(
+        { status: "error", message: "durasi_sewa, tgl_masuk, dan metode_bayar wajib diisi" },
+        400
+      );
+    }
+
+    if (!["TRANSFER", "QRIS"].includes(metode_bayar)) {
+      return c.json(
+        { status: "error", message: "Metode pembayaran tidak valid" },
+        400
+      );
+    }
+
+    const penghuni = await prisma.penghuni.findUnique({
+      where: { user_id: user.userId },
+      include: { kamar: { include: { properti: true } } }
+    });
+
+    if (!penghuni) {
+      return c.json(
+        { status: "error", message: "Data penghuni tidak ditemukan" },
+        404
+      );
+    }
+
+    if (penghuni.status_sewa !== "AKTIF") {
+      return c.json(
+        { status: "error", message: "Penghuni tidak aktif" },
+        400
+      );
+    }
+
+    if (!penghuni.kamar_id || !penghuni.kamar) {
+      return c.json(
+        { status: "error", message: "Penghuni tidak memiliki kamar" },
+        400
+      );
+    }
+
+    // Cek apakah ada pemesanan atau pembayaran pending
+    const pendingPemesanan = await prisma.pemesanan.findFirst({
+      where: {
+        penghuni_id: penghuni.id,
+        OR: [
+          { status: "MENUNGGU" },
+          { pembayaran: { status: "DIVERIFIKASI" } }
+        ]
+      }
+    });
+
+    if (pendingPemesanan) {
+      return c.json(
+        { status: "error", message: "Masih ada pemesanan yang menunggu diverifikasi" },
+        400
+      );
+    }
+
+    const kamar = penghuni.kamar;
+    const tarif = kamar.tarif as Record<string, number> || {};
+    const totalBayar = tarif[`${durasi_sewa}_bulan`] || 0;
+
+    if (totalBayar === 0) {
+      return c.json(
+        { status: "error", message: "Durasi tidak tersedia untuk kamar ini" },
+        400
+      );
+    }
+
+    const settings = await getSettings(kamar.properti.admin_id);
+    const metodeInfo = metode_bayar === "TRANSFER"
+      ? { rekening: settings?.nomor_rekening, atas_nama: settings?.nama_rekening, bank: settings?.bank }
+      : { qris_image: settings?.qris_image };
+
+    const pemesanan = await prisma.pemesanan.create({
+      data: {
+        kamar_id: kamar.id,
+        penghuni_id: penghuni.id,
+        properti_id: kamar.properti_id,
+        durasi_sewa,
+        tgl_masuk: new Date(tgl_masuk),
+        metode_bayar,
+        total_bayar: totalBayar,
+        status: "MENUNGGU",
+      },
+      include: {
+        kamar: {
+          select: {
+            id: true,
+            nomor: true,
+            tarif: true
+          }
+        },
+        properti: {
+          select: {
+            id: true,
+            nama: true,
+            alamat: true
+          }
+        }
+      }
+    });
+
+    const pembayaran = await prisma.pembayaran.create({
+      data: {
+        pemesanan_id: pemesanan.id,
+        metode_bayar,
+        status: "MENUNGGU",
+      }
+    });
+
+    return c.json({
+      status: "success",
+      data: {
+        ...pemesanan,
+        pembayaran: {
+          metode_bayar: pembayaran.metode_bayar,
+          status: pembayaran.status,
+          rekening: metodeInfo.rekening,
+          atas_nama: metodeInfo.atas_nama,
+          bank: metodeInfo.bank,
+          qris_image: metodeInfo.qris_image,
+        }
+      },
+    }, 201);
+  } catch (error) {
+    console.error("Perpanjang pemesanan error:", error);
+    return c.json(
+      { status: "error", message: "Gagal membuat pemesanan perpanjang" },
+      500
+    );
+  }
+});
+
 // Get my pemesanan (PENGHUNI)
 app.get("/my", async (c) => {
   try {

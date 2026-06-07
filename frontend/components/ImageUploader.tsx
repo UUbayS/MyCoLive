@@ -18,18 +18,25 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrls, setPreviewUrls] = useState<string[]>(images);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
 
     const newFiles = Array.from(files).slice(0, maxImages - images.length);
-    const newPreviewUrls = newFiles.map((file) => URL.createObjectURL(file));
+    const newBase64Urls = await Promise.all(newFiles.map((file) => fileToBase64(file)));
 
-    const updatedPreviews = [...previewUrls, ...newPreviewUrls];
+    const updatedPreviews = [...previewUrls, ...newBase64Urls];
     setPreviewUrls(updatedPreviews);
 
-    // For now, we store the preview URLs. In production, you'd upload to cloud storage
-    // and store the resulting URLs.
     onChange(updatedPreviews);
   };
 

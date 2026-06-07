@@ -177,45 +177,9 @@ export default function DetailKamarPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Kolom Kiri - Gambar */}
         <div>
-          <ImageCarousel images={kamar.gambar || []} alt={kamar.nomor} />
-        </div>
-
-        {/* Kolom Kanan - Detail */}
-        <div className="space-y-4 md:space-y-6">
-          {/* Status */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-medium">Status:</span>
-              <span
-                className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                  isKosong
-                    ? "bg-green-500 text-white"
-                    : isTerisi
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-500 text-white"
-                }`}
-              >
-                {isKosong ? "Kosong" : isTerisi ? "Terisi" : "Non-Aktif"}
-              </span>
-            </div>
-
-            {isPemilik && (isKosong || isMaintenance) && (
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                <span className="text-sm text-gray-600">Kamar Aktif</span>
-                <button
-                  onClick={handleToggleAktif}
-                  className={`w-12 h-6 rounded-full transition-colors relative ${
-                    isAktif ? "bg-[#84CC16]" : "bg-gray-300"
-                  }`}
-                >
-                  <span
-                    className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${
-                      isAktif ? "left-6" : "left-0.5"
-                    }`}
-                  />
-                </button>
-              </div>
-            )}
+          {/* Image Carousel */}
+          <div className="mb-4">
+            <ImageCarousel images={kamar.gambar || []} alt={kamar.nomor} />
           </div>
 
           {/* Penghuni Aktif - hanya PEMILIK */}
@@ -271,7 +235,7 @@ export default function DetailKamarPage() {
                     Check-Out
                   </button>
                   <Link
-                    href={`/pengelola/penghuni/${kamar.penghuni.id}`}
+                    href={`/administrator/penghuni/${kamar.penghuni.id}`}
                     className="flex-1 border-2 border-[#84CC16] text-[#84CC16] py-2 rounded-xl text-sm font-medium text-center hover:bg-[#84CC16]/5 transition-colors"
                   >
                     Lihat Detail
@@ -280,6 +244,45 @@ export default function DetailKamarPage() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Kolom Kanan - Detail */}
+        <div className="space-y-4 md:space-y-6">
+          {/* Status */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-medium">Status:</span>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                  isKosong
+                    ? "bg-green-500 text-white"
+                    : isTerisi
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-500 text-white"
+                }`}
+              >
+                {isKosong ? "Kosong" : isTerisi ? "Terisi" : "Non-Aktif"}
+              </span>
+            </div>
+
+            {isPemilik && (isKosong || isMaintenance) && (
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                <span className="text-sm text-gray-600">Kamar Aktif</span>
+                <button
+                  onClick={handleToggleAktif}
+                  className={`w-12 h-6 rounded-full transition-colors relative ${
+                    isAktif ? "bg-[#84CC16]" : "bg-gray-300"
+                  }`}
+                >
+                  <span
+                    className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${
+                      isAktif ? "left-6" : "left-0.5"
+                    }`}
+                  />
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Deskripsi Kamar */}
           <div>

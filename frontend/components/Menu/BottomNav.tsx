@@ -53,7 +53,7 @@ export default function BottomNav() {
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={item.submenu?.length ? item.submenu[0].href : item.href}
               className={`flex flex-col items-center justify-start gap-1 flex-1 h-full py-2 transition-colors ${
                 active
                   ? "text-[#84CC16]"

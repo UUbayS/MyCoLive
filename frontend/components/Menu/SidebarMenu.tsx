@@ -7,6 +7,8 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { getUser, AuthUser } from "../../lib/auth";
 import { getMenuByRole, MenuItem, iconMap } from "../../lib/menu";
 
+const STORAGE_KEY = "sidebar-expanded";
+
 export default function SidebarMenu() {
   const pathname = usePathname();
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -19,11 +21,45 @@ export default function SidebarMenu() {
       setUser(currentUser);
 
       if (currentUser?.role) {
-        setMenuItems(getMenuByRole(currentUser.role));
+        const items = getMenuByRole(currentUser.role);
+        setMenuItems(items);
+
+        // Restore saved expanded state from localStorage
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            setExpandedMenus(JSON.parse(saved));
+          } else {
+            // Auto-expand active menu group on first load
+            const initial: Record<string, boolean> = {};
+            items.forEach((item) => {
+              if (item.submenu && item.submenu.length > 0) {
+                const isGroupActive = item.submenu.some((sub) =>
+                  pathname === sub.href || pathname.startsWith(sub.href + "/")
+                );
+                if (isGroupActive) {
+                  initial[item.href] = true;
+                }
+              }
+            });
+            setExpandedMenus(initial);
+          }
+        } catch {
+          // ignore localStorage errors
+        }
       }
     };
     init();
-  }, []);
+  }, [pathname]);
+
+  // Persist expanded state to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(expandedMenus));
+    } catch {
+      // ignore localStorage errors
+    }
+  }, [expandedMenus]);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";

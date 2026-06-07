@@ -14,6 +14,15 @@ app.get("/me", requireRole("PENGHUNI"), async (c) => {
     const penghuni = await prisma.penghuni.findUnique({
       where: { user_id: user.userId },
       include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            nama: true,
+            email: true,
+            no_telepon: true,
+          },
+        },
         kamar: {
           include: {
             properti: {
@@ -21,6 +30,11 @@ app.get("/me", requireRole("PENGHUNI"), async (c) => {
                 id: true,
                 nama: true,
                 alamat: true,
+                provinsi: true,
+                kota: true,
+                kecamatan: true,
+                kode_pos: true,
+                detail_alamat: true,
               },
             },
           },
@@ -79,18 +93,10 @@ app.get("/", async (c) => {
     }
 
     if (propertiIds.length === 0) {
-    return c.json({
-      status: "success",
-      data: {
-        ...penghuni,
-        kamar: penghuni.kamar ? {
-          id: penghuni.kamar.id,
-          nomor: penghuni.kamar.nomor,
-          properti: penghuni.kamar.properti.nama,
-          alamat: penghuni.kamar.properti.alamat
-        } : null
-      },
-    });
+      return c.json({
+        status: "success",
+        data: [],
+      });
     }
 
     // Ambil SEMUA penghuni yang ada di properti ini (dengan atau tanpa kamar)

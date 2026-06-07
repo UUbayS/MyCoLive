@@ -9,6 +9,7 @@ import {
   MapPin,
   Calendar,
   ChevronLeft,
+  ArrowLeft,
   CreditCard,
   Receipt,
   MessageCircle,
@@ -16,7 +17,6 @@ import {
   Loader2,
 } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
-import PenghuniTabs from "@/components/PenghuniTabs";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getPenghuniById, PenghuniData, checkoutPenghuni } from "@/lib/api";
 
@@ -139,17 +139,17 @@ export default function DetailPenghuniPage() {
   return (
     <MainLayout>
       <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Penghuni Properti</h1>
-        <PenghuniTabs />
-
-        {/* Back Button */}
-        <Link
-          href="/administrator/penghuni/daftar"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          Kembali
-        </Link>
+        {/* Header: Back + Title */}
+        <div className="flex items-center justify-between mb-4">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">Detail Penghuni</h1>
+          <div></div>
+        </div>
 
         {/* Profile Card */}
         <div className="bg-white rounded-xl shadow-sm p-4 md:p-5 mb-4">
@@ -159,7 +159,7 @@ export default function DetailPenghuniPage() {
                 <User className="w-5 h-5 md:w-6 md:h-6 text-[#84CC16]" />
               </div>
               <div className="min-w-0">
-                <h1 className="text-base md:text-lg font-semibold text-gray-900 truncate">{penghuni.user.nama}</h1>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900 truncate">{penghuni.user.nama}</h2>
                 <p className="text-xs md:text-sm text-gray-500 truncate">{penghuni.user.email}</p>
               </div>
             </div>

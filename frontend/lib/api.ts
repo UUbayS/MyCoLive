@@ -503,6 +503,49 @@ export async function getPenghuniList(status?: string, properti_id?: string): Pr
   }
 }
 
+export type MyPenghuniData = {
+  id: string;
+  tgl_mulai: string;
+  tgl_berakhir?: string | null;
+  status_sewa: string;
+  kamar: {
+    id: string;
+    nomor: string;
+    tipe: string;
+    luas?: string | null;
+    fasilitas?: string[];
+    deskripsi?: string | null;
+    tarif?: Record<string, number>;
+    gambar?: string[];
+    properti: {
+      id: string;
+      nama: string;
+      alamat: string;
+      provinsi?: string | null;
+      kota?: string | null;
+      kecamatan?: string | null;
+      kode_pos?: string | null;
+      detail_alamat?: string | null;
+    };
+  } | null;
+  user: {
+    id: string;
+    username: string;
+    nama: string;
+    email: string;
+    no_telepon?: string | null;
+  };
+};
+
+export async function getMyPenghuni(): Promise<MyPenghuniData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: MyPenghuniData }>("/api/penghuni/me");
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getPenghuniById(id: string): Promise<PenghuniData | null> {
   try {
     const res = await apiFetch<{ status: string; data: PenghuniData }>("/api/penghuni/" + id);
@@ -528,6 +571,22 @@ export async function verifikasiPemesanan(id: string, status: "DITERIMA" | "DITO
     const res = await apiFetch<{ status: string; data: PemesananData }>("/api/pemesanan/" + id + "/verifikasi", {
       method: "PUT",
       body: JSON.stringify({ status }),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function createPerpanjangPemesanan(data: {
+  durasi_sewa: number;
+  tgl_masuk: string;
+  metode_bayar: string;
+}): Promise<PemesananData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: PemesananData }>("/api/pemesanan/perpanjang", {
+      method: "POST",
+      body: JSON.stringify(data),
     });
     return res.data || null;
   } catch {

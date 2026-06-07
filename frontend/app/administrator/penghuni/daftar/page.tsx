@@ -97,7 +97,10 @@ export default function DaftarPenghuniPage() {
     <MainLayout>
       <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
         <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Penghuni Properti</h1>
-        <PenghuniTabs />
+        <h2 className="hidden md:block text-base font-medium text-gray-600 mb-4">Penghuni Properti — Daftar Penghuni</h2>
+        <div className="md:hidden">
+          <PenghuniTabs />
+        </div>
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-4 mt-4">
