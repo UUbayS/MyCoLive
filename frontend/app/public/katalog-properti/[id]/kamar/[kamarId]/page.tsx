@@ -181,69 +181,6 @@ export default function DetailKamarPage() {
           <div className="mb-4">
             <ImageCarousel images={kamar.gambar || []} alt={kamar.nomor} />
           </div>
-
-          {/* Penghuni Aktif - hanya PEMILIK */}
-          {isPemilik && kamar.penghuni && (
-            <div>
-              <h2 className="text-lg font-semibold mb-3">Penghuni Aktif</h2>
-              <div className="bg-white rounded-xl shadow-sm p-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                    <span className="text-lg font-semibold text-gray-600">
-                      {kamar.penghuni.user.nama.charAt(0)}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-semibold">{kamar.penghuni.user.nama}</p>
-                    <p className="text-sm text-gray-500">
-                      {kamar.penghuni.user.email} | {kamar.penghuni.user.no_telepon || "-"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="text-sm text-gray-600 space-y-1 mb-3">
-                  <p>
-                    Aktif dari:{" "}
-                    {kamar.penghuni.tgl_mulai
-                      ? new Date(kamar.penghuni.tgl_mulai).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
-                      : "-"}
-                  </p>
-                  <p>
-                    Jatuh Tempo:{" "}
-                    {kamar.penghuni.tgl_berakhir
-                      ? new Date(kamar.penghuni.tgl_berakhir).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
-                      : "-"}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm text-green-600 font-medium">
-                    {getSisaHari()} Hari tersisa
-                  </span>
-                </div>
-
-                <div className="flex gap-3">
-                  <button className="flex-1 border-2 border-red-500 text-red-500 py-2 rounded-xl text-sm font-medium hover:bg-red-50 transition-colors">
-                    Check-Out
-                  </button>
-                  <Link
-                    href={`/administrator/penghuni/${kamar.penghuni.id}`}
-                    className="flex-1 border-2 border-[#84CC16] text-[#84CC16] py-2 rounded-xl text-sm font-medium text-center hover:bg-[#84CC16]/5 transition-colors"
-                  >
-                    Lihat Detail
-                  </Link>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Kolom Kanan - Detail */}

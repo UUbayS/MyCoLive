@@ -839,6 +839,33 @@ export async function updatePengajuanDanaStatus(id: string, status: "DITERIMA" |
   }
 }
 
+export async function getMyDanaList(): Promise<PengajuanDanaData[]> {
+  try {
+    const res = await apiFetch<{ status: string; data: PengajuanDanaData[] }>("/api/dana/my");
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function createPengajuanDana(data: {
+  jumlah: number;
+  tujuan: string;
+  no_rekening: string;
+  foto?: string | null;
+  properti_id: string;
+}): Promise<PengajuanDanaData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: PengajuanDanaData }>("/api/dana", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
 // ─── NOTIFIKASI ───
 
 export type NotifikasiData = {

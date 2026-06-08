@@ -12,7 +12,7 @@ import MainLayout from "../../../../../components/Layout/MainLayout";
 export default function EditPropertiPage() {
   const router = useRouter();
   const params = useParams();
-  const propertiId = params.propertiId as string;
+  const propertiId = params.id as string;
 
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -105,8 +105,8 @@ export default function EditPropertiPage() {
         gambar: formData.gambar.length > 0 ? formData.gambar : undefined,
       });
 
-      if (result) {
-        router.push(`/public/katalog-properti/${propertiId}`);
+        if (result) {
+        router.push(`/administrator/properti/${propertiId}`);
       } else {
         alert("Gagal mengupdate properti. Silakan coba lagi.");
       }

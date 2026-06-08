@@ -93,7 +93,9 @@ export async function apiFetch<T>(
   const data = await res.json();
 
   if (data.status === "error") {
-    throw new Error(data.message || "API error");
+    const errorMessage = data.message || "API error";
+    console.error(`API Error (${endpoint}):`, errorMessage);
+    throw new Error(errorMessage);
   }
 
   return data as T;

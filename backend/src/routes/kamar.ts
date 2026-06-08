@@ -172,8 +172,8 @@ app.get("/kamar/:id", async (c) => {
   }
 });
 
-// Update kamar (requires auth)
-app.put("/kamar/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
+// Update kamar (PEMILIK/PENGELOLA)
+app.put("/kamar/:id", authMiddleware, async (c) => {
   try {
     const id = c.req.param("id");
     const user = c.get("user");
@@ -183,7 +183,8 @@ app.put("/kamar/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
     const existingKamar = await prisma.kamar.findUnique({
       where: { id },
       include: {
-        properti: true
+        properti: true,
+        penghuni: true
       }
     });
 
@@ -194,43 +195,120 @@ app.put("/kamar/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
       );
     }
 
-    if (existingKamar.properti.admin_id !== user.userId) {
-      return c.json(
-        { status: "error", message: "Tidak punya akses" },
-        403
-      );
-    }
+    // Block update if kamar has active penghuni (occupied)
+    const isOccupied = existingKamar.penghuni && existingKamar.penghuni.status_sewa === "AKTIF";
 
-    const updateData: any = {};
-    if (nomor) updateData.nomor = nomor;
-    if (tipe) updateData.tipe = tipe;
-    if (luas !== undefined) updateData.luas = luas;
-    if (fasilitas !== undefined) updateData.fasilitas = fasilitas;
-    if (deskripsi !== undefined) updateData.deskripsi = deskripsi;
-    if (tarif !== undefined) updateData.tarif = tarif;
-    if (foto !== undefined) updateData.gambar = foto;
-    if (status && ["KOSONG", "TERISI", "MAINTENANCE"].includes(status)) {
-      updateData.status = status;
-    }
+    // PEMILIK: full access
+    if (user.role === "PEMILIK") {
+      if (existingKamar.properti.admin_id !== user.userId) {
+        return c.json(
+          { status: "error", message: "Tidak punya akses" },
+          403
+        );
+      }
 
-    const kamar = await prisma.kamar.update({
-      where: { id },
-      data: updateData,
-      include: {
-        properti: {
-          select: {
-            id: true,
-            nama: true,
-            alamat: true
+      if (isOccupied && status) {
+        return c.json(
+          { status: "error", message: "Kamar sedang ditempati penghuni aktif. Tidak dapat mengubah status." },
+          400
+        );
+      }
+
+      const updateData: any = {};
+      if (nomor) updateData.nomor = nomor;
+      if (tipe) updateData.tipe = tipe;
+      if (luas !== undefined) updateData.luas = luas;
+      if (fasilitas !== undefined) updateData.fasilitas = fasilitas;
+      if (deskripsi !== undefined) updateData.deskripsi = deskripsi;
+      if (tarif !== undefined) updateData.tarif = tarif;
+      if (foto !== undefined) updateData.gambar = foto;
+      if (status && ["KOSONG", "TERISI", "MAINTENANCE"].includes(status)) {
+        updateData.status = status;
+      }
+
+      const kamar = await prisma.kamar.update({
+        where: { id },
+        data: updateData,
+        include: {
+          properti: {
+            select: {
+              id: true,
+              nama: true,
+              alamat: true
+            }
           }
         }
-      }
-    });
+      });
 
-    return c.json({
-      status: "success",
-      data: kamar,
-    });
+      return c.json({
+        status: "success",
+        data: kamar,
+      });
+    }
+
+    // PENGELOLA: status only, and must manage this properti
+    if (user.role === "PENGELOLA") {
+      const operator = await prisma.operator.findFirst({
+        where: {
+          user_id: user.userId,
+          properti_id: existingKamar.properti_id
+        }
+      });
+
+      if (!operator) {
+        return c.json(
+          { status: "error", message: "Anda tidak mengelola properti ini" },
+          403
+        );
+      }
+
+      // Only allow status field
+      const hasOtherFields = Object.keys(body).some((key) => key !== "status");
+      if (hasOtherFields) {
+        return c.json(
+          { status: "error", message: "PENGELOLA hanya boleh mengubah status kamar" },
+          403
+        );
+      }
+
+      if (!status || !["KOSONG", "TERISI", "MAINTENANCE"].includes(status)) {
+        return c.json(
+          { status: "error", message: "Status tidak valid" },
+          400
+        );
+      }
+
+      if (isOccupied) {
+        return c.json(
+          { status: "error", message: "Kamar sedang ditempati penghuni aktif. Tidak dapat mengubah status." },
+          400
+        );
+      }
+
+      const kamar = await prisma.kamar.update({
+        where: { id },
+        data: { status },
+        include: {
+          properti: {
+            select: {
+              id: true,
+              nama: true,
+              alamat: true
+            }
+          }
+        }
+      });
+
+      return c.json({
+        status: "success",
+        data: kamar,
+      });
+    }
+
+    return c.json(
+      { status: "error", message: "Akses tidak diizinkan" },
+      403
+    );
   } catch (error) {
     console.error("Update kamar error:", error);
     return c.json(

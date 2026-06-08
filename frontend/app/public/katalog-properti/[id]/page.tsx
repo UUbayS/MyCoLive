@@ -275,26 +275,6 @@ export default function DetailPropertiPage() {
           </a>
         </div>
       )}
-
-      {isPengurus && (
-        <button
-          onClick={() => setShowDeleteDialog(true)}
-          className="w-full border-2 border-red-500 text-red-500 py-3 rounded-xl font-medium hover:bg-red-50 transition-colors"
-        >
-          Hapus Properti
-        </button>
-      )}
-
-      <ConfirmDialog
-        isOpen={showDeleteDialog}
-        title="Hapus Properti"
-        message="Apakah Anda yakin ingin menghapus properti ini? Tindakan ini tidak dapat dibatalkan."
-        confirmLabel="Hapus"
-        cancelLabel="Batal"
-        danger
-        onConfirm={handleDelete}
-        onCancel={() => setShowDeleteDialog(false)}
-      />
     </MainLayout>
   );
 }

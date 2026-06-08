@@ -129,16 +129,6 @@ export default function KatalogPropertiPage() {
           </p>
         </div>
       )}
-
-      {showTambah && (
-        <Link
-          href="/administrator/properti/tambah"
-          className="md:hidden fixed bottom-24 right-4 w-14 h-14 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
-          aria-label="Tambah Properti"
-        >
-          <Plus className="w-6 h-6" />
-        </Link>
-      )}
     </MainLayout>
   );
 }

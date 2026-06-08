@@ -72,7 +72,7 @@ export default function TambahPropertiPage() {
       });
 
       if (result) {
-        router.push("/public/katalog-properti");
+        router.push("/administrator/properti");
       } else {
         alert("Gagal menambahkan properti. Silakan coba lagi.");
       }

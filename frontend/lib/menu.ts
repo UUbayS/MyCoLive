@@ -75,11 +75,6 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       icon: "Building2",
     },
     {
-      label: "Katalog Properti",
-      href: "/public/katalog-properti",
-      icon: "Building2",
-    },
-    {
       label: "Penghuni",
       href: "/pengelola/penghuni",
       icon: "Users",
