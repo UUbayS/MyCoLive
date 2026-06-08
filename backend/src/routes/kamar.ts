@@ -44,7 +44,7 @@ app.post("/properti/:propertiId/kamar", authMiddleware, requireRole("PEMILIK"), 
     const propertiId = c.req.param("propertiId")!;
     const user = c.get("user");
     const body = await c.req.json();
-    const { nomor, tipe, luas, fasilitas, deskripsi, tarif, foto } = body;
+    const { nomor, tipe, luas, fasilitas_ids, deskripsi, tarif, foto } = body;
 
     if (!nomor) {
       return c.json(
@@ -87,19 +87,27 @@ app.post("/properti/:propertiId/kamar", authMiddleware, requireRole("PEMILIK"), 
       );
     }
 
+    const createData: any = {
+      nomor,
+      tipe: tipe || "REGULER",
+      luas: luas || null,
+      deskripsi: deskripsi || null,
+      tarif: tarif || {},
+      gambar: foto || [],
+      status: "KOSONG",
+      properti_id: propertiId,
+    };
+
+    if (fasilitas_ids && Array.isArray(fasilitas_ids) && fasilitas_ids.length > 0) {
+      createData.fasilitas_ruangan = {
+        connect: fasilitas_ids.map((id: string) => ({ id })),
+      };
+    }
+
     const kamar = await prisma.kamar.create({
-      data: {
-        nomor,
-        tipe: tipe || "REGULER",
-        luas: luas || null,
-        fasilitas: fasilitas || [],
-        deskripsi: deskripsi || null,
-        tarif: tarif || {},
-        gambar: foto || [],
-        status: "KOSONG",
-        properti_id: propertiId,
-      },
+      data: createData,
       include: {
+        fasilitas_ruangan: true,
         properti: {
           select: {
             id: true,
@@ -130,6 +138,7 @@ app.get("/kamar/:id", async (c) => {
     const kamar = await prisma.kamar.findUnique({
       where: { id },
       include: {
+        fasilitas_ruangan: true,
         properti: {
           select: {
             id: true,
@@ -178,7 +187,7 @@ app.put("/kamar/:id", authMiddleware, async (c) => {
     const id = c.req.param("id");
     const user = c.get("user");
     const body = await c.req.json();
-    const { nomor, tipe, luas, fasilitas, deskripsi, tarif, foto, status } = body;
+    const { nomor, tipe, luas, fasilitas_ids, deskripsi, tarif, foto, status } = body;
 
     const existingKamar = await prisma.kamar.findUnique({
       where: { id },
@@ -218,18 +227,23 @@ app.put("/kamar/:id", authMiddleware, async (c) => {
       if (nomor) updateData.nomor = nomor;
       if (tipe) updateData.tipe = tipe;
       if (luas !== undefined) updateData.luas = luas;
-      if (fasilitas !== undefined) updateData.fasilitas = fasilitas;
       if (deskripsi !== undefined) updateData.deskripsi = deskripsi;
       if (tarif !== undefined) updateData.tarif = tarif;
       if (foto !== undefined) updateData.gambar = foto;
       if (status && ["KOSONG", "TERISI", "MAINTENANCE"].includes(status)) {
         updateData.status = status;
       }
+      if (fasilitas_ids !== undefined && Array.isArray(fasilitas_ids)) {
+        updateData.fasilitas_ruangan = {
+          set: fasilitas_ids.map((id: string) => ({ id })),
+        };
+      }
 
       const kamar = await prisma.kamar.update({
         where: { id },
         data: updateData,
         include: {
+          fasilitas_ruangan: true,
           properti: {
             select: {
               id: true,

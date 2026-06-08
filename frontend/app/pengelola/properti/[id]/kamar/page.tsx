@@ -157,7 +157,7 @@ export default function PengelolaKamarPage() {
                   </div>
                   <div className="text-sm text-gray-500 mb-4">
                     {k.luas && <p>Luas: {k.luas}</p>}
-                    <p>Fasilitas: {k.fasilitas?.length ? k.fasilitas.join(", ") : "-"}</p>
+                    <p>Fasilitas: {k.fasilitas_ruangan?.length ? k.fasilitas_ruangan.map(f => f.nama).join(", ") : "-"}</p>
                   </div>
                   <button
                     onClick={() => {

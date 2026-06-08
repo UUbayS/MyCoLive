@@ -6,6 +6,7 @@ import Link from "next/link";
 import {
   ArrowLeft,
   MapPin,
+  MapPinned,
   Edit,
   Trash2,
   DoorOpen,
@@ -13,6 +14,7 @@ import {
   BedDouble,
   Users,
   Wrench,
+  ExternalLink
 } from "lucide-react";
 import ImageCarousel from "../../../../components/ImageCarousel";
 import ConfirmDialog from "../../../../components/ConfirmDialog";
@@ -102,11 +104,13 @@ export default function AdminDetailPropertiPage() {
     maintenance: kamarList.filter((k) => k.status === "MAINTENANCE").length,
   };
 
-  const allFasilitas = new Set<string>();
+  const fasilitasUmum = properti?.fasilitas_umum || [];
+  const fasilitasRuangan = new Set<string>();
   properti?.kamar?.forEach((kamar) => {
-    kamar.fasilitas?.forEach((f) => allFasilitas.add(f));
+    kamar.fasilitas_ruangan?.forEach((f) => fasilitasRuangan.add(f.nama));
   });
-  const fasilitasList = Array.from(allFasilitas);
+  const allFasilitas = [...fasilitasUmum.map((f) => f.nama), ...Array.from(fasilitasRuangan)];
+  const fasilitasList = Array.from(new Set(allFasilitas));
 
   if (loading) {
     return (
@@ -199,106 +203,6 @@ export default function AdminDetailPropertiPage() {
         <ImageCarousel images={properti.gambar || []} alt={properti.nama} />
       </div>
 
-      {/* Info Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {/* Informasi Properti */}
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-semibold mb-4">Informasi Properti</h2>
-          <div className="space-y-3">
-            <div>
-              <p className="text-sm text-gray-500">Jenis</p>
-              <p className="font-medium text-gray-900">
-                {properti.jenis === "LAKI_LAKI" && "Putra"}
-                {properti.jenis === "PEREMPUAN" && "Putri"}
-                {properti.jenis === "CAMPUR" && "Campur"}
-                {!properti.jenis && "-"}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Alamat Lengkap</p>
-              <p className="font-medium text-gray-900">{getDisplayAlamat()}</p>
-            </div>
-            {properti.provinsi && (
-              <div>
-                <p className="text-sm text-gray-500">Provinsi</p>
-                <p className="font-medium text-gray-900">{properti.provinsi}</p>
-              </div>
-            )}
-            {properti.kota && (
-              <div>
-                <p className="text-sm text-gray-500">Kota/Kabupaten</p>
-                <p className="font-medium text-gray-900">{properti.kota}</p>
-              </div>
-            )}
-            {properti.kecamatan && (
-              <div>
-                <p className="text-sm text-gray-500">Kecamatan</p>
-                <p className="font-medium text-gray-900">{properti.kecamatan}</p>
-              </div>
-            )}
-            {properti.kode_pos && (
-              <div>
-                <p className="text-sm text-gray-500">Kode Pos</p>
-                <p className="font-medium text-gray-900">{properti.kode_pos}</p>
-              </div>
-            )}
-            <div>
-              <p className="text-sm text-gray-500">Lokasi</p>
-              <a
-                href={getGoogleMapsLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[#84CC16] hover:underline text-sm"
-              >
-                <MapPin className="w-3 h-3" />
-                Lihat di Google Maps
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Deskripsi & Kebijakan */}
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-semibold mb-4">Deskripsi & Kebijakan</h2>
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">Deskripsi</p>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                {properti.deskripsi || "Tidak ada deskripsi"}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500 mb-1">Kebijakan</p>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                {properti.kebijakan || "Tidak ada kebijakan"}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Fasilitas */}
-      <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Fasilitas</h2>
-          <span className="text-sm text-gray-500">{fasilitasList.length} fasilitas</span>
-        </div>
-        {fasilitasList.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {fasilitasList.map((fasilitas, idx) => (
-              <span
-                key={idx}
-                className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm"
-              >
-                {fasilitas}
-              </span>
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-500">Belum ada fasilitas terdaftar</p>
-        )}
-      </div>
-
       {/* Kamar Section */}
       <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
         <div className="flex items-center justify-between mb-4">
@@ -326,6 +230,65 @@ export default function AdminDetailPropertiPage() {
         </Link>
       </div>
 
+      {/* Deskripsi & Kebijakan */}
+      <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+        <h2 className="text-lg font-semibold mb-4">Deskripsi & Kebijakan</h2>
+        <div className="space-y-4">
+          <div>
+            <p className="text-sm text-gray-500 mb-1">Deskripsi</p>
+            <p className="text-sm text-gray-700 whitespace-pre-wrap">
+              {properti.deskripsi || "Tidak ada deskripsi"}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500 mb-1">Kebijakan</p>
+            <p className="text-sm text-gray-700 whitespace-pre-wrap">
+              {properti.kebijakan || "Tidak ada kebijakan"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Fasilitas */}
+      <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold">Fasilitas</h2>
+          <span className="text-sm text-gray-500">{fasilitasList.length} fasilitas</span>
+        </div>
+        {fasilitasList.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {fasilitasList.map((fasilitas, idx) => (
+              <span
+                key={idx}
+                className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm"
+              >
+                {fasilitas}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">Belum ada fasilitas terdaftar</p>
+        )}
+      </div>
+
+      {/* Lokasi */}
+      <div className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm mb-6">
+        <h3 className="font-semibold text-gray-900 mb-2 text-sm flex items-center gap-2">
+          <MapPinned className="w-4 h-4 text-[#84CC16]" />
+          Detail Lokasi
+        </h3>
+        <p className="text-sm text-gray-600 mb-2 leading-relaxed">{getDisplayAlamat()}</p>
+        <a
+          href={getGoogleMapsLink()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full py-2.5 bg-gray-50 rounded-xl text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+        >
+          <ExternalLink className="w-4 h-4" />
+          Buka di Google Maps
+        </a>
+      </div>
+      
       <div className="mt-8 mb-6">
         <button
           onClick={() => setShowDeleteDialog(true)}

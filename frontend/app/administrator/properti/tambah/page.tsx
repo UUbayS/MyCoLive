@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import ImageUploader from "../../../../components/ImageUploader";
 import AddressFields from "../../../../components/AddressFields";
+import FacilitySelector from "../../../../components/FacilitySelector";
 import { createProperti } from "../../../../lib/api";
 import { getUser, isAuthenticated } from "../../../../lib/auth";
 import MainLayout from "../../../../components/Layout/MainLayout";
@@ -23,6 +24,7 @@ export default function TambahPropertiPage() {
     deskripsi: "",
     kebijakan: "",
     gambar: [] as string[],
+    fasilitas_umum_ids: [] as string[],
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -69,6 +71,7 @@ export default function TambahPropertiPage() {
         deskripsi: formData.deskripsi || undefined,
         kebijakan: formData.kebijakan || undefined,
         gambar: formData.gambar.length > 0 ? formData.gambar : undefined,
+        fasilitas_umum_ids: formData.fasilitas_umum_ids.length > 0 ? formData.fasilitas_umum_ids : undefined,
       });
 
       if (result) {
@@ -168,6 +171,13 @@ export default function TambahPropertiPage() {
               className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16] resize-none"
             />
           </div>
+
+          <FacilitySelector
+            jenis="UMUM"
+            selectedIds={formData.fasilitas_umum_ids}
+            onChange={(ids) => setFormData({ ...formData, fasilitas_umum_ids: ids })}
+            showManagement={true}
+          />
 
           <ImageUploader
             label="Upload Foto Properti"

@@ -17,6 +17,7 @@ app.get("/", authMiddleware, async (c) => {
         where: { admin_id: user.userId },
         include: {
           kamar: true,
+          fasilitas_umum: true,
           _count: {
             select: { kamar: true }
           }
@@ -35,6 +36,7 @@ app.get("/", authMiddleware, async (c) => {
         where: { id: { in: propertiIds } },
         include: {
           kamar: true,
+          fasilitas_umum: true,
           _count: {
             select: { kamar: true }
           }
@@ -64,6 +66,7 @@ app.get("/", authMiddleware, async (c) => {
       created_at: p.created_at,
       total_kamar: p._count.kamar,
       kamar_kosong: p.kamar.filter((k: any) => k.status === "KOSONG").length,
+      fasilitas_umum: p.fasilitas_umum,
       kamar: p.kamar.map((k: any) => ({
         id: k.id,
         nomor: k.nomor,
@@ -90,7 +93,7 @@ app.post("/", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {
     const user = c.get("user");
     const body = await c.req.json();
-    const { nama, provinsi, kota, kecamatan, kode_pos, detail_alamat, jenis, deskripsi, kebijakan, gambar } = body;
+    const { nama, provinsi, kota, kecamatan, kode_pos, detail_alamat, jenis, deskripsi, kebijakan, gambar, fasilitas_umum_ids } = body;
 
     if (!nama || !detail_alamat) {
       return c.json(
@@ -114,22 +117,31 @@ app.post("/", authMiddleware, requireRole("PEMILIK"), async (c) => {
       kode_pos
     ].filter(Boolean).join(", ");
 
+    const createData: any = {
+      nama,
+      alamat: fullAlamat,
+      provinsi: provinsi || null,
+      kota: kota || null,
+      kecamatan: kecamatan || null,
+      kode_pos: kode_pos || null,
+      detail_alamat: detail_alamat || null,
+      jenis: jenis as any,
+      deskripsi: deskripsi || null,
+      kebijakan: kebijakan || null,
+      gambar: gambar || [],
+      admin_id: user.userId,
+    };
+
+    if (fasilitas_umum_ids && Array.isArray(fasilitas_umum_ids) && fasilitas_umum_ids.length > 0) {
+      createData.fasilitas_umum = {
+        connect: fasilitas_umum_ids.map((id: string) => ({ id })),
+      };
+    }
+
     const properti = await prisma.properti.create({
-      data: {
-        nama,
-        alamat: fullAlamat,
-        provinsi: provinsi || null,
-        kota: kota || null,
-        kecamatan: kecamatan || null,
-        kode_pos: kode_pos || null,
-        detail_alamat: detail_alamat || null,
-        jenis: jenis as any,
-        deskripsi: deskripsi || null,
-        kebijakan: kebijakan || null,
-        gambar: gambar || [],
-        admin_id: user.userId,
-      },
+      data: createData,
       include: {
+        fasilitas_umum: true,
         admin: {
           select: {
             id: true,
@@ -209,7 +221,7 @@ app.put("/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
     const id = c.req.param("id");
     const user = c.get("user");
     const body = await c.req.json();
-    const { nama, provinsi, kota, kecamatan, kode_pos, detail_alamat, jenis, deskripsi, kebijakan, gambar } = body;
+    const { nama, provinsi, kota, kecamatan, kode_pos, detail_alamat, jenis, deskripsi, kebijakan, gambar, fasilitas_umum_ids } = body;
 
     const existing = await prisma.properti.findUnique({
       where: { id }
@@ -253,10 +265,17 @@ app.put("/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
     if (kebijakan !== undefined) updateData.kebijakan = kebijakan;
     if (gambar !== undefined) updateData.gambar = gambar;
 
+    if (fasilitas_umum_ids !== undefined && Array.isArray(fasilitas_umum_ids)) {
+      updateData.fasilitas_umum = {
+        set: fasilitas_umum_ids.map((fid: string) => ({ id: fid })),
+      };
+    }
+
     const properti = await prisma.properti.update({
       where: { id },
       data: updateData,
       include: {
+        fasilitas_umum: true,
         admin: {
           select: {
             id: true,

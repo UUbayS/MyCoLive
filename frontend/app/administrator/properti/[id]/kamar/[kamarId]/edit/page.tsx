@@ -9,23 +9,6 @@ import { getKamarById, updateKamar, KamarData } from "../../../../../../../lib/a
 import { getUser, isAuthenticated } from "../../../../../../../lib/auth";
 import MainLayout from "../../../../../../../components/Layout/MainLayout";
 
-const defaultFasilitas = [
-  "Wifi",
-  "Listrik",
-  "Kamar Mandi Dalam",
-  "Kamar Mandi Luar",
-  "Kasur + Bantal",
-  "Lemari",
-  "Meja Belajar",
-  "Kursi",
-  "AC",
-  "Kipas Angin",
-  "Dapur Bersama",
-  "Parkir",
-  "CCTV",
-  "Laundry",
-];
-
 export default function EditKamarPage() {
   const router = useRouter();
   const params = useParams();
@@ -38,7 +21,7 @@ export default function EditKamarPage() {
     nomor: "",
     lantai: "",
     luas: "",
-    fasilitas: [] as string[],
+    fasilitas_ids: [] as string[],
     deskripsi: "",
     tarif1Bulan: "",
     tarif3Bulan: "",
@@ -47,7 +30,6 @@ export default function EditKamarPage() {
     gambar: [] as string[],
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [availableFasilitas, setAvailableFasilitas] = useState(defaultFasilitas);
 
   useEffect(() => {
     if (typeof window !== "undefined" && !isAuthenticated()) {
@@ -77,7 +59,7 @@ export default function EditKamarPage() {
             nomor: data.nomor || "",
             lantai: lantai,
             luas: ukuran,
-            fasilitas: data.fasilitas || [],
+            fasilitas_ids: data.fasilitas_ruangan?.map((f) => f.id) || [],
             deskripsi: data.deskripsi || "",
             tarif1Bulan: tarif["1_bulan"] ? String(tarif["1_bulan"]) : "",
             tarif3Bulan: tarif["3_bulan"] ? String(tarif["3_bulan"]) : "",
@@ -85,9 +67,6 @@ export default function EditKamarPage() {
             tarif12Bulan: tarif["12_bulan"] ? String(tarif["12_bulan"]) : "",
             gambar: data.gambar || [],
           });
-
-          const mergedFasilitas = new Set([...defaultFasilitas, ...(data.fasilitas || [])]);
-          setAvailableFasilitas(Array.from(mergedFasilitas));
         }
       } catch (error) {
         console.error("Failed to fetch kamar:", error);
@@ -126,7 +105,7 @@ export default function EditKamarPage() {
         nomor: formData.nomor,
         tipe: "REGULER",
         luas,
-        fasilitas: formData.fasilitas.length > 0 ? formData.fasilitas : undefined,
+        fasilitas_ids: formData.fasilitas_ids.length > 0 ? formData.fasilitas_ids : undefined,
         deskripsi: formData.deskripsi || undefined,
         tarif: Object.keys(tarif).length > 0 ? tarif : undefined,
         foto: formData.gambar.length > 0 ? formData.gambar : undefined,
@@ -226,22 +205,10 @@ export default function EditKamarPage() {
           </div>
 
           <FacilitySelector
-            facilities={formData.fasilitas}
-            availableFacilities={availableFasilitas}
-            onChange={(facilities) => setFormData({ ...formData, fasilitas: facilities })}
-            showManagement
-            onAddFacility={(name) => {
-              if (!availableFasilitas.includes(name)) {
-                setAvailableFasilitas([...availableFasilitas, name]);
-              }
-            }}
-            onDeleteFacility={(name) => {
-              setAvailableFasilitas(availableFasilitas.filter((f) => f !== name));
-              setFormData({
-                ...formData,
-                fasilitas: formData.fasilitas.filter((f) => f !== name),
-              });
-            }}
+            jenis="RUANGAN"
+            selectedIds={formData.fasilitas_ids}
+            onChange={(ids) => setFormData({ ...formData, fasilitas_ids: ids })}
+            showManagement={true}
           />
 
           <div>

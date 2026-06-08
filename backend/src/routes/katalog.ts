@@ -14,7 +14,12 @@ app.get("/", async (c) => {
             nama: true,
           }
         },
-        kamar: true,
+        fasilitas_umum: true,
+        kamar: {
+          include: {
+            fasilitas_ruangan: true,
+          }
+        },
         _count: {
           select: { kamar: true }
         }
@@ -33,13 +38,15 @@ app.get("/", async (c) => {
       total_kamar: p._count.kamar,
       kamar_kosong: p.kamar.filter((k: any) => k.status === "KOSONG").length,
       admin: p.admin,
+      fasilitas_umum: p.fasilitas_umum,
       kamar: p.kamar.filter((k: any) => k.status === "KOSONG").map((k: any) => ({
         id: k.id,
         nomor: k.nomor,
         tipe: k.tipe,
         tarif: k.tarif,
         deskripsi: k.deskripsi,
-        gambar: k.gambar
+        gambar: k.gambar,
+        fasilitas_ruangan: k.fasilitas_ruangan,
       }))
     }));
 
@@ -70,15 +77,10 @@ app.get("/:id", async (c) => {
             no_telepon: true,
           }
         },
+        fasilitas_umum: true,
         kamar: {
-          select: {
-            id: true,
-            nomor: true,
-            tipe: true,
-            tarif: true,
-            status: true,
-            deskripsi: true,
-            gambar: true,
+          include: {
+            fasilitas_ruangan: true,
           }
         },
         _count: {

@@ -125,11 +125,13 @@ export default function DetailPropertiPage() {
   const kamarMaintenance = kamarList.filter(k => k.status === "MAINTENANCE").length;
   const kamarKosongList = kamarList.filter(k => k.status === "KOSONG");
 
-  const allFasilitas = new Set<string>();
+  const fasilitasUmum = properti?.fasilitas_umum || [];
+  const fasilitasRuangan = new Set<string>();
   properti?.kamar?.forEach((kamar) => {
-    kamar.fasilitas?.forEach((f) => allFasilitas.add(f));
+    kamar.fasilitas_ruangan?.forEach((f) => fasilitasRuangan.add(f.nama));
   });
-  const fasilitasList = Array.from(allFasilitas);
+  const allFasilitas = [...fasilitasUmum.map((f) => f.nama), ...Array.from(fasilitasRuangan)];
+  const fasilitasList = Array.from(new Set(allFasilitas));
 
   const stats = [
     { label: "Total", value: totalKamar, sub: "Kamar", icon: Home, color: "bg-blue-50 text-blue-600" },

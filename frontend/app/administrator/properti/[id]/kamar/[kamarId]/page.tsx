@@ -23,6 +23,7 @@ import {
   deleteKamar,
   updateKamarStatus,
   KamarData,
+  PropertiData,
 } from "../../../../../../lib/api";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
 
@@ -39,6 +40,7 @@ export default function AdminDetailKamarPage() {
   const propertiId = params.id as string;
 
   const [kamar, setKamar] = useState<KamarData | null>(null);
+  const [properti, setProperti] = useState<PropertiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
@@ -69,6 +71,22 @@ export default function AdminDetailKamarPage() {
 
     fetchKamar();
   }, [kamarId, propertiId, router]);
+
+  const getDisplayAlamat = () => {
+    if (!properti) return "";
+    if (properti.detail_alamat) {
+      return [
+        properti.detail_alamat,
+        properti.kecamatan ? `Kec. ${properti.kecamatan}` : null,
+        properti.kota,
+        properti.provinsi,
+        properti.kode_pos,
+      ]
+        .filter(Boolean)
+        .join(", ");
+    }
+    return properti.alamat;
+  };
 
   const handleDelete = async () => {
     try {
@@ -169,7 +187,7 @@ export default function AdminDetailKamarPage() {
         </div>
         <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
           <MapPin className="w-4 h-4" />
-          <span>{kamar.properti?.nama || "Properti"}</span>
+          <span>{kamar.properti?.nama || "Properti"} - {kamar.properti.alamat}</span>
         </div>
       </div>
 
@@ -263,9 +281,9 @@ export default function AdminDetailKamarPage() {
       </div>
       <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
         {/* Penghuni Aktif - hanya PEMILIK */}
-        {kamar.status === "TERISI" && kamar.penghuni && (
-          <div>
-            <h2 className="text-lg font-semibold mb-3">Penghuni Aktif</h2>
+        <h2 className="text-lg font-semibold mb-3">Penghuni Aktif</h2>
+        {kamar.status === "TERISI" && kamar.penghuni ?(
+          <div>  
             <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                 <span className="text-lg font-semibold text-gray-600">
@@ -321,24 +339,26 @@ export default function AdminDetailKamarPage() {
               </Link>
             </div>
           </div>
+        ):(
+          <p className="text-sm text-gray-500">Belum ada penghuni</p>
         )}
       </div>
 
       {/* Fasilitas */}
       <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Fasilitas</h2>
-          <span className="text-sm text-gray-500">{(kamar.fasilitas?.length || 0)} fasilitas</span>
+          <h2 className="text-lg font-semibold">Fasilitas Ruangan</h2>
+          <span className="text-sm text-gray-500">{(kamar.fasilitas_ruangan?.length || 0)} fasilitas</span>
         </div>
-        {kamar.fasilitas && kamar.fasilitas.length > 0 ? (
+        {kamar.fasilitas_ruangan && kamar.fasilitas_ruangan.length > 0 ? (
           <div className="flex flex-wrap gap-2">
-            {kamar.fasilitas.map((fasilitas, idx) => (
+            {kamar.fasilitas_ruangan.map((f) => (
               <span
-                key={idx}
+                key={f.id}
                 className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm flex items-center gap-1"
               >
                 <Wifi className="w-3 h-3" />
-                {fasilitas}
+                {f.nama}
               </span>
             ))}
           </div>

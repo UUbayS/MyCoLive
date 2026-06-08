@@ -248,14 +248,14 @@ export default function KamarSayaPage() {
               )}
             </div>
 
-            {kamar.fasilitas && kamar.fasilitas.length > 0 && (
+            {kamar.fasilitas_ruangan && kamar.fasilitas_ruangan.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-3">
-                {kamar.fasilitas.map((f) => {
-                  const Icon = getFasilitasIcon(f);
+                {kamar.fasilitas_ruangan.map((f) => {
+                  const Icon = getFasilitasIcon(f.nama);
                   return (
-                    <span key={f} className="flex items-center gap-1 px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-lg">
+                    <span key={f.id} className="flex items-center gap-1 px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-lg">
                       <Icon className="w-3.5 h-3.5" />
-                      {f}
+                      {f.nama}
                     </span>
                   );
                 })}

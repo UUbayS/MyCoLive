@@ -9,23 +9,6 @@ import { createKamar } from "../../../../../../lib/api";
 import { getUser, isAuthenticated } from "../../../../../../lib/auth";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
 
-const defaultFasilitas = [
-  "Wifi",
-  "Listrik",
-  "Kamar Mandi Dalam",
-  "Kamar Mandi Luar",
-  "Kasur + Bantal",
-  "Lemari",
-  "Meja Belajar",
-  "Kursi",
-  "AC",
-  "Kipas Angin",
-  "Dapur Bersama",
-  "Parkir",
-  "CCTV",
-  "Laundry",
-];
-
 export default function TambahKamarPage() {
   const router = useRouter();
   const params = useParams();
@@ -36,7 +19,7 @@ export default function TambahKamarPage() {
     nomor: "",
     lantai: "",
     luas: "",
-    fasilitas: [] as string[],
+    fasilitas_ids: [] as string[],
     deskripsi: "",
     tarif1Bulan: "",
     tarif3Bulan: "",
@@ -45,7 +28,6 @@ export default function TambahKamarPage() {
     gambar: [] as string[],
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [availableFasilitas, setAvailableFasilitas] = useState(defaultFasilitas);
 
   useEffect(() => {
     if (typeof window !== "undefined" && !isAuthenticated()) {
@@ -86,7 +68,7 @@ export default function TambahKamarPage() {
         nomor: formData.nomor,
         tipe: "REGULER",
         luas,
-        fasilitas: formData.fasilitas.length > 0 ? formData.fasilitas : undefined,
+        fasilitas_ids: formData.fasilitas_ids.length > 0 ? formData.fasilitas_ids : undefined,
         deskripsi: formData.deskripsi || undefined,
         tarif: Object.keys(tarif).length > 0 ? tarif : undefined,
         foto: formData.gambar.length > 0 ? formData.gambar : undefined,
@@ -171,22 +153,10 @@ export default function TambahKamarPage() {
           </div>
 
           <FacilitySelector
-            facilities={formData.fasilitas}
-            availableFacilities={availableFasilitas}
-            onChange={(facilities) => setFormData({ ...formData, fasilitas: facilities })}
-            showManagement
-            onAddFacility={(name) => {
-              if (!availableFasilitas.includes(name)) {
-                setAvailableFasilitas([...availableFasilitas, name]);
-              }
-            }}
-            onDeleteFacility={(name) => {
-              setAvailableFasilitas(availableFasilitas.filter((f) => f !== name));
-              setFormData({
-                ...formData,
-                fasilitas: formData.fasilitas.filter((f) => f !== name),
-              });
-            }}
+            jenis="RUANGAN"
+            selectedIds={formData.fasilitas_ids}
+            onChange={(ids) => setFormData({ ...formData, fasilitas_ids: ids })}
+            showManagement={true}
           />
 
           <div>

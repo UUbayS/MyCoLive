@@ -58,6 +58,11 @@ button:focus {
   appearance: none;
 }
 
+input[type="checkbox"] {
+  -webkit-appearance: checkbox;
+  appearance: auto;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

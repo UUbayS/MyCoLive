@@ -353,10 +353,11 @@ export default function AdminDaftarKamarPage() {
       {/* Floating Add Button Mobile */}
       <Link
         href={`/administrator/properti/${propertiId}/kamar/tambah`}
-        className="md:hidden fixed bottom-24 right-4 w-14 h-14 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
+        className="md:hidden fixed bottom-24 right-4 p-4 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
         aria-label="Tambah Kamar"
       >
         <Plus className="w-6 h-6" />
+        <span>Tambah Kamar</span>
       </Link>
 
       {/* Delete Dialog */}

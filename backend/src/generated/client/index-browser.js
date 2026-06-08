@@ -142,6 +142,13 @@ exports.Prisma.AdminSettingsScalarFieldEnum = {
   user_id: 'user_id'
 };
 
+exports.Prisma.FasilitasScalarFieldEnum = {
+  id: 'id',
+  nama: 'nama',
+  jenis: 'jenis',
+  created_at: 'created_at'
+};
+
 exports.Prisma.PropertiScalarFieldEnum = {
   id: 'id',
   nama: 'nama',
@@ -165,7 +172,6 @@ exports.Prisma.KamarScalarFieldEnum = {
   nomor: 'nomor',
   tipe: 'tipe',
   luas: 'luas',
-  fasilitas: 'fasilitas',
   deskripsi: 'deskripsi',
   tarif: 'tarif',
   gambar: 'gambar',
@@ -301,6 +307,11 @@ exports.Role = exports.$Enums.Role = {
   PENGHUNI: 'PENGHUNI'
 };
 
+exports.JenisFasilitas = exports.$Enums.JenisFasilitas = {
+  RUANGAN: 'RUANGAN',
+  UMUM: 'UMUM'
+};
+
 exports.JenisProperti = exports.$Enums.JenisProperti = {
   LAKI_LAKI: 'LAKI_LAKI',
   PEREMPUAN: 'PEREMPUAN',
@@ -367,6 +378,7 @@ exports.StatusPengajuanCheckout = exports.$Enums.StatusPengajuanCheckout = {
 exports.Prisma.ModelName = {
   User: 'User',
   AdminSettings: 'AdminSettings',
+  Fasilitas: 'Fasilitas',
   Properti: 'Properti',
   Kamar: 'Kamar',
   Pemesanan: 'Pemesanan',

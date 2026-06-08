@@ -1,5 +1,12 @@
 import { apiFetch } from "./auth";
 
+export type FasilitasData = {
+  id: string;
+  nama: string;
+  jenis: "RUANGAN" | "UMUM";
+  created_at?: string;
+};
+
 export type PropertiData = {
   id: string;
   nama: string;
@@ -15,6 +22,7 @@ export type PropertiData = {
   gambar?: string[];
   total_kamar?: number;
   kamar_kosong?: number;
+  fasilitas_umum?: FasilitasData[];
   admin?: {
     id: string;
     nama: string;
@@ -28,7 +36,7 @@ export type KamarData = {
   nomor: string;
   tipe: string;
   luas?: string;
-  fasilitas?: string[];
+  fasilitas_ruangan?: FasilitasData[];
   deskripsi?: string;
   tarif?: Record<string, number>;
   gambar?: string[];
@@ -53,11 +61,6 @@ export type KamarData = {
     tgl_mulai: string;
     tgl_berakhir?: string;
   };
-};
-
-export type FasilitasData = {
-  id: string;
-  nama: string;
 };
 
 export async function getKatalogProperti(): Promise<PropertiData[]> {
@@ -98,6 +101,7 @@ export async function createProperti(data: {
   deskripsi?: string;
   kebijakan?: string;
   gambar?: string[];
+  fasilitas_umum_ids?: string[];
 }): Promise<PropertiData | null> {
   try {
     const res = await apiFetch<{ status: string; data: PropertiData }>("/api/properti", {
@@ -134,6 +138,7 @@ export async function updateProperti(
     deskripsi?: string;
     kebijakan?: string;
     gambar?: string[];
+    fasilitas_umum_ids?: string[];
   }
 ): Promise<PropertiData | null> {
   try {
@@ -176,7 +181,7 @@ export async function createKamar(
     nomor: string;
     tipe?: string;
     luas?: string;
-    fasilitas?: string[];
+    fasilitas_ids?: string[];
     deskripsi?: string;
     tarif?: Record<string, number>;
     foto?: string[];
@@ -225,7 +230,7 @@ export async function updateKamar(
     nomor?: string;
     tipe?: string;
     luas?: string;
-    fasilitas?: string[];
+    fasilitas_ids?: string[];
     deskripsi?: string;
     tarif?: Record<string, number>;
     foto?: string[];
@@ -243,20 +248,21 @@ export async function updateKamar(
   }
 }
 
-export async function getFasilitasList(): Promise<FasilitasData[]> {
+export async function getFasilitasList(jenis?: "RUANGAN" | "UMUM"): Promise<FasilitasData[]> {
   try {
-    const res = await apiFetch<{ status: string; data: FasilitasData[] }>("/api/fasilitas");
+    const query = jenis ? `?jenis=${jenis}` : "";
+    const res = await apiFetch<{ status: string; data: FasilitasData[] }>("/api/fasilitas" + query);
     return res.data || [];
   } catch {
     return [];
   }
 }
 
-export async function createFasilitas(nama: string): Promise<FasilitasData | null> {
+export async function createFasilitas(nama: string, jenis: "RUANGAN" | "UMUM"): Promise<FasilitasData | null> {
   try {
     const res = await apiFetch<{ status: string; data: FasilitasData }>("/api/fasilitas", {
       method: "POST",
-      body: JSON.stringify({ nama }),
+      body: JSON.stringify({ nama, jenis }),
     });
     return res.data || null;
   } catch {
@@ -513,7 +519,7 @@ export type MyPenghuniData = {
     nomor: string;
     tipe: string;
     luas?: string | null;
-    fasilitas?: string[];
+    fasilitas_ruangan?: FasilitasData[];
     deskripsi?: string | null;
     tarif?: Record<string, number>;
     gambar?: string[];

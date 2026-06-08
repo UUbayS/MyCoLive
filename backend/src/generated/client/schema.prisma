@@ -76,6 +76,11 @@ enum StatusPengajuanCheckout {
   DITOLAK
 }
 
+enum JenisFasilitas {
+  RUANGAN
+  UMUM
+}
+
 model User {
   id         String   @id @default(cuid())
   username   String   @unique
@@ -110,6 +115,16 @@ model AdminSettings {
   user    User   @relation(fields: [user_id], references: [id])
 }
 
+model Fasilitas {
+  id         String         @id @default(cuid())
+  nama       String
+  jenis      JenisFasilitas
+  created_at DateTime       @default(now())
+
+  kamar    Kamar[]
+  properti Properti[]
+}
+
 model Properti {
   id            String         @id @default(cuid())
   nama          String
@@ -135,6 +150,7 @@ model Properti {
   pemesanan         Pemesanan[]
   pengajuanDana     PengajuanDana[]
   pengajuanCheckout PengajuanCheckout[]
+  fasilitas_umum    Fasilitas[]
 }
 
 model Kamar {
@@ -142,7 +158,6 @@ model Kamar {
   nomor      String
   tipe       TipeKamar   @default(REGULER)
   luas       String?
-  fasilitas  String[]
   deskripsi  String?
   tarif      Json?
   gambar     String[]
@@ -156,6 +171,7 @@ model Kamar {
   pemesanan         Pemesanan[]
   penghuni          Penghuni?
   pengajuanCheckout PengajuanCheckout[]
+  fasilitas_ruangan Fasilitas[]
 
   @@unique([properti_id, nomor])
 }

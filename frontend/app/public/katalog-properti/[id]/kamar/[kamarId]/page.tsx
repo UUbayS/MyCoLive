@@ -6,9 +6,8 @@ import Link from "next/link";
 import { ArrowLeft, MapPin, Edit, MessageCircle, LogIn, Home } from "lucide-react";
 import ImageCarousel from "../../../../../../components/ImageCarousel";
 import TarifSelector from "../../../../../../components/TarifSelector";
-import ConfirmDialog from "../../../../../../components/ConfirmDialog";
 import { getUser, isAuthenticated } from "../../../../../../lib/auth";
-import { getKamarById, deleteKamar, updateKamarStatus, getMyPenghuni, KamarData } from "../../../../../../lib/api";
+import { getKamarById, getMyPenghuni, KamarData, PropertiData } from "../../../../../../lib/api";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
 
 export default function DetailKamarPage() {
@@ -18,6 +17,7 @@ export default function DetailKamarPage() {
   const propertiId = params.id as string;
 
   const [kamar, setKamar] = useState<KamarData | null>(null);
+  const [properti, setProperti] = useState<PropertiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("1_bulan");
@@ -27,9 +27,7 @@ export default function DetailKamarPage() {
 
   const user = getUser();
   const isLoggedIn = isAuthenticated();
-  const isPemilik = user?.role === "PEMILIK";
   const isPenghuni = user?.role === "PENGHUNI";
-  const isPengelola = user?.role === "PENGELOLA";
 
   useEffect(() => {
     if (!kamarId) return;
@@ -71,33 +69,21 @@ export default function DetailKamarPage() {
     checkPenghuniRoom();
   }, [isPenghuni]);
 
-  const handleDelete = async () => {
-    try {
-      const success = await deleteKamar(kamarId);
-      if (success) {
-        router.push(`/public/katalog-properti/${propertiId}/kamar`);
-      } else {
-        alert("Gagal menghapus kamar.");
-      }
-    } catch (error) {
-      console.error("Delete error:", error);
-      alert("Terjadi kesalahan saat menghapus kamar.");
-    } finally {
-      setShowDeleteDialog(false);
-    }
-  };
 
-  const handleToggleAktif = async () => {
-    const newStatus = isAktif ? "MAINTENANCE" : "KOSONG";
-    try {
-      const updated = await updateKamarStatus(kamarId, newStatus);
-      if (updated) {
-        setKamar(updated);
-        setIsAktif(!isAktif);
-      }
-    } catch (error) {
-      console.error("Toggle error:", error);
+  const getDisplayAlamat = () => {
+    if (!properti) return "";
+    if (properti.detail_alamat) {
+      return [
+        properti.detail_alamat,
+        properti.kecamatan ? `Kec. ${properti.kecamatan}` : null,
+        properti.kota,
+        properti.provinsi,
+        properti.kode_pos,
+      ]
+        .filter(Boolean)
+        .join(", ");
     }
+    return properti.alamat;
   };
 
   const getWhatsAppLink = () => {
@@ -147,24 +133,7 @@ export default function DetailKamarPage() {
 
   const isKosong = kamar.status === "KOSONG";
   const isTerisi = kamar.status === "TERISI";
-  const isMaintenance = kamar.status === "MAINTENANCE";
   const tarif = (typeof kamar.tarif === "object" && kamar.tarif ? kamar.tarif : {}) as Record<string, number>;
-
-  if (!isPemilik && isMaintenance) {
-    return (
-      <MainLayout>
-        <div className="text-center py-12">
-          <p className="text-lg text-gray-500">Kamar tidak tersedia</p>
-          <Link
-            href={`/public/katalog-properti/${propertiId}/kamar`}
-            className="mt-4 inline-block text-[#84CC16] hover:underline"
-          >
-            Kembali ke Daftar Kamar
-          </Link>
-        </div>
-      </MainLayout>
-    );
-  }
 
   return (
     <MainLayout>
@@ -182,19 +151,10 @@ export default function DetailKamarPage() {
             {kamar.properti && (
               <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
                 <MapPin className="w-3 h-3" />
-                <span>{kamar.properti.alamat}</span>
+                <span>{kamar.properti?.nama || "Properti"} - {kamar.properti.alamat}</span>
               </div>
             )}
           </div>
-          {isPemilik && (
-            <Link
-              href={`/administrator/properti/${propertiId}/kamar/${kamarId}/edit`}
-              className="flex items-center gap-1 text-[#84CC16] hover:text-[#73b814]"
-            >
-              <Edit className="w-4 h-4" />
-              <span className="text-sm">Edit</span>
-            </Link>
-          )}
         </div>
       </div>
 
@@ -226,24 +186,6 @@ export default function DetailKamarPage() {
                 {isKosong ? "Kosong" : isTerisi ? "Terisi" : "Non-Aktif"}
               </span>
             </div>
-
-            {isPemilik && (isKosong || isMaintenance) && (
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                <span className="text-sm text-gray-600">Kamar Aktif</span>
-                <button
-                  onClick={handleToggleAktif}
-                  className={`w-12 h-6 rounded-full transition-colors relative ${
-                    isAktif ? "bg-[#84CC16]" : "bg-gray-300"
-                  }`}
-                >
-                  <span
-                    className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${
-                      isAktif ? "left-6" : "left-0.5"
-                    }`}
-                  />
-                </button>
-              </div>
-            )}
           </div>
 
           {/* Deskripsi Kamar */}
@@ -255,15 +197,20 @@ export default function DetailKamarPage() {
             </div>
           </div>
 
-          {/* Fasilitas */}
-          {kamar.fasilitas && kamar.fasilitas.length > 0 && (
+          {/* Fasilitas Ruangan */}
+          {kamar.fasilitas_ruangan && kamar.fasilitas_ruangan.length > 0 && (
             <div>
-              <h2 className="text-lg font-semibold mb-2">Fasilitas</h2>
-              <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-                {kamar.fasilitas.map((f, idx) => (
-                  <li key={idx}>{f}</li>
+              <h2 className="text-lg font-semibold mb-2">Fasilitas Ruangan</h2>
+              <div className="flex flex-wrap gap-2">
+                {kamar.fasilitas_ruangan.map((f) => (
+                  <span
+                    key={f.id}
+                    className="px-3 py-1.5 bg-gray-50 text-gray-700 text-sm rounded-lg border border-gray-100"
+                  >
+                    {f.nama}
+                  </span>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
 

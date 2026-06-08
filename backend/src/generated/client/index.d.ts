@@ -24,6 +24,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type AdminSettings = $Result.DefaultSelection<Prisma.$AdminSettingsPayload>
 /**
+ * Model Fasilitas
+ * 
+ */
+export type Fasilitas = $Result.DefaultSelection<Prisma.$FasilitasPayload>
+/**
  * Model Properti
  * 
  */
@@ -179,6 +184,14 @@ export const StatusPengajuanCheckout: {
 
 export type StatusPengajuanCheckout = (typeof StatusPengajuanCheckout)[keyof typeof StatusPengajuanCheckout]
 
+
+export const JenisFasilitas: {
+  RUANGAN: 'RUANGAN',
+  UMUM: 'UMUM'
+};
+
+export type JenisFasilitas = (typeof JenisFasilitas)[keyof typeof JenisFasilitas]
+
 }
 
 export type Role = $Enums.Role
@@ -224,6 +237,10 @@ export const StatusSewa: typeof $Enums.StatusSewa
 export type StatusPengajuanCheckout = $Enums.StatusPengajuanCheckout
 
 export const StatusPengajuanCheckout: typeof $Enums.StatusPengajuanCheckout
+
+export type JenisFasilitas = $Enums.JenisFasilitas
+
+export const JenisFasilitas: typeof $Enums.JenisFasilitas
 
 /**
  * ##  Prisma Client ʲˢ
@@ -365,6 +382,16 @@ export class PrismaClient<
     * ```
     */
   get adminSettings(): Prisma.AdminSettingsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fasilitas`: Exposes CRUD operations for the **Fasilitas** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Fasilitas
+    * const fasilitas = await prisma.fasilitas.findMany()
+    * ```
+    */
+  get fasilitas(): Prisma.FasilitasDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.properti`: Exposes CRUD operations for the **Properti** model.
@@ -901,6 +928,7 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     AdminSettings: 'AdminSettings',
+    Fasilitas: 'Fasilitas',
     Properti: 'Properti',
     Kamar: 'Kamar',
     Pemesanan: 'Pemesanan',
@@ -926,7 +954,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "adminSettings" | "properti" | "kamar" | "pemesanan" | "pembayaran" | "penghuni" | "operator" | "komplain" | "pengajuanDana" | "notifikasi" | "pengajuanCheckout"
+      modelProps: "user" | "adminSettings" | "fasilitas" | "properti" | "kamar" | "pemesanan" | "pembayaran" | "penghuni" | "operator" | "komplain" | "pengajuanDana" | "notifikasi" | "pengajuanCheckout"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1075,6 +1103,80 @@ export namespace Prisma {
           count: {
             args: Prisma.AdminSettingsCountArgs<ExtArgs>
             result: $Utils.Optional<AdminSettingsCountAggregateOutputType> | number
+          }
+        }
+      }
+      Fasilitas: {
+        payload: Prisma.$FasilitasPayload<ExtArgs>
+        fields: Prisma.FasilitasFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FasilitasFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FasilitasFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload>
+          }
+          findFirst: {
+            args: Prisma.FasilitasFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FasilitasFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload>
+          }
+          findMany: {
+            args: Prisma.FasilitasFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload>[]
+          }
+          create: {
+            args: Prisma.FasilitasCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload>
+          }
+          createMany: {
+            args: Prisma.FasilitasCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FasilitasCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload>[]
+          }
+          delete: {
+            args: Prisma.FasilitasDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload>
+          }
+          update: {
+            args: Prisma.FasilitasUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload>
+          }
+          deleteMany: {
+            args: Prisma.FasilitasDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FasilitasUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FasilitasUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload>[]
+          }
+          upsert: {
+            args: Prisma.FasilitasUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FasilitasPayload>
+          }
+          aggregate: {
+            args: Prisma.FasilitasAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFasilitas>
+          }
+          groupBy: {
+            args: Prisma.FasilitasGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FasilitasGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FasilitasCountArgs<ExtArgs>
+            result: $Utils.Optional<FasilitasCountAggregateOutputType> | number
           }
         }
       }
@@ -1928,6 +2030,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     adminSettings?: AdminSettingsOmit
+    fasilitas?: FasilitasOmit
     properti?: PropertiOmit
     kamar?: KamarOmit
     pemesanan?: PemesananOmit
@@ -2063,6 +2166,46 @@ export namespace Prisma {
 
 
   /**
+   * Count Type FasilitasCountOutputType
+   */
+
+  export type FasilitasCountOutputType = {
+    kamar: number
+    properti: number
+  }
+
+  export type FasilitasCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kamar?: boolean | FasilitasCountOutputTypeCountKamarArgs
+    properti?: boolean | FasilitasCountOutputTypeCountPropertiArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FasilitasCountOutputType without action
+   */
+  export type FasilitasCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FasilitasCountOutputType
+     */
+    select?: FasilitasCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FasilitasCountOutputType without action
+   */
+  export type FasilitasCountOutputTypeCountKamarArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KamarWhereInput
+  }
+
+  /**
+   * FasilitasCountOutputType without action
+   */
+  export type FasilitasCountOutputTypeCountPropertiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PropertiWhereInput
+  }
+
+
+  /**
    * Count Type PropertiCountOutputType
    */
 
@@ -2073,6 +2216,7 @@ export namespace Prisma {
     pemesanan: number
     pengajuanDana: number
     pengajuanCheckout: number
+    fasilitas_umum: number
   }
 
   export type PropertiCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2082,6 +2226,7 @@ export namespace Prisma {
     pemesanan?: boolean | PropertiCountOutputTypeCountPemesananArgs
     pengajuanDana?: boolean | PropertiCountOutputTypeCountPengajuanDanaArgs
     pengajuanCheckout?: boolean | PropertiCountOutputTypeCountPengajuanCheckoutArgs
+    fasilitas_umum?: boolean | PropertiCountOutputTypeCountFasilitas_umumArgs
   }
 
   // Custom InputTypes
@@ -2137,6 +2282,13 @@ export namespace Prisma {
     where?: PengajuanCheckoutWhereInput
   }
 
+  /**
+   * PropertiCountOutputType without action
+   */
+  export type PropertiCountOutputTypeCountFasilitas_umumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FasilitasWhereInput
+  }
+
 
   /**
    * Count Type KamarCountOutputType
@@ -2145,11 +2297,13 @@ export namespace Prisma {
   export type KamarCountOutputType = {
     pemesanan: number
     pengajuanCheckout: number
+    fasilitas_ruangan: number
   }
 
   export type KamarCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pemesanan?: boolean | KamarCountOutputTypeCountPemesananArgs
     pengajuanCheckout?: boolean | KamarCountOutputTypeCountPengajuanCheckoutArgs
+    fasilitas_ruangan?: boolean | KamarCountOutputTypeCountFasilitas_ruanganArgs
   }
 
   // Custom InputTypes
@@ -2175,6 +2329,13 @@ export namespace Prisma {
    */
   export type KamarCountOutputTypeCountPengajuanCheckoutArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PengajuanCheckoutWhereInput
+  }
+
+  /**
+   * KamarCountOutputType without action
+   */
+  export type KamarCountOutputTypeCountFasilitas_ruanganArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FasilitasWhereInput
   }
 
 
@@ -4581,6 +4742,1096 @@ export namespace Prisma {
 
 
   /**
+   * Model Fasilitas
+   */
+
+  export type AggregateFasilitas = {
+    _count: FasilitasCountAggregateOutputType | null
+    _min: FasilitasMinAggregateOutputType | null
+    _max: FasilitasMaxAggregateOutputType | null
+  }
+
+  export type FasilitasMinAggregateOutputType = {
+    id: string | null
+    nama: string | null
+    jenis: $Enums.JenisFasilitas | null
+    created_at: Date | null
+  }
+
+  export type FasilitasMaxAggregateOutputType = {
+    id: string | null
+    nama: string | null
+    jenis: $Enums.JenisFasilitas | null
+    created_at: Date | null
+  }
+
+  export type FasilitasCountAggregateOutputType = {
+    id: number
+    nama: number
+    jenis: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type FasilitasMinAggregateInputType = {
+    id?: true
+    nama?: true
+    jenis?: true
+    created_at?: true
+  }
+
+  export type FasilitasMaxAggregateInputType = {
+    id?: true
+    nama?: true
+    jenis?: true
+    created_at?: true
+  }
+
+  export type FasilitasCountAggregateInputType = {
+    id?: true
+    nama?: true
+    jenis?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type FasilitasAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Fasilitas to aggregate.
+     */
+    where?: FasilitasWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fasilitas to fetch.
+     */
+    orderBy?: FasilitasOrderByWithRelationInput | FasilitasOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FasilitasWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fasilitas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fasilitas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Fasilitas
+    **/
+    _count?: true | FasilitasCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FasilitasMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FasilitasMaxAggregateInputType
+  }
+
+  export type GetFasilitasAggregateType<T extends FasilitasAggregateArgs> = {
+        [P in keyof T & keyof AggregateFasilitas]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFasilitas[P]>
+      : GetScalarType<T[P], AggregateFasilitas[P]>
+  }
+
+
+
+
+  export type FasilitasGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FasilitasWhereInput
+    orderBy?: FasilitasOrderByWithAggregationInput | FasilitasOrderByWithAggregationInput[]
+    by: FasilitasScalarFieldEnum[] | FasilitasScalarFieldEnum
+    having?: FasilitasScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FasilitasCountAggregateInputType | true
+    _min?: FasilitasMinAggregateInputType
+    _max?: FasilitasMaxAggregateInputType
+  }
+
+  export type FasilitasGroupByOutputType = {
+    id: string
+    nama: string
+    jenis: $Enums.JenisFasilitas
+    created_at: Date
+    _count: FasilitasCountAggregateOutputType | null
+    _min: FasilitasMinAggregateOutputType | null
+    _max: FasilitasMaxAggregateOutputType | null
+  }
+
+  type GetFasilitasGroupByPayload<T extends FasilitasGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FasilitasGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FasilitasGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FasilitasGroupByOutputType[P]>
+            : GetScalarType<T[P], FasilitasGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FasilitasSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nama?: boolean
+    jenis?: boolean
+    created_at?: boolean
+    kamar?: boolean | Fasilitas$kamarArgs<ExtArgs>
+    properti?: boolean | Fasilitas$propertiArgs<ExtArgs>
+    _count?: boolean | FasilitasCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fasilitas"]>
+
+  export type FasilitasSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nama?: boolean
+    jenis?: boolean
+    created_at?: boolean
+  }, ExtArgs["result"]["fasilitas"]>
+
+  export type FasilitasSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nama?: boolean
+    jenis?: boolean
+    created_at?: boolean
+  }, ExtArgs["result"]["fasilitas"]>
+
+  export type FasilitasSelectScalar = {
+    id?: boolean
+    nama?: boolean
+    jenis?: boolean
+    created_at?: boolean
+  }
+
+  export type FasilitasOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nama" | "jenis" | "created_at", ExtArgs["result"]["fasilitas"]>
+  export type FasilitasInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kamar?: boolean | Fasilitas$kamarArgs<ExtArgs>
+    properti?: boolean | Fasilitas$propertiArgs<ExtArgs>
+    _count?: boolean | FasilitasCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FasilitasIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type FasilitasIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $FasilitasPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Fasilitas"
+    objects: {
+      kamar: Prisma.$KamarPayload<ExtArgs>[]
+      properti: Prisma.$PropertiPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      nama: string
+      jenis: $Enums.JenisFasilitas
+      created_at: Date
+    }, ExtArgs["result"]["fasilitas"]>
+    composites: {}
+  }
+
+  type FasilitasGetPayload<S extends boolean | null | undefined | FasilitasDefaultArgs> = $Result.GetResult<Prisma.$FasilitasPayload, S>
+
+  type FasilitasCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FasilitasFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FasilitasCountAggregateInputType | true
+    }
+
+  export interface FasilitasDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Fasilitas'], meta: { name: 'Fasilitas' } }
+    /**
+     * Find zero or one Fasilitas that matches the filter.
+     * @param {FasilitasFindUniqueArgs} args - Arguments to find a Fasilitas
+     * @example
+     * // Get one Fasilitas
+     * const fasilitas = await prisma.fasilitas.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FasilitasFindUniqueArgs>(args: SelectSubset<T, FasilitasFindUniqueArgs<ExtArgs>>): Prisma__FasilitasClient<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Fasilitas that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FasilitasFindUniqueOrThrowArgs} args - Arguments to find a Fasilitas
+     * @example
+     * // Get one Fasilitas
+     * const fasilitas = await prisma.fasilitas.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FasilitasFindUniqueOrThrowArgs>(args: SelectSubset<T, FasilitasFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FasilitasClient<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Fasilitas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FasilitasFindFirstArgs} args - Arguments to find a Fasilitas
+     * @example
+     * // Get one Fasilitas
+     * const fasilitas = await prisma.fasilitas.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FasilitasFindFirstArgs>(args?: SelectSubset<T, FasilitasFindFirstArgs<ExtArgs>>): Prisma__FasilitasClient<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Fasilitas that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FasilitasFindFirstOrThrowArgs} args - Arguments to find a Fasilitas
+     * @example
+     * // Get one Fasilitas
+     * const fasilitas = await prisma.fasilitas.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FasilitasFindFirstOrThrowArgs>(args?: SelectSubset<T, FasilitasFindFirstOrThrowArgs<ExtArgs>>): Prisma__FasilitasClient<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Fasilitas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FasilitasFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Fasilitas
+     * const fasilitas = await prisma.fasilitas.findMany()
+     * 
+     * // Get first 10 Fasilitas
+     * const fasilitas = await prisma.fasilitas.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fasilitasWithIdOnly = await prisma.fasilitas.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FasilitasFindManyArgs>(args?: SelectSubset<T, FasilitasFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Fasilitas.
+     * @param {FasilitasCreateArgs} args - Arguments to create a Fasilitas.
+     * @example
+     * // Create one Fasilitas
+     * const Fasilitas = await prisma.fasilitas.create({
+     *   data: {
+     *     // ... data to create a Fasilitas
+     *   }
+     * })
+     * 
+     */
+    create<T extends FasilitasCreateArgs>(args: SelectSubset<T, FasilitasCreateArgs<ExtArgs>>): Prisma__FasilitasClient<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Fasilitas.
+     * @param {FasilitasCreateManyArgs} args - Arguments to create many Fasilitas.
+     * @example
+     * // Create many Fasilitas
+     * const fasilitas = await prisma.fasilitas.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FasilitasCreateManyArgs>(args?: SelectSubset<T, FasilitasCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Fasilitas and returns the data saved in the database.
+     * @param {FasilitasCreateManyAndReturnArgs} args - Arguments to create many Fasilitas.
+     * @example
+     * // Create many Fasilitas
+     * const fasilitas = await prisma.fasilitas.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Fasilitas and only return the `id`
+     * const fasilitasWithIdOnly = await prisma.fasilitas.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FasilitasCreateManyAndReturnArgs>(args?: SelectSubset<T, FasilitasCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Fasilitas.
+     * @param {FasilitasDeleteArgs} args - Arguments to delete one Fasilitas.
+     * @example
+     * // Delete one Fasilitas
+     * const Fasilitas = await prisma.fasilitas.delete({
+     *   where: {
+     *     // ... filter to delete one Fasilitas
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FasilitasDeleteArgs>(args: SelectSubset<T, FasilitasDeleteArgs<ExtArgs>>): Prisma__FasilitasClient<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Fasilitas.
+     * @param {FasilitasUpdateArgs} args - Arguments to update one Fasilitas.
+     * @example
+     * // Update one Fasilitas
+     * const fasilitas = await prisma.fasilitas.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FasilitasUpdateArgs>(args: SelectSubset<T, FasilitasUpdateArgs<ExtArgs>>): Prisma__FasilitasClient<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Fasilitas.
+     * @param {FasilitasDeleteManyArgs} args - Arguments to filter Fasilitas to delete.
+     * @example
+     * // Delete a few Fasilitas
+     * const { count } = await prisma.fasilitas.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FasilitasDeleteManyArgs>(args?: SelectSubset<T, FasilitasDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Fasilitas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FasilitasUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Fasilitas
+     * const fasilitas = await prisma.fasilitas.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FasilitasUpdateManyArgs>(args: SelectSubset<T, FasilitasUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Fasilitas and returns the data updated in the database.
+     * @param {FasilitasUpdateManyAndReturnArgs} args - Arguments to update many Fasilitas.
+     * @example
+     * // Update many Fasilitas
+     * const fasilitas = await prisma.fasilitas.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Fasilitas and only return the `id`
+     * const fasilitasWithIdOnly = await prisma.fasilitas.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FasilitasUpdateManyAndReturnArgs>(args: SelectSubset<T, FasilitasUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Fasilitas.
+     * @param {FasilitasUpsertArgs} args - Arguments to update or create a Fasilitas.
+     * @example
+     * // Update or create a Fasilitas
+     * const fasilitas = await prisma.fasilitas.upsert({
+     *   create: {
+     *     // ... data to create a Fasilitas
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Fasilitas we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FasilitasUpsertArgs>(args: SelectSubset<T, FasilitasUpsertArgs<ExtArgs>>): Prisma__FasilitasClient<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Fasilitas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FasilitasCountArgs} args - Arguments to filter Fasilitas to count.
+     * @example
+     * // Count the number of Fasilitas
+     * const count = await prisma.fasilitas.count({
+     *   where: {
+     *     // ... the filter for the Fasilitas we want to count
+     *   }
+     * })
+    **/
+    count<T extends FasilitasCountArgs>(
+      args?: Subset<T, FasilitasCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FasilitasCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Fasilitas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FasilitasAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FasilitasAggregateArgs>(args: Subset<T, FasilitasAggregateArgs>): Prisma.PrismaPromise<GetFasilitasAggregateType<T>>
+
+    /**
+     * Group by Fasilitas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FasilitasGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FasilitasGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FasilitasGroupByArgs['orderBy'] }
+        : { orderBy?: FasilitasGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FasilitasGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFasilitasGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Fasilitas model
+   */
+  readonly fields: FasilitasFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Fasilitas.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FasilitasClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    kamar<T extends Fasilitas$kamarArgs<ExtArgs> = {}>(args?: Subset<T, Fasilitas$kamarArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KamarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    properti<T extends Fasilitas$propertiArgs<ExtArgs> = {}>(args?: Subset<T, Fasilitas$propertiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Fasilitas model
+   */
+  interface FasilitasFieldRefs {
+    readonly id: FieldRef<"Fasilitas", 'String'>
+    readonly nama: FieldRef<"Fasilitas", 'String'>
+    readonly jenis: FieldRef<"Fasilitas", 'JenisFasilitas'>
+    readonly created_at: FieldRef<"Fasilitas", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Fasilitas findUnique
+   */
+  export type FasilitasFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    /**
+     * Filter, which Fasilitas to fetch.
+     */
+    where: FasilitasWhereUniqueInput
+  }
+
+  /**
+   * Fasilitas findUniqueOrThrow
+   */
+  export type FasilitasFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    /**
+     * Filter, which Fasilitas to fetch.
+     */
+    where: FasilitasWhereUniqueInput
+  }
+
+  /**
+   * Fasilitas findFirst
+   */
+  export type FasilitasFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    /**
+     * Filter, which Fasilitas to fetch.
+     */
+    where?: FasilitasWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fasilitas to fetch.
+     */
+    orderBy?: FasilitasOrderByWithRelationInput | FasilitasOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Fasilitas.
+     */
+    cursor?: FasilitasWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fasilitas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fasilitas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Fasilitas.
+     */
+    distinct?: FasilitasScalarFieldEnum | FasilitasScalarFieldEnum[]
+  }
+
+  /**
+   * Fasilitas findFirstOrThrow
+   */
+  export type FasilitasFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    /**
+     * Filter, which Fasilitas to fetch.
+     */
+    where?: FasilitasWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fasilitas to fetch.
+     */
+    orderBy?: FasilitasOrderByWithRelationInput | FasilitasOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Fasilitas.
+     */
+    cursor?: FasilitasWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fasilitas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fasilitas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Fasilitas.
+     */
+    distinct?: FasilitasScalarFieldEnum | FasilitasScalarFieldEnum[]
+  }
+
+  /**
+   * Fasilitas findMany
+   */
+  export type FasilitasFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    /**
+     * Filter, which Fasilitas to fetch.
+     */
+    where?: FasilitasWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fasilitas to fetch.
+     */
+    orderBy?: FasilitasOrderByWithRelationInput | FasilitasOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Fasilitas.
+     */
+    cursor?: FasilitasWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fasilitas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fasilitas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Fasilitas.
+     */
+    distinct?: FasilitasScalarFieldEnum | FasilitasScalarFieldEnum[]
+  }
+
+  /**
+   * Fasilitas create
+   */
+  export type FasilitasCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Fasilitas.
+     */
+    data: XOR<FasilitasCreateInput, FasilitasUncheckedCreateInput>
+  }
+
+  /**
+   * Fasilitas createMany
+   */
+  export type FasilitasCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Fasilitas.
+     */
+    data: FasilitasCreateManyInput | FasilitasCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Fasilitas createManyAndReturn
+   */
+  export type FasilitasCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * The data used to create many Fasilitas.
+     */
+    data: FasilitasCreateManyInput | FasilitasCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Fasilitas update
+   */
+  export type FasilitasUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Fasilitas.
+     */
+    data: XOR<FasilitasUpdateInput, FasilitasUncheckedUpdateInput>
+    /**
+     * Choose, which Fasilitas to update.
+     */
+    where: FasilitasWhereUniqueInput
+  }
+
+  /**
+   * Fasilitas updateMany
+   */
+  export type FasilitasUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Fasilitas.
+     */
+    data: XOR<FasilitasUpdateManyMutationInput, FasilitasUncheckedUpdateManyInput>
+    /**
+     * Filter which Fasilitas to update
+     */
+    where?: FasilitasWhereInput
+    /**
+     * Limit how many Fasilitas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Fasilitas updateManyAndReturn
+   */
+  export type FasilitasUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * The data used to update Fasilitas.
+     */
+    data: XOR<FasilitasUpdateManyMutationInput, FasilitasUncheckedUpdateManyInput>
+    /**
+     * Filter which Fasilitas to update
+     */
+    where?: FasilitasWhereInput
+    /**
+     * Limit how many Fasilitas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Fasilitas upsert
+   */
+  export type FasilitasUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Fasilitas to update in case it exists.
+     */
+    where: FasilitasWhereUniqueInput
+    /**
+     * In case the Fasilitas found by the `where` argument doesn't exist, create a new Fasilitas with this data.
+     */
+    create: XOR<FasilitasCreateInput, FasilitasUncheckedCreateInput>
+    /**
+     * In case the Fasilitas was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FasilitasUpdateInput, FasilitasUncheckedUpdateInput>
+  }
+
+  /**
+   * Fasilitas delete
+   */
+  export type FasilitasDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    /**
+     * Filter which Fasilitas to delete.
+     */
+    where: FasilitasWhereUniqueInput
+  }
+
+  /**
+   * Fasilitas deleteMany
+   */
+  export type FasilitasDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Fasilitas to delete
+     */
+    where?: FasilitasWhereInput
+    /**
+     * Limit how many Fasilitas to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Fasilitas.kamar
+   */
+  export type Fasilitas$kamarArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Kamar
+     */
+    select?: KamarSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Kamar
+     */
+    omit?: KamarOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KamarInclude<ExtArgs> | null
+    where?: KamarWhereInput
+    orderBy?: KamarOrderByWithRelationInput | KamarOrderByWithRelationInput[]
+    cursor?: KamarWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: KamarScalarFieldEnum | KamarScalarFieldEnum[]
+  }
+
+  /**
+   * Fasilitas.properti
+   */
+  export type Fasilitas$propertiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Properti
+     */
+    select?: PropertiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Properti
+     */
+    omit?: PropertiOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertiInclude<ExtArgs> | null
+    where?: PropertiWhereInput
+    orderBy?: PropertiOrderByWithRelationInput | PropertiOrderByWithRelationInput[]
+    cursor?: PropertiWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PropertiScalarFieldEnum | PropertiScalarFieldEnum[]
+  }
+
+  /**
+   * Fasilitas without action
+   */
+  export type FasilitasDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Properti
    */
 
@@ -4827,6 +6078,7 @@ export namespace Prisma {
     pemesanan?: boolean | Properti$pemesananArgs<ExtArgs>
     pengajuanDana?: boolean | Properti$pengajuanDanaArgs<ExtArgs>
     pengajuanCheckout?: boolean | Properti$pengajuanCheckoutArgs<ExtArgs>
+    fasilitas_umum?: boolean | Properti$fasilitas_umumArgs<ExtArgs>
     _count?: boolean | PropertiCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["properti"]>
 
@@ -4895,6 +6147,7 @@ export namespace Prisma {
     pemesanan?: boolean | Properti$pemesananArgs<ExtArgs>
     pengajuanDana?: boolean | Properti$pengajuanDanaArgs<ExtArgs>
     pengajuanCheckout?: boolean | Properti$pengajuanCheckoutArgs<ExtArgs>
+    fasilitas_umum?: boolean | Properti$fasilitas_umumArgs<ExtArgs>
     _count?: boolean | PropertiCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PropertiIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4914,6 +6167,7 @@ export namespace Prisma {
       pemesanan: Prisma.$PemesananPayload<ExtArgs>[]
       pengajuanDana: Prisma.$PengajuanDanaPayload<ExtArgs>[]
       pengajuanCheckout: Prisma.$PengajuanCheckoutPayload<ExtArgs>[]
+      fasilitas_umum: Prisma.$FasilitasPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5332,6 +6586,7 @@ export namespace Prisma {
     pemesanan<T extends Properti$pemesananArgs<ExtArgs> = {}>(args?: Subset<T, Properti$pemesananArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PemesananPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pengajuanDana<T extends Properti$pengajuanDanaArgs<ExtArgs> = {}>(args?: Subset<T, Properti$pengajuanDanaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanDanaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pengajuanCheckout<T extends Properti$pengajuanCheckoutArgs<ExtArgs> = {}>(args?: Subset<T, Properti$pengajuanCheckoutArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fasilitas_umum<T extends Properti$fasilitas_umumArgs<ExtArgs> = {}>(args?: Subset<T, Properti$fasilitas_umumArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5921,6 +7176,30 @@ export namespace Prisma {
   }
 
   /**
+   * Properti.fasilitas_umum
+   */
+  export type Properti$fasilitas_umumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    where?: FasilitasWhereInput
+    orderBy?: FasilitasOrderByWithRelationInput | FasilitasOrderByWithRelationInput[]
+    cursor?: FasilitasWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FasilitasScalarFieldEnum | FasilitasScalarFieldEnum[]
+  }
+
+  /**
    * Properti without action
    */
   export type PropertiDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5978,7 +7257,6 @@ export namespace Prisma {
     nomor: number
     tipe: number
     luas: number
-    fasilitas: number
     deskripsi: number
     tarif: number
     gambar: number
@@ -6019,7 +7297,6 @@ export namespace Prisma {
     nomor?: true
     tipe?: true
     luas?: true
-    fasilitas?: true
     deskripsi?: true
     tarif?: true
     gambar?: true
@@ -6107,7 +7384,6 @@ export namespace Prisma {
     nomor: string
     tipe: $Enums.TipeKamar
     luas: string | null
-    fasilitas: string[]
     deskripsi: string | null
     tarif: JsonValue | null
     gambar: string[]
@@ -6139,7 +7415,6 @@ export namespace Prisma {
     nomor?: boolean
     tipe?: boolean
     luas?: boolean
-    fasilitas?: boolean
     deskripsi?: boolean
     tarif?: boolean
     gambar?: boolean
@@ -6151,6 +7426,7 @@ export namespace Prisma {
     pemesanan?: boolean | Kamar$pemesananArgs<ExtArgs>
     penghuni?: boolean | Kamar$penghuniArgs<ExtArgs>
     pengajuanCheckout?: boolean | Kamar$pengajuanCheckoutArgs<ExtArgs>
+    fasilitas_ruangan?: boolean | Kamar$fasilitas_ruanganArgs<ExtArgs>
     _count?: boolean | KamarCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["kamar"]>
 
@@ -6159,7 +7435,6 @@ export namespace Prisma {
     nomor?: boolean
     tipe?: boolean
     luas?: boolean
-    fasilitas?: boolean
     deskripsi?: boolean
     tarif?: boolean
     gambar?: boolean
@@ -6175,7 +7450,6 @@ export namespace Prisma {
     nomor?: boolean
     tipe?: boolean
     luas?: boolean
-    fasilitas?: boolean
     deskripsi?: boolean
     tarif?: boolean
     gambar?: boolean
@@ -6191,7 +7465,6 @@ export namespace Prisma {
     nomor?: boolean
     tipe?: boolean
     luas?: boolean
-    fasilitas?: boolean
     deskripsi?: boolean
     tarif?: boolean
     gambar?: boolean
@@ -6201,12 +7474,13 @@ export namespace Prisma {
     properti_id?: boolean
   }
 
-  export type KamarOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nomor" | "tipe" | "luas" | "fasilitas" | "deskripsi" | "tarif" | "gambar" | "status" | "created_at" | "updated_at" | "properti_id", ExtArgs["result"]["kamar"]>
+  export type KamarOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nomor" | "tipe" | "luas" | "deskripsi" | "tarif" | "gambar" | "status" | "created_at" | "updated_at" | "properti_id", ExtArgs["result"]["kamar"]>
   export type KamarInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
     pemesanan?: boolean | Kamar$pemesananArgs<ExtArgs>
     penghuni?: boolean | Kamar$penghuniArgs<ExtArgs>
     pengajuanCheckout?: boolean | Kamar$pengajuanCheckoutArgs<ExtArgs>
+    fasilitas_ruangan?: boolean | Kamar$fasilitas_ruanganArgs<ExtArgs>
     _count?: boolean | KamarCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type KamarIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6223,13 +7497,13 @@ export namespace Prisma {
       pemesanan: Prisma.$PemesananPayload<ExtArgs>[]
       penghuni: Prisma.$PenghuniPayload<ExtArgs> | null
       pengajuanCheckout: Prisma.$PengajuanCheckoutPayload<ExtArgs>[]
+      fasilitas_ruangan: Prisma.$FasilitasPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       nomor: string
       tipe: $Enums.TipeKamar
       luas: string | null
-      fasilitas: string[]
       deskripsi: string | null
       tarif: Prisma.JsonValue | null
       gambar: string[]
@@ -6635,6 +7909,7 @@ export namespace Prisma {
     pemesanan<T extends Kamar$pemesananArgs<ExtArgs> = {}>(args?: Subset<T, Kamar$pemesananArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PemesananPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     penghuni<T extends Kamar$penghuniArgs<ExtArgs> = {}>(args?: Subset<T, Kamar$penghuniArgs<ExtArgs>>): Prisma__PenghuniClient<$Result.GetResult<Prisma.$PenghuniPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     pengajuanCheckout<T extends Kamar$pengajuanCheckoutArgs<ExtArgs> = {}>(args?: Subset<T, Kamar$pengajuanCheckoutArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fasilitas_ruangan<T extends Kamar$fasilitas_ruanganArgs<ExtArgs> = {}>(args?: Subset<T, Kamar$fasilitas_ruanganArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FasilitasPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6668,7 +7943,6 @@ export namespace Prisma {
     readonly nomor: FieldRef<"Kamar", 'String'>
     readonly tipe: FieldRef<"Kamar", 'TipeKamar'>
     readonly luas: FieldRef<"Kamar", 'String'>
-    readonly fasilitas: FieldRef<"Kamar", 'String[]'>
     readonly deskripsi: FieldRef<"Kamar", 'String'>
     readonly tarif: FieldRef<"Kamar", 'Json'>
     readonly gambar: FieldRef<"Kamar", 'String[]'>
@@ -7141,6 +8415,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PengajuanCheckoutScalarFieldEnum | PengajuanCheckoutScalarFieldEnum[]
+  }
+
+  /**
+   * Kamar.fasilitas_ruangan
+   */
+  export type Kamar$fasilitas_ruanganArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fasilitas
+     */
+    select?: FasilitasSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fasilitas
+     */
+    omit?: FasilitasOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FasilitasInclude<ExtArgs> | null
+    where?: FasilitasWhereInput
+    orderBy?: FasilitasOrderByWithRelationInput | FasilitasOrderByWithRelationInput[]
+    cursor?: FasilitasWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FasilitasScalarFieldEnum | FasilitasScalarFieldEnum[]
   }
 
   /**
@@ -16369,6 +17667,16 @@ export namespace Prisma {
   export type AdminSettingsScalarFieldEnum = (typeof AdminSettingsScalarFieldEnum)[keyof typeof AdminSettingsScalarFieldEnum]
 
 
+  export const FasilitasScalarFieldEnum: {
+    id: 'id',
+    nama: 'nama',
+    jenis: 'jenis',
+    created_at: 'created_at'
+  };
+
+  export type FasilitasScalarFieldEnum = (typeof FasilitasScalarFieldEnum)[keyof typeof FasilitasScalarFieldEnum]
+
+
   export const PropertiScalarFieldEnum: {
     id: 'id',
     nama: 'nama',
@@ -16395,7 +17703,6 @@ export namespace Prisma {
     nomor: 'nomor',
     tipe: 'tipe',
     luas: 'luas',
-    fasilitas: 'fasilitas',
     deskripsi: 'deskripsi',
     tarif: 'tarif',
     gambar: 'gambar',
@@ -16612,6 +17919,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'JenisFasilitas'
+   */
+  export type EnumJenisFasilitasFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JenisFasilitas'>
+    
+
+
+  /**
+   * Reference to a field of type 'JenisFasilitas[]'
+   */
+  export type ListEnumJenisFasilitasFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JenisFasilitas[]'>
     
 
 
@@ -16959,6 +18280,59 @@ export namespace Prisma {
     user_id?: StringWithAggregatesFilter<"AdminSettings"> | string
   }
 
+  export type FasilitasWhereInput = {
+    AND?: FasilitasWhereInput | FasilitasWhereInput[]
+    OR?: FasilitasWhereInput[]
+    NOT?: FasilitasWhereInput | FasilitasWhereInput[]
+    id?: StringFilter<"Fasilitas"> | string
+    nama?: StringFilter<"Fasilitas"> | string
+    jenis?: EnumJenisFasilitasFilter<"Fasilitas"> | $Enums.JenisFasilitas
+    created_at?: DateTimeFilter<"Fasilitas"> | Date | string
+    kamar?: KamarListRelationFilter
+    properti?: PropertiListRelationFilter
+  }
+
+  export type FasilitasOrderByWithRelationInput = {
+    id?: SortOrder
+    nama?: SortOrder
+    jenis?: SortOrder
+    created_at?: SortOrder
+    kamar?: KamarOrderByRelationAggregateInput
+    properti?: PropertiOrderByRelationAggregateInput
+  }
+
+  export type FasilitasWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FasilitasWhereInput | FasilitasWhereInput[]
+    OR?: FasilitasWhereInput[]
+    NOT?: FasilitasWhereInput | FasilitasWhereInput[]
+    nama?: StringFilter<"Fasilitas"> | string
+    jenis?: EnumJenisFasilitasFilter<"Fasilitas"> | $Enums.JenisFasilitas
+    created_at?: DateTimeFilter<"Fasilitas"> | Date | string
+    kamar?: KamarListRelationFilter
+    properti?: PropertiListRelationFilter
+  }, "id">
+
+  export type FasilitasOrderByWithAggregationInput = {
+    id?: SortOrder
+    nama?: SortOrder
+    jenis?: SortOrder
+    created_at?: SortOrder
+    _count?: FasilitasCountOrderByAggregateInput
+    _max?: FasilitasMaxOrderByAggregateInput
+    _min?: FasilitasMinOrderByAggregateInput
+  }
+
+  export type FasilitasScalarWhereWithAggregatesInput = {
+    AND?: FasilitasScalarWhereWithAggregatesInput | FasilitasScalarWhereWithAggregatesInput[]
+    OR?: FasilitasScalarWhereWithAggregatesInput[]
+    NOT?: FasilitasScalarWhereWithAggregatesInput | FasilitasScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Fasilitas"> | string
+    nama?: StringWithAggregatesFilter<"Fasilitas"> | string
+    jenis?: EnumJenisFasilitasWithAggregatesFilter<"Fasilitas"> | $Enums.JenisFasilitas
+    created_at?: DateTimeWithAggregatesFilter<"Fasilitas"> | Date | string
+  }
+
   export type PropertiWhereInput = {
     AND?: PropertiWhereInput | PropertiWhereInput[]
     OR?: PropertiWhereInput[]
@@ -16985,6 +18359,7 @@ export namespace Prisma {
     pemesanan?: PemesananListRelationFilter
     pengajuanDana?: PengajuanDanaListRelationFilter
     pengajuanCheckout?: PengajuanCheckoutListRelationFilter
+    fasilitas_umum?: FasilitasListRelationFilter
   }
 
   export type PropertiOrderByWithRelationInput = {
@@ -17010,6 +18385,7 @@ export namespace Prisma {
     pemesanan?: PemesananOrderByRelationAggregateInput
     pengajuanDana?: PengajuanDanaOrderByRelationAggregateInput
     pengajuanCheckout?: PengajuanCheckoutOrderByRelationAggregateInput
+    fasilitas_umum?: FasilitasOrderByRelationAggregateInput
   }
 
   export type PropertiWhereUniqueInput = Prisma.AtLeast<{
@@ -17038,6 +18414,7 @@ export namespace Prisma {
     pemesanan?: PemesananListRelationFilter
     pengajuanDana?: PengajuanDanaListRelationFilter
     pengajuanCheckout?: PengajuanCheckoutListRelationFilter
+    fasilitas_umum?: FasilitasListRelationFilter
   }, "id">
 
   export type PropertiOrderByWithAggregationInput = {
@@ -17090,7 +18467,6 @@ export namespace Prisma {
     nomor?: StringFilter<"Kamar"> | string
     tipe?: EnumTipeKamarFilter<"Kamar"> | $Enums.TipeKamar
     luas?: StringNullableFilter<"Kamar"> | string | null
-    fasilitas?: StringNullableListFilter<"Kamar">
     deskripsi?: StringNullableFilter<"Kamar"> | string | null
     tarif?: JsonNullableFilter<"Kamar">
     gambar?: StringNullableListFilter<"Kamar">
@@ -17102,6 +18478,7 @@ export namespace Prisma {
     pemesanan?: PemesananListRelationFilter
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
     pengajuanCheckout?: PengajuanCheckoutListRelationFilter
+    fasilitas_ruangan?: FasilitasListRelationFilter
   }
 
   export type KamarOrderByWithRelationInput = {
@@ -17109,7 +18486,6 @@ export namespace Prisma {
     nomor?: SortOrder
     tipe?: SortOrder
     luas?: SortOrderInput | SortOrder
-    fasilitas?: SortOrder
     deskripsi?: SortOrderInput | SortOrder
     tarif?: SortOrderInput | SortOrder
     gambar?: SortOrder
@@ -17121,6 +18497,7 @@ export namespace Prisma {
     pemesanan?: PemesananOrderByRelationAggregateInput
     penghuni?: PenghuniOrderByWithRelationInput
     pengajuanCheckout?: PengajuanCheckoutOrderByRelationAggregateInput
+    fasilitas_ruangan?: FasilitasOrderByRelationAggregateInput
   }
 
   export type KamarWhereUniqueInput = Prisma.AtLeast<{
@@ -17132,7 +18509,6 @@ export namespace Prisma {
     nomor?: StringFilter<"Kamar"> | string
     tipe?: EnumTipeKamarFilter<"Kamar"> | $Enums.TipeKamar
     luas?: StringNullableFilter<"Kamar"> | string | null
-    fasilitas?: StringNullableListFilter<"Kamar">
     deskripsi?: StringNullableFilter<"Kamar"> | string | null
     tarif?: JsonNullableFilter<"Kamar">
     gambar?: StringNullableListFilter<"Kamar">
@@ -17144,6 +18520,7 @@ export namespace Prisma {
     pemesanan?: PemesananListRelationFilter
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
     pengajuanCheckout?: PengajuanCheckoutListRelationFilter
+    fasilitas_ruangan?: FasilitasListRelationFilter
   }, "id" | "properti_id_nomor">
 
   export type KamarOrderByWithAggregationInput = {
@@ -17151,7 +18528,6 @@ export namespace Prisma {
     nomor?: SortOrder
     tipe?: SortOrder
     luas?: SortOrderInput | SortOrder
-    fasilitas?: SortOrder
     deskripsi?: SortOrderInput | SortOrder
     tarif?: SortOrderInput | SortOrder
     gambar?: SortOrder
@@ -17172,7 +18548,6 @@ export namespace Prisma {
     nomor?: StringWithAggregatesFilter<"Kamar"> | string
     tipe?: EnumTipeKamarWithAggregatesFilter<"Kamar"> | $Enums.TipeKamar
     luas?: StringNullableWithAggregatesFilter<"Kamar"> | string | null
-    fasilitas?: StringNullableListFilter<"Kamar">
     deskripsi?: StringNullableWithAggregatesFilter<"Kamar"> | string | null
     tarif?: JsonNullableWithAggregatesFilter<"Kamar">
     gambar?: StringNullableListFilter<"Kamar">
@@ -17994,6 +19369,63 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
   }
 
+  export type FasilitasCreateInput = {
+    id?: string
+    nama: string
+    jenis: $Enums.JenisFasilitas
+    created_at?: Date | string
+    kamar?: KamarCreateNestedManyWithoutFasilitas_ruanganInput
+    properti?: PropertiCreateNestedManyWithoutFasilitas_umumInput
+  }
+
+  export type FasilitasUncheckedCreateInput = {
+    id?: string
+    nama: string
+    jenis: $Enums.JenisFasilitas
+    created_at?: Date | string
+    kamar?: KamarUncheckedCreateNestedManyWithoutFasilitas_ruanganInput
+    properti?: PropertiUncheckedCreateNestedManyWithoutFasilitas_umumInput
+  }
+
+  export type FasilitasUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    kamar?: KamarUpdateManyWithoutFasilitas_ruanganNestedInput
+    properti?: PropertiUpdateManyWithoutFasilitas_umumNestedInput
+  }
+
+  export type FasilitasUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    kamar?: KamarUncheckedUpdateManyWithoutFasilitas_ruanganNestedInput
+    properti?: PropertiUncheckedUpdateManyWithoutFasilitas_umumNestedInput
+  }
+
+  export type FasilitasCreateManyInput = {
+    id?: string
+    nama: string
+    jenis: $Enums.JenisFasilitas
+    created_at?: Date | string
+  }
+
+  export type FasilitasUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FasilitasUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PropertiCreateInput = {
     id?: string
     nama: string
@@ -18016,6 +19448,7 @@ export namespace Prisma {
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateInput = {
@@ -18040,6 +19473,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUpdateInput = {
@@ -18064,6 +19498,7 @@ export namespace Prisma {
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateInput = {
@@ -18088,6 +19523,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiCreateManyInput = {
@@ -18148,7 +19584,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -18159,6 +19594,7 @@ export namespace Prisma {
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
+    fasilitas_ruangan?: FasilitasCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUncheckedCreateInput = {
@@ -18166,7 +19602,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -18177,6 +19612,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
+    fasilitas_ruangan?: FasilitasUncheckedCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUpdateInput = {
@@ -18184,7 +19620,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -18195,6 +19630,7 @@ export namespace Prisma {
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateInput = {
@@ -18202,7 +19638,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -18213,6 +19648,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUncheckedUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarCreateManyInput = {
@@ -18220,7 +19656,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -18235,7 +19670,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -18249,7 +19683,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -19152,6 +20585,54 @@ export namespace Prisma {
     user_id?: SortOrder
   }
 
+  export type EnumJenisFasilitasFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisFasilitas | EnumJenisFasilitasFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisFasilitas[] | ListEnumJenisFasilitasFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisFasilitas[] | ListEnumJenisFasilitasFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisFasilitasFilter<$PrismaModel> | $Enums.JenisFasilitas
+  }
+
+  export type KamarListRelationFilter = {
+    every?: KamarWhereInput
+    some?: KamarWhereInput
+    none?: KamarWhereInput
+  }
+
+  export type KamarOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FasilitasCountOrderByAggregateInput = {
+    id?: SortOrder
+    nama?: SortOrder
+    jenis?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type FasilitasMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nama?: SortOrder
+    jenis?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type FasilitasMinOrderByAggregateInput = {
+    id?: SortOrder
+    nama?: SortOrder
+    jenis?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type EnumJenisFasilitasWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisFasilitas | EnumJenisFasilitasFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisFasilitas[] | ListEnumJenisFasilitasFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisFasilitas[] | ListEnumJenisFasilitasFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisFasilitasWithAggregatesFilter<$PrismaModel> | $Enums.JenisFasilitas
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumJenisFasilitasFilter<$PrismaModel>
+    _max?: NestedEnumJenisFasilitasFilter<$PrismaModel>
+  }
+
   export type EnumJenisPropertiNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.JenisProperti | EnumJenisPropertiFieldRefInput<$PrismaModel> | null
     in?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
@@ -19165,12 +20646,6 @@ export namespace Prisma {
     hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
     hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
     isEmpty?: boolean
-  }
-
-  export type KamarListRelationFilter = {
-    every?: KamarWhereInput
-    some?: KamarWhereInput
-    none?: KamarWhereInput
   }
 
   export type KomplainListRelationFilter = {
@@ -19191,8 +20666,10 @@ export namespace Prisma {
     none?: PengajuanDanaWhereInput
   }
 
-  export type KamarOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type FasilitasListRelationFilter = {
+    every?: FasilitasWhereInput
+    some?: FasilitasWhereInput
+    none?: FasilitasWhereInput
   }
 
   export type KomplainOrderByRelationAggregateInput = {
@@ -19204,6 +20681,10 @@ export namespace Prisma {
   }
 
   export type PengajuanDanaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FasilitasOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19321,7 +20802,6 @@ export namespace Prisma {
     nomor?: SortOrder
     tipe?: SortOrder
     luas?: SortOrder
-    fasilitas?: SortOrder
     deskripsi?: SortOrder
     tarif?: SortOrder
     gambar?: SortOrder
@@ -20148,6 +21628,86 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSettingsInput, UserUpdateWithoutSettingsInput>, UserUncheckedUpdateWithoutSettingsInput>
   }
 
+  export type KamarCreateNestedManyWithoutFasilitas_ruanganInput = {
+    create?: XOR<KamarCreateWithoutFasilitas_ruanganInput, KamarUncheckedCreateWithoutFasilitas_ruanganInput> | KamarCreateWithoutFasilitas_ruanganInput[] | KamarUncheckedCreateWithoutFasilitas_ruanganInput[]
+    connectOrCreate?: KamarCreateOrConnectWithoutFasilitas_ruanganInput | KamarCreateOrConnectWithoutFasilitas_ruanganInput[]
+    connect?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+  }
+
+  export type PropertiCreateNestedManyWithoutFasilitas_umumInput = {
+    create?: XOR<PropertiCreateWithoutFasilitas_umumInput, PropertiUncheckedCreateWithoutFasilitas_umumInput> | PropertiCreateWithoutFasilitas_umumInput[] | PropertiUncheckedCreateWithoutFasilitas_umumInput[]
+    connectOrCreate?: PropertiCreateOrConnectWithoutFasilitas_umumInput | PropertiCreateOrConnectWithoutFasilitas_umumInput[]
+    connect?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+  }
+
+  export type KamarUncheckedCreateNestedManyWithoutFasilitas_ruanganInput = {
+    create?: XOR<KamarCreateWithoutFasilitas_ruanganInput, KamarUncheckedCreateWithoutFasilitas_ruanganInput> | KamarCreateWithoutFasilitas_ruanganInput[] | KamarUncheckedCreateWithoutFasilitas_ruanganInput[]
+    connectOrCreate?: KamarCreateOrConnectWithoutFasilitas_ruanganInput | KamarCreateOrConnectWithoutFasilitas_ruanganInput[]
+    connect?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+  }
+
+  export type PropertiUncheckedCreateNestedManyWithoutFasilitas_umumInput = {
+    create?: XOR<PropertiCreateWithoutFasilitas_umumInput, PropertiUncheckedCreateWithoutFasilitas_umumInput> | PropertiCreateWithoutFasilitas_umumInput[] | PropertiUncheckedCreateWithoutFasilitas_umumInput[]
+    connectOrCreate?: PropertiCreateOrConnectWithoutFasilitas_umumInput | PropertiCreateOrConnectWithoutFasilitas_umumInput[]
+    connect?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+  }
+
+  export type EnumJenisFasilitasFieldUpdateOperationsInput = {
+    set?: $Enums.JenisFasilitas
+  }
+
+  export type KamarUpdateManyWithoutFasilitas_ruanganNestedInput = {
+    create?: XOR<KamarCreateWithoutFasilitas_ruanganInput, KamarUncheckedCreateWithoutFasilitas_ruanganInput> | KamarCreateWithoutFasilitas_ruanganInput[] | KamarUncheckedCreateWithoutFasilitas_ruanganInput[]
+    connectOrCreate?: KamarCreateOrConnectWithoutFasilitas_ruanganInput | KamarCreateOrConnectWithoutFasilitas_ruanganInput[]
+    upsert?: KamarUpsertWithWhereUniqueWithoutFasilitas_ruanganInput | KamarUpsertWithWhereUniqueWithoutFasilitas_ruanganInput[]
+    set?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+    disconnect?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+    delete?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+    connect?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+    update?: KamarUpdateWithWhereUniqueWithoutFasilitas_ruanganInput | KamarUpdateWithWhereUniqueWithoutFasilitas_ruanganInput[]
+    updateMany?: KamarUpdateManyWithWhereWithoutFasilitas_ruanganInput | KamarUpdateManyWithWhereWithoutFasilitas_ruanganInput[]
+    deleteMany?: KamarScalarWhereInput | KamarScalarWhereInput[]
+  }
+
+  export type PropertiUpdateManyWithoutFasilitas_umumNestedInput = {
+    create?: XOR<PropertiCreateWithoutFasilitas_umumInput, PropertiUncheckedCreateWithoutFasilitas_umumInput> | PropertiCreateWithoutFasilitas_umumInput[] | PropertiUncheckedCreateWithoutFasilitas_umumInput[]
+    connectOrCreate?: PropertiCreateOrConnectWithoutFasilitas_umumInput | PropertiCreateOrConnectWithoutFasilitas_umumInput[]
+    upsert?: PropertiUpsertWithWhereUniqueWithoutFasilitas_umumInput | PropertiUpsertWithWhereUniqueWithoutFasilitas_umumInput[]
+    set?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+    disconnect?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+    delete?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+    connect?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+    update?: PropertiUpdateWithWhereUniqueWithoutFasilitas_umumInput | PropertiUpdateWithWhereUniqueWithoutFasilitas_umumInput[]
+    updateMany?: PropertiUpdateManyWithWhereWithoutFasilitas_umumInput | PropertiUpdateManyWithWhereWithoutFasilitas_umumInput[]
+    deleteMany?: PropertiScalarWhereInput | PropertiScalarWhereInput[]
+  }
+
+  export type KamarUncheckedUpdateManyWithoutFasilitas_ruanganNestedInput = {
+    create?: XOR<KamarCreateWithoutFasilitas_ruanganInput, KamarUncheckedCreateWithoutFasilitas_ruanganInput> | KamarCreateWithoutFasilitas_ruanganInput[] | KamarUncheckedCreateWithoutFasilitas_ruanganInput[]
+    connectOrCreate?: KamarCreateOrConnectWithoutFasilitas_ruanganInput | KamarCreateOrConnectWithoutFasilitas_ruanganInput[]
+    upsert?: KamarUpsertWithWhereUniqueWithoutFasilitas_ruanganInput | KamarUpsertWithWhereUniqueWithoutFasilitas_ruanganInput[]
+    set?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+    disconnect?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+    delete?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+    connect?: KamarWhereUniqueInput | KamarWhereUniqueInput[]
+    update?: KamarUpdateWithWhereUniqueWithoutFasilitas_ruanganInput | KamarUpdateWithWhereUniqueWithoutFasilitas_ruanganInput[]
+    updateMany?: KamarUpdateManyWithWhereWithoutFasilitas_ruanganInput | KamarUpdateManyWithWhereWithoutFasilitas_ruanganInput[]
+    deleteMany?: KamarScalarWhereInput | KamarScalarWhereInput[]
+  }
+
+  export type PropertiUncheckedUpdateManyWithoutFasilitas_umumNestedInput = {
+    create?: XOR<PropertiCreateWithoutFasilitas_umumInput, PropertiUncheckedCreateWithoutFasilitas_umumInput> | PropertiCreateWithoutFasilitas_umumInput[] | PropertiUncheckedCreateWithoutFasilitas_umumInput[]
+    connectOrCreate?: PropertiCreateOrConnectWithoutFasilitas_umumInput | PropertiCreateOrConnectWithoutFasilitas_umumInput[]
+    upsert?: PropertiUpsertWithWhereUniqueWithoutFasilitas_umumInput | PropertiUpsertWithWhereUniqueWithoutFasilitas_umumInput[]
+    set?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+    disconnect?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+    delete?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+    connect?: PropertiWhereUniqueInput | PropertiWhereUniqueInput[]
+    update?: PropertiUpdateWithWhereUniqueWithoutFasilitas_umumInput | PropertiUpdateWithWhereUniqueWithoutFasilitas_umumInput[]
+    updateMany?: PropertiUpdateManyWithWhereWithoutFasilitas_umumInput | PropertiUpdateManyWithWhereWithoutFasilitas_umumInput[]
+    deleteMany?: PropertiScalarWhereInput | PropertiScalarWhereInput[]
+  }
+
   export type PropertiCreategambarInput = {
     set: string[]
   }
@@ -20200,6 +21760,12 @@ export namespace Prisma {
     connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
   }
 
+  export type FasilitasCreateNestedManyWithoutPropertiInput = {
+    create?: XOR<FasilitasCreateWithoutPropertiInput, FasilitasUncheckedCreateWithoutPropertiInput> | FasilitasCreateWithoutPropertiInput[] | FasilitasUncheckedCreateWithoutPropertiInput[]
+    connectOrCreate?: FasilitasCreateOrConnectWithoutPropertiInput | FasilitasCreateOrConnectWithoutPropertiInput[]
+    connect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+  }
+
   export type KamarUncheckedCreateNestedManyWithoutPropertiInput = {
     create?: XOR<KamarCreateWithoutPropertiInput, KamarUncheckedCreateWithoutPropertiInput> | KamarCreateWithoutPropertiInput[] | KamarUncheckedCreateWithoutPropertiInput[]
     connectOrCreate?: KamarCreateOrConnectWithoutPropertiInput | KamarCreateOrConnectWithoutPropertiInput[]
@@ -20240,6 +21806,12 @@ export namespace Prisma {
     connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutPropertiInput | PengajuanCheckoutCreateOrConnectWithoutPropertiInput[]
     createMany?: PengajuanCheckoutCreateManyPropertiInputEnvelope
     connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+  }
+
+  export type FasilitasUncheckedCreateNestedManyWithoutPropertiInput = {
+    create?: XOR<FasilitasCreateWithoutPropertiInput, FasilitasUncheckedCreateWithoutPropertiInput> | FasilitasCreateWithoutPropertiInput[] | FasilitasUncheckedCreateWithoutPropertiInput[]
+    connectOrCreate?: FasilitasCreateOrConnectWithoutPropertiInput | FasilitasCreateOrConnectWithoutPropertiInput[]
+    connect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
   }
 
   export type NullableEnumJenisPropertiFieldUpdateOperationsInput = {
@@ -20343,6 +21915,19 @@ export namespace Prisma {
     deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
   }
 
+  export type FasilitasUpdateManyWithoutPropertiNestedInput = {
+    create?: XOR<FasilitasCreateWithoutPropertiInput, FasilitasUncheckedCreateWithoutPropertiInput> | FasilitasCreateWithoutPropertiInput[] | FasilitasUncheckedCreateWithoutPropertiInput[]
+    connectOrCreate?: FasilitasCreateOrConnectWithoutPropertiInput | FasilitasCreateOrConnectWithoutPropertiInput[]
+    upsert?: FasilitasUpsertWithWhereUniqueWithoutPropertiInput | FasilitasUpsertWithWhereUniqueWithoutPropertiInput[]
+    set?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    disconnect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    delete?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    connect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    update?: FasilitasUpdateWithWhereUniqueWithoutPropertiInput | FasilitasUpdateWithWhereUniqueWithoutPropertiInput[]
+    updateMany?: FasilitasUpdateManyWithWhereWithoutPropertiInput | FasilitasUpdateManyWithWhereWithoutPropertiInput[]
+    deleteMany?: FasilitasScalarWhereInput | FasilitasScalarWhereInput[]
+  }
+
   export type KamarUncheckedUpdateManyWithoutPropertiNestedInput = {
     create?: XOR<KamarCreateWithoutPropertiInput, KamarUncheckedCreateWithoutPropertiInput> | KamarCreateWithoutPropertiInput[] | KamarUncheckedCreateWithoutPropertiInput[]
     connectOrCreate?: KamarCreateOrConnectWithoutPropertiInput | KamarCreateOrConnectWithoutPropertiInput[]
@@ -20427,8 +22012,17 @@ export namespace Prisma {
     deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
   }
 
-  export type KamarCreatefasilitasInput = {
-    set: string[]
+  export type FasilitasUncheckedUpdateManyWithoutPropertiNestedInput = {
+    create?: XOR<FasilitasCreateWithoutPropertiInput, FasilitasUncheckedCreateWithoutPropertiInput> | FasilitasCreateWithoutPropertiInput[] | FasilitasUncheckedCreateWithoutPropertiInput[]
+    connectOrCreate?: FasilitasCreateOrConnectWithoutPropertiInput | FasilitasCreateOrConnectWithoutPropertiInput[]
+    upsert?: FasilitasUpsertWithWhereUniqueWithoutPropertiInput | FasilitasUpsertWithWhereUniqueWithoutPropertiInput[]
+    set?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    disconnect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    delete?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    connect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    update?: FasilitasUpdateWithWhereUniqueWithoutPropertiInput | FasilitasUpdateWithWhereUniqueWithoutPropertiInput[]
+    updateMany?: FasilitasUpdateManyWithWhereWithoutPropertiInput | FasilitasUpdateManyWithWhereWithoutPropertiInput[]
+    deleteMany?: FasilitasScalarWhereInput | FasilitasScalarWhereInput[]
   }
 
   export type KamarCreategambarInput = {
@@ -20461,6 +22055,12 @@ export namespace Prisma {
     connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
   }
 
+  export type FasilitasCreateNestedManyWithoutKamarInput = {
+    create?: XOR<FasilitasCreateWithoutKamarInput, FasilitasUncheckedCreateWithoutKamarInput> | FasilitasCreateWithoutKamarInput[] | FasilitasUncheckedCreateWithoutKamarInput[]
+    connectOrCreate?: FasilitasCreateOrConnectWithoutKamarInput | FasilitasCreateOrConnectWithoutKamarInput[]
+    connect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+  }
+
   export type PemesananUncheckedCreateNestedManyWithoutKamarInput = {
     create?: XOR<PemesananCreateWithoutKamarInput, PemesananUncheckedCreateWithoutKamarInput> | PemesananCreateWithoutKamarInput[] | PemesananUncheckedCreateWithoutKamarInput[]
     connectOrCreate?: PemesananCreateOrConnectWithoutKamarInput | PemesananCreateOrConnectWithoutKamarInput[]
@@ -20481,13 +22081,14 @@ export namespace Prisma {
     connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
   }
 
-  export type EnumTipeKamarFieldUpdateOperationsInput = {
-    set?: $Enums.TipeKamar
+  export type FasilitasUncheckedCreateNestedManyWithoutKamarInput = {
+    create?: XOR<FasilitasCreateWithoutKamarInput, FasilitasUncheckedCreateWithoutKamarInput> | FasilitasCreateWithoutKamarInput[] | FasilitasUncheckedCreateWithoutKamarInput[]
+    connectOrCreate?: FasilitasCreateOrConnectWithoutKamarInput | FasilitasCreateOrConnectWithoutKamarInput[]
+    connect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
   }
 
-  export type KamarUpdatefasilitasInput = {
-    set?: string[]
-    push?: string | string[]
+  export type EnumTipeKamarFieldUpdateOperationsInput = {
+    set?: $Enums.TipeKamar
   }
 
   export type KamarUpdategambarInput = {
@@ -20545,6 +22146,19 @@ export namespace Prisma {
     deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
   }
 
+  export type FasilitasUpdateManyWithoutKamarNestedInput = {
+    create?: XOR<FasilitasCreateWithoutKamarInput, FasilitasUncheckedCreateWithoutKamarInput> | FasilitasCreateWithoutKamarInput[] | FasilitasUncheckedCreateWithoutKamarInput[]
+    connectOrCreate?: FasilitasCreateOrConnectWithoutKamarInput | FasilitasCreateOrConnectWithoutKamarInput[]
+    upsert?: FasilitasUpsertWithWhereUniqueWithoutKamarInput | FasilitasUpsertWithWhereUniqueWithoutKamarInput[]
+    set?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    disconnect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    delete?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    connect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    update?: FasilitasUpdateWithWhereUniqueWithoutKamarInput | FasilitasUpdateWithWhereUniqueWithoutKamarInput[]
+    updateMany?: FasilitasUpdateManyWithWhereWithoutKamarInput | FasilitasUpdateManyWithWhereWithoutKamarInput[]
+    deleteMany?: FasilitasScalarWhereInput | FasilitasScalarWhereInput[]
+  }
+
   export type PemesananUncheckedUpdateManyWithoutKamarNestedInput = {
     create?: XOR<PemesananCreateWithoutKamarInput, PemesananUncheckedCreateWithoutKamarInput> | PemesananCreateWithoutKamarInput[] | PemesananUncheckedCreateWithoutKamarInput[]
     connectOrCreate?: PemesananCreateOrConnectWithoutKamarInput | PemesananCreateOrConnectWithoutKamarInput[]
@@ -20581,6 +22195,19 @@ export namespace Prisma {
     update?: PengajuanCheckoutUpdateWithWhereUniqueWithoutKamarInput | PengajuanCheckoutUpdateWithWhereUniqueWithoutKamarInput[]
     updateMany?: PengajuanCheckoutUpdateManyWithWhereWithoutKamarInput | PengajuanCheckoutUpdateManyWithWhereWithoutKamarInput[]
     deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
+  }
+
+  export type FasilitasUncheckedUpdateManyWithoutKamarNestedInput = {
+    create?: XOR<FasilitasCreateWithoutKamarInput, FasilitasUncheckedCreateWithoutKamarInput> | FasilitasCreateWithoutKamarInput[] | FasilitasUncheckedCreateWithoutKamarInput[]
+    connectOrCreate?: FasilitasCreateOrConnectWithoutKamarInput | FasilitasCreateOrConnectWithoutKamarInput[]
+    upsert?: FasilitasUpsertWithWhereUniqueWithoutKamarInput | FasilitasUpsertWithWhereUniqueWithoutKamarInput[]
+    set?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    disconnect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    delete?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    connect?: FasilitasWhereUniqueInput | FasilitasWhereUniqueInput[]
+    update?: FasilitasUpdateWithWhereUniqueWithoutKamarInput | FasilitasUpdateWithWhereUniqueWithoutKamarInput[]
+    updateMany?: FasilitasUpdateManyWithWhereWithoutKamarInput | FasilitasUpdateManyWithWhereWithoutKamarInput[]
+    deleteMany?: FasilitasScalarWhereInput | FasilitasScalarWhereInput[]
   }
 
   export type KamarCreateNestedOneWithoutPemesananInput = {
@@ -21181,6 +22808,23 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumJenisFasilitasFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisFasilitas | EnumJenisFasilitasFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisFasilitas[] | ListEnumJenisFasilitasFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisFasilitas[] | ListEnumJenisFasilitasFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisFasilitasFilter<$PrismaModel> | $Enums.JenisFasilitas
+  }
+
+  export type NestedEnumJenisFasilitasWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisFasilitas | EnumJenisFasilitasFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisFasilitas[] | ListEnumJenisFasilitasFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisFasilitas[] | ListEnumJenisFasilitasFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisFasilitasWithAggregatesFilter<$PrismaModel> | $Enums.JenisFasilitas
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumJenisFasilitasFilter<$PrismaModel>
+    _max?: NestedEnumJenisFasilitasFilter<$PrismaModel>
+  }
+
   export type NestedEnumJenisPropertiNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.JenisProperti | EnumJenisPropertiFieldRefInput<$PrismaModel> | null
     in?: $Enums.JenisProperti[] | ListEnumJenisPropertiFieldRefInput<$PrismaModel> | null
@@ -21517,6 +23161,7 @@ export namespace Prisma {
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutAdminInput = {
@@ -21540,6 +23185,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutAdminInput = {
@@ -21848,6 +23494,147 @@ export namespace Prisma {
     pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedUpdateManyWithoutAdminNestedInput
   }
 
+  export type KamarCreateWithoutFasilitas_ruanganInput = {
+    id?: string
+    nomor: string
+    tipe?: $Enums.TipeKamar
+    luas?: string | null
+    deskripsi?: string | null
+    tarif?: NullableJsonNullValueInput | InputJsonValue
+    gambar?: KamarCreategambarInput | string[]
+    status?: $Enums.StatusKamar
+    created_at?: Date | string
+    updated_at?: Date | string
+    properti: PropertiCreateNestedOneWithoutKamarInput
+    pemesanan?: PemesananCreateNestedManyWithoutKamarInput
+    penghuni?: PenghuniCreateNestedOneWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
+  }
+
+  export type KamarUncheckedCreateWithoutFasilitas_ruanganInput = {
+    id?: string
+    nomor: string
+    tipe?: $Enums.TipeKamar
+    luas?: string | null
+    deskripsi?: string | null
+    tarif?: NullableJsonNullValueInput | InputJsonValue
+    gambar?: KamarCreategambarInput | string[]
+    status?: $Enums.StatusKamar
+    created_at?: Date | string
+    updated_at?: Date | string
+    properti_id: string
+    pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
+    penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
+  }
+
+  export type KamarCreateOrConnectWithoutFasilitas_ruanganInput = {
+    where: KamarWhereUniqueInput
+    create: XOR<KamarCreateWithoutFasilitas_ruanganInput, KamarUncheckedCreateWithoutFasilitas_ruanganInput>
+  }
+
+  export type PropertiCreateWithoutFasilitas_umumInput = {
+    id?: string
+    nama: string
+    alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
+    jenis?: $Enums.JenisProperti | null
+    deskripsi?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
+    created_at?: Date | string
+    updated_at?: Date | string
+    admin: UserCreateNestedOneWithoutPropertiInput
+    kamar?: KamarCreateNestedManyWithoutPropertiInput
+    komplain?: KomplainCreateNestedManyWithoutPropertiInput
+    operator?: OperatorCreateNestedManyWithoutPropertiInput
+    pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
+    pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
+  }
+
+  export type PropertiUncheckedCreateWithoutFasilitas_umumInput = {
+    id?: string
+    nama: string
+    alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
+    jenis?: $Enums.JenisProperti | null
+    deskripsi?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
+    created_at?: Date | string
+    updated_at?: Date | string
+    admin_id: string
+    kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
+    komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
+    operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
+    pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
+  }
+
+  export type PropertiCreateOrConnectWithoutFasilitas_umumInput = {
+    where: PropertiWhereUniqueInput
+    create: XOR<PropertiCreateWithoutFasilitas_umumInput, PropertiUncheckedCreateWithoutFasilitas_umumInput>
+  }
+
+  export type KamarUpsertWithWhereUniqueWithoutFasilitas_ruanganInput = {
+    where: KamarWhereUniqueInput
+    update: XOR<KamarUpdateWithoutFasilitas_ruanganInput, KamarUncheckedUpdateWithoutFasilitas_ruanganInput>
+    create: XOR<KamarCreateWithoutFasilitas_ruanganInput, KamarUncheckedCreateWithoutFasilitas_ruanganInput>
+  }
+
+  export type KamarUpdateWithWhereUniqueWithoutFasilitas_ruanganInput = {
+    where: KamarWhereUniqueInput
+    data: XOR<KamarUpdateWithoutFasilitas_ruanganInput, KamarUncheckedUpdateWithoutFasilitas_ruanganInput>
+  }
+
+  export type KamarUpdateManyWithWhereWithoutFasilitas_ruanganInput = {
+    where: KamarScalarWhereInput
+    data: XOR<KamarUpdateManyMutationInput, KamarUncheckedUpdateManyWithoutFasilitas_ruanganInput>
+  }
+
+  export type KamarScalarWhereInput = {
+    AND?: KamarScalarWhereInput | KamarScalarWhereInput[]
+    OR?: KamarScalarWhereInput[]
+    NOT?: KamarScalarWhereInput | KamarScalarWhereInput[]
+    id?: StringFilter<"Kamar"> | string
+    nomor?: StringFilter<"Kamar"> | string
+    tipe?: EnumTipeKamarFilter<"Kamar"> | $Enums.TipeKamar
+    luas?: StringNullableFilter<"Kamar"> | string | null
+    deskripsi?: StringNullableFilter<"Kamar"> | string | null
+    tarif?: JsonNullableFilter<"Kamar">
+    gambar?: StringNullableListFilter<"Kamar">
+    status?: EnumStatusKamarFilter<"Kamar"> | $Enums.StatusKamar
+    created_at?: DateTimeFilter<"Kamar"> | Date | string
+    updated_at?: DateTimeFilter<"Kamar"> | Date | string
+    properti_id?: StringFilter<"Kamar"> | string
+  }
+
+  export type PropertiUpsertWithWhereUniqueWithoutFasilitas_umumInput = {
+    where: PropertiWhereUniqueInput
+    update: XOR<PropertiUpdateWithoutFasilitas_umumInput, PropertiUncheckedUpdateWithoutFasilitas_umumInput>
+    create: XOR<PropertiCreateWithoutFasilitas_umumInput, PropertiUncheckedCreateWithoutFasilitas_umumInput>
+  }
+
+  export type PropertiUpdateWithWhereUniqueWithoutFasilitas_umumInput = {
+    where: PropertiWhereUniqueInput
+    data: XOR<PropertiUpdateWithoutFasilitas_umumInput, PropertiUncheckedUpdateWithoutFasilitas_umumInput>
+  }
+
+  export type PropertiUpdateManyWithWhereWithoutFasilitas_umumInput = {
+    where: PropertiScalarWhereInput
+    data: XOR<PropertiUpdateManyMutationInput, PropertiUncheckedUpdateManyWithoutFasilitas_umumInput>
+  }
+
   export type UserCreateWithoutPropertiInput = {
     id?: string
     username: string
@@ -21890,7 +23677,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -21900,6 +23686,7 @@ export namespace Prisma {
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
+    fasilitas_ruangan?: FasilitasCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUncheckedCreateWithoutPropertiInput = {
@@ -21907,7 +23694,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -21917,6 +23703,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
+    fasilitas_ruangan?: FasilitasUncheckedCreateNestedManyWithoutKamarInput
   }
 
   export type KamarCreateOrConnectWithoutPropertiInput = {
@@ -22093,6 +23880,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FasilitasCreateWithoutPropertiInput = {
+    id?: string
+    nama: string
+    jenis: $Enums.JenisFasilitas
+    created_at?: Date | string
+    kamar?: KamarCreateNestedManyWithoutFasilitas_ruanganInput
+  }
+
+  export type FasilitasUncheckedCreateWithoutPropertiInput = {
+    id?: string
+    nama: string
+    jenis: $Enums.JenisFasilitas
+    created_at?: Date | string
+    kamar?: KamarUncheckedCreateNestedManyWithoutFasilitas_ruanganInput
+  }
+
+  export type FasilitasCreateOrConnectWithoutPropertiInput = {
+    where: FasilitasWhereUniqueInput
+    create: XOR<FasilitasCreateWithoutPropertiInput, FasilitasUncheckedCreateWithoutPropertiInput>
+  }
+
   export type UserUpsertWithoutPropertiInput = {
     update: XOR<UserUpdateWithoutPropertiInput, UserUncheckedUpdateWithoutPropertiInput>
     create: XOR<UserCreateWithoutPropertiInput, UserUncheckedCreateWithoutPropertiInput>
@@ -22150,24 +23958,6 @@ export namespace Prisma {
   export type KamarUpdateManyWithWhereWithoutPropertiInput = {
     where: KamarScalarWhereInput
     data: XOR<KamarUpdateManyMutationInput, KamarUncheckedUpdateManyWithoutPropertiInput>
-  }
-
-  export type KamarScalarWhereInput = {
-    AND?: KamarScalarWhereInput | KamarScalarWhereInput[]
-    OR?: KamarScalarWhereInput[]
-    NOT?: KamarScalarWhereInput | KamarScalarWhereInput[]
-    id?: StringFilter<"Kamar"> | string
-    nomor?: StringFilter<"Kamar"> | string
-    tipe?: EnumTipeKamarFilter<"Kamar"> | $Enums.TipeKamar
-    luas?: StringNullableFilter<"Kamar"> | string | null
-    fasilitas?: StringNullableListFilter<"Kamar">
-    deskripsi?: StringNullableFilter<"Kamar"> | string | null
-    tarif?: JsonNullableFilter<"Kamar">
-    gambar?: StringNullableListFilter<"Kamar">
-    status?: EnumStatusKamarFilter<"Kamar"> | $Enums.StatusKamar
-    created_at?: DateTimeFilter<"Kamar"> | Date | string
-    updated_at?: DateTimeFilter<"Kamar"> | Date | string
-    properti_id?: StringFilter<"Kamar"> | string
   }
 
   export type KomplainUpsertWithWhereUniqueWithoutPropertiInput = {
@@ -22299,6 +24089,32 @@ export namespace Prisma {
     data: XOR<PengajuanCheckoutUpdateManyMutationInput, PengajuanCheckoutUncheckedUpdateManyWithoutPropertiInput>
   }
 
+  export type FasilitasUpsertWithWhereUniqueWithoutPropertiInput = {
+    where: FasilitasWhereUniqueInput
+    update: XOR<FasilitasUpdateWithoutPropertiInput, FasilitasUncheckedUpdateWithoutPropertiInput>
+    create: XOR<FasilitasCreateWithoutPropertiInput, FasilitasUncheckedCreateWithoutPropertiInput>
+  }
+
+  export type FasilitasUpdateWithWhereUniqueWithoutPropertiInput = {
+    where: FasilitasWhereUniqueInput
+    data: XOR<FasilitasUpdateWithoutPropertiInput, FasilitasUncheckedUpdateWithoutPropertiInput>
+  }
+
+  export type FasilitasUpdateManyWithWhereWithoutPropertiInput = {
+    where: FasilitasScalarWhereInput
+    data: XOR<FasilitasUpdateManyMutationInput, FasilitasUncheckedUpdateManyWithoutPropertiInput>
+  }
+
+  export type FasilitasScalarWhereInput = {
+    AND?: FasilitasScalarWhereInput | FasilitasScalarWhereInput[]
+    OR?: FasilitasScalarWhereInput[]
+    NOT?: FasilitasScalarWhereInput | FasilitasScalarWhereInput[]
+    id?: StringFilter<"Fasilitas"> | string
+    nama?: StringFilter<"Fasilitas"> | string
+    jenis?: EnumJenisFasilitasFilter<"Fasilitas"> | $Enums.JenisFasilitas
+    created_at?: DateTimeFilter<"Fasilitas"> | Date | string
+  }
+
   export type PropertiCreateWithoutKamarInput = {
     id?: string
     nama: string
@@ -22320,6 +24136,7 @@ export namespace Prisma {
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutKamarInput = {
@@ -22343,6 +24160,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutKamarInput = {
@@ -22451,6 +24269,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FasilitasCreateWithoutKamarInput = {
+    id?: string
+    nama: string
+    jenis: $Enums.JenisFasilitas
+    created_at?: Date | string
+    properti?: PropertiCreateNestedManyWithoutFasilitas_umumInput
+  }
+
+  export type FasilitasUncheckedCreateWithoutKamarInput = {
+    id?: string
+    nama: string
+    jenis: $Enums.JenisFasilitas
+    created_at?: Date | string
+    properti?: PropertiUncheckedCreateNestedManyWithoutFasilitas_umumInput
+  }
+
+  export type FasilitasCreateOrConnectWithoutKamarInput = {
+    where: FasilitasWhereUniqueInput
+    create: XOR<FasilitasCreateWithoutKamarInput, FasilitasUncheckedCreateWithoutKamarInput>
+  }
+
   export type PropertiUpsertWithoutKamarInput = {
     update: XOR<PropertiUpdateWithoutKamarInput, PropertiUncheckedUpdateWithoutKamarInput>
     create: XOR<PropertiCreateWithoutKamarInput, PropertiUncheckedCreateWithoutKamarInput>
@@ -22483,6 +24322,7 @@ export namespace Prisma {
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutKamarInput = {
@@ -22506,6 +24346,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PemesananUpsertWithWhereUniqueWithoutKamarInput = {
@@ -22577,12 +24418,27 @@ export namespace Prisma {
     data: XOR<PengajuanCheckoutUpdateManyMutationInput, PengajuanCheckoutUncheckedUpdateManyWithoutKamarInput>
   }
 
+  export type FasilitasUpsertWithWhereUniqueWithoutKamarInput = {
+    where: FasilitasWhereUniqueInput
+    update: XOR<FasilitasUpdateWithoutKamarInput, FasilitasUncheckedUpdateWithoutKamarInput>
+    create: XOR<FasilitasCreateWithoutKamarInput, FasilitasUncheckedCreateWithoutKamarInput>
+  }
+
+  export type FasilitasUpdateWithWhereUniqueWithoutKamarInput = {
+    where: FasilitasWhereUniqueInput
+    data: XOR<FasilitasUpdateWithoutKamarInput, FasilitasUncheckedUpdateWithoutKamarInput>
+  }
+
+  export type FasilitasUpdateManyWithWhereWithoutKamarInput = {
+    where: FasilitasScalarWhereInput
+    data: XOR<FasilitasUpdateManyMutationInput, FasilitasUncheckedUpdateManyWithoutKamarInput>
+  }
+
   export type KamarCreateWithoutPemesananInput = {
     id?: string
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -22592,6 +24448,7 @@ export namespace Prisma {
     properti: PropertiCreateNestedOneWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
+    fasilitas_ruangan?: FasilitasCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUncheckedCreateWithoutPemesananInput = {
@@ -22599,7 +24456,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -22609,6 +24465,7 @@ export namespace Prisma {
     properti_id: string
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
+    fasilitas_ruangan?: FasilitasUncheckedCreateNestedManyWithoutKamarInput
   }
 
   export type KamarCreateOrConnectWithoutPemesananInput = {
@@ -22668,6 +24525,7 @@ export namespace Prisma {
     operator?: OperatorCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutPemesananInput = {
@@ -22691,6 +24549,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutPemesananInput = {
@@ -22741,7 +24600,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -22751,6 +24609,7 @@ export namespace Prisma {
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateWithoutPemesananInput = {
@@ -22758,7 +24617,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -22768,6 +24626,7 @@ export namespace Prisma {
     properti_id?: StringFieldUpdateOperationsInput | string
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUncheckedUpdateManyWithoutKamarNestedInput
   }
 
   export type PenghuniUpsertWithoutPemesananInput = {
@@ -22839,6 +24698,7 @@ export namespace Prisma {
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutPemesananInput = {
@@ -22862,6 +24722,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PembayaranUpsertWithoutPemesananInput = {
@@ -23011,7 +24872,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -23021,6 +24881,7 @@ export namespace Prisma {
     properti: PropertiCreateNestedOneWithoutKamarInput
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
+    fasilitas_ruangan?: FasilitasCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUncheckedCreateWithoutPenghuniInput = {
@@ -23028,7 +24889,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -23038,6 +24898,7 @@ export namespace Prisma {
     properti_id: string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
+    fasilitas_ruangan?: FasilitasUncheckedCreateNestedManyWithoutKamarInput
   }
 
   export type KamarCreateOrConnectWithoutPenghuniInput = {
@@ -23208,7 +25069,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -23218,6 +25078,7 @@ export namespace Prisma {
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateWithoutPenghuniInput = {
@@ -23225,7 +25086,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -23235,6 +25095,7 @@ export namespace Prisma {
     properti_id?: StringFieldUpdateOperationsInput | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUncheckedUpdateManyWithoutKamarNestedInput
   }
 
   export type PemesananUpsertWithWhereUniqueWithoutPenghuniInput = {
@@ -23343,6 +25204,7 @@ export namespace Prisma {
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutOperatorInput = {
@@ -23366,6 +25228,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutOperatorInput = {
@@ -23482,6 +25345,7 @@ export namespace Prisma {
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutOperatorInput = {
@@ -23505,6 +25369,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PengajuanDanaUpsertWithWhereUniqueWithoutOperatorInput = {
@@ -23575,6 +25440,7 @@ export namespace Prisma {
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutKomplainInput = {
@@ -23598,6 +25464,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutKomplainInput = {
@@ -23674,6 +25541,7 @@ export namespace Prisma {
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutKomplainInput = {
@@ -23697,6 +25565,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type OperatorCreateWithoutPengajuanDanaInput = {
@@ -23741,6 +25610,7 @@ export namespace Prisma {
     operator?: OperatorCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutPengajuanDanaInput = {
@@ -23764,6 +25634,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutPengajuanDanaInput = {
@@ -23830,6 +25701,7 @@ export namespace Prisma {
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutPengajuanDanaInput = {
@@ -23853,6 +25725,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PenghuniCreateWithoutPengajuanCheckoutInput = {
@@ -23891,7 +25764,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -23901,6 +25773,7 @@ export namespace Prisma {
     properti: PropertiCreateNestedOneWithoutKamarInput
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
+    fasilitas_ruangan?: FasilitasCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUncheckedCreateWithoutPengajuanCheckoutInput = {
@@ -23908,7 +25781,6 @@ export namespace Prisma {
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -23918,6 +25790,7 @@ export namespace Prisma {
     properti_id: string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
+    fasilitas_ruangan?: FasilitasUncheckedCreateNestedManyWithoutKamarInput
   }
 
   export type KamarCreateOrConnectWithoutPengajuanCheckoutInput = {
@@ -23946,6 +25819,7 @@ export namespace Prisma {
     operator?: OperatorCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutPengajuanCheckoutInput = {
@@ -23969,6 +25843,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
+    fasilitas_umum?: FasilitasUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutPengajuanCheckoutInput = {
@@ -24066,7 +25941,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -24076,6 +25950,7 @@ export namespace Prisma {
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateWithoutPengajuanCheckoutInput = {
@@ -24083,7 +25958,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -24093,6 +25967,7 @@ export namespace Prisma {
     properti_id?: StringFieldUpdateOperationsInput | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUncheckedUpdateManyWithoutKamarNestedInput
   }
 
   export type PropertiUpsertWithoutPengajuanCheckoutInput = {
@@ -24127,6 +26002,7 @@ export namespace Prisma {
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutPengajuanCheckoutInput = {
@@ -24150,6 +26026,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type UserUpsertWithoutPengajuanCheckoutAdminInput = {
@@ -24274,6 +26151,7 @@ export namespace Prisma {
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutAdminInput = {
@@ -24297,6 +26175,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
+    fasilitas_umum?: FasilitasUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateManyWithoutAdminInput = {
@@ -24349,12 +26228,125 @@ export namespace Prisma {
     properti_id?: StringFieldUpdateOperationsInput | string
   }
 
+  export type KamarUpdateWithoutFasilitas_ruanganInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nomor?: StringFieldUpdateOperationsInput | string
+    tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
+    luas?: NullableStringFieldUpdateOperationsInput | string | null
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    tarif?: NullableJsonNullValueInput | InputJsonValue
+    gambar?: KamarUpdategambarInput | string[]
+    status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
+    pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
+    penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
+  }
+
+  export type KamarUncheckedUpdateWithoutFasilitas_ruanganInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nomor?: StringFieldUpdateOperationsInput | string
+    tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
+    luas?: NullableStringFieldUpdateOperationsInput | string | null
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    tarif?: NullableJsonNullValueInput | InputJsonValue
+    gambar?: KamarUpdategambarInput | string[]
+    status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+    pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
+    penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
+  }
+
+  export type KamarUncheckedUpdateManyWithoutFasilitas_ruanganInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nomor?: StringFieldUpdateOperationsInput | string
+    tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
+    luas?: NullableStringFieldUpdateOperationsInput | string | null
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    tarif?: NullableJsonNullValueInput | InputJsonValue
+    gambar?: KamarUpdategambarInput | string[]
+    status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PropertiUpdateWithoutFasilitas_umumInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
+    kamar?: KamarUpdateManyWithoutPropertiNestedInput
+    komplain?: KomplainUpdateManyWithoutPropertiNestedInput
+    operator?: OperatorUpdateManyWithoutPropertiNestedInput
+    pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
+    pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
+  }
+
+  export type PropertiUncheckedUpdateWithoutFasilitas_umumInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_id?: StringFieldUpdateOperationsInput | string
+    kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
+    komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
+    operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
+    pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
+  }
+
+  export type PropertiUncheckedUpdateManyWithoutFasilitas_umumInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_id?: StringFieldUpdateOperationsInput | string
+  }
+
   export type KamarCreateManyPropertiInput = {
     id?: string
     nomor: string
     tipe?: $Enums.TipeKamar
     luas?: string | null
-    fasilitas?: KamarCreatefasilitasInput | string[]
     deskripsi?: string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarCreategambarInput | string[]
@@ -24423,7 +26415,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -24433,6 +26424,7 @@ export namespace Prisma {
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateWithoutPropertiInput = {
@@ -24440,7 +26432,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -24450,6 +26441,7 @@ export namespace Prisma {
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
+    fasilitas_ruangan?: FasilitasUncheckedUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateManyWithoutPropertiInput = {
@@ -24457,7 +26449,6 @@ export namespace Prisma {
     nomor?: StringFieldUpdateOperationsInput | string
     tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
     luas?: NullableStringFieldUpdateOperationsInput | string | null
-    fasilitas?: KamarUpdatefasilitasInput | string[]
     deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
     tarif?: NullableJsonNullValueInput | InputJsonValue
     gambar?: KamarUpdategambarInput | string[]
@@ -24635,6 +26626,29 @@ export namespace Prisma {
     admin_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type FasilitasUpdateWithoutPropertiInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    kamar?: KamarUpdateManyWithoutFasilitas_ruanganNestedInput
+  }
+
+  export type FasilitasUncheckedUpdateWithoutPropertiInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    kamar?: KamarUncheckedUpdateManyWithoutFasilitas_ruanganNestedInput
+  }
+
+  export type FasilitasUncheckedUpdateManyWithoutPropertiInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PemesananCreateManyKamarInput = {
     id?: string
     durasi_sewa: number
@@ -24731,6 +26745,29 @@ export namespace Prisma {
     penghuni_id?: StringFieldUpdateOperationsInput | string
     properti_id?: StringFieldUpdateOperationsInput | string
     admin_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FasilitasUpdateWithoutKamarInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti?: PropertiUpdateManyWithoutFasilitas_umumNestedInput
+  }
+
+  export type FasilitasUncheckedUpdateWithoutKamarInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti?: PropertiUncheckedUpdateManyWithoutFasilitas_umumNestedInput
+  }
+
+  export type FasilitasUncheckedUpdateManyWithoutKamarInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    jenis?: EnumJenisFasilitasFieldUpdateOperationsInput | $Enums.JenisFasilitas
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PemesananCreateManyPenghuniInput = {

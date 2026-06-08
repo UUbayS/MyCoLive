@@ -197,18 +197,18 @@ export default function PengelolaDetailKamarPage() {
       {/* Fasilitas */}
       <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Fasilitas</h2>
-          <span className="text-sm text-gray-500">{(kamar.fasilitas?.length || 0)} fasilitas</span>
+          <h2 className="text-lg font-semibold">Fasilitas Ruangan</h2>
+          <span className="text-sm text-gray-500">{(kamar.fasilitas_ruangan?.length || 0)} fasilitas</span>
         </div>
-        {kamar.fasilitas && kamar.fasilitas.length > 0 ? (
+        {kamar.fasilitas_ruangan && kamar.fasilitas_ruangan.length > 0 ? (
           <div className="flex flex-wrap gap-2">
-            {kamar.fasilitas.map((fasilitas, idx) => (
+            {kamar.fasilitas_ruangan.map((f) => (
               <span
-                key={idx}
+                key={f.id}
                 className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm flex items-center gap-1"
               >
                 <Wifi className="w-3 h-3" />
-                {fasilitas}
+                {f.nama}
               </span>
             ))}
           </div>
