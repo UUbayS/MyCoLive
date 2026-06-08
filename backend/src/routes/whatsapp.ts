@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { authMiddleware, requireRole } from "../middleware/auth";
 import { sendWhatsAppBroadcast, isValidNomorWA } from "../services/whatsapp";
+import { baileysProvider } from "../services/whatsapp/providers/baileys";
 
 const app = new Hono();
 
@@ -50,6 +51,16 @@ app.post("/broadcast", requireRole("PEMILIK"), async (c) => {
       500
     );
   }
+});
+
+app.get("/status", requireRole("PEMILIK"), async (c) => {
+  return c.json({
+    status: "success",
+    data: {
+      connected: baileysProvider.isConnected(),
+      qr: baileysProvider.getQR(),
+    },
+  });
 });
 
 export default app;

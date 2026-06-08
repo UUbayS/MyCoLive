@@ -22,8 +22,10 @@ export interface BroadcastResult {
 
 function getProvider(): WhatsAppProvider {
   const provider = process.env.WHATSAPP_PROVIDER || "whapi";
-  
+
   switch (provider) {
+    case "baileys":
+      return require("./providers/baileys").baileysProvider;
     case "whapi":
       return new (require("./providers/whapi").WhapiProvider)();
     default:
@@ -80,7 +82,7 @@ export function formatNomorWA(nomor: string): string {
     cleaned = "62" + cleaned;
   }
   
-  return cleaned + "@c.us";
+  return cleaned + "@s.whatsapp.net";
 }
 
 export function isValidNomorWA(nomor: string): boolean {

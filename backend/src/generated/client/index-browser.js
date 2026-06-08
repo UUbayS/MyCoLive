@@ -258,6 +258,15 @@ exports.Prisma.NotifikasiScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.PengumumanScalarFieldEnum = {
+  id: 'id',
+  judul: 'judul',
+  isi: 'isi',
+  properti_id: 'properti_id',
+  pemilik_id: 'pemilik_id',
+  created_at: 'created_at'
+};
+
 exports.Prisma.PengajuanCheckoutScalarFieldEnum = {
   id: 'id',
   keterangan: 'keterangan',
@@ -376,6 +385,7 @@ exports.Prisma.ModelName = {
   Komplain: 'Komplain',
   PengajuanDana: 'PengajuanDana',
   Notifikasi: 'Notifikasi',
+  Pengumuman: 'Pengumuman',
   PengajuanCheckout: 'PengajuanCheckout'
 };
 

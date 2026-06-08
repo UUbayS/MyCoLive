@@ -2,4 +2,7 @@
 node_modules/
 NEXT_SESSION_PLAN.md
 /src/generated/prisma
+whatsapp-session/
+qr.png
+.env
 
