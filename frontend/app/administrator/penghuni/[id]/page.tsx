@@ -26,6 +26,7 @@ const statusBadge: Record<string, { label: string; color: string }> = {
   "Sewa Berakhir": { label: "Sewa Berakhir", color: "bg-red-100 text-red-700" },
   AKTIF: { label: "Aktif", color: "bg-green-100 text-green-700" },
   BERAKHIR: { label: "Berakhir", color: "bg-red-100 text-red-700" },
+  PENGAJUAN_CHECKOUT: { label: "Pengajuan Checkout", color: "bg-yellow-100 text-yellow-700" },
 };
 
 const statusPemesananBadge: Record<string, { label: string; color: string }> = {
@@ -132,6 +133,7 @@ export default function DetailPenghuniPage() {
   const badge = statusBadge[penghuni.status_display] || statusBadge[penghuni.status_sewa] || { label: penghuni.status_display, color: "bg-gray-100 text-gray-600" };
   const waNumber = formatWAPhone(penghuni.user.no_telepon);
   const canCheckout = penghuni.status_sewa === "AKTIF" && penghuni.kamar;
+  const isPengajuanCheckout = penghuni.status_sewa === "PENGAJUAN_CHECKOUT";
 
   // Cast pemesanan jika ada (backend include pemesanan di detail)
   const pemesananList = (penghuni as any).pemesanan || [];
@@ -153,6 +155,35 @@ export default function DetailPenghuniPage() {
             </div>
           </div>
         </div>
+
+        {/* Pengajuan Checkout Alert */}
+        {isPengajuanCheckout && (
+          <div className="bg-yellow-50 rounded-xl p-4 md:p-5 mb-4 border border-yellow-200">
+            <h3 className="text-sm font-semibold text-yellow-800 mb-2 flex items-center gap-2">
+              <LogOut className="w-4 h-4" />
+              Pengajuan Checkout
+            </h3>
+            <p className="text-sm text-yellow-700 mb-3">
+              Penghuni ini mengajukan checkout dan menunggu persetujuan Anda.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowCheckoutConfirm(true)}
+                disabled={checkoutLoading}
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+              >
+                Terima
+              </button>
+              <button
+                onClick={() => setShowCheckoutConfirm(true)}
+                disabled={checkoutLoading}
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50"
+              >
+                Tolak
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Profile Card */}
         <div className="bg-white rounded-xl shadow-sm p-4 md:p-5 mb-4">
@@ -231,6 +262,12 @@ export default function DetailPenghuniPage() {
                 Check Out Penghuni
               </button>
             )}
+            {isPengajuanCheckout && (
+              <div className="flex items-center justify-center gap-2 flex-1 py-2.5 bg-yellow-50 border-2 border-yellow-400 text-yellow-700 text-sm font-medium rounded-xl">
+                <LogOut className="w-4 h-4" />
+                Menunggu Checkout
+              </div>
+            )}
           </div>
         </div>
 
@@ -259,7 +296,7 @@ export default function DetailPenghuniPage() {
               </div>
             </div>
           </div>
-        )}
+        )}   
 
         {/* Riwayat Pemesanan */}
         <div className="bg-white rounded-xl shadow-sm p-4 md:p-5">

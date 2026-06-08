@@ -68,6 +68,11 @@ export type PengajuanDana = $Result.DefaultSelection<Prisma.$PengajuanDanaPayloa
  * 
  */
 export type Notifikasi = $Result.DefaultSelection<Prisma.$NotifikasiPayload>
+/**
+ * Model PengajuanCheckout
+ * 
+ */
+export type PengajuanCheckout = $Result.DefaultSelection<Prisma.$PengajuanCheckoutPayload>
 
 /**
  * Enums
@@ -159,10 +164,20 @@ export type StatusDana = (typeof StatusDana)[keyof typeof StatusDana]
 
 export const StatusSewa: {
   AKTIF: 'AKTIF',
+  PENGAJUAN_CHECKOUT: 'PENGAJUAN_CHECKOUT',
   BERAKHIR: 'BERAKHIR'
 };
 
 export type StatusSewa = (typeof StatusSewa)[keyof typeof StatusSewa]
+
+
+export const StatusPengajuanCheckout: {
+  MENUNGGU: 'MENUNGGU',
+  DITERIMA: 'DITERIMA',
+  DITOLAK: 'DITOLAK'
+};
+
+export type StatusPengajuanCheckout = (typeof StatusPengajuanCheckout)[keyof typeof StatusPengajuanCheckout]
 
 }
 
@@ -205,6 +220,10 @@ export const StatusDana: typeof $Enums.StatusDana
 export type StatusSewa = $Enums.StatusSewa
 
 export const StatusSewa: typeof $Enums.StatusSewa
+
+export type StatusPengajuanCheckout = $Enums.StatusPengajuanCheckout
+
+export const StatusPengajuanCheckout: typeof $Enums.StatusPengajuanCheckout
 
 /**
  * ##  Prisma Client ʲˢ
@@ -436,6 +455,16 @@ export class PrismaClient<
     * ```
     */
   get notifikasi(): Prisma.NotifikasiDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pengajuanCheckout`: Exposes CRUD operations for the **PengajuanCheckout** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PengajuanCheckouts
+    * const pengajuanCheckouts = await prisma.pengajuanCheckout.findMany()
+    * ```
+    */
+  get pengajuanCheckout(): Prisma.PengajuanCheckoutDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -880,7 +909,8 @@ export namespace Prisma {
     Operator: 'Operator',
     Komplain: 'Komplain',
     PengajuanDana: 'PengajuanDana',
-    Notifikasi: 'Notifikasi'
+    Notifikasi: 'Notifikasi',
+    PengajuanCheckout: 'PengajuanCheckout'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -896,7 +926,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "adminSettings" | "properti" | "kamar" | "pemesanan" | "pembayaran" | "penghuni" | "operator" | "komplain" | "pengajuanDana" | "notifikasi"
+      modelProps: "user" | "adminSettings" | "properti" | "kamar" | "pemesanan" | "pembayaran" | "penghuni" | "operator" | "komplain" | "pengajuanDana" | "notifikasi" | "pengajuanCheckout"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1714,6 +1744,80 @@ export namespace Prisma {
           }
         }
       }
+      PengajuanCheckout: {
+        payload: Prisma.$PengajuanCheckoutPayload<ExtArgs>
+        fields: Prisma.PengajuanCheckoutFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PengajuanCheckoutFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PengajuanCheckoutFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload>
+          }
+          findFirst: {
+            args: Prisma.PengajuanCheckoutFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PengajuanCheckoutFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload>
+          }
+          findMany: {
+            args: Prisma.PengajuanCheckoutFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload>[]
+          }
+          create: {
+            args: Prisma.PengajuanCheckoutCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload>
+          }
+          createMany: {
+            args: Prisma.PengajuanCheckoutCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PengajuanCheckoutCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload>[]
+          }
+          delete: {
+            args: Prisma.PengajuanCheckoutDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload>
+          }
+          update: {
+            args: Prisma.PengajuanCheckoutUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload>
+          }
+          deleteMany: {
+            args: Prisma.PengajuanCheckoutDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PengajuanCheckoutUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PengajuanCheckoutUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload>[]
+          }
+          upsert: {
+            args: Prisma.PengajuanCheckoutUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PengajuanCheckoutPayload>
+          }
+          aggregate: {
+            args: Prisma.PengajuanCheckoutAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePengajuanCheckout>
+          }
+          groupBy: {
+            args: Prisma.PengajuanCheckoutGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PengajuanCheckoutGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PengajuanCheckoutCountArgs<ExtArgs>
+            result: $Utils.Optional<PengajuanCheckoutCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1833,6 +1937,7 @@ export namespace Prisma {
     komplain?: KomplainOmit
     pengajuanDana?: PengajuanDanaOmit
     notifikasi?: NotifikasiOmit
+    pengajuanCheckout?: PengajuanCheckoutOmit
   }
 
   /* Types for Logging */
@@ -1915,11 +2020,13 @@ export namespace Prisma {
   export type UserCountOutputType = {
     operator: number
     properti: number
+    pengajuanCheckoutAdmin: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     operator?: boolean | UserCountOutputTypeCountOperatorArgs
     properti?: boolean | UserCountOutputTypeCountPropertiArgs
+    pengajuanCheckoutAdmin?: boolean | UserCountOutputTypeCountPengajuanCheckoutAdminArgs
   }
 
   // Custom InputTypes
@@ -1947,6 +2054,13 @@ export namespace Prisma {
     where?: PropertiWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPengajuanCheckoutAdminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PengajuanCheckoutWhereInput
+  }
+
 
   /**
    * Count Type PropertiCountOutputType
@@ -1958,6 +2072,7 @@ export namespace Prisma {
     operator: number
     pemesanan: number
     pengajuanDana: number
+    pengajuanCheckout: number
   }
 
   export type PropertiCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1966,6 +2081,7 @@ export namespace Prisma {
     operator?: boolean | PropertiCountOutputTypeCountOperatorArgs
     pemesanan?: boolean | PropertiCountOutputTypeCountPemesananArgs
     pengajuanDana?: boolean | PropertiCountOutputTypeCountPengajuanDanaArgs
+    pengajuanCheckout?: boolean | PropertiCountOutputTypeCountPengajuanCheckoutArgs
   }
 
   // Custom InputTypes
@@ -2014,6 +2130,13 @@ export namespace Prisma {
     where?: PengajuanDanaWhereInput
   }
 
+  /**
+   * PropertiCountOutputType without action
+   */
+  export type PropertiCountOutputTypeCountPengajuanCheckoutArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PengajuanCheckoutWhereInput
+  }
+
 
   /**
    * Count Type KamarCountOutputType
@@ -2021,10 +2144,12 @@ export namespace Prisma {
 
   export type KamarCountOutputType = {
     pemesanan: number
+    pengajuanCheckout: number
   }
 
   export type KamarCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pemesanan?: boolean | KamarCountOutputTypeCountPemesananArgs
+    pengajuanCheckout?: boolean | KamarCountOutputTypeCountPengajuanCheckoutArgs
   }
 
   // Custom InputTypes
@@ -2045,6 +2170,13 @@ export namespace Prisma {
     where?: PemesananWhereInput
   }
 
+  /**
+   * KamarCountOutputType without action
+   */
+  export type KamarCountOutputTypeCountPengajuanCheckoutArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PengajuanCheckoutWhereInput
+  }
+
 
   /**
    * Count Type PenghuniCountOutputType
@@ -2053,11 +2185,13 @@ export namespace Prisma {
   export type PenghuniCountOutputType = {
     pemesanan: number
     komplain: number
+    pengajuanCheckout: number
   }
 
   export type PenghuniCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pemesanan?: boolean | PenghuniCountOutputTypeCountPemesananArgs
     komplain?: boolean | PenghuniCountOutputTypeCountKomplainArgs
+    pengajuanCheckout?: boolean | PenghuniCountOutputTypeCountPengajuanCheckoutArgs
   }
 
   // Custom InputTypes
@@ -2083,6 +2217,13 @@ export namespace Prisma {
    */
   export type PenghuniCountOutputTypeCountKomplainArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: KomplainWhereInput
+  }
+
+  /**
+   * PenghuniCountOutputType without action
+   */
+  export type PenghuniCountOutputTypeCountPengajuanCheckoutArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PengajuanCheckoutWhereInput
   }
 
 
@@ -2321,6 +2462,7 @@ export namespace Prisma {
     operator?: boolean | User$operatorArgs<ExtArgs>
     properti?: boolean | User$propertiArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
+    pengajuanCheckoutAdmin?: boolean | User$pengajuanCheckoutAdminArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2366,6 +2508,7 @@ export namespace Prisma {
     operator?: boolean | User$operatorArgs<ExtArgs>
     properti?: boolean | User$propertiArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
+    pengajuanCheckoutAdmin?: boolean | User$pengajuanCheckoutAdminArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2378,6 +2521,7 @@ export namespace Prisma {
       operator: Prisma.$OperatorPayload<ExtArgs>[]
       properti: Prisma.$PropertiPayload<ExtArgs>[]
       settings: Prisma.$AdminSettingsPayload<ExtArgs> | null
+      pengajuanCheckoutAdmin: Prisma.$PengajuanCheckoutPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2787,6 +2931,7 @@ export namespace Prisma {
     operator<T extends User$operatorArgs<ExtArgs> = {}>(args?: Subset<T, User$operatorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     properti<T extends User$propertiArgs<ExtArgs> = {}>(args?: Subset<T, User$propertiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma__AdminSettingsClient<$Result.GetResult<Prisma.$AdminSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    pengajuanCheckoutAdmin<T extends User$pengajuanCheckoutAdminArgs<ExtArgs> = {}>(args?: Subset<T, User$pengajuanCheckoutAdminArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3301,6 +3446,30 @@ export namespace Prisma {
      */
     include?: AdminSettingsInclude<ExtArgs> | null
     where?: AdminSettingsWhereInput
+  }
+
+  /**
+   * User.pengajuanCheckoutAdmin
+   */
+  export type User$pengajuanCheckoutAdminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    where?: PengajuanCheckoutWhereInput
+    orderBy?: PengajuanCheckoutOrderByWithRelationInput | PengajuanCheckoutOrderByWithRelationInput[]
+    cursor?: PengajuanCheckoutWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PengajuanCheckoutScalarFieldEnum | PengajuanCheckoutScalarFieldEnum[]
   }
 
   /**
@@ -4657,6 +4826,7 @@ export namespace Prisma {
     operator?: boolean | Properti$operatorArgs<ExtArgs>
     pemesanan?: boolean | Properti$pemesananArgs<ExtArgs>
     pengajuanDana?: boolean | Properti$pengajuanDanaArgs<ExtArgs>
+    pengajuanCheckout?: boolean | Properti$pengajuanCheckoutArgs<ExtArgs>
     _count?: boolean | PropertiCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["properti"]>
 
@@ -4724,6 +4894,7 @@ export namespace Prisma {
     operator?: boolean | Properti$operatorArgs<ExtArgs>
     pemesanan?: boolean | Properti$pemesananArgs<ExtArgs>
     pengajuanDana?: boolean | Properti$pengajuanDanaArgs<ExtArgs>
+    pengajuanCheckout?: boolean | Properti$pengajuanCheckoutArgs<ExtArgs>
     _count?: boolean | PropertiCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PropertiIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4742,6 +4913,7 @@ export namespace Prisma {
       operator: Prisma.$OperatorPayload<ExtArgs>[]
       pemesanan: Prisma.$PemesananPayload<ExtArgs>[]
       pengajuanDana: Prisma.$PengajuanDanaPayload<ExtArgs>[]
+      pengajuanCheckout: Prisma.$PengajuanCheckoutPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5159,6 +5331,7 @@ export namespace Prisma {
     operator<T extends Properti$operatorArgs<ExtArgs> = {}>(args?: Subset<T, Properti$operatorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pemesanan<T extends Properti$pemesananArgs<ExtArgs> = {}>(args?: Subset<T, Properti$pemesananArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PemesananPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pengajuanDana<T extends Properti$pengajuanDanaArgs<ExtArgs> = {}>(args?: Subset<T, Properti$pengajuanDanaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanDanaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pengajuanCheckout<T extends Properti$pengajuanCheckoutArgs<ExtArgs> = {}>(args?: Subset<T, Properti$pengajuanCheckoutArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5724,6 +5897,30 @@ export namespace Prisma {
   }
 
   /**
+   * Properti.pengajuanCheckout
+   */
+  export type Properti$pengajuanCheckoutArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    where?: PengajuanCheckoutWhereInput
+    orderBy?: PengajuanCheckoutOrderByWithRelationInput | PengajuanCheckoutOrderByWithRelationInput[]
+    cursor?: PengajuanCheckoutWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PengajuanCheckoutScalarFieldEnum | PengajuanCheckoutScalarFieldEnum[]
+  }
+
+  /**
    * Properti without action
    */
   export type PropertiDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5953,6 +6150,7 @@ export namespace Prisma {
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
     pemesanan?: boolean | Kamar$pemesananArgs<ExtArgs>
     penghuni?: boolean | Kamar$penghuniArgs<ExtArgs>
+    pengajuanCheckout?: boolean | Kamar$pengajuanCheckoutArgs<ExtArgs>
     _count?: boolean | KamarCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["kamar"]>
 
@@ -6008,6 +6206,7 @@ export namespace Prisma {
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
     pemesanan?: boolean | Kamar$pemesananArgs<ExtArgs>
     penghuni?: boolean | Kamar$penghuniArgs<ExtArgs>
+    pengajuanCheckout?: boolean | Kamar$pengajuanCheckoutArgs<ExtArgs>
     _count?: boolean | KamarCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type KamarIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6023,6 +6222,7 @@ export namespace Prisma {
       properti: Prisma.$PropertiPayload<ExtArgs>
       pemesanan: Prisma.$PemesananPayload<ExtArgs>[]
       penghuni: Prisma.$PenghuniPayload<ExtArgs> | null
+      pengajuanCheckout: Prisma.$PengajuanCheckoutPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6434,6 +6634,7 @@ export namespace Prisma {
     properti<T extends PropertiDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PropertiDefaultArgs<ExtArgs>>): Prisma__PropertiClient<$Result.GetResult<Prisma.$PropertiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     pemesanan<T extends Kamar$pemesananArgs<ExtArgs> = {}>(args?: Subset<T, Kamar$pemesananArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PemesananPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     penghuni<T extends Kamar$penghuniArgs<ExtArgs> = {}>(args?: Subset<T, Kamar$penghuniArgs<ExtArgs>>): Prisma__PenghuniClient<$Result.GetResult<Prisma.$PenghuniPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    pengajuanCheckout<T extends Kamar$pengajuanCheckoutArgs<ExtArgs> = {}>(args?: Subset<T, Kamar$pengajuanCheckoutArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6916,6 +7117,30 @@ export namespace Prisma {
      */
     include?: PenghuniInclude<ExtArgs> | null
     where?: PenghuniWhereInput
+  }
+
+  /**
+   * Kamar.pengajuanCheckout
+   */
+  export type Kamar$pengajuanCheckoutArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    where?: PengajuanCheckoutWhereInput
+    orderBy?: PengajuanCheckoutOrderByWithRelationInput | PengajuanCheckoutOrderByWithRelationInput[]
+    cursor?: PengajuanCheckoutWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PengajuanCheckoutScalarFieldEnum | PengajuanCheckoutScalarFieldEnum[]
   }
 
   /**
@@ -9462,6 +9687,7 @@ export namespace Prisma {
     kamar?: boolean | Penghuni$kamarArgs<ExtArgs>
     pemesanan?: boolean | Penghuni$pemesananArgs<ExtArgs>
     komplain?: boolean | Penghuni$komplainArgs<ExtArgs>
+    pengajuanCheckout?: boolean | Penghuni$pengajuanCheckoutArgs<ExtArgs>
     _count?: boolean | PenghuniCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["penghuni"]>
 
@@ -9508,6 +9734,7 @@ export namespace Prisma {
     kamar?: boolean | Penghuni$kamarArgs<ExtArgs>
     pemesanan?: boolean | Penghuni$pemesananArgs<ExtArgs>
     komplain?: boolean | Penghuni$komplainArgs<ExtArgs>
+    pengajuanCheckout?: boolean | Penghuni$pengajuanCheckoutArgs<ExtArgs>
     _count?: boolean | PenghuniCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PenghuniIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9526,6 +9753,7 @@ export namespace Prisma {
       kamar: Prisma.$KamarPayload<ExtArgs> | null
       pemesanan: Prisma.$PemesananPayload<ExtArgs>[]
       komplain: Prisma.$KomplainPayload<ExtArgs>[]
+      pengajuanCheckout: Prisma.$PengajuanCheckoutPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9934,6 +10162,7 @@ export namespace Prisma {
     kamar<T extends Penghuni$kamarArgs<ExtArgs> = {}>(args?: Subset<T, Penghuni$kamarArgs<ExtArgs>>): Prisma__KamarClient<$Result.GetResult<Prisma.$KamarPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     pemesanan<T extends Penghuni$pemesananArgs<ExtArgs> = {}>(args?: Subset<T, Penghuni$pemesananArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PemesananPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     komplain<T extends Penghuni$komplainArgs<ExtArgs> = {}>(args?: Subset<T, Penghuni$komplainArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KomplainPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pengajuanCheckout<T extends Penghuni$pengajuanCheckoutArgs<ExtArgs> = {}>(args?: Subset<T, Penghuni$pengajuanCheckoutArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10436,6 +10665,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: KomplainScalarFieldEnum | KomplainScalarFieldEnum[]
+  }
+
+  /**
+   * Penghuni.pengajuanCheckout
+   */
+  export type Penghuni$pengajuanCheckoutArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    where?: PengajuanCheckoutWhereInput
+    orderBy?: PengajuanCheckoutOrderByWithRelationInput | PengajuanCheckoutOrderByWithRelationInput[]
+    cursor?: PengajuanCheckoutWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PengajuanCheckoutScalarFieldEnum | PengajuanCheckoutScalarFieldEnum[]
   }
 
   /**
@@ -14917,6 +15170,1164 @@ export namespace Prisma {
 
 
   /**
+   * Model PengajuanCheckout
+   */
+
+  export type AggregatePengajuanCheckout = {
+    _count: PengajuanCheckoutCountAggregateOutputType | null
+    _min: PengajuanCheckoutMinAggregateOutputType | null
+    _max: PengajuanCheckoutMaxAggregateOutputType | null
+  }
+
+  export type PengajuanCheckoutMinAggregateOutputType = {
+    id: string | null
+    keterangan: string | null
+    status: $Enums.StatusPengajuanCheckout | null
+    created_at: Date | null
+    updated_at: Date | null
+    penghuni_id: string | null
+    kamar_id: string | null
+    properti_id: string | null
+    admin_id: string | null
+  }
+
+  export type PengajuanCheckoutMaxAggregateOutputType = {
+    id: string | null
+    keterangan: string | null
+    status: $Enums.StatusPengajuanCheckout | null
+    created_at: Date | null
+    updated_at: Date | null
+    penghuni_id: string | null
+    kamar_id: string | null
+    properti_id: string | null
+    admin_id: string | null
+  }
+
+  export type PengajuanCheckoutCountAggregateOutputType = {
+    id: number
+    keterangan: number
+    status: number
+    created_at: number
+    updated_at: number
+    penghuni_id: number
+    kamar_id: number
+    properti_id: number
+    admin_id: number
+    _all: number
+  }
+
+
+  export type PengajuanCheckoutMinAggregateInputType = {
+    id?: true
+    keterangan?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+    penghuni_id?: true
+    kamar_id?: true
+    properti_id?: true
+    admin_id?: true
+  }
+
+  export type PengajuanCheckoutMaxAggregateInputType = {
+    id?: true
+    keterangan?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+    penghuni_id?: true
+    kamar_id?: true
+    properti_id?: true
+    admin_id?: true
+  }
+
+  export type PengajuanCheckoutCountAggregateInputType = {
+    id?: true
+    keterangan?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+    penghuni_id?: true
+    kamar_id?: true
+    properti_id?: true
+    admin_id?: true
+    _all?: true
+  }
+
+  export type PengajuanCheckoutAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PengajuanCheckout to aggregate.
+     */
+    where?: PengajuanCheckoutWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PengajuanCheckouts to fetch.
+     */
+    orderBy?: PengajuanCheckoutOrderByWithRelationInput | PengajuanCheckoutOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PengajuanCheckoutWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PengajuanCheckouts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PengajuanCheckouts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PengajuanCheckouts
+    **/
+    _count?: true | PengajuanCheckoutCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PengajuanCheckoutMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PengajuanCheckoutMaxAggregateInputType
+  }
+
+  export type GetPengajuanCheckoutAggregateType<T extends PengajuanCheckoutAggregateArgs> = {
+        [P in keyof T & keyof AggregatePengajuanCheckout]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePengajuanCheckout[P]>
+      : GetScalarType<T[P], AggregatePengajuanCheckout[P]>
+  }
+
+
+
+
+  export type PengajuanCheckoutGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PengajuanCheckoutWhereInput
+    orderBy?: PengajuanCheckoutOrderByWithAggregationInput | PengajuanCheckoutOrderByWithAggregationInput[]
+    by: PengajuanCheckoutScalarFieldEnum[] | PengajuanCheckoutScalarFieldEnum
+    having?: PengajuanCheckoutScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PengajuanCheckoutCountAggregateInputType | true
+    _min?: PengajuanCheckoutMinAggregateInputType
+    _max?: PengajuanCheckoutMaxAggregateInputType
+  }
+
+  export type PengajuanCheckoutGroupByOutputType = {
+    id: string
+    keterangan: string | null
+    status: $Enums.StatusPengajuanCheckout
+    created_at: Date
+    updated_at: Date
+    penghuni_id: string
+    kamar_id: string
+    properti_id: string
+    admin_id: string | null
+    _count: PengajuanCheckoutCountAggregateOutputType | null
+    _min: PengajuanCheckoutMinAggregateOutputType | null
+    _max: PengajuanCheckoutMaxAggregateOutputType | null
+  }
+
+  type GetPengajuanCheckoutGroupByPayload<T extends PengajuanCheckoutGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PengajuanCheckoutGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PengajuanCheckoutGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PengajuanCheckoutGroupByOutputType[P]>
+            : GetScalarType<T[P], PengajuanCheckoutGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PengajuanCheckoutSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    keterangan?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    penghuni_id?: boolean
+    kamar_id?: boolean
+    properti_id?: boolean
+    admin_id?: boolean
+    penghuni?: boolean | PenghuniDefaultArgs<ExtArgs>
+    kamar?: boolean | KamarDefaultArgs<ExtArgs>
+    properti?: boolean | PropertiDefaultArgs<ExtArgs>
+    admin?: boolean | PengajuanCheckout$adminArgs<ExtArgs>
+  }, ExtArgs["result"]["pengajuanCheckout"]>
+
+  export type PengajuanCheckoutSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    keterangan?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    penghuni_id?: boolean
+    kamar_id?: boolean
+    properti_id?: boolean
+    admin_id?: boolean
+    penghuni?: boolean | PenghuniDefaultArgs<ExtArgs>
+    kamar?: boolean | KamarDefaultArgs<ExtArgs>
+    properti?: boolean | PropertiDefaultArgs<ExtArgs>
+    admin?: boolean | PengajuanCheckout$adminArgs<ExtArgs>
+  }, ExtArgs["result"]["pengajuanCheckout"]>
+
+  export type PengajuanCheckoutSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    keterangan?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    penghuni_id?: boolean
+    kamar_id?: boolean
+    properti_id?: boolean
+    admin_id?: boolean
+    penghuni?: boolean | PenghuniDefaultArgs<ExtArgs>
+    kamar?: boolean | KamarDefaultArgs<ExtArgs>
+    properti?: boolean | PropertiDefaultArgs<ExtArgs>
+    admin?: boolean | PengajuanCheckout$adminArgs<ExtArgs>
+  }, ExtArgs["result"]["pengajuanCheckout"]>
+
+  export type PengajuanCheckoutSelectScalar = {
+    id?: boolean
+    keterangan?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    penghuni_id?: boolean
+    kamar_id?: boolean
+    properti_id?: boolean
+    admin_id?: boolean
+  }
+
+  export type PengajuanCheckoutOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "keterangan" | "status" | "created_at" | "updated_at" | "penghuni_id" | "kamar_id" | "properti_id" | "admin_id", ExtArgs["result"]["pengajuanCheckout"]>
+  export type PengajuanCheckoutInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    penghuni?: boolean | PenghuniDefaultArgs<ExtArgs>
+    kamar?: boolean | KamarDefaultArgs<ExtArgs>
+    properti?: boolean | PropertiDefaultArgs<ExtArgs>
+    admin?: boolean | PengajuanCheckout$adminArgs<ExtArgs>
+  }
+  export type PengajuanCheckoutIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    penghuni?: boolean | PenghuniDefaultArgs<ExtArgs>
+    kamar?: boolean | KamarDefaultArgs<ExtArgs>
+    properti?: boolean | PropertiDefaultArgs<ExtArgs>
+    admin?: boolean | PengajuanCheckout$adminArgs<ExtArgs>
+  }
+  export type PengajuanCheckoutIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    penghuni?: boolean | PenghuniDefaultArgs<ExtArgs>
+    kamar?: boolean | KamarDefaultArgs<ExtArgs>
+    properti?: boolean | PropertiDefaultArgs<ExtArgs>
+    admin?: boolean | PengajuanCheckout$adminArgs<ExtArgs>
+  }
+
+  export type $PengajuanCheckoutPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PengajuanCheckout"
+    objects: {
+      penghuni: Prisma.$PenghuniPayload<ExtArgs>
+      kamar: Prisma.$KamarPayload<ExtArgs>
+      properti: Prisma.$PropertiPayload<ExtArgs>
+      admin: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      keterangan: string | null
+      status: $Enums.StatusPengajuanCheckout
+      created_at: Date
+      updated_at: Date
+      penghuni_id: string
+      kamar_id: string
+      properti_id: string
+      admin_id: string | null
+    }, ExtArgs["result"]["pengajuanCheckout"]>
+    composites: {}
+  }
+
+  type PengajuanCheckoutGetPayload<S extends boolean | null | undefined | PengajuanCheckoutDefaultArgs> = $Result.GetResult<Prisma.$PengajuanCheckoutPayload, S>
+
+  type PengajuanCheckoutCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PengajuanCheckoutFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PengajuanCheckoutCountAggregateInputType | true
+    }
+
+  export interface PengajuanCheckoutDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PengajuanCheckout'], meta: { name: 'PengajuanCheckout' } }
+    /**
+     * Find zero or one PengajuanCheckout that matches the filter.
+     * @param {PengajuanCheckoutFindUniqueArgs} args - Arguments to find a PengajuanCheckout
+     * @example
+     * // Get one PengajuanCheckout
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PengajuanCheckoutFindUniqueArgs>(args: SelectSubset<T, PengajuanCheckoutFindUniqueArgs<ExtArgs>>): Prisma__PengajuanCheckoutClient<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PengajuanCheckout that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PengajuanCheckoutFindUniqueOrThrowArgs} args - Arguments to find a PengajuanCheckout
+     * @example
+     * // Get one PengajuanCheckout
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PengajuanCheckoutFindUniqueOrThrowArgs>(args: SelectSubset<T, PengajuanCheckoutFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PengajuanCheckoutClient<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PengajuanCheckout that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PengajuanCheckoutFindFirstArgs} args - Arguments to find a PengajuanCheckout
+     * @example
+     * // Get one PengajuanCheckout
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PengajuanCheckoutFindFirstArgs>(args?: SelectSubset<T, PengajuanCheckoutFindFirstArgs<ExtArgs>>): Prisma__PengajuanCheckoutClient<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PengajuanCheckout that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PengajuanCheckoutFindFirstOrThrowArgs} args - Arguments to find a PengajuanCheckout
+     * @example
+     * // Get one PengajuanCheckout
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PengajuanCheckoutFindFirstOrThrowArgs>(args?: SelectSubset<T, PengajuanCheckoutFindFirstOrThrowArgs<ExtArgs>>): Prisma__PengajuanCheckoutClient<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PengajuanCheckouts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PengajuanCheckoutFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PengajuanCheckouts
+     * const pengajuanCheckouts = await prisma.pengajuanCheckout.findMany()
+     * 
+     * // Get first 10 PengajuanCheckouts
+     * const pengajuanCheckouts = await prisma.pengajuanCheckout.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pengajuanCheckoutWithIdOnly = await prisma.pengajuanCheckout.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PengajuanCheckoutFindManyArgs>(args?: SelectSubset<T, PengajuanCheckoutFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PengajuanCheckout.
+     * @param {PengajuanCheckoutCreateArgs} args - Arguments to create a PengajuanCheckout.
+     * @example
+     * // Create one PengajuanCheckout
+     * const PengajuanCheckout = await prisma.pengajuanCheckout.create({
+     *   data: {
+     *     // ... data to create a PengajuanCheckout
+     *   }
+     * })
+     * 
+     */
+    create<T extends PengajuanCheckoutCreateArgs>(args: SelectSubset<T, PengajuanCheckoutCreateArgs<ExtArgs>>): Prisma__PengajuanCheckoutClient<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PengajuanCheckouts.
+     * @param {PengajuanCheckoutCreateManyArgs} args - Arguments to create many PengajuanCheckouts.
+     * @example
+     * // Create many PengajuanCheckouts
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PengajuanCheckoutCreateManyArgs>(args?: SelectSubset<T, PengajuanCheckoutCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PengajuanCheckouts and returns the data saved in the database.
+     * @param {PengajuanCheckoutCreateManyAndReturnArgs} args - Arguments to create many PengajuanCheckouts.
+     * @example
+     * // Create many PengajuanCheckouts
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PengajuanCheckouts and only return the `id`
+     * const pengajuanCheckoutWithIdOnly = await prisma.pengajuanCheckout.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PengajuanCheckoutCreateManyAndReturnArgs>(args?: SelectSubset<T, PengajuanCheckoutCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PengajuanCheckout.
+     * @param {PengajuanCheckoutDeleteArgs} args - Arguments to delete one PengajuanCheckout.
+     * @example
+     * // Delete one PengajuanCheckout
+     * const PengajuanCheckout = await prisma.pengajuanCheckout.delete({
+     *   where: {
+     *     // ... filter to delete one PengajuanCheckout
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PengajuanCheckoutDeleteArgs>(args: SelectSubset<T, PengajuanCheckoutDeleteArgs<ExtArgs>>): Prisma__PengajuanCheckoutClient<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PengajuanCheckout.
+     * @param {PengajuanCheckoutUpdateArgs} args - Arguments to update one PengajuanCheckout.
+     * @example
+     * // Update one PengajuanCheckout
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PengajuanCheckoutUpdateArgs>(args: SelectSubset<T, PengajuanCheckoutUpdateArgs<ExtArgs>>): Prisma__PengajuanCheckoutClient<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PengajuanCheckouts.
+     * @param {PengajuanCheckoutDeleteManyArgs} args - Arguments to filter PengajuanCheckouts to delete.
+     * @example
+     * // Delete a few PengajuanCheckouts
+     * const { count } = await prisma.pengajuanCheckout.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PengajuanCheckoutDeleteManyArgs>(args?: SelectSubset<T, PengajuanCheckoutDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PengajuanCheckouts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PengajuanCheckoutUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PengajuanCheckouts
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PengajuanCheckoutUpdateManyArgs>(args: SelectSubset<T, PengajuanCheckoutUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PengajuanCheckouts and returns the data updated in the database.
+     * @param {PengajuanCheckoutUpdateManyAndReturnArgs} args - Arguments to update many PengajuanCheckouts.
+     * @example
+     * // Update many PengajuanCheckouts
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PengajuanCheckouts and only return the `id`
+     * const pengajuanCheckoutWithIdOnly = await prisma.pengajuanCheckout.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PengajuanCheckoutUpdateManyAndReturnArgs>(args: SelectSubset<T, PengajuanCheckoutUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PengajuanCheckout.
+     * @param {PengajuanCheckoutUpsertArgs} args - Arguments to update or create a PengajuanCheckout.
+     * @example
+     * // Update or create a PengajuanCheckout
+     * const pengajuanCheckout = await prisma.pengajuanCheckout.upsert({
+     *   create: {
+     *     // ... data to create a PengajuanCheckout
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PengajuanCheckout we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PengajuanCheckoutUpsertArgs>(args: SelectSubset<T, PengajuanCheckoutUpsertArgs<ExtArgs>>): Prisma__PengajuanCheckoutClient<$Result.GetResult<Prisma.$PengajuanCheckoutPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PengajuanCheckouts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PengajuanCheckoutCountArgs} args - Arguments to filter PengajuanCheckouts to count.
+     * @example
+     * // Count the number of PengajuanCheckouts
+     * const count = await prisma.pengajuanCheckout.count({
+     *   where: {
+     *     // ... the filter for the PengajuanCheckouts we want to count
+     *   }
+     * })
+    **/
+    count<T extends PengajuanCheckoutCountArgs>(
+      args?: Subset<T, PengajuanCheckoutCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PengajuanCheckoutCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PengajuanCheckout.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PengajuanCheckoutAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PengajuanCheckoutAggregateArgs>(args: Subset<T, PengajuanCheckoutAggregateArgs>): Prisma.PrismaPromise<GetPengajuanCheckoutAggregateType<T>>
+
+    /**
+     * Group by PengajuanCheckout.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PengajuanCheckoutGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PengajuanCheckoutGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PengajuanCheckoutGroupByArgs['orderBy'] }
+        : { orderBy?: PengajuanCheckoutGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PengajuanCheckoutGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPengajuanCheckoutGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PengajuanCheckout model
+   */
+  readonly fields: PengajuanCheckoutFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PengajuanCheckout.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PengajuanCheckoutClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    penghuni<T extends PenghuniDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PenghuniDefaultArgs<ExtArgs>>): Prisma__PenghuniClient<$Result.GetResult<Prisma.$PenghuniPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    kamar<T extends KamarDefaultArgs<ExtArgs> = {}>(args?: Subset<T, KamarDefaultArgs<ExtArgs>>): Prisma__KamarClient<$Result.GetResult<Prisma.$KamarPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    properti<T extends PropertiDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PropertiDefaultArgs<ExtArgs>>): Prisma__PropertiClient<$Result.GetResult<Prisma.$PropertiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    admin<T extends PengajuanCheckout$adminArgs<ExtArgs> = {}>(args?: Subset<T, PengajuanCheckout$adminArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PengajuanCheckout model
+   */
+  interface PengajuanCheckoutFieldRefs {
+    readonly id: FieldRef<"PengajuanCheckout", 'String'>
+    readonly keterangan: FieldRef<"PengajuanCheckout", 'String'>
+    readonly status: FieldRef<"PengajuanCheckout", 'StatusPengajuanCheckout'>
+    readonly created_at: FieldRef<"PengajuanCheckout", 'DateTime'>
+    readonly updated_at: FieldRef<"PengajuanCheckout", 'DateTime'>
+    readonly penghuni_id: FieldRef<"PengajuanCheckout", 'String'>
+    readonly kamar_id: FieldRef<"PengajuanCheckout", 'String'>
+    readonly properti_id: FieldRef<"PengajuanCheckout", 'String'>
+    readonly admin_id: FieldRef<"PengajuanCheckout", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PengajuanCheckout findUnique
+   */
+  export type PengajuanCheckoutFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    /**
+     * Filter, which PengajuanCheckout to fetch.
+     */
+    where: PengajuanCheckoutWhereUniqueInput
+  }
+
+  /**
+   * PengajuanCheckout findUniqueOrThrow
+   */
+  export type PengajuanCheckoutFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    /**
+     * Filter, which PengajuanCheckout to fetch.
+     */
+    where: PengajuanCheckoutWhereUniqueInput
+  }
+
+  /**
+   * PengajuanCheckout findFirst
+   */
+  export type PengajuanCheckoutFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    /**
+     * Filter, which PengajuanCheckout to fetch.
+     */
+    where?: PengajuanCheckoutWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PengajuanCheckouts to fetch.
+     */
+    orderBy?: PengajuanCheckoutOrderByWithRelationInput | PengajuanCheckoutOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PengajuanCheckouts.
+     */
+    cursor?: PengajuanCheckoutWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PengajuanCheckouts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PengajuanCheckouts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PengajuanCheckouts.
+     */
+    distinct?: PengajuanCheckoutScalarFieldEnum | PengajuanCheckoutScalarFieldEnum[]
+  }
+
+  /**
+   * PengajuanCheckout findFirstOrThrow
+   */
+  export type PengajuanCheckoutFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    /**
+     * Filter, which PengajuanCheckout to fetch.
+     */
+    where?: PengajuanCheckoutWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PengajuanCheckouts to fetch.
+     */
+    orderBy?: PengajuanCheckoutOrderByWithRelationInput | PengajuanCheckoutOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PengajuanCheckouts.
+     */
+    cursor?: PengajuanCheckoutWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PengajuanCheckouts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PengajuanCheckouts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PengajuanCheckouts.
+     */
+    distinct?: PengajuanCheckoutScalarFieldEnum | PengajuanCheckoutScalarFieldEnum[]
+  }
+
+  /**
+   * PengajuanCheckout findMany
+   */
+  export type PengajuanCheckoutFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    /**
+     * Filter, which PengajuanCheckouts to fetch.
+     */
+    where?: PengajuanCheckoutWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PengajuanCheckouts to fetch.
+     */
+    orderBy?: PengajuanCheckoutOrderByWithRelationInput | PengajuanCheckoutOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PengajuanCheckouts.
+     */
+    cursor?: PengajuanCheckoutWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PengajuanCheckouts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PengajuanCheckouts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PengajuanCheckouts.
+     */
+    distinct?: PengajuanCheckoutScalarFieldEnum | PengajuanCheckoutScalarFieldEnum[]
+  }
+
+  /**
+   * PengajuanCheckout create
+   */
+  export type PengajuanCheckoutCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PengajuanCheckout.
+     */
+    data: XOR<PengajuanCheckoutCreateInput, PengajuanCheckoutUncheckedCreateInput>
+  }
+
+  /**
+   * PengajuanCheckout createMany
+   */
+  export type PengajuanCheckoutCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PengajuanCheckouts.
+     */
+    data: PengajuanCheckoutCreateManyInput | PengajuanCheckoutCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PengajuanCheckout createManyAndReturn
+   */
+  export type PengajuanCheckoutCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * The data used to create many PengajuanCheckouts.
+     */
+    data: PengajuanCheckoutCreateManyInput | PengajuanCheckoutCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PengajuanCheckout update
+   */
+  export type PengajuanCheckoutUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PengajuanCheckout.
+     */
+    data: XOR<PengajuanCheckoutUpdateInput, PengajuanCheckoutUncheckedUpdateInput>
+    /**
+     * Choose, which PengajuanCheckout to update.
+     */
+    where: PengajuanCheckoutWhereUniqueInput
+  }
+
+  /**
+   * PengajuanCheckout updateMany
+   */
+  export type PengajuanCheckoutUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PengajuanCheckouts.
+     */
+    data: XOR<PengajuanCheckoutUpdateManyMutationInput, PengajuanCheckoutUncheckedUpdateManyInput>
+    /**
+     * Filter which PengajuanCheckouts to update
+     */
+    where?: PengajuanCheckoutWhereInput
+    /**
+     * Limit how many PengajuanCheckouts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PengajuanCheckout updateManyAndReturn
+   */
+  export type PengajuanCheckoutUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * The data used to update PengajuanCheckouts.
+     */
+    data: XOR<PengajuanCheckoutUpdateManyMutationInput, PengajuanCheckoutUncheckedUpdateManyInput>
+    /**
+     * Filter which PengajuanCheckouts to update
+     */
+    where?: PengajuanCheckoutWhereInput
+    /**
+     * Limit how many PengajuanCheckouts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PengajuanCheckout upsert
+   */
+  export type PengajuanCheckoutUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PengajuanCheckout to update in case it exists.
+     */
+    where: PengajuanCheckoutWhereUniqueInput
+    /**
+     * In case the PengajuanCheckout found by the `where` argument doesn't exist, create a new PengajuanCheckout with this data.
+     */
+    create: XOR<PengajuanCheckoutCreateInput, PengajuanCheckoutUncheckedCreateInput>
+    /**
+     * In case the PengajuanCheckout was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PengajuanCheckoutUpdateInput, PengajuanCheckoutUncheckedUpdateInput>
+  }
+
+  /**
+   * PengajuanCheckout delete
+   */
+  export type PengajuanCheckoutDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+    /**
+     * Filter which PengajuanCheckout to delete.
+     */
+    where: PengajuanCheckoutWhereUniqueInput
+  }
+
+  /**
+   * PengajuanCheckout deleteMany
+   */
+  export type PengajuanCheckoutDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PengajuanCheckouts to delete
+     */
+    where?: PengajuanCheckoutWhereInput
+    /**
+     * Limit how many PengajuanCheckouts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PengajuanCheckout.admin
+   */
+  export type PengajuanCheckout$adminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * PengajuanCheckout without action
+   */
+  export type PengajuanCheckoutDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PengajuanCheckout
+     */
+    select?: PengajuanCheckoutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PengajuanCheckout
+     */
+    omit?: PengajuanCheckoutOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PengajuanCheckoutInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -15099,6 +16510,21 @@ export namespace Prisma {
   };
 
   export type NotifikasiScalarFieldEnum = (typeof NotifikasiScalarFieldEnum)[keyof typeof NotifikasiScalarFieldEnum]
+
+
+  export const PengajuanCheckoutScalarFieldEnum: {
+    id: 'id',
+    keterangan: 'keterangan',
+    status: 'status',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    penghuni_id: 'penghuni_id',
+    kamar_id: 'kamar_id',
+    properti_id: 'properti_id',
+    admin_id: 'admin_id'
+  };
+
+  export type PengajuanCheckoutScalarFieldEnum = (typeof PengajuanCheckoutScalarFieldEnum)[keyof typeof PengajuanCheckoutScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -15351,6 +16777,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'StatusPengajuanCheckout'
+   */
+  export type EnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusPengajuanCheckout'>
+    
+
+
+  /**
+   * Reference to a field of type 'StatusPengajuanCheckout[]'
+   */
+  export type ListEnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusPengajuanCheckout[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -15384,6 +16824,7 @@ export namespace Prisma {
     operator?: OperatorListRelationFilter
     properti?: PropertiListRelationFilter
     settings?: XOR<AdminSettingsNullableScalarRelationFilter, AdminSettingsWhereInput> | null
+    pengajuanCheckoutAdmin?: PengajuanCheckoutListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -15400,6 +16841,7 @@ export namespace Prisma {
     operator?: OperatorOrderByRelationAggregateInput
     properti?: PropertiOrderByRelationAggregateInput
     settings?: AdminSettingsOrderByWithRelationInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -15419,6 +16861,7 @@ export namespace Prisma {
     operator?: OperatorListRelationFilter
     properti?: PropertiListRelationFilter
     settings?: XOR<AdminSettingsNullableScalarRelationFilter, AdminSettingsWhereInput> | null
+    pengajuanCheckoutAdmin?: PengajuanCheckoutListRelationFilter
   }, "id" | "username" | "email" | "no_telepon">
 
   export type UserOrderByWithAggregationInput = {
@@ -15541,6 +16984,7 @@ export namespace Prisma {
     operator?: OperatorListRelationFilter
     pemesanan?: PemesananListRelationFilter
     pengajuanDana?: PengajuanDanaListRelationFilter
+    pengajuanCheckout?: PengajuanCheckoutListRelationFilter
   }
 
   export type PropertiOrderByWithRelationInput = {
@@ -15565,6 +17009,7 @@ export namespace Prisma {
     operator?: OperatorOrderByRelationAggregateInput
     pemesanan?: PemesananOrderByRelationAggregateInput
     pengajuanDana?: PengajuanDanaOrderByRelationAggregateInput
+    pengajuanCheckout?: PengajuanCheckoutOrderByRelationAggregateInput
   }
 
   export type PropertiWhereUniqueInput = Prisma.AtLeast<{
@@ -15592,6 +17037,7 @@ export namespace Prisma {
     operator?: OperatorListRelationFilter
     pemesanan?: PemesananListRelationFilter
     pengajuanDana?: PengajuanDanaListRelationFilter
+    pengajuanCheckout?: PengajuanCheckoutListRelationFilter
   }, "id">
 
   export type PropertiOrderByWithAggregationInput = {
@@ -15655,6 +17101,7 @@ export namespace Prisma {
     properti?: XOR<PropertiScalarRelationFilter, PropertiWhereInput>
     pemesanan?: PemesananListRelationFilter
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
+    pengajuanCheckout?: PengajuanCheckoutListRelationFilter
   }
 
   export type KamarOrderByWithRelationInput = {
@@ -15673,6 +17120,7 @@ export namespace Prisma {
     properti?: PropertiOrderByWithRelationInput
     pemesanan?: PemesananOrderByRelationAggregateInput
     penghuni?: PenghuniOrderByWithRelationInput
+    pengajuanCheckout?: PengajuanCheckoutOrderByRelationAggregateInput
   }
 
   export type KamarWhereUniqueInput = Prisma.AtLeast<{
@@ -15695,6 +17143,7 @@ export namespace Prisma {
     properti?: XOR<PropertiScalarRelationFilter, PropertiWhereInput>
     pemesanan?: PemesananListRelationFilter
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
+    pengajuanCheckout?: PengajuanCheckoutListRelationFilter
   }, "id" | "properti_id_nomor">
 
   export type KamarOrderByWithAggregationInput = {
@@ -15920,6 +17369,7 @@ export namespace Prisma {
     kamar?: XOR<KamarNullableScalarRelationFilter, KamarWhereInput> | null
     pemesanan?: PemesananListRelationFilter
     komplain?: KomplainListRelationFilter
+    pengajuanCheckout?: PengajuanCheckoutListRelationFilter
   }
 
   export type PenghuniOrderByWithRelationInput = {
@@ -15935,6 +17385,7 @@ export namespace Prisma {
     kamar?: KamarOrderByWithRelationInput
     pemesanan?: PemesananOrderByRelationAggregateInput
     komplain?: KomplainOrderByRelationAggregateInput
+    pengajuanCheckout?: PengajuanCheckoutOrderByRelationAggregateInput
   }
 
   export type PenghuniWhereUniqueInput = Prisma.AtLeast<{
@@ -15953,6 +17404,7 @@ export namespace Prisma {
     kamar?: XOR<KamarNullableScalarRelationFilter, KamarWhereInput> | null
     pemesanan?: PemesananListRelationFilter
     komplain?: KomplainListRelationFilter
+    pengajuanCheckout?: PengajuanCheckoutListRelationFilter
   }, "id" | "user_id" | "kamar_id">
 
   export type PenghuniOrderByWithAggregationInput = {
@@ -16285,6 +17737,90 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"Notifikasi"> | Date | string
   }
 
+  export type PengajuanCheckoutWhereInput = {
+    AND?: PengajuanCheckoutWhereInput | PengajuanCheckoutWhereInput[]
+    OR?: PengajuanCheckoutWhereInput[]
+    NOT?: PengajuanCheckoutWhereInput | PengajuanCheckoutWhereInput[]
+    id?: StringFilter<"PengajuanCheckout"> | string
+    keterangan?: StringNullableFilter<"PengajuanCheckout"> | string | null
+    status?: EnumStatusPengajuanCheckoutFilter<"PengajuanCheckout"> | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFilter<"PengajuanCheckout"> | Date | string
+    updated_at?: DateTimeFilter<"PengajuanCheckout"> | Date | string
+    penghuni_id?: StringFilter<"PengajuanCheckout"> | string
+    kamar_id?: StringFilter<"PengajuanCheckout"> | string
+    properti_id?: StringFilter<"PengajuanCheckout"> | string
+    admin_id?: StringNullableFilter<"PengajuanCheckout"> | string | null
+    penghuni?: XOR<PenghuniScalarRelationFilter, PenghuniWhereInput>
+    kamar?: XOR<KamarScalarRelationFilter, KamarWhereInput>
+    properti?: XOR<PropertiScalarRelationFilter, PropertiWhereInput>
+    admin?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type PengajuanCheckoutOrderByWithRelationInput = {
+    id?: SortOrder
+    keterangan?: SortOrderInput | SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    penghuni_id?: SortOrder
+    kamar_id?: SortOrder
+    properti_id?: SortOrder
+    admin_id?: SortOrderInput | SortOrder
+    penghuni?: PenghuniOrderByWithRelationInput
+    kamar?: KamarOrderByWithRelationInput
+    properti?: PropertiOrderByWithRelationInput
+    admin?: UserOrderByWithRelationInput
+  }
+
+  export type PengajuanCheckoutWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PengajuanCheckoutWhereInput | PengajuanCheckoutWhereInput[]
+    OR?: PengajuanCheckoutWhereInput[]
+    NOT?: PengajuanCheckoutWhereInput | PengajuanCheckoutWhereInput[]
+    keterangan?: StringNullableFilter<"PengajuanCheckout"> | string | null
+    status?: EnumStatusPengajuanCheckoutFilter<"PengajuanCheckout"> | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFilter<"PengajuanCheckout"> | Date | string
+    updated_at?: DateTimeFilter<"PengajuanCheckout"> | Date | string
+    penghuni_id?: StringFilter<"PengajuanCheckout"> | string
+    kamar_id?: StringFilter<"PengajuanCheckout"> | string
+    properti_id?: StringFilter<"PengajuanCheckout"> | string
+    admin_id?: StringNullableFilter<"PengajuanCheckout"> | string | null
+    penghuni?: XOR<PenghuniScalarRelationFilter, PenghuniWhereInput>
+    kamar?: XOR<KamarScalarRelationFilter, KamarWhereInput>
+    properti?: XOR<PropertiScalarRelationFilter, PropertiWhereInput>
+    admin?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type PengajuanCheckoutOrderByWithAggregationInput = {
+    id?: SortOrder
+    keterangan?: SortOrderInput | SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    penghuni_id?: SortOrder
+    kamar_id?: SortOrder
+    properti_id?: SortOrder
+    admin_id?: SortOrderInput | SortOrder
+    _count?: PengajuanCheckoutCountOrderByAggregateInput
+    _max?: PengajuanCheckoutMaxOrderByAggregateInput
+    _min?: PengajuanCheckoutMinOrderByAggregateInput
+  }
+
+  export type PengajuanCheckoutScalarWhereWithAggregatesInput = {
+    AND?: PengajuanCheckoutScalarWhereWithAggregatesInput | PengajuanCheckoutScalarWhereWithAggregatesInput[]
+    OR?: PengajuanCheckoutScalarWhereWithAggregatesInput[]
+    NOT?: PengajuanCheckoutScalarWhereWithAggregatesInput | PengajuanCheckoutScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PengajuanCheckout"> | string
+    keterangan?: StringNullableWithAggregatesFilter<"PengajuanCheckout"> | string | null
+    status?: EnumStatusPengajuanCheckoutWithAggregatesFilter<"PengajuanCheckout"> | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeWithAggregatesFilter<"PengajuanCheckout"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"PengajuanCheckout"> | Date | string
+    penghuni_id?: StringWithAggregatesFilter<"PengajuanCheckout"> | string
+    kamar_id?: StringWithAggregatesFilter<"PengajuanCheckout"> | string
+    properti_id?: StringWithAggregatesFilter<"PengajuanCheckout"> | string
+    admin_id?: StringNullableWithAggregatesFilter<"PengajuanCheckout"> | string | null
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -16299,6 +17835,7 @@ export namespace Prisma {
     operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -16315,6 +17852,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserUpdateInput = {
@@ -16331,6 +17869,7 @@ export namespace Prisma {
     operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -16347,6 +17886,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -16475,6 +18015,7 @@ export namespace Prisma {
     operator?: OperatorCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateInput = {
@@ -16498,6 +18039,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUpdateInput = {
@@ -16521,6 +18063,7 @@ export namespace Prisma {
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateInput = {
@@ -16544,6 +18087,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiCreateManyInput = {
@@ -16614,6 +18158,7 @@ export namespace Prisma {
     properti: PropertiCreateNestedOneWithoutKamarInput
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUncheckedCreateInput = {
@@ -16631,6 +18176,7 @@ export namespace Prisma {
     properti_id: string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUpdateInput = {
@@ -16648,6 +18194,7 @@ export namespace Prisma {
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateInput = {
@@ -16665,6 +18212,7 @@ export namespace Prisma {
     properti_id?: StringFieldUpdateOperationsInput | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarCreateManyInput = {
@@ -16904,6 +18452,7 @@ export namespace Prisma {
     kamar?: KamarCreateNestedOneWithoutPenghuniInput
     pemesanan?: PemesananCreateNestedManyWithoutPenghuniInput
     komplain?: KomplainCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniUncheckedCreateInput = {
@@ -16917,6 +18466,7 @@ export namespace Prisma {
     kamar_id?: string | null
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPenghuniInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniUpdateInput = {
@@ -16930,6 +18480,7 @@ export namespace Prisma {
     kamar?: KamarUpdateOneWithoutPenghuniNestedInput
     pemesanan?: PemesananUpdateManyWithoutPenghuniNestedInput
     komplain?: KomplainUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPenghuniNestedInput
   }
 
   export type PenghuniUncheckedUpdateInput = {
@@ -16943,6 +18494,7 @@ export namespace Prisma {
     kamar_id?: NullableStringFieldUpdateOperationsInput | string | null
     pemesanan?: PemesananUncheckedUpdateManyWithoutPenghuniNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPenghuniNestedInput
   }
 
   export type PenghuniCreateManyInput = {
@@ -17296,6 +18848,86 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PengajuanCheckoutCreateInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni: PenghuniCreateNestedOneWithoutPengajuanCheckoutInput
+    kamar: KamarCreateNestedOneWithoutPengajuanCheckoutInput
+    properti: PropertiCreateNestedOneWithoutPengajuanCheckoutInput
+    admin?: UserCreateNestedOneWithoutPengajuanCheckoutAdminInput
+  }
+
+  export type PengajuanCheckoutUncheckedCreateInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni_id: string
+    kamar_id: string
+    properti_id: string
+    admin_id?: string | null
+  }
+
+  export type PengajuanCheckoutUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni?: PenghuniUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    kamar?: KamarUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    properti?: PropertiUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    admin?: UserUpdateOneWithoutPengajuanCheckoutAdminNestedInput
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni_id?: StringFieldUpdateOperationsInput | string
+    kamar_id?: StringFieldUpdateOperationsInput | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PengajuanCheckoutCreateManyInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni_id: string
+    kamar_id: string
+    properti_id: string
+    admin_id?: string | null
+  }
+
+  export type PengajuanCheckoutUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni_id?: StringFieldUpdateOperationsInput | string
+    kamar_id?: StringFieldUpdateOperationsInput | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -17366,6 +18998,12 @@ export namespace Prisma {
     isNot?: AdminSettingsWhereInput | null
   }
 
+  export type PengajuanCheckoutListRelationFilter = {
+    every?: PengajuanCheckoutWhereInput
+    some?: PengajuanCheckoutWhereInput
+    none?: PengajuanCheckoutWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -17376,6 +19014,10 @@ export namespace Prisma {
   }
 
   export type PropertiOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PengajuanCheckoutOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -18228,6 +19870,64 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type EnumStatusPengajuanCheckoutFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatusPengajuanCheckout | EnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    in?: $Enums.StatusPengajuanCheckout[] | ListEnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusPengajuanCheckout[] | ListEnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusPengajuanCheckoutFilter<$PrismaModel> | $Enums.StatusPengajuanCheckout
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type PengajuanCheckoutCountOrderByAggregateInput = {
+    id?: SortOrder
+    keterangan?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    penghuni_id?: SortOrder
+    kamar_id?: SortOrder
+    properti_id?: SortOrder
+    admin_id?: SortOrder
+  }
+
+  export type PengajuanCheckoutMaxOrderByAggregateInput = {
+    id?: SortOrder
+    keterangan?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    penghuni_id?: SortOrder
+    kamar_id?: SortOrder
+    properti_id?: SortOrder
+    admin_id?: SortOrder
+  }
+
+  export type PengajuanCheckoutMinOrderByAggregateInput = {
+    id?: SortOrder
+    keterangan?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    penghuni_id?: SortOrder
+    kamar_id?: SortOrder
+    properti_id?: SortOrder
+    admin_id?: SortOrder
+  }
+
+  export type EnumStatusPengajuanCheckoutWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatusPengajuanCheckout | EnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    in?: $Enums.StatusPengajuanCheckout[] | ListEnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusPengajuanCheckout[] | ListEnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusPengajuanCheckoutWithAggregatesFilter<$PrismaModel> | $Enums.StatusPengajuanCheckout
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusPengajuanCheckoutFilter<$PrismaModel>
+    _max?: NestedEnumStatusPengajuanCheckoutFilter<$PrismaModel>
+  }
+
   export type PenghuniCreateNestedOneWithoutUserInput = {
     create?: XOR<PenghuniCreateWithoutUserInput, PenghuniUncheckedCreateWithoutUserInput>
     connectOrCreate?: PenghuniCreateOrConnectWithoutUserInput
@@ -18254,6 +19954,13 @@ export namespace Prisma {
     connect?: AdminSettingsWhereUniqueInput
   }
 
+  export type PengajuanCheckoutCreateNestedManyWithoutAdminInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutAdminInput, PengajuanCheckoutUncheckedCreateWithoutAdminInput> | PengajuanCheckoutCreateWithoutAdminInput[] | PengajuanCheckoutUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutAdminInput | PengajuanCheckoutCreateOrConnectWithoutAdminInput[]
+    createMany?: PengajuanCheckoutCreateManyAdminInputEnvelope
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+  }
+
   export type PenghuniUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<PenghuniCreateWithoutUserInput, PenghuniUncheckedCreateWithoutUserInput>
     connectOrCreate?: PenghuniCreateOrConnectWithoutUserInput
@@ -18278,6 +19985,13 @@ export namespace Prisma {
     create?: XOR<AdminSettingsCreateWithoutUserInput, AdminSettingsUncheckedCreateWithoutUserInput>
     connectOrCreate?: AdminSettingsCreateOrConnectWithoutUserInput
     connect?: AdminSettingsWhereUniqueInput
+  }
+
+  export type PengajuanCheckoutUncheckedCreateNestedManyWithoutAdminInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutAdminInput, PengajuanCheckoutUncheckedCreateWithoutAdminInput> | PengajuanCheckoutCreateWithoutAdminInput[] | PengajuanCheckoutUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutAdminInput | PengajuanCheckoutCreateOrConnectWithoutAdminInput[]
+    createMany?: PengajuanCheckoutCreateManyAdminInputEnvelope
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -18344,6 +20058,20 @@ export namespace Prisma {
     update?: XOR<XOR<AdminSettingsUpdateToOneWithWhereWithoutUserInput, AdminSettingsUpdateWithoutUserInput>, AdminSettingsUncheckedUpdateWithoutUserInput>
   }
 
+  export type PengajuanCheckoutUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutAdminInput, PengajuanCheckoutUncheckedCreateWithoutAdminInput> | PengajuanCheckoutCreateWithoutAdminInput[] | PengajuanCheckoutUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutAdminInput | PengajuanCheckoutCreateOrConnectWithoutAdminInput[]
+    upsert?: PengajuanCheckoutUpsertWithWhereUniqueWithoutAdminInput | PengajuanCheckoutUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: PengajuanCheckoutCreateManyAdminInputEnvelope
+    set?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    disconnect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    delete?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    update?: PengajuanCheckoutUpdateWithWhereUniqueWithoutAdminInput | PengajuanCheckoutUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: PengajuanCheckoutUpdateManyWithWhereWithoutAdminInput | PengajuanCheckoutUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
+  }
+
   export type PenghuniUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<PenghuniCreateWithoutUserInput, PenghuniUncheckedCreateWithoutUserInput>
     connectOrCreate?: PenghuniCreateOrConnectWithoutUserInput
@@ -18390,6 +20118,20 @@ export namespace Prisma {
     delete?: AdminSettingsWhereInput | boolean
     connect?: AdminSettingsWhereUniqueInput
     update?: XOR<XOR<AdminSettingsUpdateToOneWithWhereWithoutUserInput, AdminSettingsUpdateWithoutUserInput>, AdminSettingsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutAdminInput, PengajuanCheckoutUncheckedCreateWithoutAdminInput> | PengajuanCheckoutCreateWithoutAdminInput[] | PengajuanCheckoutUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutAdminInput | PengajuanCheckoutCreateOrConnectWithoutAdminInput[]
+    upsert?: PengajuanCheckoutUpsertWithWhereUniqueWithoutAdminInput | PengajuanCheckoutUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: PengajuanCheckoutCreateManyAdminInputEnvelope
+    set?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    disconnect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    delete?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    update?: PengajuanCheckoutUpdateWithWhereUniqueWithoutAdminInput | PengajuanCheckoutUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: PengajuanCheckoutUpdateManyWithWhereWithoutAdminInput | PengajuanCheckoutUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSettingsInput = {
@@ -18451,6 +20193,13 @@ export namespace Prisma {
     connect?: PengajuanDanaWhereUniqueInput | PengajuanDanaWhereUniqueInput[]
   }
 
+  export type PengajuanCheckoutCreateNestedManyWithoutPropertiInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutPropertiInput, PengajuanCheckoutUncheckedCreateWithoutPropertiInput> | PengajuanCheckoutCreateWithoutPropertiInput[] | PengajuanCheckoutUncheckedCreateWithoutPropertiInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutPropertiInput | PengajuanCheckoutCreateOrConnectWithoutPropertiInput[]
+    createMany?: PengajuanCheckoutCreateManyPropertiInputEnvelope
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+  }
+
   export type KamarUncheckedCreateNestedManyWithoutPropertiInput = {
     create?: XOR<KamarCreateWithoutPropertiInput, KamarUncheckedCreateWithoutPropertiInput> | KamarCreateWithoutPropertiInput[] | KamarUncheckedCreateWithoutPropertiInput[]
     connectOrCreate?: KamarCreateOrConnectWithoutPropertiInput | KamarCreateOrConnectWithoutPropertiInput[]
@@ -18484,6 +20233,13 @@ export namespace Prisma {
     connectOrCreate?: PengajuanDanaCreateOrConnectWithoutPropertiInput | PengajuanDanaCreateOrConnectWithoutPropertiInput[]
     createMany?: PengajuanDanaCreateManyPropertiInputEnvelope
     connect?: PengajuanDanaWhereUniqueInput | PengajuanDanaWhereUniqueInput[]
+  }
+
+  export type PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutPropertiInput, PengajuanCheckoutUncheckedCreateWithoutPropertiInput> | PengajuanCheckoutCreateWithoutPropertiInput[] | PengajuanCheckoutUncheckedCreateWithoutPropertiInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutPropertiInput | PengajuanCheckoutCreateOrConnectWithoutPropertiInput[]
+    createMany?: PengajuanCheckoutCreateManyPropertiInputEnvelope
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
   }
 
   export type NullableEnumJenisPropertiFieldUpdateOperationsInput = {
@@ -18573,6 +20329,20 @@ export namespace Prisma {
     deleteMany?: PengajuanDanaScalarWhereInput | PengajuanDanaScalarWhereInput[]
   }
 
+  export type PengajuanCheckoutUpdateManyWithoutPropertiNestedInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutPropertiInput, PengajuanCheckoutUncheckedCreateWithoutPropertiInput> | PengajuanCheckoutCreateWithoutPropertiInput[] | PengajuanCheckoutUncheckedCreateWithoutPropertiInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutPropertiInput | PengajuanCheckoutCreateOrConnectWithoutPropertiInput[]
+    upsert?: PengajuanCheckoutUpsertWithWhereUniqueWithoutPropertiInput | PengajuanCheckoutUpsertWithWhereUniqueWithoutPropertiInput[]
+    createMany?: PengajuanCheckoutCreateManyPropertiInputEnvelope
+    set?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    disconnect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    delete?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    update?: PengajuanCheckoutUpdateWithWhereUniqueWithoutPropertiInput | PengajuanCheckoutUpdateWithWhereUniqueWithoutPropertiInput[]
+    updateMany?: PengajuanCheckoutUpdateManyWithWhereWithoutPropertiInput | PengajuanCheckoutUpdateManyWithWhereWithoutPropertiInput[]
+    deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
+  }
+
   export type KamarUncheckedUpdateManyWithoutPropertiNestedInput = {
     create?: XOR<KamarCreateWithoutPropertiInput, KamarUncheckedCreateWithoutPropertiInput> | KamarCreateWithoutPropertiInput[] | KamarUncheckedCreateWithoutPropertiInput[]
     connectOrCreate?: KamarCreateOrConnectWithoutPropertiInput | KamarCreateOrConnectWithoutPropertiInput[]
@@ -18643,6 +20413,20 @@ export namespace Prisma {
     deleteMany?: PengajuanDanaScalarWhereInput | PengajuanDanaScalarWhereInput[]
   }
 
+  export type PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutPropertiInput, PengajuanCheckoutUncheckedCreateWithoutPropertiInput> | PengajuanCheckoutCreateWithoutPropertiInput[] | PengajuanCheckoutUncheckedCreateWithoutPropertiInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutPropertiInput | PengajuanCheckoutCreateOrConnectWithoutPropertiInput[]
+    upsert?: PengajuanCheckoutUpsertWithWhereUniqueWithoutPropertiInput | PengajuanCheckoutUpsertWithWhereUniqueWithoutPropertiInput[]
+    createMany?: PengajuanCheckoutCreateManyPropertiInputEnvelope
+    set?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    disconnect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    delete?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    update?: PengajuanCheckoutUpdateWithWhereUniqueWithoutPropertiInput | PengajuanCheckoutUpdateWithWhereUniqueWithoutPropertiInput[]
+    updateMany?: PengajuanCheckoutUpdateManyWithWhereWithoutPropertiInput | PengajuanCheckoutUpdateManyWithWhereWithoutPropertiInput[]
+    deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
+  }
+
   export type KamarCreatefasilitasInput = {
     set: string[]
   }
@@ -18670,6 +20454,13 @@ export namespace Prisma {
     connect?: PenghuniWhereUniqueInput
   }
 
+  export type PengajuanCheckoutCreateNestedManyWithoutKamarInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutKamarInput, PengajuanCheckoutUncheckedCreateWithoutKamarInput> | PengajuanCheckoutCreateWithoutKamarInput[] | PengajuanCheckoutUncheckedCreateWithoutKamarInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutKamarInput | PengajuanCheckoutCreateOrConnectWithoutKamarInput[]
+    createMany?: PengajuanCheckoutCreateManyKamarInputEnvelope
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+  }
+
   export type PemesananUncheckedCreateNestedManyWithoutKamarInput = {
     create?: XOR<PemesananCreateWithoutKamarInput, PemesananUncheckedCreateWithoutKamarInput> | PemesananCreateWithoutKamarInput[] | PemesananUncheckedCreateWithoutKamarInput[]
     connectOrCreate?: PemesananCreateOrConnectWithoutKamarInput | PemesananCreateOrConnectWithoutKamarInput[]
@@ -18681,6 +20472,13 @@ export namespace Prisma {
     create?: XOR<PenghuniCreateWithoutKamarInput, PenghuniUncheckedCreateWithoutKamarInput>
     connectOrCreate?: PenghuniCreateOrConnectWithoutKamarInput
     connect?: PenghuniWhereUniqueInput
+  }
+
+  export type PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutKamarInput, PengajuanCheckoutUncheckedCreateWithoutKamarInput> | PengajuanCheckoutCreateWithoutKamarInput[] | PengajuanCheckoutUncheckedCreateWithoutKamarInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutKamarInput | PengajuanCheckoutCreateOrConnectWithoutKamarInput[]
+    createMany?: PengajuanCheckoutCreateManyKamarInputEnvelope
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
   }
 
   export type EnumTipeKamarFieldUpdateOperationsInput = {
@@ -18733,6 +20531,20 @@ export namespace Prisma {
     update?: XOR<XOR<PenghuniUpdateToOneWithWhereWithoutKamarInput, PenghuniUpdateWithoutKamarInput>, PenghuniUncheckedUpdateWithoutKamarInput>
   }
 
+  export type PengajuanCheckoutUpdateManyWithoutKamarNestedInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutKamarInput, PengajuanCheckoutUncheckedCreateWithoutKamarInput> | PengajuanCheckoutCreateWithoutKamarInput[] | PengajuanCheckoutUncheckedCreateWithoutKamarInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutKamarInput | PengajuanCheckoutCreateOrConnectWithoutKamarInput[]
+    upsert?: PengajuanCheckoutUpsertWithWhereUniqueWithoutKamarInput | PengajuanCheckoutUpsertWithWhereUniqueWithoutKamarInput[]
+    createMany?: PengajuanCheckoutCreateManyKamarInputEnvelope
+    set?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    disconnect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    delete?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    update?: PengajuanCheckoutUpdateWithWhereUniqueWithoutKamarInput | PengajuanCheckoutUpdateWithWhereUniqueWithoutKamarInput[]
+    updateMany?: PengajuanCheckoutUpdateManyWithWhereWithoutKamarInput | PengajuanCheckoutUpdateManyWithWhereWithoutKamarInput[]
+    deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
+  }
+
   export type PemesananUncheckedUpdateManyWithoutKamarNestedInput = {
     create?: XOR<PemesananCreateWithoutKamarInput, PemesananUncheckedCreateWithoutKamarInput> | PemesananCreateWithoutKamarInput[] | PemesananUncheckedCreateWithoutKamarInput[]
     connectOrCreate?: PemesananCreateOrConnectWithoutKamarInput | PemesananCreateOrConnectWithoutKamarInput[]
@@ -18755,6 +20567,20 @@ export namespace Prisma {
     delete?: PenghuniWhereInput | boolean
     connect?: PenghuniWhereUniqueInput
     update?: XOR<XOR<PenghuniUpdateToOneWithWhereWithoutKamarInput, PenghuniUpdateWithoutKamarInput>, PenghuniUncheckedUpdateWithoutKamarInput>
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutKamarInput, PengajuanCheckoutUncheckedCreateWithoutKamarInput> | PengajuanCheckoutCreateWithoutKamarInput[] | PengajuanCheckoutUncheckedCreateWithoutKamarInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutKamarInput | PengajuanCheckoutCreateOrConnectWithoutKamarInput[]
+    upsert?: PengajuanCheckoutUpsertWithWhereUniqueWithoutKamarInput | PengajuanCheckoutUpsertWithWhereUniqueWithoutKamarInput[]
+    createMany?: PengajuanCheckoutCreateManyKamarInputEnvelope
+    set?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    disconnect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    delete?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    update?: PengajuanCheckoutUpdateWithWhereUniqueWithoutKamarInput | PengajuanCheckoutUpdateWithWhereUniqueWithoutKamarInput[]
+    updateMany?: PengajuanCheckoutUpdateManyWithWhereWithoutKamarInput | PengajuanCheckoutUpdateManyWithWhereWithoutKamarInput[]
+    deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
   }
 
   export type KamarCreateNestedOneWithoutPemesananInput = {
@@ -18891,6 +20717,13 @@ export namespace Prisma {
     connect?: KomplainWhereUniqueInput | KomplainWhereUniqueInput[]
   }
 
+  export type PengajuanCheckoutCreateNestedManyWithoutPenghuniInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutPenghuniInput, PengajuanCheckoutUncheckedCreateWithoutPenghuniInput> | PengajuanCheckoutCreateWithoutPenghuniInput[] | PengajuanCheckoutUncheckedCreateWithoutPenghuniInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutPenghuniInput | PengajuanCheckoutCreateOrConnectWithoutPenghuniInput[]
+    createMany?: PengajuanCheckoutCreateManyPenghuniInputEnvelope
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+  }
+
   export type PemesananUncheckedCreateNestedManyWithoutPenghuniInput = {
     create?: XOR<PemesananCreateWithoutPenghuniInput, PemesananUncheckedCreateWithoutPenghuniInput> | PemesananCreateWithoutPenghuniInput[] | PemesananUncheckedCreateWithoutPenghuniInput[]
     connectOrCreate?: PemesananCreateOrConnectWithoutPenghuniInput | PemesananCreateOrConnectWithoutPenghuniInput[]
@@ -18903,6 +20736,13 @@ export namespace Prisma {
     connectOrCreate?: KomplainCreateOrConnectWithoutPenghuniInput | KomplainCreateOrConnectWithoutPenghuniInput[]
     createMany?: KomplainCreateManyPenghuniInputEnvelope
     connect?: KomplainWhereUniqueInput | KomplainWhereUniqueInput[]
+  }
+
+  export type PengajuanCheckoutUncheckedCreateNestedManyWithoutPenghuniInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutPenghuniInput, PengajuanCheckoutUncheckedCreateWithoutPenghuniInput> | PengajuanCheckoutCreateWithoutPenghuniInput[] | PengajuanCheckoutUncheckedCreateWithoutPenghuniInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutPenghuniInput | PengajuanCheckoutCreateOrConnectWithoutPenghuniInput[]
+    createMany?: PengajuanCheckoutCreateManyPenghuniInputEnvelope
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
   }
 
   export type EnumStatusSewaFieldUpdateOperationsInput = {
@@ -18955,6 +20795,20 @@ export namespace Prisma {
     deleteMany?: KomplainScalarWhereInput | KomplainScalarWhereInput[]
   }
 
+  export type PengajuanCheckoutUpdateManyWithoutPenghuniNestedInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutPenghuniInput, PengajuanCheckoutUncheckedCreateWithoutPenghuniInput> | PengajuanCheckoutCreateWithoutPenghuniInput[] | PengajuanCheckoutUncheckedCreateWithoutPenghuniInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutPenghuniInput | PengajuanCheckoutCreateOrConnectWithoutPenghuniInput[]
+    upsert?: PengajuanCheckoutUpsertWithWhereUniqueWithoutPenghuniInput | PengajuanCheckoutUpsertWithWhereUniqueWithoutPenghuniInput[]
+    createMany?: PengajuanCheckoutCreateManyPenghuniInputEnvelope
+    set?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    disconnect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    delete?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    update?: PengajuanCheckoutUpdateWithWhereUniqueWithoutPenghuniInput | PengajuanCheckoutUpdateWithWhereUniqueWithoutPenghuniInput[]
+    updateMany?: PengajuanCheckoutUpdateManyWithWhereWithoutPenghuniInput | PengajuanCheckoutUpdateManyWithWhereWithoutPenghuniInput[]
+    deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
+  }
+
   export type PemesananUncheckedUpdateManyWithoutPenghuniNestedInput = {
     create?: XOR<PemesananCreateWithoutPenghuniInput, PemesananUncheckedCreateWithoutPenghuniInput> | PemesananCreateWithoutPenghuniInput[] | PemesananUncheckedCreateWithoutPenghuniInput[]
     connectOrCreate?: PemesananCreateOrConnectWithoutPenghuniInput | PemesananCreateOrConnectWithoutPenghuniInput[]
@@ -18981,6 +20835,20 @@ export namespace Prisma {
     update?: KomplainUpdateWithWhereUniqueWithoutPenghuniInput | KomplainUpdateWithWhereUniqueWithoutPenghuniInput[]
     updateMany?: KomplainUpdateManyWithWhereWithoutPenghuniInput | KomplainUpdateManyWithWhereWithoutPenghuniInput[]
     deleteMany?: KomplainScalarWhereInput | KomplainScalarWhereInput[]
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateManyWithoutPenghuniNestedInput = {
+    create?: XOR<PengajuanCheckoutCreateWithoutPenghuniInput, PengajuanCheckoutUncheckedCreateWithoutPenghuniInput> | PengajuanCheckoutCreateWithoutPenghuniInput[] | PengajuanCheckoutUncheckedCreateWithoutPenghuniInput[]
+    connectOrCreate?: PengajuanCheckoutCreateOrConnectWithoutPenghuniInput | PengajuanCheckoutCreateOrConnectWithoutPenghuniInput[]
+    upsert?: PengajuanCheckoutUpsertWithWhereUniqueWithoutPenghuniInput | PengajuanCheckoutUpsertWithWhereUniqueWithoutPenghuniInput[]
+    createMany?: PengajuanCheckoutCreateManyPenghuniInputEnvelope
+    set?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    disconnect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    delete?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    connect?: PengajuanCheckoutWhereUniqueInput | PengajuanCheckoutWhereUniqueInput[]
+    update?: PengajuanCheckoutUpdateWithWhereUniqueWithoutPenghuniInput | PengajuanCheckoutUpdateWithWhereUniqueWithoutPenghuniInput[]
+    updateMany?: PengajuanCheckoutUpdateManyWithWhereWithoutPenghuniInput | PengajuanCheckoutUpdateManyWithWhereWithoutPenghuniInput[]
+    deleteMany?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutOperatorInput = {
@@ -19123,6 +20991,68 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type PenghuniCreateNestedOneWithoutPengajuanCheckoutInput = {
+    create?: XOR<PenghuniCreateWithoutPengajuanCheckoutInput, PenghuniUncheckedCreateWithoutPengajuanCheckoutInput>
+    connectOrCreate?: PenghuniCreateOrConnectWithoutPengajuanCheckoutInput
+    connect?: PenghuniWhereUniqueInput
+  }
+
+  export type KamarCreateNestedOneWithoutPengajuanCheckoutInput = {
+    create?: XOR<KamarCreateWithoutPengajuanCheckoutInput, KamarUncheckedCreateWithoutPengajuanCheckoutInput>
+    connectOrCreate?: KamarCreateOrConnectWithoutPengajuanCheckoutInput
+    connect?: KamarWhereUniqueInput
+  }
+
+  export type PropertiCreateNestedOneWithoutPengajuanCheckoutInput = {
+    create?: XOR<PropertiCreateWithoutPengajuanCheckoutInput, PropertiUncheckedCreateWithoutPengajuanCheckoutInput>
+    connectOrCreate?: PropertiCreateOrConnectWithoutPengajuanCheckoutInput
+    connect?: PropertiWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPengajuanCheckoutAdminInput = {
+    create?: XOR<UserCreateWithoutPengajuanCheckoutAdminInput, UserUncheckedCreateWithoutPengajuanCheckoutAdminInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPengajuanCheckoutAdminInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumStatusPengajuanCheckoutFieldUpdateOperationsInput = {
+    set?: $Enums.StatusPengajuanCheckout
+  }
+
+  export type PenghuniUpdateOneRequiredWithoutPengajuanCheckoutNestedInput = {
+    create?: XOR<PenghuniCreateWithoutPengajuanCheckoutInput, PenghuniUncheckedCreateWithoutPengajuanCheckoutInput>
+    connectOrCreate?: PenghuniCreateOrConnectWithoutPengajuanCheckoutInput
+    upsert?: PenghuniUpsertWithoutPengajuanCheckoutInput
+    connect?: PenghuniWhereUniqueInput
+    update?: XOR<XOR<PenghuniUpdateToOneWithWhereWithoutPengajuanCheckoutInput, PenghuniUpdateWithoutPengajuanCheckoutInput>, PenghuniUncheckedUpdateWithoutPengajuanCheckoutInput>
+  }
+
+  export type KamarUpdateOneRequiredWithoutPengajuanCheckoutNestedInput = {
+    create?: XOR<KamarCreateWithoutPengajuanCheckoutInput, KamarUncheckedCreateWithoutPengajuanCheckoutInput>
+    connectOrCreate?: KamarCreateOrConnectWithoutPengajuanCheckoutInput
+    upsert?: KamarUpsertWithoutPengajuanCheckoutInput
+    connect?: KamarWhereUniqueInput
+    update?: XOR<XOR<KamarUpdateToOneWithWhereWithoutPengajuanCheckoutInput, KamarUpdateWithoutPengajuanCheckoutInput>, KamarUncheckedUpdateWithoutPengajuanCheckoutInput>
+  }
+
+  export type PropertiUpdateOneRequiredWithoutPengajuanCheckoutNestedInput = {
+    create?: XOR<PropertiCreateWithoutPengajuanCheckoutInput, PropertiUncheckedCreateWithoutPengajuanCheckoutInput>
+    connectOrCreate?: PropertiCreateOrConnectWithoutPengajuanCheckoutInput
+    upsert?: PropertiUpsertWithoutPengajuanCheckoutInput
+    connect?: PropertiWhereUniqueInput
+    update?: XOR<XOR<PropertiUpdateToOneWithWhereWithoutPengajuanCheckoutInput, PropertiUpdateWithoutPengajuanCheckoutInput>, PropertiUncheckedUpdateWithoutPengajuanCheckoutInput>
+  }
+
+  export type UserUpdateOneWithoutPengajuanCheckoutAdminNestedInput = {
+    create?: XOR<UserCreateWithoutPengajuanCheckoutAdminInput, UserUncheckedCreateWithoutPengajuanCheckoutAdminInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPengajuanCheckoutAdminInput
+    upsert?: UserUpsertWithoutPengajuanCheckoutAdminInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPengajuanCheckoutAdminInput, UserUpdateWithoutPengajuanCheckoutAdminInput>, UserUncheckedUpdateWithoutPengajuanCheckoutAdminInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -19492,6 +21422,23 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedEnumStatusPengajuanCheckoutFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatusPengajuanCheckout | EnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    in?: $Enums.StatusPengajuanCheckout[] | ListEnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusPengajuanCheckout[] | ListEnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusPengajuanCheckoutFilter<$PrismaModel> | $Enums.StatusPengajuanCheckout
+  }
+
+  export type NestedEnumStatusPengajuanCheckoutWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatusPengajuanCheckout | EnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    in?: $Enums.StatusPengajuanCheckout[] | ListEnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusPengajuanCheckout[] | ListEnumStatusPengajuanCheckoutFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusPengajuanCheckoutWithAggregatesFilter<$PrismaModel> | $Enums.StatusPengajuanCheckout
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusPengajuanCheckoutFilter<$PrismaModel>
+    _max?: NestedEnumStatusPengajuanCheckoutFilter<$PrismaModel>
+  }
+
   export type PenghuniCreateWithoutUserInput = {
     id?: string
     tgl_mulai: Date | string
@@ -19502,6 +21449,7 @@ export namespace Prisma {
     kamar?: KamarCreateNestedOneWithoutPenghuniInput
     pemesanan?: PemesananCreateNestedManyWithoutPenghuniInput
     komplain?: KomplainCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniUncheckedCreateWithoutUserInput = {
@@ -19514,6 +21462,7 @@ export namespace Prisma {
     kamar_id?: string | null
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPenghuniInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniCreateOrConnectWithoutUserInput = {
@@ -19567,6 +21516,7 @@ export namespace Prisma {
     operator?: OperatorCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutAdminInput = {
@@ -19589,6 +21539,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutAdminInput = {
@@ -19624,6 +21575,38 @@ export namespace Prisma {
     create: XOR<AdminSettingsCreateWithoutUserInput, AdminSettingsUncheckedCreateWithoutUserInput>
   }
 
+  export type PengajuanCheckoutCreateWithoutAdminInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni: PenghuniCreateNestedOneWithoutPengajuanCheckoutInput
+    kamar: KamarCreateNestedOneWithoutPengajuanCheckoutInput
+    properti: PropertiCreateNestedOneWithoutPengajuanCheckoutInput
+  }
+
+  export type PengajuanCheckoutUncheckedCreateWithoutAdminInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni_id: string
+    kamar_id: string
+    properti_id: string
+  }
+
+  export type PengajuanCheckoutCreateOrConnectWithoutAdminInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    create: XOR<PengajuanCheckoutCreateWithoutAdminInput, PengajuanCheckoutUncheckedCreateWithoutAdminInput>
+  }
+
+  export type PengajuanCheckoutCreateManyAdminInputEnvelope = {
+    data: PengajuanCheckoutCreateManyAdminInput | PengajuanCheckoutCreateManyAdminInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PenghuniUpsertWithoutUserInput = {
     update: XOR<PenghuniUpdateWithoutUserInput, PenghuniUncheckedUpdateWithoutUserInput>
     create: XOR<PenghuniCreateWithoutUserInput, PenghuniUncheckedCreateWithoutUserInput>
@@ -19645,6 +21628,7 @@ export namespace Prisma {
     kamar?: KamarUpdateOneWithoutPenghuniNestedInput
     pemesanan?: PemesananUpdateManyWithoutPenghuniNestedInput
     komplain?: KomplainUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPenghuniNestedInput
   }
 
   export type PenghuniUncheckedUpdateWithoutUserInput = {
@@ -19657,6 +21641,7 @@ export namespace Prisma {
     kamar_id?: NullableStringFieldUpdateOperationsInput | string | null
     pemesanan?: PemesananUncheckedUpdateManyWithoutPenghuniNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPenghuniNestedInput
   }
 
   export type OperatorUpsertWithWhereUniqueWithoutUserInput = {
@@ -19752,6 +21737,37 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PengajuanCheckoutUpsertWithWhereUniqueWithoutAdminInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    update: XOR<PengajuanCheckoutUpdateWithoutAdminInput, PengajuanCheckoutUncheckedUpdateWithoutAdminInput>
+    create: XOR<PengajuanCheckoutCreateWithoutAdminInput, PengajuanCheckoutUncheckedCreateWithoutAdminInput>
+  }
+
+  export type PengajuanCheckoutUpdateWithWhereUniqueWithoutAdminInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    data: XOR<PengajuanCheckoutUpdateWithoutAdminInput, PengajuanCheckoutUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type PengajuanCheckoutUpdateManyWithWhereWithoutAdminInput = {
+    where: PengajuanCheckoutScalarWhereInput
+    data: XOR<PengajuanCheckoutUpdateManyMutationInput, PengajuanCheckoutUncheckedUpdateManyWithoutAdminInput>
+  }
+
+  export type PengajuanCheckoutScalarWhereInput = {
+    AND?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
+    OR?: PengajuanCheckoutScalarWhereInput[]
+    NOT?: PengajuanCheckoutScalarWhereInput | PengajuanCheckoutScalarWhereInput[]
+    id?: StringFilter<"PengajuanCheckout"> | string
+    keterangan?: StringNullableFilter<"PengajuanCheckout"> | string | null
+    status?: EnumStatusPengajuanCheckoutFilter<"PengajuanCheckout"> | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFilter<"PengajuanCheckout"> | Date | string
+    updated_at?: DateTimeFilter<"PengajuanCheckout"> | Date | string
+    penghuni_id?: StringFilter<"PengajuanCheckout"> | string
+    kamar_id?: StringFilter<"PengajuanCheckout"> | string
+    properti_id?: StringFilter<"PengajuanCheckout"> | string
+    admin_id?: StringNullableFilter<"PengajuanCheckout"> | string | null
+  }
+
   export type UserCreateWithoutSettingsInput = {
     id?: string
     username: string
@@ -19765,6 +21781,7 @@ export namespace Prisma {
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutSettingsInput = {
@@ -19780,6 +21797,7 @@ export namespace Prisma {
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutSettingsInput = {
@@ -19811,6 +21829,7 @@ export namespace Prisma {
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSettingsInput = {
@@ -19826,6 +21845,7 @@ export namespace Prisma {
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type UserCreateWithoutPropertiInput = {
@@ -19841,6 +21861,7 @@ export namespace Prisma {
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     operator?: OperatorCreateNestedManyWithoutUserInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutPropertiInput = {
@@ -19856,6 +21877,7 @@ export namespace Prisma {
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutPropertiInput = {
@@ -19877,6 +21899,7 @@ export namespace Prisma {
     updated_at?: Date | string
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUncheckedCreateWithoutPropertiInput = {
@@ -19893,6 +21916,7 @@ export namespace Prisma {
     updated_at?: Date | string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
   }
 
   export type KamarCreateOrConnectWithoutPropertiInput = {
@@ -20037,6 +22061,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PengajuanCheckoutCreateWithoutPropertiInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni: PenghuniCreateNestedOneWithoutPengajuanCheckoutInput
+    kamar: KamarCreateNestedOneWithoutPengajuanCheckoutInput
+    admin?: UserCreateNestedOneWithoutPengajuanCheckoutAdminInput
+  }
+
+  export type PengajuanCheckoutUncheckedCreateWithoutPropertiInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni_id: string
+    kamar_id: string
+    admin_id?: string | null
+  }
+
+  export type PengajuanCheckoutCreateOrConnectWithoutPropertiInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    create: XOR<PengajuanCheckoutCreateWithoutPropertiInput, PengajuanCheckoutUncheckedCreateWithoutPropertiInput>
+  }
+
+  export type PengajuanCheckoutCreateManyPropertiInputEnvelope = {
+    data: PengajuanCheckoutCreateManyPropertiInput | PengajuanCheckoutCreateManyPropertiInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutPropertiInput = {
     update: XOR<UserUpdateWithoutPropertiInput, UserUncheckedUpdateWithoutPropertiInput>
     create: XOR<UserCreateWithoutPropertiInput, UserUncheckedCreateWithoutPropertiInput>
@@ -20061,6 +22117,7 @@ export namespace Prisma {
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     operator?: OperatorUpdateManyWithoutUserNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPropertiInput = {
@@ -20076,6 +22133,7 @@ export namespace Prisma {
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type KamarUpsertWithWhereUniqueWithoutPropertiInput = {
@@ -20225,6 +22283,22 @@ export namespace Prisma {
     properti_id?: StringFilter<"PengajuanDana"> | string
   }
 
+  export type PengajuanCheckoutUpsertWithWhereUniqueWithoutPropertiInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    update: XOR<PengajuanCheckoutUpdateWithoutPropertiInput, PengajuanCheckoutUncheckedUpdateWithoutPropertiInput>
+    create: XOR<PengajuanCheckoutCreateWithoutPropertiInput, PengajuanCheckoutUncheckedCreateWithoutPropertiInput>
+  }
+
+  export type PengajuanCheckoutUpdateWithWhereUniqueWithoutPropertiInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    data: XOR<PengajuanCheckoutUpdateWithoutPropertiInput, PengajuanCheckoutUncheckedUpdateWithoutPropertiInput>
+  }
+
+  export type PengajuanCheckoutUpdateManyWithWhereWithoutPropertiInput = {
+    where: PengajuanCheckoutScalarWhereInput
+    data: XOR<PengajuanCheckoutUpdateManyMutationInput, PengajuanCheckoutUncheckedUpdateManyWithoutPropertiInput>
+  }
+
   export type PropertiCreateWithoutKamarInput = {
     id?: string
     nama: string
@@ -20245,6 +22319,7 @@ export namespace Prisma {
     operator?: OperatorCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutKamarInput = {
@@ -20267,6 +22342,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutKamarInput = {
@@ -20322,6 +22398,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutPenghuniInput
     pemesanan?: PemesananCreateNestedManyWithoutPenghuniInput
     komplain?: KomplainCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniUncheckedCreateWithoutKamarInput = {
@@ -20334,11 +22411,44 @@ export namespace Prisma {
     user_id: string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPenghuniInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniCreateOrConnectWithoutKamarInput = {
     where: PenghuniWhereUniqueInput
     create: XOR<PenghuniCreateWithoutKamarInput, PenghuniUncheckedCreateWithoutKamarInput>
+  }
+
+  export type PengajuanCheckoutCreateWithoutKamarInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni: PenghuniCreateNestedOneWithoutPengajuanCheckoutInput
+    properti: PropertiCreateNestedOneWithoutPengajuanCheckoutInput
+    admin?: UserCreateNestedOneWithoutPengajuanCheckoutAdminInput
+  }
+
+  export type PengajuanCheckoutUncheckedCreateWithoutKamarInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni_id: string
+    properti_id: string
+    admin_id?: string | null
+  }
+
+  export type PengajuanCheckoutCreateOrConnectWithoutKamarInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    create: XOR<PengajuanCheckoutCreateWithoutKamarInput, PengajuanCheckoutUncheckedCreateWithoutKamarInput>
+  }
+
+  export type PengajuanCheckoutCreateManyKamarInputEnvelope = {
+    data: PengajuanCheckoutCreateManyKamarInput | PengajuanCheckoutCreateManyKamarInput[]
+    skipDuplicates?: boolean
   }
 
   export type PropertiUpsertWithoutKamarInput = {
@@ -20372,6 +22482,7 @@ export namespace Prisma {
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutKamarInput = {
@@ -20394,6 +22505,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PemesananUpsertWithWhereUniqueWithoutKamarInput = {
@@ -20433,6 +22545,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutPenghuniNestedInput
     pemesanan?: PemesananUpdateManyWithoutPenghuniNestedInput
     komplain?: KomplainUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPenghuniNestedInput
   }
 
   export type PenghuniUncheckedUpdateWithoutKamarInput = {
@@ -20445,6 +22558,23 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutPenghuniNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPenghuniNestedInput
+  }
+
+  export type PengajuanCheckoutUpsertWithWhereUniqueWithoutKamarInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    update: XOR<PengajuanCheckoutUpdateWithoutKamarInput, PengajuanCheckoutUncheckedUpdateWithoutKamarInput>
+    create: XOR<PengajuanCheckoutCreateWithoutKamarInput, PengajuanCheckoutUncheckedCreateWithoutKamarInput>
+  }
+
+  export type PengajuanCheckoutUpdateWithWhereUniqueWithoutKamarInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    data: XOR<PengajuanCheckoutUpdateWithoutKamarInput, PengajuanCheckoutUncheckedUpdateWithoutKamarInput>
+  }
+
+  export type PengajuanCheckoutUpdateManyWithWhereWithoutKamarInput = {
+    where: PengajuanCheckoutScalarWhereInput
+    data: XOR<PengajuanCheckoutUpdateManyMutationInput, PengajuanCheckoutUncheckedUpdateManyWithoutKamarInput>
   }
 
   export type KamarCreateWithoutPemesananInput = {
@@ -20461,6 +22591,7 @@ export namespace Prisma {
     updated_at?: Date | string
     properti: PropertiCreateNestedOneWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUncheckedCreateWithoutPemesananInput = {
@@ -20477,6 +22608,7 @@ export namespace Prisma {
     updated_at?: Date | string
     properti_id: string
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
   }
 
   export type KamarCreateOrConnectWithoutPemesananInput = {
@@ -20494,6 +22626,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutPenghuniInput
     kamar?: KamarCreateNestedOneWithoutPenghuniInput
     komplain?: KomplainCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniUncheckedCreateWithoutPemesananInput = {
@@ -20506,6 +22639,7 @@ export namespace Prisma {
     user_id: string
     kamar_id?: string | null
     komplain?: KomplainUncheckedCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniCreateOrConnectWithoutPemesananInput = {
@@ -20533,6 +22667,7 @@ export namespace Prisma {
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
     operator?: OperatorCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutPemesananInput = {
@@ -20555,6 +22690,7 @@ export namespace Prisma {
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutPemesananInput = {
@@ -20614,6 +22750,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateWithoutPemesananInput = {
@@ -20630,6 +22767,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     properti_id?: StringFieldUpdateOperationsInput | string
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
   }
 
   export type PenghuniUpsertWithoutPemesananInput = {
@@ -20653,6 +22791,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutPenghuniNestedInput
     kamar?: KamarUpdateOneWithoutPenghuniNestedInput
     komplain?: KomplainUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPenghuniNestedInput
   }
 
   export type PenghuniUncheckedUpdateWithoutPemesananInput = {
@@ -20665,6 +22804,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     kamar_id?: NullableStringFieldUpdateOperationsInput | string | null
     komplain?: KomplainUncheckedUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPenghuniNestedInput
   }
 
   export type PropertiUpsertWithoutPemesananInput = {
@@ -20698,6 +22838,7 @@ export namespace Prisma {
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutPemesananInput = {
@@ -20720,6 +22861,7 @@ export namespace Prisma {
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PembayaranUpsertWithoutPemesananInput = {
@@ -20840,6 +22982,7 @@ export namespace Prisma {
     operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutPenghuniInput = {
@@ -20855,6 +22998,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutPenghuniInput = {
@@ -20876,6 +23020,7 @@ export namespace Prisma {
     updated_at?: Date | string
     properti: PropertiCreateNestedOneWithoutKamarInput
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
   }
 
   export type KamarUncheckedCreateWithoutPenghuniInput = {
@@ -20892,6 +23037,7 @@ export namespace Prisma {
     updated_at?: Date | string
     properti_id: string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
   }
 
   export type KamarCreateOrConnectWithoutPenghuniInput = {
@@ -20971,6 +23117,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PengajuanCheckoutCreateWithoutPenghuniInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    kamar: KamarCreateNestedOneWithoutPengajuanCheckoutInput
+    properti: PropertiCreateNestedOneWithoutPengajuanCheckoutInput
+    admin?: UserCreateNestedOneWithoutPengajuanCheckoutAdminInput
+  }
+
+  export type PengajuanCheckoutUncheckedCreateWithoutPenghuniInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    kamar_id: string
+    properti_id: string
+    admin_id?: string | null
+  }
+
+  export type PengajuanCheckoutCreateOrConnectWithoutPenghuniInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    create: XOR<PengajuanCheckoutCreateWithoutPenghuniInput, PengajuanCheckoutUncheckedCreateWithoutPenghuniInput>
+  }
+
+  export type PengajuanCheckoutCreateManyPenghuniInputEnvelope = {
+    data: PengajuanCheckoutCreateManyPenghuniInput | PengajuanCheckoutCreateManyPenghuniInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutPenghuniInput = {
     update: XOR<UserUpdateWithoutPenghuniInput, UserUncheckedUpdateWithoutPenghuniInput>
     create: XOR<UserCreateWithoutPenghuniInput, UserUncheckedCreateWithoutPenghuniInput>
@@ -20995,6 +23173,7 @@ export namespace Prisma {
     operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPenghuniInput = {
@@ -21010,6 +23189,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type KamarUpsertWithoutPenghuniInput = {
@@ -21037,6 +23217,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateWithoutPenghuniInput = {
@@ -21053,6 +23234,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     properti_id?: StringFieldUpdateOperationsInput | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
   }
 
   export type PemesananUpsertWithWhereUniqueWithoutPenghuniInput = {
@@ -21087,6 +23269,22 @@ export namespace Prisma {
     data: XOR<KomplainUpdateManyMutationInput, KomplainUncheckedUpdateManyWithoutPenghuniInput>
   }
 
+  export type PengajuanCheckoutUpsertWithWhereUniqueWithoutPenghuniInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    update: XOR<PengajuanCheckoutUpdateWithoutPenghuniInput, PengajuanCheckoutUncheckedUpdateWithoutPenghuniInput>
+    create: XOR<PengajuanCheckoutCreateWithoutPenghuniInput, PengajuanCheckoutUncheckedCreateWithoutPenghuniInput>
+  }
+
+  export type PengajuanCheckoutUpdateWithWhereUniqueWithoutPenghuniInput = {
+    where: PengajuanCheckoutWhereUniqueInput
+    data: XOR<PengajuanCheckoutUpdateWithoutPenghuniInput, PengajuanCheckoutUncheckedUpdateWithoutPenghuniInput>
+  }
+
+  export type PengajuanCheckoutUpdateManyWithWhereWithoutPenghuniInput = {
+    where: PengajuanCheckoutScalarWhereInput
+    data: XOR<PengajuanCheckoutUpdateManyMutationInput, PengajuanCheckoutUncheckedUpdateManyWithoutPenghuniInput>
+  }
+
   export type UserCreateWithoutOperatorInput = {
     id?: string
     username: string
@@ -21100,6 +23298,7 @@ export namespace Prisma {
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutOperatorInput = {
@@ -21115,6 +23314,7 @@ export namespace Prisma {
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutOperatorInput = {
@@ -21142,6 +23342,7 @@ export namespace Prisma {
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutOperatorInput = {
@@ -21164,6 +23365,7 @@ export namespace Prisma {
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutOperatorInput = {
@@ -21229,6 +23431,7 @@ export namespace Prisma {
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOperatorInput = {
@@ -21244,6 +23447,7 @@ export namespace Prisma {
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
+    pengajuanCheckoutAdmin?: PengajuanCheckoutUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type PropertiUpsertWithoutOperatorInput = {
@@ -21277,6 +23481,7 @@ export namespace Prisma {
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutOperatorInput = {
@@ -21299,6 +23504,7 @@ export namespace Prisma {
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PengajuanDanaUpsertWithWhereUniqueWithoutOperatorInput = {
@@ -21327,6 +23533,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutPenghuniInput
     kamar?: KamarCreateNestedOneWithoutPenghuniInput
     pemesanan?: PemesananCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniUncheckedCreateWithoutKomplainInput = {
@@ -21339,6 +23546,7 @@ export namespace Prisma {
     user_id: string
     kamar_id?: string | null
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPenghuniInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPenghuniInput
   }
 
   export type PenghuniCreateOrConnectWithoutKomplainInput = {
@@ -21366,6 +23574,7 @@ export namespace Prisma {
     operator?: OperatorCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutKomplainInput = {
@@ -21388,6 +23597,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutKomplainInput = {
@@ -21416,6 +23626,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutPenghuniNestedInput
     kamar?: KamarUpdateOneWithoutPenghuniNestedInput
     pemesanan?: PemesananUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPenghuniNestedInput
   }
 
   export type PenghuniUncheckedUpdateWithoutKomplainInput = {
@@ -21428,6 +23639,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     kamar_id?: NullableStringFieldUpdateOperationsInput | string | null
     pemesanan?: PemesananUncheckedUpdateManyWithoutPenghuniNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPenghuniNestedInput
   }
 
   export type PropertiUpsertWithoutKomplainInput = {
@@ -21461,6 +23673,7 @@ export namespace Prisma {
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutKomplainInput = {
@@ -21483,6 +23696,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type OperatorCreateWithoutPengajuanDanaInput = {
@@ -21526,6 +23740,7 @@ export namespace Prisma {
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
     operator?: OperatorCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiUncheckedCreateWithoutPengajuanDanaInput = {
@@ -21548,6 +23763,7 @@ export namespace Prisma {
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutPropertiInput
   }
 
   export type PropertiCreateOrConnectWithoutPengajuanDanaInput = {
@@ -21613,6 +23829,7 @@ export namespace Prisma {
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutPengajuanDanaInput = {
@@ -21635,6 +23852,347 @@ export namespace Prisma {
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
+  }
+
+  export type PenghuniCreateWithoutPengajuanCheckoutInput = {
+    id?: string
+    tgl_mulai: Date | string
+    tgl_berakhir?: Date | string | null
+    status_sewa?: $Enums.StatusSewa
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutPenghuniInput
+    kamar?: KamarCreateNestedOneWithoutPenghuniInput
+    pemesanan?: PemesananCreateNestedManyWithoutPenghuniInput
+    komplain?: KomplainCreateNestedManyWithoutPenghuniInput
+  }
+
+  export type PenghuniUncheckedCreateWithoutPengajuanCheckoutInput = {
+    id?: string
+    tgl_mulai: Date | string
+    tgl_berakhir?: Date | string | null
+    status_sewa?: $Enums.StatusSewa
+    created_at?: Date | string
+    updated_at?: Date | string
+    user_id: string
+    kamar_id?: string | null
+    pemesanan?: PemesananUncheckedCreateNestedManyWithoutPenghuniInput
+    komplain?: KomplainUncheckedCreateNestedManyWithoutPenghuniInput
+  }
+
+  export type PenghuniCreateOrConnectWithoutPengajuanCheckoutInput = {
+    where: PenghuniWhereUniqueInput
+    create: XOR<PenghuniCreateWithoutPengajuanCheckoutInput, PenghuniUncheckedCreateWithoutPengajuanCheckoutInput>
+  }
+
+  export type KamarCreateWithoutPengajuanCheckoutInput = {
+    id?: string
+    nomor: string
+    tipe?: $Enums.TipeKamar
+    luas?: string | null
+    fasilitas?: KamarCreatefasilitasInput | string[]
+    deskripsi?: string | null
+    tarif?: NullableJsonNullValueInput | InputJsonValue
+    gambar?: KamarCreategambarInput | string[]
+    status?: $Enums.StatusKamar
+    created_at?: Date | string
+    updated_at?: Date | string
+    properti: PropertiCreateNestedOneWithoutKamarInput
+    pemesanan?: PemesananCreateNestedManyWithoutKamarInput
+    penghuni?: PenghuniCreateNestedOneWithoutKamarInput
+  }
+
+  export type KamarUncheckedCreateWithoutPengajuanCheckoutInput = {
+    id?: string
+    nomor: string
+    tipe?: $Enums.TipeKamar
+    luas?: string | null
+    fasilitas?: KamarCreatefasilitasInput | string[]
+    deskripsi?: string | null
+    tarif?: NullableJsonNullValueInput | InputJsonValue
+    gambar?: KamarCreategambarInput | string[]
+    status?: $Enums.StatusKamar
+    created_at?: Date | string
+    updated_at?: Date | string
+    properti_id: string
+    pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
+    penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
+  }
+
+  export type KamarCreateOrConnectWithoutPengajuanCheckoutInput = {
+    where: KamarWhereUniqueInput
+    create: XOR<KamarCreateWithoutPengajuanCheckoutInput, KamarUncheckedCreateWithoutPengajuanCheckoutInput>
+  }
+
+  export type PropertiCreateWithoutPengajuanCheckoutInput = {
+    id?: string
+    nama: string
+    alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
+    jenis?: $Enums.JenisProperti | null
+    deskripsi?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
+    created_at?: Date | string
+    updated_at?: Date | string
+    admin: UserCreateNestedOneWithoutPropertiInput
+    kamar?: KamarCreateNestedManyWithoutPropertiInput
+    komplain?: KomplainCreateNestedManyWithoutPropertiInput
+    operator?: OperatorCreateNestedManyWithoutPropertiInput
+    pemesanan?: PemesananCreateNestedManyWithoutPropertiInput
+    pengajuanDana?: PengajuanDanaCreateNestedManyWithoutPropertiInput
+  }
+
+  export type PropertiUncheckedCreateWithoutPengajuanCheckoutInput = {
+    id?: string
+    nama: string
+    alamat: string
+    provinsi?: string | null
+    kota?: string | null
+    kecamatan?: string | null
+    kode_pos?: string | null
+    detail_alamat?: string | null
+    jenis?: $Enums.JenisProperti | null
+    deskripsi?: string | null
+    kebijakan?: string | null
+    gambar?: PropertiCreategambarInput | string[]
+    created_at?: Date | string
+    updated_at?: Date | string
+    admin_id: string
+    kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
+    komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
+    operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
+    pemesanan?: PemesananUncheckedCreateNestedManyWithoutPropertiInput
+    pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutPropertiInput
+  }
+
+  export type PropertiCreateOrConnectWithoutPengajuanCheckoutInput = {
+    where: PropertiWhereUniqueInput
+    create: XOR<PropertiCreateWithoutPengajuanCheckoutInput, PropertiUncheckedCreateWithoutPengajuanCheckoutInput>
+  }
+
+  export type UserCreateWithoutPengajuanCheckoutAdminInput = {
+    id?: string
+    username: string
+    email: string
+    password: string
+    nama: string
+    role: $Enums.Role
+    no_telepon?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni?: PenghuniCreateNestedOneWithoutUserInput
+    operator?: OperatorCreateNestedManyWithoutUserInput
+    properti?: PropertiCreateNestedManyWithoutAdminInput
+    settings?: AdminSettingsCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPengajuanCheckoutAdminInput = {
+    id?: string
+    username: string
+    email: string
+    password: string
+    nama: string
+    role: $Enums.Role
+    no_telepon?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
+    operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
+    properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
+    settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPengajuanCheckoutAdminInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPengajuanCheckoutAdminInput, UserUncheckedCreateWithoutPengajuanCheckoutAdminInput>
+  }
+
+  export type PenghuniUpsertWithoutPengajuanCheckoutInput = {
+    update: XOR<PenghuniUpdateWithoutPengajuanCheckoutInput, PenghuniUncheckedUpdateWithoutPengajuanCheckoutInput>
+    create: XOR<PenghuniCreateWithoutPengajuanCheckoutInput, PenghuniUncheckedCreateWithoutPengajuanCheckoutInput>
+    where?: PenghuniWhereInput
+  }
+
+  export type PenghuniUpdateToOneWithWhereWithoutPengajuanCheckoutInput = {
+    where?: PenghuniWhereInput
+    data: XOR<PenghuniUpdateWithoutPengajuanCheckoutInput, PenghuniUncheckedUpdateWithoutPengajuanCheckoutInput>
+  }
+
+  export type PenghuniUpdateWithoutPengajuanCheckoutInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tgl_mulai?: DateTimeFieldUpdateOperationsInput | Date | string
+    tgl_berakhir?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status_sewa?: EnumStatusSewaFieldUpdateOperationsInput | $Enums.StatusSewa
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPenghuniNestedInput
+    kamar?: KamarUpdateOneWithoutPenghuniNestedInput
+    pemesanan?: PemesananUpdateManyWithoutPenghuniNestedInput
+    komplain?: KomplainUpdateManyWithoutPenghuniNestedInput
+  }
+
+  export type PenghuniUncheckedUpdateWithoutPengajuanCheckoutInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tgl_mulai?: DateTimeFieldUpdateOperationsInput | Date | string
+    tgl_berakhir?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status_sewa?: EnumStatusSewaFieldUpdateOperationsInput | $Enums.StatusSewa
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    kamar_id?: NullableStringFieldUpdateOperationsInput | string | null
+    pemesanan?: PemesananUncheckedUpdateManyWithoutPenghuniNestedInput
+    komplain?: KomplainUncheckedUpdateManyWithoutPenghuniNestedInput
+  }
+
+  export type KamarUpsertWithoutPengajuanCheckoutInput = {
+    update: XOR<KamarUpdateWithoutPengajuanCheckoutInput, KamarUncheckedUpdateWithoutPengajuanCheckoutInput>
+    create: XOR<KamarCreateWithoutPengajuanCheckoutInput, KamarUncheckedCreateWithoutPengajuanCheckoutInput>
+    where?: KamarWhereInput
+  }
+
+  export type KamarUpdateToOneWithWhereWithoutPengajuanCheckoutInput = {
+    where?: KamarWhereInput
+    data: XOR<KamarUpdateWithoutPengajuanCheckoutInput, KamarUncheckedUpdateWithoutPengajuanCheckoutInput>
+  }
+
+  export type KamarUpdateWithoutPengajuanCheckoutInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nomor?: StringFieldUpdateOperationsInput | string
+    tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
+    luas?: NullableStringFieldUpdateOperationsInput | string | null
+    fasilitas?: KamarUpdatefasilitasInput | string[]
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    tarif?: NullableJsonNullValueInput | InputJsonValue
+    gambar?: KamarUpdategambarInput | string[]
+    status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
+    pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
+    penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
+  }
+
+  export type KamarUncheckedUpdateWithoutPengajuanCheckoutInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nomor?: StringFieldUpdateOperationsInput | string
+    tipe?: EnumTipeKamarFieldUpdateOperationsInput | $Enums.TipeKamar
+    luas?: NullableStringFieldUpdateOperationsInput | string | null
+    fasilitas?: KamarUpdatefasilitasInput | string[]
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    tarif?: NullableJsonNullValueInput | InputJsonValue
+    gambar?: KamarUpdategambarInput | string[]
+    status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+    pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
+    penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
+  }
+
+  export type PropertiUpsertWithoutPengajuanCheckoutInput = {
+    update: XOR<PropertiUpdateWithoutPengajuanCheckoutInput, PropertiUncheckedUpdateWithoutPengajuanCheckoutInput>
+    create: XOR<PropertiCreateWithoutPengajuanCheckoutInput, PropertiUncheckedCreateWithoutPengajuanCheckoutInput>
+    where?: PropertiWhereInput
+  }
+
+  export type PropertiUpdateToOneWithWhereWithoutPengajuanCheckoutInput = {
+    where?: PropertiWhereInput
+    data: XOR<PropertiUpdateWithoutPengajuanCheckoutInput, PropertiUncheckedUpdateWithoutPengajuanCheckoutInput>
+  }
+
+  export type PropertiUpdateWithoutPengajuanCheckoutInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
+    kamar?: KamarUpdateManyWithoutPropertiNestedInput
+    komplain?: KomplainUpdateManyWithoutPropertiNestedInput
+    operator?: OperatorUpdateManyWithoutPropertiNestedInput
+    pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
+    pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
+  }
+
+  export type PropertiUncheckedUpdateWithoutPengajuanCheckoutInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    alamat?: StringFieldUpdateOperationsInput | string
+    provinsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kota?: NullableStringFieldUpdateOperationsInput | string | null
+    kecamatan?: NullableStringFieldUpdateOperationsInput | string | null
+    kode_pos?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_alamat?: NullableStringFieldUpdateOperationsInput | string | null
+    jenis?: NullableEnumJenisPropertiFieldUpdateOperationsInput | $Enums.JenisProperti | null
+    deskripsi?: NullableStringFieldUpdateOperationsInput | string | null
+    kebijakan?: NullableStringFieldUpdateOperationsInput | string | null
+    gambar?: PropertiUpdategambarInput | string[]
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_id?: StringFieldUpdateOperationsInput | string
+    kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
+    komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
+    operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
+    pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
+  }
+
+  export type UserUpsertWithoutPengajuanCheckoutAdminInput = {
+    update: XOR<UserUpdateWithoutPengajuanCheckoutAdminInput, UserUncheckedUpdateWithoutPengajuanCheckoutAdminInput>
+    create: XOR<UserCreateWithoutPengajuanCheckoutAdminInput, UserUncheckedCreateWithoutPengajuanCheckoutAdminInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPengajuanCheckoutAdminInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPengajuanCheckoutAdminInput, UserUncheckedUpdateWithoutPengajuanCheckoutAdminInput>
+  }
+
+  export type UserUpdateWithoutPengajuanCheckoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni?: PenghuniUpdateOneWithoutUserNestedInput
+    operator?: OperatorUpdateManyWithoutUserNestedInput
+    properti?: PropertiUpdateManyWithoutAdminNestedInput
+    settings?: AdminSettingsUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPengajuanCheckoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    nama?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
+    operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
+    properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
+    settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type OperatorCreateManyUserInput = {
@@ -21659,6 +24217,17 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+  }
+
+  export type PengajuanCheckoutCreateManyAdminInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni_id: string
+    kamar_id: string
+    properti_id: string
   }
 
   export type OperatorUpdateWithoutUserInput = {
@@ -21704,6 +24273,7 @@ export namespace Prisma {
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateWithoutAdminInput = {
@@ -21726,6 +24296,7 @@ export namespace Prisma {
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
     pemesanan?: PemesananUncheckedUpdateManyWithoutPropertiNestedInput
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutPropertiNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutPropertiNestedInput
   }
 
   export type PropertiUncheckedUpdateManyWithoutAdminInput = {
@@ -21743,6 +24314,39 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PengajuanCheckoutUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni?: PenghuniUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    kamar?: KamarUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    properti?: PropertiUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni_id?: StringFieldUpdateOperationsInput | string
+    kamar_id?: StringFieldUpdateOperationsInput | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateManyWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni_id?: StringFieldUpdateOperationsInput | string
+    kamar_id?: StringFieldUpdateOperationsInput | string
+    properti_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type KamarCreateManyPropertiInput = {
@@ -21803,6 +24407,17 @@ export namespace Prisma {
     operator_id: string
   }
 
+  export type PengajuanCheckoutCreateManyPropertiInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni_id: string
+    kamar_id: string
+    admin_id?: string | null
+  }
+
   export type KamarUpdateWithoutPropertiInput = {
     id?: StringFieldUpdateOperationsInput | string
     nomor?: StringFieldUpdateOperationsInput | string
@@ -21817,6 +24432,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateWithoutPropertiInput = {
@@ -21833,6 +24449,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
+    pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
   }
 
   export type KamarUncheckedUpdateManyWithoutPropertiInput = {
@@ -21985,6 +24602,39 @@ export namespace Prisma {
     operator_id?: StringFieldUpdateOperationsInput | string
   }
 
+  export type PengajuanCheckoutUpdateWithoutPropertiInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni?: PenghuniUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    kamar?: KamarUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    admin?: UserUpdateOneWithoutPengajuanCheckoutAdminNestedInput
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateWithoutPropertiInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni_id?: StringFieldUpdateOperationsInput | string
+    kamar_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateManyWithoutPropertiInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni_id?: StringFieldUpdateOperationsInput | string
+    kamar_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type PemesananCreateManyKamarInput = {
     id?: string
     durasi_sewa: number
@@ -21996,6 +24646,17 @@ export namespace Prisma {
     updated_at?: Date | string
     penghuni_id: string
     properti_id: string
+  }
+
+  export type PengajuanCheckoutCreateManyKamarInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    penghuni_id: string
+    properti_id: string
+    admin_id?: string | null
   }
 
   export type PemesananUpdateWithoutKamarInput = {
@@ -22039,6 +24700,39 @@ export namespace Prisma {
     properti_id?: StringFieldUpdateOperationsInput | string
   }
 
+  export type PengajuanCheckoutUpdateWithoutKamarInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni?: PenghuniUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    properti?: PropertiUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    admin?: UserUpdateOneWithoutPengajuanCheckoutAdminNestedInput
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateWithoutKamarInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni_id?: StringFieldUpdateOperationsInput | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateManyWithoutKamarInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    penghuni_id?: StringFieldUpdateOperationsInput | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type PemesananCreateManyPenghuniInput = {
     id?: string
     durasi_sewa: number
@@ -22062,6 +24756,17 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     properti_id: string
+  }
+
+  export type PengajuanCheckoutCreateManyPenghuniInput = {
+    id?: string
+    keterangan?: string | null
+    status?: $Enums.StatusPengajuanCheckout
+    created_at?: Date | string
+    updated_at?: Date | string
+    kamar_id: string
+    properti_id: string
+    admin_id?: string | null
   }
 
   export type PemesananUpdateWithoutPenghuniInput = {
@@ -22139,6 +24844,39 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     properti_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PengajuanCheckoutUpdateWithoutPenghuniInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    kamar?: KamarUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    properti?: PropertiUpdateOneRequiredWithoutPengajuanCheckoutNestedInput
+    admin?: UserUpdateOneWithoutPengajuanCheckoutAdminNestedInput
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateWithoutPenghuniInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    kamar_id?: StringFieldUpdateOperationsInput | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PengajuanCheckoutUncheckedUpdateManyWithoutPenghuniInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusPengajuanCheckoutFieldUpdateOperationsInput | $Enums.StatusPengajuanCheckout
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    kamar_id?: StringFieldUpdateOperationsInput | string
+    properti_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PengajuanDanaCreateManyOperatorInput = {

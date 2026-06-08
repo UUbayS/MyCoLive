@@ -66,7 +66,14 @@ enum StatusDana {
 
 enum StatusSewa {
   AKTIF
+  PENGAJUAN_CHECKOUT
   BERAKHIR
+}
+
+enum StatusPengajuanCheckout {
+  MENUNGGU
+  DITERIMA
+  DITOLAK
 }
 
 model User {
@@ -87,6 +94,8 @@ model User {
   properti  Properti[]
   // Relation opposite: settings
   settings   AdminSettings?
+  // Relation opposite: admin yang memproses checkout
+  pengajuanCheckoutAdmin PengajuanCheckout[]
 }
 
 model AdminSettings {
@@ -125,6 +134,7 @@ model Properti {
   operator   Operator[]
   pemesanan  Pemesanan[]
   pengajuanDana PengajuanDana[]
+  pengajuanCheckout PengajuanCheckout[]
 }
 
 model Kamar {
@@ -145,6 +155,7 @@ model Kamar {
 
   pemesanan    Pemesanan[]
   penghuni     Penghuni?
+  pengajuanCheckout PengajuanCheckout[]
 
   @@unique([properti_id, nomor])
 }
@@ -201,6 +212,7 @@ model Penghuni {
 
   pemesanan   Pemesanan[]
   komplain   Komplain[]
+  pengajuanCheckout PengajuanCheckout[]
 }
 
 model Operator {
@@ -264,4 +276,24 @@ model Notifikasi {
   related_id  String?
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+}
+
+model PengajuanCheckout {
+  id          String   @id @default(cuid())
+  keterangan  String?
+  status      StatusPengajuanCheckout @default(MENUNGGU)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  penghuni_id String
+  penghuni    Penghuni @relation(fields: [penghuni_id], references: [id])
+
+  kamar_id    String
+  kamar       Kamar    @relation(fields: [kamar_id], references: [id])
+
+  properti_id String
+  properti    Properti @relation(fields: [properti_id], references: [id])
+
+  admin_id    String?
+  admin       User?    @relation(fields: [admin_id], references: [id])
 }

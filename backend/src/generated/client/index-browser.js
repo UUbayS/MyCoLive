@@ -258,6 +258,18 @@ exports.Prisma.NotifikasiScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.PengajuanCheckoutScalarFieldEnum = {
+  id: 'id',
+  keterangan: 'keterangan',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  penghuni_id: 'penghuni_id',
+  kamar_id: 'kamar_id',
+  properti_id: 'properti_id',
+  admin_id: 'admin_id'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -323,6 +335,7 @@ exports.StatusPembayaran = exports.$Enums.StatusPembayaran = {
 
 exports.StatusSewa = exports.$Enums.StatusSewa = {
   AKTIF: 'AKTIF',
+  PENGAJUAN_CHECKOUT: 'PENGAJUAN_CHECKOUT',
   BERAKHIR: 'BERAKHIR'
 };
 
@@ -345,6 +358,12 @@ exports.StatusDana = exports.$Enums.StatusDana = {
   DITOLAK: 'DITOLAK'
 };
 
+exports.StatusPengajuanCheckout = exports.$Enums.StatusPengajuanCheckout = {
+  MENUNGGU: 'MENUNGGU',
+  DITERIMA: 'DITERIMA',
+  DITOLAK: 'DITOLAK'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   AdminSettings: 'AdminSettings',
@@ -356,7 +375,8 @@ exports.Prisma.ModelName = {
   Operator: 'Operator',
   Komplain: 'Komplain',
   PengajuanDana: 'PengajuanDana',
-  Notifikasi: 'Notifikasi'
+  Notifikasi: 'Notifikasi',
+  PengajuanCheckout: 'PengajuanCheckout'
 };
 
 /**

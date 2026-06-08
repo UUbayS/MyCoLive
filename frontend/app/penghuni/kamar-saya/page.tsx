@@ -31,6 +31,7 @@ import {
   getMyPemesanan,
   PemesananData,
   createPerpanjangPemesanan,
+  createPengajuanCheckout,
 } from "@/lib/api";
 
 const fasilitasIcon: Record<string, typeof Home> = {
@@ -71,6 +72,8 @@ export default function KamarSayaPage() {
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [showPerpanjangModal, setShowPerpanjangModal] = useState(false);
   const [perpanjangLoading, setPerpanjangLoading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutKeterangan, setCheckoutKeterangan] = useState("");
   const [selectedDurasi, setSelectedDurasi] = useState("");
   const [selectedMetode, setSelectedMetode] = useState("TRANSFER");
 
@@ -103,9 +106,32 @@ export default function KamarSayaPage() {
     fetchData();
   }, [router]);
 
-  const handleCheckout = () => {
-    alert("Pengajuan check-out telah dikirim. Admin akan menghubungi Anda.");
-    setShowCheckoutModal(false);
+  const handleCheckout = async () => {
+    setCheckoutLoading(true);
+    try {
+      const result = await createPengajuanCheckout({ 
+        keterangan: checkoutKeterangan 
+      });
+      if (result) {
+        alert("Pengajuan checkout berhasil dikirim. Menunggu persetujuan admin.");
+        setShowCheckoutModal(false);
+        setCheckoutKeterangan("");
+        // Refresh data
+        const [penghuniData, pemesananData] = await Promise.all([
+          getMyPenghuni(),
+          getMyPemesanan(),
+        ]);
+        setPenghuni(penghuniData);
+        setPemesananList(pemesananData);
+      } else {
+        alert("Gagal mengajukan checkout. Silakan coba lagi.");
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("Terjadi kesalahan saat mengajukan checkout.");
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
 
   const handlePerpanjang = async () => {
@@ -300,7 +326,7 @@ export default function KamarSayaPage() {
               Chat WhatsApp
             </a>
           )}
-          {isActive && (
+          {penghuni.status_sewa === "AKTIF" && (
             <button
               onClick={() => setShowCheckoutModal(true)}
               className="flex items-center justify-center gap-2 flex-1 py-3 border-2 border-red-500 text-red-500 text-sm font-medium rounded-xl hover:bg-red-50 transition-colors"
@@ -308,6 +334,12 @@ export default function KamarSayaPage() {
               <LogOut className="w-4 h-4" />
               Ajukan Check-out
             </button>
+          )}
+          {penghuni.status_sewa === "PENGAJUAN_CHECKOUT" && (
+            <div className="flex items-center justify-center gap-2 flex-1 py-3 bg-yellow-50 border-2 border-yellow-400 text-yellow-700 text-sm font-medium rounded-xl">
+              <LogOut className="w-4 h-4" />
+              Menunggu Checkout
+            </div>
           )}
         </div>
 
@@ -327,15 +359,33 @@ export default function KamarSayaPage() {
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={() => setShowCheckoutModal(false)}>
           <div className="bg-white rounded-xl w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
             <h3 className="font-semibold text-gray-900 mb-2">Konfirmasi Check-out</h3>
-            <p className="text-sm text-gray-500 mb-5">
+            <p className="text-sm text-gray-500 mb-3">
               Ajukan check-out dari kamar ini? Admin akan memproses pengajuan Anda dalam 1x24 jam.
             </p>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Alasan (opsional)</label>
+              <textarea
+                value={checkoutKeterangan}
+                onChange={(e) => setCheckoutKeterangan(e.target.value)}
+                placeholder="Contoh: Pindah ke kost lain, sudah lulus, dll."
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] resize-none"
+              />
+            </div>
             <div className="flex gap-2">
-              <button onClick={() => setShowCheckoutModal(false)} className="flex-1 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+              <button 
+                onClick={() => setShowCheckoutModal(false)} 
+                disabled={checkoutLoading}
+                className="flex-1 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
                 Batal
               </button>
-              <button onClick={handleCheckout} className="flex-1 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
-                Ya, Ajukan
+              <button 
+                onClick={handleCheckout} 
+                disabled={checkoutLoading}
+                className="flex-1 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {checkoutLoading ? "Mengirim..." : "Ya, Ajukan"}
               </button>
             </div>
           </div>

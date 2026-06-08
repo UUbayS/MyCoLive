@@ -135,10 +135,14 @@ app.get("/", async (c) => {
       orderBy: { created_at: "desc" }
     });
 
-    // Filter berdasarkan properti_ids (baik ada kamar maupun tidak)
+    // Filter berdasarkan properti_ids
     const result = penghuni
       .filter(p => {
-        // Jika ada kamar, cek apakah properti_id cocok
+        if (user.role === "PENGELOLA") {
+          // Pengelola hanya lihat penghuni yang punya kamar di properti yang dikelola
+          return p.kamar && propertiIds.includes(p.kamar.properti_id);
+        }
+        // PEMILIK: Jika ada kamar, cek apakah properti_id cocok
         if (p.kamar) {
           return propertiIds.includes(p.kamar.properti_id);
         }
@@ -311,7 +315,7 @@ app.put("/:id/checkout", requireRole("PEMILIK"), async (c) => {
       );
     }
 
-    if (penghuni.status_sewa !== "AKTIF") {
+    if (penghuni.status_sewa !== "AKTIF" && penghuni.status_sewa !== "PENGAJUAN_CHECKOUT") {
       return c.json(
         { status: "error", message: "Penghuni sudah tidak aktif" },
         400
@@ -404,6 +408,342 @@ app.put("/:id/checkout", requireRole("PEMILIK"), async (c) => {
     console.error("Checkout error:", error);
     return c.json(
       { status: "error", message: "Gagal melakukan checkout" },
+      500
+    );
+  }
+});
+
+// Penghuni mengajukan checkout (PENGHUNI)
+app.post("/checkout", requireRole("PENGHUNI"), async (c) => {
+  try {
+    const user = c.get("user");
+    const body = await c.req.json();
+    const { keterangan } = body;
+
+    const penghuni = await prisma.penghuni.findUnique({
+      where: { user_id: user.userId },
+      include: {
+        kamar: {
+          include: {
+            properti: {
+              select: {
+                id: true,
+                nama: true,
+                admin_id: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (!penghuni) {
+      return c.json(
+        { status: "error", message: "Data penghuni tidak ditemukan" },
+        404
+      );
+    }
+
+    if (!penghuni.kamar) {
+      return c.json(
+        { status: "error", message: "Anda tidak memiliki kamar" },
+        400
+      );
+    }
+
+    if (penghuni.status_sewa !== "AKTIF") {
+      return c.json(
+        { status: "error", message: "Hanya penghuni aktif yang bisa mengajukan checkout" },
+        400
+      );
+    }
+
+    // Cek sudah ada pengajuan yang menunggu
+    const existingPengajuan = await prisma.pengajuanCheckout.findFirst({
+      where: {
+        penghuni_id: penghuni.id,
+        status: "MENUNGGU"
+      }
+    });
+
+    if (existingPengajuan) {
+      return c.json(
+        { status: "error", message: "Anda sudah memiliki pengajuan checkout yang menunggu" },
+        400
+      );
+    }
+
+    // Buat pengajuan checkout
+    const pengajuan = await prisma.pengajuanCheckout.create({
+      data: {
+        penghuni_id: penghuni.id,
+        kamar_id: penghuni.kamar.id,
+        properti_id: penghuni.kamar.properti.id,
+        keterangan: keterangan || null
+      }
+    });
+
+    // Update status penghuni
+    await prisma.penghuni.update({
+      where: { id: penghuni.id },
+      data: { status_sewa: "PENGAJUAN_CHECKOUT" }
+    });
+
+    // Notifikasi ke admin pemilik
+    await createNotifikasi(
+      penghuni.kamar.properti.admin_id,
+      "Pengajuan Checkout Baru",
+      `${user.nama || user.email} mengajukan checkout dari Kamar ${penghuni.kamar.nomor}`,
+      "PENGAJUAN_CHECKOUT",
+      pengajuan.id
+    );
+
+    return c.json({
+      status: "success",
+      data: pengajuan,
+      message: "Pengajuan checkout berhasil dikirim"
+    });
+  } catch (error) {
+    console.error("Pengajuan checkout error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengajukan checkout: " + (error instanceof Error ? error.message : "Unknown error") },
+      500
+    );
+  }
+});
+
+// Admin lihat daftar pengajuan checkout (PEMILIK/PENGELOLA)
+app.get("/checkout/pengajuan", async (c) => {
+  try {
+    const user = c.get("user");
+
+    if (!["PEMILIK", "PENGELOLA"].includes(user.role)) {
+      return c.json(
+        { status: "error", message: "Akses tidak diizinkan" },
+        403
+      );
+    }
+
+    let propertiIds: string[] = [];
+    
+    if (user.role === "PEMILIK") {
+      const properti = await prisma.properti.findMany({
+        where: { admin_id: user.userId },
+        select: { id: true }
+      });
+      propertiIds = properti.map((p: any) => p.id);
+    } else if (user.role === "PENGELOLA") {
+      const operators = await prisma.operator.findMany({
+        where: { user_id: user.userId },
+        select: { properti_id: true }
+      });
+      propertiIds = operators.map((op: any) => op.properti_id);
+    }
+
+    if (propertiIds.length === 0) {
+      return c.json({
+        status: "success",
+        data: [],
+      });
+    }
+
+    const pengajuan = await prisma.pengajuanCheckout.findMany({
+      where: {
+        properti_id: { in: propertiIds },
+        status: "MENUNGGU"
+      },
+      include: {
+        penghuni: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                nama: true,
+                email: true,
+                no_telepon: true
+              }
+            }
+          }
+        },
+        kamar: {
+          select: {
+            id: true,
+            nomor: true
+          }
+        },
+        properti: {
+          select: {
+            id: true,
+            nama: true
+          }
+        }
+      },
+      orderBy: { created_at: "desc" }
+    });
+
+    return c.json({
+      status: "success",
+      data: pengajuan,
+    });
+  } catch (error) {
+    console.error("Get pengajuan checkout error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengambil data pengajuan checkout" },
+      500
+    );
+  }
+});
+
+// Admin proses pengajuan checkout (PEMILIK/PENGELOLA)
+app.put("/checkout/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const user = c.get("user");
+    const body = await c.req.json();
+    const { status, keterangan } = body;
+
+    if (!["PEMILIK", "PENGELOLA"].includes(user.role)) {
+      return c.json(
+        { status: "error", message: "Akses tidak diizinkan" },
+        403
+      );
+    }
+
+    if (!status || !["DITERIMA", "DITOLAK"].includes(status)) {
+      return c.json(
+        { status: "error", message: "Status harus DITERIMA atau DITOLAK" },
+        400
+      );
+    }
+
+    const pengajuan = await prisma.pengajuanCheckout.findUnique({
+      where: { id },
+      include: {
+        penghuni: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                nama: true,
+                email: true
+              }
+            }
+          }
+        },
+        kamar: true,
+        properti: {
+          select: {
+            id: true,
+            admin_id: true
+          }
+        }
+      }
+    });
+
+    if (!pengajuan) {
+      return c.json(
+        { status: "error", message: "Pengajuan checkout tidak ditemukan" },
+        404
+      );
+    }
+
+    if (pengajuan.status !== "MENUNGGU") {
+      return c.json(
+        { status: "error", message: "Pengajuan sudah diproses" },
+        400
+      );
+    }
+
+    // Ownership check
+    let isAllowed = false;
+    if (user.role === "PEMILIK") {
+      isAllowed = pengajuan.properti.admin_id === user.userId;
+    } else if (user.role === "PENGELOLA") {
+      const operator = await prisma.operator.findFirst({
+        where: { user_id: user.userId, properti_id: pengajuan.properti_id }
+      });
+      isAllowed = !!operator;
+    }
+
+    if (!isAllowed) {
+      return c.json(
+        { status: "error", message: "Akses ditolak" },
+        403
+      );
+    }
+
+    if (status === "DITERIMA") {
+      // Transaction: checkout penghuni + kosongkan kamar
+      await prisma.$transaction(async (tx) => {
+        await tx.kamar.update({
+          where: { id: pengajuan.kamar_id },
+          data: { status: "KOSONG" }
+        });
+
+        await tx.penghuni.update({
+          where: { id: pengajuan.penghuni_id },
+          data: {
+            status_sewa: "BERAKHIR",
+            tgl_berakhir: new Date(),
+            kamar_id: null
+          }
+        });
+
+        await tx.pengajuanCheckout.update({
+          where: { id },
+          data: {
+            status: "DITERIMA",
+            admin_id: user.userId
+          }
+        });
+      });
+
+      // Notifikasi ke penghuni
+      await createNotifikasi(
+        pengajuan.penghuni.user.id,
+        "Pengajuan Checkout Diterima",
+        `Admin telah menerima pengajuan checkout Anda dari Kamar ${pengajuan.kamar.nomor}`,
+        "CHECKOUT_DITERIMA",
+        id
+      );
+    } else {
+      // DITOLAK
+      await prisma.$transaction(async (tx) => {
+        await tx.penghuni.update({
+          where: { id: pengajuan.penghuni_id },
+          data: {
+            status_sewa: "AKTIF"
+          }
+        });
+
+        await tx.pengajuanCheckout.update({
+          where: { id },
+          data: {
+            status: "DITOLAK",
+            admin_id: user.userId,
+            keterangan: keterangan || null
+          }
+        });
+      });
+
+      // Notifikasi ke penghuni
+      await createNotifikasi(
+        pengajuan.penghuni.user.id,
+        "Pengajuan Checkout Ditolak",
+        `Pengajuan checkout Anda ditolak. ${keterangan ? `Alasan: ${keterangan}` : ""}`,
+        "CHECKOUT_DITOLAK",
+        id
+      );
+    }
+
+    return c.json({
+      status: "success",
+      message: `Pengajuan checkout ${status === "DITERIMA" ? "diterima" : "ditolak"}`
+    });
+  } catch (error) {
+    console.error("Proses checkout error:", error);
+    return c.json(
+      { status: "error", message: "Gagal memproses pengajuan checkout" },
       500
     );
   }

@@ -284,13 +284,13 @@ export default function AdminDaftarKamarPage() {
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="text-lg font-semibold">Kamar {kamar.nomor}</h3>
                       <div className="flex items-center gap-1">
-                        <Link
-                          href={`/administrator/properti/${propertiId}/kamar/${kamar.id}/edit`}
+                        <button
+                          onClick={() => router.push(`/administrator/properti/${propertiId}/kamar/${kamar.id}/edit`)}
                           className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                           title="Edit"
                         >
                           <Pencil className="w-4 h-4" />
-                        </Link>
+                        </button>
                         <button
                           onClick={() => {
                             setKamarToDelete(kamar);

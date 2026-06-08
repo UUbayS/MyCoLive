@@ -23,6 +23,7 @@ const statusBadge: Record<string, { label: string; color: string }> = {
   "Sewa Berakhir": { label: "Sewa Berakhir", color: "bg-red-100 text-red-700" },
   AKTIF: { label: "Aktif", color: "bg-green-100 text-green-700" },
   BERAKHIR: { label: "Berakhir", color: "bg-red-100 text-red-700" },
+  PENGAJUAN_CHECKOUT: { label: "Pengajuan Checkout", color: "bg-yellow-100 text-yellow-700" },
 };
 
 export default function DaftarPenghuniPage() {
@@ -84,6 +85,10 @@ export default function DaftarPenghuniPage() {
 
     if (statusFilter) {
       result = result.filter((p) => p.status_display === statusFilter || p.status_sewa === statusFilter);
+      // Special handling for PENGAJUAN_CHECKOUT
+      if (statusFilter === "PENGAJUAN_CHECKOUT") {
+        result = result.filter((p) => p.status_sewa === "PENGAJUAN_CHECKOUT");
+      }
     }
 
     if (propertiFilter) {
@@ -126,6 +131,7 @@ export default function DaftarPenghuniPage() {
                 <option value="Menyewa">Menyewa</option>
                 <option value="Sewa Berakhir">Sewa Berakhir</option>
                 <option value="Belum Menyewa">Belum Menyewa</option>
+                <option value="PENGAJUAN_CHECKOUT">Pengajuan Checkout</option>
               </select>
             </div>
             <div className="relative">
@@ -175,6 +181,11 @@ export default function DaftarPenghuniPage() {
                         <span className={`px-2 py-0.5 rounded-full text-[10px] md:text-xs font-medium shrink-0 ${badge.color}`}>
                           {badge.label}
                         </span>
+                        {p.status_sewa === "PENGAJUAN_CHECKOUT" && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] md:text-xs font-medium shrink-0 bg-yellow-100 text-yellow-700">
+                            ⚠️ Menunggu
+                          </span>
+                        )}
                       </div>
                       <p className="text-xs md:text-sm text-gray-500 mb-2 truncate">{p.user.email}</p>
                       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-y-1 gap-x-4 text-xs text-gray-500">

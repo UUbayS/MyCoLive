@@ -866,6 +866,78 @@ export async function createPengajuanDana(data: {
   }
 }
 
+// ─── PENGAJUAN CHECKOUT ───
+
+export type PengajuanCheckoutData = {
+  id: string;
+  keterangan?: string | null;
+  status: string;
+  created_at: string;
+  updated_at?: string;
+  penghuni_id: string;
+  kamar_id: string;
+  properti_id: string;
+  admin_id?: string | null;
+  penghuni?: {
+    id: string;
+    user: {
+      id: string;
+      nama: string;
+      email: string;
+      no_telepon?: string | null;
+    };
+  };
+  kamar?: {
+    id: string;
+    nomor: string;
+  };
+  properti?: {
+    id: string;
+    nama: string;
+  };
+  admin?: {
+    id: string;
+    nama: string;
+  };
+};
+
+export async function createPengajuanCheckout(data: { keterangan?: string }): Promise<PengajuanCheckoutData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: PengajuanCheckoutData }>("/api/penghuni/checkout", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function getPengajuanCheckoutList(): Promise<PengajuanCheckoutData[]> {
+  try {
+    const res = await apiFetch<{ status: string; data: PengajuanCheckoutData[] }>("/api/penghuni/checkout/pengajuan");
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function processPengajuanCheckout(
+  id: string,
+  status: "DITERIMA" | "DITOLAK",
+  keterangan?: string
+): Promise<any> {
+  try {
+    const res = await apiFetch<{ status: string; data: any; message: string }>("/api/penghuni/checkout/" + id, {
+      method: "PUT",
+      body: JSON.stringify({ status, keterangan }),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
 // ─── NOTIFIKASI ───
 
 export type NotifikasiData = {
