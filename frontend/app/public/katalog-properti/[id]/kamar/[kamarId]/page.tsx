@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, MapPin, Edit, MessageCircle } from "lucide-react";
+import { ArrowLeft, MapPin, Edit, MessageCircle, LogIn, Home } from "lucide-react";
 import ImageCarousel from "../../../../../../components/ImageCarousel";
 import TarifSelector from "../../../../../../components/TarifSelector";
 import ConfirmDialog from "../../../../../../components/ConfirmDialog";
-import { getUser } from "../../../../../../lib/auth";
-import { getKamarById, deleteKamar, updateKamarStatus, KamarData } from "../../../../../../lib/api";
+import { getUser, isAuthenticated } from "../../../../../../lib/auth";
+import { getKamarById, deleteKamar, updateKamarStatus, getMyPenghuni, KamarData } from "../../../../../../lib/api";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
 
 export default function DetailKamarPage() {
@@ -22,8 +22,11 @@ export default function DetailKamarPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("1_bulan");
   const [isAktif, setIsAktif] = useState(true);
+  const [hasActiveRoom, setHasActiveRoom] = useState(false);
+  const [checkingRoom, setCheckingRoom] = useState(true);
 
   const user = getUser();
+  const isLoggedIn = isAuthenticated();
   const isPemilik = user?.role === "PEMILIK";
   const isPenghuni = user?.role === "PENGHUNI";
   const isPengelola = user?.role === "PENGELOLA";
@@ -45,6 +48,28 @@ export default function DetailKamarPage() {
 
     fetchKamar();
   }, [kamarId]);
+
+  useEffect(() => {
+    if (!isPenghuni) {
+      setCheckingRoom(false);
+      return;
+    }
+
+    const checkPenghuniRoom = async () => {
+      try {
+        const myPenghuni = await getMyPenghuni();
+        if (myPenghuni && myPenghuni.kamar && myPenghuni.status_sewa === "AKTIF") {
+          setHasActiveRoom(true);
+        }
+      } catch (error) {
+        console.error("Failed to check penghuni room:", error);
+      } finally {
+        setCheckingRoom(false);
+      }
+    };
+
+    checkPenghuniRoom();
+  }, [isPenghuni]);
 
   const handleDelete = async () => {
     try {
@@ -260,51 +285,52 @@ export default function DetailKamarPage() {
               />
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Tombol Aksi - full width */}
-      {(isPenghuni || isPengelola) && (
-        <div className="flex gap-3 mb-6">
-          <a
-            href={getWhatsAppLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 flex-1 border-2 border-[#84CC16] text-[#84CC16] py-3 rounded-xl font-medium hover:bg-[#84CC16]/5 transition-colors"
-          >
-            <MessageCircle className="w-5 h-5" />
-            Chat Pengurus
-          </a>
-          {isPenghuni && isKosong && (
-            <Link
-              href={`/penghuni/pesan/${kamarId}`}
-              className="flex-1 bg-[#84CC16] text-white py-3 rounded-xl font-medium text-center hover:bg-[#73b814] transition-colors"
+          {/* Tombol Aksi - full width */}
+          <div className="mb-6">
+            <a
+              href={getWhatsAppLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full border-2 border-[#84CC16] text-[#84CC16] py-3 rounded-xl font-medium hover:bg-[#84CC16]/5 transition-colors mb-3"
             >
-              Pesan Kamar
-            </Link>
+              <MessageCircle className="w-5 h-5" />
+              Chat Pengurus
+            </a>
+            
+
+            {/* Pesan Kamar - for unauthenticated users */}
+            {!isLoggedIn && isKosong && (
+              <Link
+                href={`/auth/login?redirect=/penghuni/pesan/${kamarId}`}
+                className="flex items-center justify-center gap-2 w-full bg-[#84CC16] text-white py-3 rounded-xl font-medium text-center hover:bg-[#73b814] transition-colors"
+              >
+                <LogIn className="w-5 h-5" />
+                Pesan Kamar
+              </Link>
+            )}
+
+            {/* Pesan Kamar - for penghuni without active room */}
+            {isPenghuni && isKosong && !checkingRoom && !hasActiveRoom && (
+              <Link
+                href={`/penghuni/pesan/${kamarId}`}
+                className="flex items-center justify-center gap-2 w-full bg-[#84CC16] text-white py-3 rounded-xl font-medium text-center hover:bg-[#73b814] transition-colors"
+              >
+                <Home className="w-5 h-5" />
+                Pesan Kamar
+              </Link>
+            )}
+          </div>
+
+          {/* Info for penghuni with active room */}
+          {isPenghuni && isKosong && !checkingRoom && hasActiveRoom && (
+            <div className="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-4 text-center">
+              <p className="text-yellow-700 font-medium text-sm">
+                Anda sudah memiliki kamar aktif. Tidak dapat memesan kamar tambahan.
+              </p>
+            </div>
           )}
-        </div>
-      )}
-
-      {isPemilik && (
-        <button
-          onClick={() => setShowDeleteDialog(true)}
-          className="w-full border-2 border-red-500 text-red-500 py-3 rounded-xl font-medium hover:bg-red-50 transition-colors"
-        >
-          Hapus Kamar
-        </button>
-      )}
-
-      <ConfirmDialog
-        isOpen={showDeleteDialog}
-        title="Hapus Kamar"
-        message="Apakah Anda yakin ingin menghapus kamar ini? Tindakan ini tidak dapat dibatalkan."
-        confirmLabel="Hapus"
-        cancelLabel="Batal"
-        danger
-        onConfirm={handleDelete}
-        onCancel={() => setShowDeleteDialog(false)}
-      />
+        </div>      
+      </div>
     </MainLayout>
   );
 }

@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { User, Phone, Lock, AtSign, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     username: "",
     nama_lengkap: "",
@@ -20,6 +21,14 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState("");
+
+  useEffect(() => {
+    const redirect = searchParams.get("redirect");
+    if (redirect) {
+      setRedirectUrl(redirect);
+    }
+  }, [searchParams]);
 
   const handleRegister = async () => {
     setError("");
@@ -82,7 +91,12 @@ export default function RegisterPage() {
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("user", JSON.stringify(user));
 
-      router.push("/auth/login");
+      // Auto-login after registration, redirect to the redirect URL if provided
+      if (redirectUrl) {
+        router.push(redirectUrl);
+      } else {
+        router.push("/penghuni/kamar-saya");
+      }
     } catch {
       setError("Tidak dapat terhubung ke server. Pastikan backend sedang berjalan.");
     } finally {
@@ -232,12 +246,24 @@ export default function RegisterPage() {
 
           <p className="text-center text-sm text-gray-500">
             Sudah punya akun?{" "}
-            <Link href="/auth/login" className="text-[#8dc63f] font-semibold active:opacity-70 transition-opacity">
+            <Link href={redirectUrl ? `/auth/login?redirect=${encodeURIComponent(redirectUrl)}` : "/auth/login"} className="text-[#8dc63f] font-semibold active:opacity-70 transition-opacity">
               Masuk
             </Link>
           </p>
         </div>
       </div>
     </AuthLayout>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-spin h-8 w-8 border-4 border-[#84CC16] border-t-transparent rounded-full"></div>
+      </div>
+    }>
+      <RegisterForm />
+    </Suspense>
   );
 }

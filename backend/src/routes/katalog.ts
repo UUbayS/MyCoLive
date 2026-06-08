@@ -94,9 +94,16 @@ app.get("/:id", async (c) => {
       );
     }
 
+    const result = {
+      ...properti,
+      total_kamar: properti._count.kamar,
+      kamar_kosong: properti.kamar.filter((k: any) => k.status === "KOSONG").length,
+    };
+    delete (result as any)._count;
+
     return c.json({
       status: "success",
-      data: properti,
+      data: result,
     });
   } catch (error) {
     console.error("Get katalog detail error:", error);

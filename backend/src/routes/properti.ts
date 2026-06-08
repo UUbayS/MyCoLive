@@ -4,9 +4,7 @@ import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
 const app = new Hono<AppEnv>();
 
-app.use("*", authMiddleware);
-
-app.get("/", async (c) => {
+app.get("/", authMiddleware, async (c) => {
   try {
     const user = c.get("user");
     
@@ -88,7 +86,7 @@ app.get("/", async (c) => {
   }
 });
 
-app.post("/", requireRole("PEMILIK"), async (c) => {
+app.post("/", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {
     const user = c.get("user");
     const body = await c.req.json();
@@ -155,7 +153,7 @@ app.post("/", requireRole("PEMILIK"), async (c) => {
   }
 });
 
-app.get("/:id", async (c) => {
+app.get("/:id", authMiddleware, async (c) => {
   try {
     const id = c.req.param("id");
     const user = c.get("user");
@@ -206,7 +204,7 @@ app.get("/:id", async (c) => {
   }
 });
 
-app.put("/:id", requireRole("PEMILIK"), async (c) => {
+app.put("/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {
     const id = c.req.param("id");
     const user = c.get("user");
@@ -282,7 +280,7 @@ app.put("/:id", requireRole("PEMILIK"), async (c) => {
   }
 });
 
-app.delete("/:id", requireRole("PEMILIK"), async (c) => {
+app.delete("/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {
     const id = c.req.param("id");
     const user = c.get("user");

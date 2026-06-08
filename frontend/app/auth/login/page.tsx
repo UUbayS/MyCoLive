@@ -1,18 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AtSign, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState("");
+
+  useEffect(() => {
+    const redirect = searchParams.get("redirect");
+    if (redirect) {
+      setRedirectUrl(redirect);
+    }
+  }, [searchParams]);
 
   const handleLogin = async () => {
     setError("");
@@ -44,6 +53,13 @@ export default function LoginPage() {
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("user", JSON.stringify(user));
 
+      // If redirect URL exists, navigate there
+      if (redirectUrl) {
+        router.push(redirectUrl);
+        return;
+      }
+
+      // Otherwise, redirect by role
       if (user.role === "PEMILIK") {
         router.push("/administrator/properti");
       } else if (user.role === "PENGELOLA") {
@@ -138,12 +154,24 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-gray-500">
             Belum punya akun?{" "}
-            <Link href="/auth/register" className="text-[#8dc63f] font-semibold active:opacity-70 transition-opacity">
+            <Link href={redirectUrl ? `/auth/register?redirect=${encodeURIComponent(redirectUrl)}` : "/auth/register"} className="text-[#8dc63f] font-semibold active:opacity-70 transition-opacity">
               Daftar sebagai Penghuni
             </Link>
           </p>
         </div>
       </div>
     </AuthLayout>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-spin h-8 w-8 border-4 border-[#84CC16] border-t-transparent rounded-full"></div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }
