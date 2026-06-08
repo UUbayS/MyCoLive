@@ -195,6 +195,7 @@ exports.Prisma.PembayaranScalarFieldEnum = {
   bukti: 'bukti',
   status: 'status',
   tgl_bayar: 'tgl_bayar',
+  nomor_kuitansi: 'nomor_kuitansi',
   created_at: 'created_at',
   updated_at: 'updated_at',
   pemesanan_id: 'pemesanan_id'

@@ -639,9 +639,20 @@ app.put("/:id/verifikasi", requireRole("PEMILIK"), async (c) => {
     });
 
     if (status === "DITERIMA") {
+      // Generate nomor kuitansi
+      const now = new Date();
+      const yy = String(now.getFullYear()).slice(-2);
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const prefix = `KT-${yy}${mm}`;
+      const count = await prisma.pembayaran.count({
+        where: { nomor_kuitansi: { startsWith: prefix } },
+      });
+      const sequence = String(count + 1).padStart(4, "0");
+      const nomorKuitansi = `${prefix}-${sequence}`;
+
       await prisma.pembayaran.update({
         where: { pemesanan_id: id },
-        data: { status: "DITERIMA" }
+        data: { status: "DITERIMA", nomor_kuitansi: nomorKuitansi },
       });
 
       await prisma.kamar.update({

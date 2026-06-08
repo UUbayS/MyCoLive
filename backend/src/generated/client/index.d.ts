@@ -8171,6 +8171,7 @@ export namespace Prisma {
     bukti: string | null
     status: $Enums.StatusPembayaran | null
     tgl_bayar: Date | null
+    nomor_kuitansi: string | null
     created_at: Date | null
     updated_at: Date | null
     pemesanan_id: string | null
@@ -8182,6 +8183,7 @@ export namespace Prisma {
     bukti: string | null
     status: $Enums.StatusPembayaran | null
     tgl_bayar: Date | null
+    nomor_kuitansi: string | null
     created_at: Date | null
     updated_at: Date | null
     pemesanan_id: string | null
@@ -8193,6 +8195,7 @@ export namespace Prisma {
     bukti: number
     status: number
     tgl_bayar: number
+    nomor_kuitansi: number
     created_at: number
     updated_at: number
     pemesanan_id: number
@@ -8206,6 +8209,7 @@ export namespace Prisma {
     bukti?: true
     status?: true
     tgl_bayar?: true
+    nomor_kuitansi?: true
     created_at?: true
     updated_at?: true
     pemesanan_id?: true
@@ -8217,6 +8221,7 @@ export namespace Prisma {
     bukti?: true
     status?: true
     tgl_bayar?: true
+    nomor_kuitansi?: true
     created_at?: true
     updated_at?: true
     pemesanan_id?: true
@@ -8228,6 +8233,7 @@ export namespace Prisma {
     bukti?: true
     status?: true
     tgl_bayar?: true
+    nomor_kuitansi?: true
     created_at?: true
     updated_at?: true
     pemesanan_id?: true
@@ -8312,6 +8318,7 @@ export namespace Prisma {
     bukti: string | null
     status: $Enums.StatusPembayaran
     tgl_bayar: Date | null
+    nomor_kuitansi: string | null
     created_at: Date
     updated_at: Date
     pemesanan_id: string
@@ -8340,6 +8347,7 @@ export namespace Prisma {
     bukti?: boolean
     status?: boolean
     tgl_bayar?: boolean
+    nomor_kuitansi?: boolean
     created_at?: boolean
     updated_at?: boolean
     pemesanan_id?: boolean
@@ -8352,6 +8360,7 @@ export namespace Prisma {
     bukti?: boolean
     status?: boolean
     tgl_bayar?: boolean
+    nomor_kuitansi?: boolean
     created_at?: boolean
     updated_at?: boolean
     pemesanan_id?: boolean
@@ -8364,6 +8373,7 @@ export namespace Prisma {
     bukti?: boolean
     status?: boolean
     tgl_bayar?: boolean
+    nomor_kuitansi?: boolean
     created_at?: boolean
     updated_at?: boolean
     pemesanan_id?: boolean
@@ -8376,12 +8386,13 @@ export namespace Prisma {
     bukti?: boolean
     status?: boolean
     tgl_bayar?: boolean
+    nomor_kuitansi?: boolean
     created_at?: boolean
     updated_at?: boolean
     pemesanan_id?: boolean
   }
 
-  export type PembayaranOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "metode_bayar" | "bukti" | "status" | "tgl_bayar" | "created_at" | "updated_at" | "pemesanan_id", ExtArgs["result"]["pembayaran"]>
+  export type PembayaranOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "metode_bayar" | "bukti" | "status" | "tgl_bayar" | "nomor_kuitansi" | "created_at" | "updated_at" | "pemesanan_id", ExtArgs["result"]["pembayaran"]>
   export type PembayaranInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pemesanan?: boolean | PemesananDefaultArgs<ExtArgs>
   }
@@ -8403,6 +8414,7 @@ export namespace Prisma {
       bukti: string | null
       status: $Enums.StatusPembayaran
       tgl_bayar: Date | null
+      nomor_kuitansi: string | null
       created_at: Date
       updated_at: Date
       pemesanan_id: string
@@ -8835,6 +8847,7 @@ export namespace Prisma {
     readonly bukti: FieldRef<"Pembayaran", 'String'>
     readonly status: FieldRef<"Pembayaran", 'StatusPembayaran'>
     readonly tgl_bayar: FieldRef<"Pembayaran", 'DateTime'>
+    readonly nomor_kuitansi: FieldRef<"Pembayaran", 'String'>
     readonly created_at: FieldRef<"Pembayaran", 'DateTime'>
     readonly updated_at: FieldRef<"Pembayaran", 'DateTime'>
     readonly pemesanan_id: FieldRef<"Pembayaran", 'String'>
@@ -15007,6 +15020,7 @@ export namespace Prisma {
     bukti: 'bukti',
     status: 'status',
     tgl_bayar: 'tgl_bayar',
+    nomor_kuitansi: 'nomor_kuitansi',
     created_at: 'created_at',
     updated_at: 'updated_at',
     pemesanan_id: 'pemesanan_id'
@@ -15824,6 +15838,7 @@ export namespace Prisma {
     bukti?: StringNullableFilter<"Pembayaran"> | string | null
     status?: EnumStatusPembayaranFilter<"Pembayaran"> | $Enums.StatusPembayaran
     tgl_bayar?: DateTimeNullableFilter<"Pembayaran"> | Date | string | null
+    nomor_kuitansi?: StringNullableFilter<"Pembayaran"> | string | null
     created_at?: DateTimeFilter<"Pembayaran"> | Date | string
     updated_at?: DateTimeFilter<"Pembayaran"> | Date | string
     pemesanan_id?: StringFilter<"Pembayaran"> | string
@@ -15836,6 +15851,7 @@ export namespace Prisma {
     bukti?: SortOrderInput | SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrderInput | SortOrder
+    nomor_kuitansi?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     pemesanan_id?: SortOrder
@@ -15844,6 +15860,7 @@ export namespace Prisma {
 
   export type PembayaranWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    nomor_kuitansi?: string
     pemesanan_id?: string
     AND?: PembayaranWhereInput | PembayaranWhereInput[]
     OR?: PembayaranWhereInput[]
@@ -15855,7 +15872,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"Pembayaran"> | Date | string
     updated_at?: DateTimeFilter<"Pembayaran"> | Date | string
     pemesanan?: XOR<PemesananScalarRelationFilter, PemesananWhereInput>
-  }, "id" | "pemesanan_id">
+  }, "id" | "nomor_kuitansi" | "pemesanan_id">
 
   export type PembayaranOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15863,6 +15880,7 @@ export namespace Prisma {
     bukti?: SortOrderInput | SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrderInput | SortOrder
+    nomor_kuitansi?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     pemesanan_id?: SortOrder
@@ -15880,6 +15898,7 @@ export namespace Prisma {
     bukti?: StringNullableWithAggregatesFilter<"Pembayaran"> | string | null
     status?: EnumStatusPembayaranWithAggregatesFilter<"Pembayaran"> | $Enums.StatusPembayaran
     tgl_bayar?: DateTimeNullableWithAggregatesFilter<"Pembayaran"> | Date | string | null
+    nomor_kuitansi?: StringNullableWithAggregatesFilter<"Pembayaran"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Pembayaran"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Pembayaran"> | Date | string
     pemesanan_id?: StringWithAggregatesFilter<"Pembayaran"> | string
@@ -16797,6 +16816,7 @@ export namespace Prisma {
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
+    nomor_kuitansi?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     pemesanan: PemesananCreateNestedOneWithoutPembayaranInput
@@ -16808,6 +16828,7 @@ export namespace Prisma {
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
+    nomor_kuitansi?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     pemesanan_id: string
@@ -16819,6 +16840,7 @@ export namespace Prisma {
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomor_kuitansi?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     pemesanan?: PemesananUpdateOneRequiredWithoutPembayaranNestedInput
@@ -16830,6 +16852,7 @@ export namespace Prisma {
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomor_kuitansi?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     pemesanan_id?: StringFieldUpdateOperationsInput | string
@@ -16841,6 +16864,7 @@ export namespace Prisma {
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
+    nomor_kuitansi?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     pemesanan_id: string
@@ -16852,6 +16876,7 @@ export namespace Prisma {
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomor_kuitansi?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16862,6 +16887,7 @@ export namespace Prisma {
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomor_kuitansi?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     pemesanan_id?: StringFieldUpdateOperationsInput | string
@@ -17873,6 +17899,7 @@ export namespace Prisma {
     bukti?: SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrder
+    nomor_kuitansi?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     pemesanan_id?: SortOrder
@@ -17884,6 +17911,7 @@ export namespace Prisma {
     bukti?: SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrder
+    nomor_kuitansi?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     pemesanan_id?: SortOrder
@@ -17895,6 +17923,7 @@ export namespace Prisma {
     bukti?: SortOrder
     status?: SortOrder
     tgl_bayar?: SortOrder
+    nomor_kuitansi?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     pemesanan_id?: SortOrder
@@ -20539,6 +20568,7 @@ export namespace Prisma {
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
+    nomor_kuitansi?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -20549,6 +20579,7 @@ export namespace Prisma {
     bukti?: string | null
     status?: $Enums.StatusPembayaran
     tgl_bayar?: Date | string | null
+    nomor_kuitansi?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -20708,6 +20739,7 @@ export namespace Prisma {
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomor_kuitansi?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20718,6 +20750,7 @@ export namespace Prisma {
     bukti?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusPembayaranFieldUpdateOperationsInput | $Enums.StatusPembayaran
     tgl_bayar?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomor_kuitansi?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

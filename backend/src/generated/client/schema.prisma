@@ -172,13 +172,14 @@ model Pemesanan {
 }
 
 model Pembayaran {
-  id           String           @id @default(cuid())
-  metode_bayar String
-  bukti        String?
-  status       StatusPembayaran @default(MENUNGGU)
-  tgl_bayar    DateTime?
-  created_at   DateTime         @default(now())
-  updated_at   DateTime         @updatedAt
+  id             String           @id @default(cuid())
+  metode_bayar   String
+  bukti          String?
+  status         StatusPembayaran @default(MENUNGGU)
+  tgl_bayar      DateTime?
+  nomor_kuitansi String?          @unique
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
 
   pemesanan_id String    @unique
   pemesanan    Pemesanan @relation(fields: [pemesanan_id], references: [id])

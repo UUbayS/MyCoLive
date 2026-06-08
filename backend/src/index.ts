@@ -13,6 +13,7 @@ import penghuniRoutes from "./routes/penghuni";
 import danaRoutes from "./routes/dana";
 import komplainRoutes from "./routes/komplain";
 import laporanRoutes from "./routes/laporan";
+import keuanganRoutes from "./routes/keuangan";
 import whatsappRoutes from "./routes/whatsapp";
 import notifikasiRoutes from "./routes/notifikasi";
 
@@ -42,6 +43,7 @@ app.route("/api/penghuni", penghuniRoutes);
 app.route("/api/dana", danaRoutes);
 app.route("/api/komplain", komplainRoutes);
 app.route("/api/laporan", laporanRoutes);
+app.route("/api/keuangan", keuanganRoutes);
 app.route("/api/whatsapp", whatsappRoutes);
 app.route("/api/notifikasi", notifikasiRoutes);
 

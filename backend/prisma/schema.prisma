@@ -177,6 +177,7 @@ model Pembayaran {
   bukti           String?
   status          StatusPembayaran @default(MENUNGGU)
   tgl_bayar       DateTime?
+  nomor_kuitansi  String?  @unique
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 

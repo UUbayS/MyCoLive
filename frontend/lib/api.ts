@@ -661,6 +661,73 @@ export async function updateKomplainStatus(id: string, status: "DIPROSES" | "SEL
   }
 }
 
+// ─── KEUANGAN ───
+
+export type TransaksiItem = {
+  id: string;
+  tipe: "PEMASUKAN" | "PENGELUARAN" | "PIUTANG";
+  nama: string;
+  tanggal: string;
+  status_badge: string;
+  jumlah: number;
+  properti_nama: string;
+  kamar_nomor?: string | null;
+  kuitansi_id?: string | null;
+  detail_info?: string;
+};
+
+export type KeuanganSummary = {
+  total_pendapatan: number;
+  total_pengeluaran: number;
+  total_bersih: number;
+};
+
+export type KeuanganData = {
+  summary: KeuanganSummary;
+  transaksi: TransaksiItem[];
+};
+
+export type KuitansiDetail = {
+  id: string;
+  nomor_kuitansi: string | null;
+  nama: string;
+  properti_nama: string;
+  kamar_nomor: string;
+  durasi: number;
+  metode_bayar: string;
+  jumlah: number;
+  tgl_bayar: string;
+  status: string;
+  bukti?: string | null;
+};
+
+export async function getKeuanganTransaksi(
+  propertiId?: string,
+  tipe?: string,
+  search?: string
+): Promise<KeuanganData | null> {
+  try {
+    const params = new URLSearchParams();
+    if (propertiId) params.append("properti_id", propertiId);
+    if (tipe) params.append("tipe", tipe);
+    if (search) params.append("search", search);
+    const query = params.toString() ? "?" + params.toString() : "";
+    const res = await apiFetch<{ status: string; data: KeuanganData }>("/api/keuangan/transaksi" + query);
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function getKuitansiDetail(id: string): Promise<KuitansiDetail | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: KuitansiDetail }>("/api/keuangan/kuitansi/" + id);
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
 // ─── USERS ───
 
 export type OperatorUserData = {
