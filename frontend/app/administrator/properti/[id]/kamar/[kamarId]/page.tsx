@@ -176,7 +176,7 @@ export default function AdminDetailKamarPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-xl font-bold text-gray-900">Kamar {kamar.nomor}</h1>
+          <h1 className="text-xl font-bold text-gray-900">Kamar {kamar.nomor} - {kamar.properti?.nama || "Properti"} </h1>
           <Link
             href={`/administrator/properti/${propertiId}/kamar/${kamarId}/edit`}
             className="flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm"
@@ -184,10 +184,6 @@ export default function AdminDetailKamarPage() {
             <Edit className="w-4 h-4" />
             <span>Edit</span>
           </Link>
-        </div>
-        <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
-          <MapPin className="w-4 h-4" />
-          <span>{kamar.properti?.nama || "Properti"} - {kamar.properti.alamat}</span>
         </div>
       </div>
 

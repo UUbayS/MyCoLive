@@ -25,12 +25,7 @@ export default function FasilitasPropertiPage() {
           setPropertiNama(properti.nama);
 
           const fasilitasUmum = properti.fasilitas_umum || [];
-          const fasilitasRuangan = new Set<string>();
-          properti.kamar?.forEach((kamar) => {
-            kamar.fasilitas_ruangan?.forEach((f) => fasilitasRuangan.add(f.nama));
-          });
-          const allFasilitas = [...fasilitasUmum.map((f) => f.nama), ...Array.from(fasilitasRuangan)];
-          setFasilitas(Array.from(new Set(allFasilitas)));
+          setFasilitas(Array.from(new Set([...fasilitasUmum.map((f) => f.nama)])));
         }
       } catch (error) {
         console.error("Failed to fetch properti:", error);
