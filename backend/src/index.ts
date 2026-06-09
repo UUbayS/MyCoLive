@@ -16,19 +16,23 @@ import laporanRoutes from "./routes/laporan";
 import keuanganRoutes from "./routes/keuangan";
 import whatsappRoutes from "./routes/whatsapp";
 import notifikasiRoutes from "./routes/notifikasi";
+import { baileysProvider } from "./services/whatsapp/providers/baileys";
 
 const app = new Hono();
 
-app.use("*", cors({
-  origin: "*",
-  allowMethods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowHeaders: ["Content-Type", "Authorization"],
-}));
+app.use(
+  "*",
+  cors({
+    origin: "*",
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 
 app.use("*", errorMiddleware);
 
 app.get("/", (c) => {
-  return c.json({ message: "API MyCoLive Berjalan Lancar 🚀" });
+  return c.json({ message: "API MyCoLive Berjalan Lancar" });
 });
 
 app.route("/api/auth", authRoutes);
@@ -46,5 +50,9 @@ app.route("/api/laporan", laporanRoutes);
 app.route("/api/keuangan", keuanganRoutes);
 app.route("/api/whatsapp", whatsappRoutes);
 app.route("/api/notifikasi", notifikasiRoutes);
+
+if (process.env.WHATSAPP_PROVIDER === "baileys") {
+  baileysProvider.initialize().catch(console.error);
+}
 
 export default app;

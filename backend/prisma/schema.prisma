@@ -94,7 +94,7 @@ model User {
 
   penghuni    Penghuni?
   operator   Operator[]
-  
+
   // Relation opposite: PEMILIK owns properti
   properti  Properti[]
   // Relation opposite: settings
