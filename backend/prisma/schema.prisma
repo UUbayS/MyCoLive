@@ -101,6 +101,7 @@ model User {
   settings   AdminSettings?
   // Relation opposite: admin yang memproses checkout
   pengajuanCheckoutAdmin PengajuanCheckout[]
+  pengumuman             Pengumuman[]
 }
 
 model AdminSettings {
@@ -151,6 +152,7 @@ model Properti {
   pengajuanDana PengajuanDana[]
   pengajuanCheckout PengajuanCheckout[]
   fasilitas_umum Fasilitas[]
+  pengumuman        Pengumuman[]
 }
 
 model Kamar {
@@ -292,6 +294,18 @@ model Notifikasi {
   related_id  String?
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+}
+
+model Pengumuman {
+  id          Int      @id @default(autoincrement())
+  judul       String
+  isi         String
+  properti_id String?
+  pemilik_id  String
+  created_at  DateTime @default(now())
+
+  properti Properti? @relation(fields: [properti_id], references: [id])
+  pemilik  User      @relation(fields: [pemilik_id], references: [id])
 }
 
 model PengajuanCheckout {
