@@ -58,9 +58,28 @@ app.get("/status", requireRole("PEMILIK"), async (c) => {
     status: "success",
     data: {
       connected: baileysProvider.isConnected(),
-      qr: baileysProvider.getQR(),
+      qr: baileysProvider.getQRDataUrl() || baileysProvider.getQR(),
     },
   });
+});
+
+// Trigger QR / reconnect (PEMILIK only)
+app.post("/connect", requireRole("PEMILIK"), async (c) => {
+  try {
+    baileysProvider.resetRetry();
+    baileysProvider.initialize().catch(console.error);
+
+    return c.json({
+      status: "success",
+      message: "Menghubungkan WhatsApp... Periksa QR di /api/whatsapp/status",
+    });
+  } catch (error) {
+    console.error("WhatsApp connect error:", error);
+    return c.json(
+      { status: "error", message: "Gagal menghubungkan WhatsApp" },
+      500
+    );
+  }
 });
 
 export default app;

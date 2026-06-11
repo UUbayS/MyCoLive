@@ -2,6 +2,8 @@ import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 import { createNotifikasi } from "../utils/notifikasi";
+import { sendWhatsAppBroadcast } from "../services/whatsapp";
+import { templateWa } from "../utils/template-wa";
 
 const app = new Hono<AppEnv>();
 
@@ -508,6 +510,33 @@ app.post("/checkout", requireRole("PENGHUNI"), async (c) => {
       pengajuan.id
     );
 
+    // WA ke pemilik + pengelola properti
+    const propertiId = penghuni.kamar.properti.id;
+    const adminId = penghuni.kamar.properti.admin_id;
+    const pemilik = await prisma.user.findUnique({
+      where: { id: adminId },
+      select: { no_telepon: true },
+    });
+    const operators = await prisma.operator.findMany({
+      where: { properti_id: propertiId },
+      include: { user: { select: { no_telepon: true } } },
+    });
+    const waPhones: string[] = [];
+    if (pemilik?.no_telepon) waPhones.push(pemilik.no_telepon);
+    operators.forEach((op) => {
+      if (op.user.no_telepon) waPhones.push(op.user.no_telepon!);
+    });
+    if (waPhones.length > 0) {
+      sendWhatsAppBroadcast(
+        waPhones,
+        templateWa.checkoutBaru(
+          user.nama || user.email,
+          penghuni.kamar.nomor,
+          penghuni.kamar.properti.nama
+        )
+      ).catch(console.error);
+    }
+
     return c.json({
       status: "success",
       data: pengajuan,
@@ -635,7 +664,8 @@ app.put("/checkout/:id", async (c) => {
               select: {
                 id: true,
                 nama: true,
-                email: true
+                email: true,
+                no_telepon: true
               }
             }
           }
@@ -644,7 +674,8 @@ app.put("/checkout/:id", async (c) => {
         properti: {
           select: {
             id: true,
-            admin_id: true
+            admin_id: true,
+            nama: true
           }
         }
       }
@@ -716,6 +747,15 @@ app.put("/checkout/:id", async (c) => {
         "CHECKOUT_DITERIMA",
         id
       );
+      if (pengajuan.penghuni.user.no_telepon) {
+        sendWhatsAppBroadcast(
+          [pengajuan.penghuni.user.no_telepon],
+          templateWa.checkoutDiterima(
+            pengajuan.kamar.nomor,
+            pengajuan.properti.nama
+          )
+        ).catch(console.error);
+      }
     } else {
       // DITOLAK
       await prisma.$transaction(async (tx) => {
@@ -744,6 +784,16 @@ app.put("/checkout/:id", async (c) => {
         "CHECKOUT_DITOLAK",
         id
       );
+      if (pengajuan.penghuni.user.no_telepon) {
+        sendWhatsAppBroadcast(
+          [pengajuan.penghuni.user.no_telepon],
+          templateWa.checkoutDitolak(
+            pengajuan.kamar.nomor,
+            pengajuan.properti.nama,
+            keterangan || undefined
+          )
+        ).catch(console.error);
+      }
     }
 
     return c.json({

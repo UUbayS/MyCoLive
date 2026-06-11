@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   BedDouble,
   Wrench,
+  Megaphone,
 } from "lucide-react";
 
 export type SubMenuItem = {
@@ -47,6 +48,7 @@ export const iconMap: Record<string, typeof Building2> = {
   LayoutDashboard,
   BedDouble,
   Wrench,
+  Megaphone,
 };
 
 export const menuConfig: Record<Role, MenuItem[]> = {
@@ -91,6 +93,7 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       submenu: [
         { label: "Daftar Penghuni", href: "/pengelola/penghuni/daftar", badgeKey: "pengajuanCheckout" },
         { label: "Komplain", href: "/pengelola/penghuni/komplain", badgeKey: "komplain" },
+        { label: "Pengumuman", href: "/pengelola/pengumuman"}
       ],
     },
     {
@@ -123,6 +126,7 @@ export const menuConfig: Record<Role, MenuItem[]> = {
         { label: "Daftar Penghuni", href: "/administrator/penghuni/daftar", badgeKey: "pengajuanCheckout" },
         { label: "Validasi Bayar", href: "/administrator/penghuni/validasi", badgeKey: "validasiBayar" },
         { label: "Komplain", href: "/administrator/penghuni/komplain", badgeKey: "komplain" },
+        { label: "Pengumuman", href: "/administrator/pengumuman"}
       ],
     },
     {

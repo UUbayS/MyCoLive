@@ -720,6 +720,8 @@ app.put("/:id/verifikasi", requireRole("PEMILIK"), async (c) => {
       );
       if (penghuniData.user.no_telepon) {
         if (status === "DITERIMA") {
+          const appUrl = process.env.APP_URL || "http://localhost:3000";
+          const link = `${appUrl}/penghuni/transaksi/${id}`;
           sendWhatsAppBroadcast(
             [penghuniData.user.no_telepon],
             templateWa.pemesananDiterima(
@@ -728,6 +730,7 @@ app.put("/:id/verifikasi", requireRole("PEMILIK"), async (c) => {
               pemesanan.properti.nama,
               nomorKuitansi,
               pemesanan.total_bayar,
+              link,
             ),
           ).catch(console.error);
         } else {

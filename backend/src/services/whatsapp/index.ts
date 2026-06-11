@@ -71,20 +71,6 @@ export async function sendWhatsAppBroadcast(
   };
 }
 
-export function formatNomorWA(nomor: string): string {
-  let cleaned = nomor.replace(/\D/g, "");
-  
-  if (cleaned.startsWith("0")) {
-    cleaned = "62" + cleaned.slice(1);
-  }
-  
-  if (!cleaned.startsWith("62")) {
-    cleaned = "62" + cleaned;
-  }
-  
-  return cleaned + "@s.whatsapp.net";
-}
-
 export function isValidNomorWA(nomor: string): boolean {
   const cleaned = nomor.replace(/\D/g, "");
   return cleaned.length >= 10 && cleaned.length <= 15;

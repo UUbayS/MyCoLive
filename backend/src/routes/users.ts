@@ -3,6 +3,8 @@ import { prisma } from "../config/db";
 import { hashPassword } from "../utils/password";
 import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 import { createNotifikasi } from "../utils/notifikasi";
+import { sendWhatsAppBroadcast } from "../services/whatsapp";
+import { templateWa } from "../utils/template-wa";
 
 const app = new Hono<AppEnv>();
 
@@ -185,6 +187,14 @@ app.post("/", async (c) => {
         "OPERATOR",
         newUser.id
       );
+
+      if (newUser.no_telepon) {
+        const propertiNames = validProperti.map((p) => p.nama).join(", ");
+        sendWhatsAppBroadcast(
+          [newUser.no_telepon],
+          templateWa.operatorBaru(newUser.nama, propertiNames)
+        ).catch(console.error);
+      }
 
       return c.json({
         status: "success",

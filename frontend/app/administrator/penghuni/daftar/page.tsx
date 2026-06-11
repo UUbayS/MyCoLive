@@ -11,6 +11,7 @@ import {
   BedDouble,
   MapPin,
   Calendar,
+  Megaphone,
 } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
 import PenghuniTabs from "@/components/PenghuniTabs";
@@ -219,6 +220,14 @@ export default function DaftarPenghuniPage() {
             })}
           </div>
         )}
+        <Link
+          href="/administrator/pengumuman"
+          className="md:hidden fixed bottom-24 right-4 p-4 gap-2 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
+          aria-label="Tambah Properti"
+        >
+          <Megaphone className="w-6 h-6" />
+          <span>Pengumuman</span>
+        </Link>
       </div>
     </MainLayout>
   );

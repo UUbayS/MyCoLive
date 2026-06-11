@@ -991,3 +991,60 @@ export async function markAllNotifikasiAsRead(): Promise<{ count: number } | nul
     return null;
   }
 }
+
+// ─── PENGUMUMAN ───
+
+export type PengumumanTarget = "ALL" | "PENGHUNI" | "PENGELOLA" | "PENGHUNI_PROPERTI" | "CUSTOM";
+
+export type PengumumanResult = {
+  total_penerima: number;
+  wa_berhasil: number;
+  wa_gagal: number;
+  inapp_berhasil: number;
+};
+
+export async function kirimPengumuman(data: {
+  target: PengumumanTarget;
+  properti_id?: string;
+  user_ids?: string[];
+  judul: string;
+  pesan: string;
+  kirim_whatsapp?: boolean;
+}): Promise<PengumumanResult | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: PengumumanResult }>("/api/pengumuman", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+// ─── WHATSAPP ───
+
+export type WhatsAppStatus = {
+  connected: boolean;
+  qr: string | null;
+};
+
+export async function getWhatsappStatus(): Promise<WhatsAppStatus | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: WhatsAppStatus }>("/api/whatsapp/status");
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function connectWhatsapp(): Promise<{ message: string } | null> {
+  try {
+    const res = await apiFetch<{ status: string; message: string }>("/api/whatsapp/connect", {
+      method: "POST",
+    });
+    return res;
+  } catch {
+    return null;
+  }
+}

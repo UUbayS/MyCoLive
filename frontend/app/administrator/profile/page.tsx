@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Lock, LogOut, X, Eye, EyeOff, User, Mail, Phone, Wallet, Building, CreditCard, QrCode } from "lucide-react";
+import { Pencil, Lock, LogOut, X, Eye, EyeOff, User, Mail, Phone, Wallet, Building, CreditCard, QrCode as QrCodeIcon, Wifi, WifiOff, RefreshCw } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
-import { getProfile, updateProfile, changePassword, getTempatPembayaran, updateTempatPembayaran, ProfileData, AdminSettingsData } from "../../../lib/api";
+import { getProfile, updateProfile, changePassword, getTempatPembayaran, updateTempatPembayaran, getWhatsappStatus, connectWhatsapp, ProfileData, AdminSettingsData, WhatsAppStatus } from "../../../lib/api";
 import { clearAuth } from "../../../lib/auth";
 
 export default function ProfileAdminPage() {
@@ -16,6 +16,9 @@ export default function ProfileAdminPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [whatsappStatus, setWhatsappStatus] = useState<WhatsAppStatus | null>(null);
+  const [whatsappConnecting, setWhatsappConnecting] = useState(false);
+  const [whatsappLoading, setWhatsappLoading] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -23,18 +26,25 @@ export default function ProfileAdminPage() {
     async function loadData() {
       const profileData = await getProfile();
       const paymentData = await getTempatPembayaran();
+      const waData = await getWhatsappStatus();
       if (mounted) {
         setProfile(profileData);
         setPaymentInfo(paymentData);
+        setWhatsappStatus(waData);
         setLoadingProfile(false);
         setLoadingPayment(false);
       }
     }
 
     loadData();
+    const waInterval = setInterval(async () => {
+      const waData = await getWhatsappStatus();
+      if (mounted) setWhatsappStatus(waData);
+    }, 5000);
 
     return () => {
       mounted = false;
+      clearInterval(waInterval);
     };
   }, []);
 
@@ -66,6 +76,28 @@ export default function ProfileAdminPage() {
     setLoadingPayment(false);
   };
 
+  const handleConnectWhatsapp = async () => {
+    setWhatsappConnecting(true);
+    try {
+      await connectWhatsapp();
+      setTimeout(async () => {
+        const data = await getWhatsappStatus();
+        setWhatsappStatus(data);
+      }, 2000);
+    } catch {
+      console.error("Failed to connect WhatsApp");
+    } finally {
+      setWhatsappConnecting(false);
+    }
+  };
+
+  const refreshWhatsapp = async () => {
+    setWhatsappLoading(true);
+    const data = await getWhatsappStatus();
+    setWhatsappStatus(data);
+    setWhatsappLoading(false);
+  };
+
   const isLoading = loadingProfile || loadingPayment;
 
   return (
@@ -82,7 +114,7 @@ export default function ProfileAdminPage() {
           <>
             {/* Header Profil */}
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-2xl font-semibold flex-shrink-0">
+              <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-2xl font-semibold shrink-0">
                 {getInitials(profile.nama)}
               </div>
               <div className="min-w-0">
@@ -181,7 +213,7 @@ export default function ProfileAdminPage() {
                   )}
                   {paymentInfo.qris_image && (
                     <div className="flex items-start gap-3">
-                      <QrCode size={18} className="text-gray-400 mt-0.5" />
+                      <QrCodeIcon size={18} className="text-gray-400 mt-0.5" />
                       <div>
                         <p className="text-xs text-gray-500 mb-1">QRIS</p>
                         <img
@@ -203,6 +235,63 @@ export default function ProfileAdminPage() {
                     Atur sekarang
                   </button>
                 </div>
+              )}
+            </div>
+
+            {/* WhatsApp Connect */}
+            <div className="bg-white border border-gray-200 rounded-2xl p-5 mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  {whatsappStatus?.connected ? (
+                    <Wifi size={20} className="text-green-500" />
+                  ) : (
+                    <WifiOff size={20} className="text-gray-400" />
+                  )}
+                  <h2 className="text-base font-semibold text-black">WhatsApp</h2>
+                </div>
+                <button
+                  onClick={refreshWhatsapp}
+                  disabled={whatsappLoading}
+                  className="text-sm font-medium text-[#8dc63f] hover:text-[#7ab332] transition-colors disabled:opacity-50"
+                >
+                  <RefreshCw size={16} className={`inline mr-1 ${whatsappLoading ? "animate-spin" : ""}`} />
+                  Refresh
+                </button>
+              </div>
+
+              <div className="flex items-center gap-3 mb-4">
+                <div className={`w-3 h-3 rounded-full ${whatsappStatus?.connected ? "bg-green-500" : "bg-gray-300"}`} />
+                <span className="text-sm text-gray-600">
+                  {whatsappStatus?.connected ? "Terhubung" : "Tidak terhubung"}
+                </span>
+              </div>
+
+              {whatsappStatus?.qr && !whatsappStatus?.connected && (
+                <div className="flex flex-col items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-200 mb-4">
+                  <QrCodeIcon size={20} className="text-green-600" />
+                  <p className="text-sm text-center text-gray-700">
+                    Scan QR code dengan WhatsApp
+                  </p>
+                  <img
+                    src={whatsappStatus.qr}
+                    alt="WhatsApp QR Code"
+                    className="w-48 h-48 border-2 border-green-300 rounded-lg bg-white p-2"
+                  />
+                  <p className="text-xs text-gray-500 text-center">
+                    Buka WhatsApp → Pengaturan → Perangkat Tertaut → Scan QR
+                  </p>
+                </div>
+              )}
+
+              {!whatsappStatus?.connected && (
+                <button
+                  onClick={handleConnectWhatsapp}
+                  disabled={whatsappConnecting}
+                  className="w-full bg-[#8dc63f] text-white py-3 rounded-xl font-medium text-sm shadow-lg shadow-[#8dc63f]/25 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <RefreshCw size={16} className={`${whatsappConnecting ? "animate-spin" : ""}`} />
+                  {whatsappConnecting ? "Menghubungkan..." : "Hubungkan WhatsApp"}
+                </button>
               )}
             </div>
 
@@ -690,7 +779,7 @@ function EditPaymentModal({
             </label>
             <div className="relative">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <QrCode size={20} />
+                <QrCodeIcon size={20} />
               </div>
               <input
                 type="text"
