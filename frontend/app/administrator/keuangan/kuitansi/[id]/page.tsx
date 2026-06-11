@@ -6,6 +6,7 @@ import { ChevronLeft, Download, Eye, CheckCircle } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getKuitansiDetail, KuitansiDetail } from "@/lib/api";
+import { generateKuitansiPDF } from "@/lib/pdf-export";
 
 export default function KuitansiPage() {
   const router = useRouter();
@@ -149,7 +150,11 @@ export default function KuitansiPage() {
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-3">
           <button
-            onClick={() => alert("Download PDF (dummy)")}
+            onClick={() => {
+              if (detail) {
+                generateKuitansiPDF(detail);
+              }
+            }}
             className="flex items-center justify-center gap-2 border border-[#84CC16] text-[#84CC16] rounded-xl py-3 text-sm font-medium hover:bg-[#84CC16]/5 transition-colors"
           >
             <Download className="w-4 h-4" />

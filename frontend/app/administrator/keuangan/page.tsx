@@ -22,6 +22,10 @@ import {
   KeuanganData,
   TransaksiItem,
 } from "@/lib/api";
+import {
+  generateSeluruhTransaksiPDF,
+  generateIncomeLossPDF,
+} from "@/lib/pdf-export";
 
 const statusBadgeStyle: Record<string, string> = {
   Lunas: "bg-green-100 text-green-700",
@@ -736,6 +740,7 @@ export default function KeuanganPage() {
   const [loading, setLoading] = useState(true);
   const [showPeriodeDropdown, setShowPeriodeDropdown] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showPdfModal, setShowPdfModal] = useState(false);
   const fetchedRef = useRef(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -1040,7 +1045,7 @@ export default function KeuanganPage() {
             ))}
           </div>
           <button
-            onClick={() => alert("Download PDF (dummy)")}
+            onClick={() => setShowPdfModal(true)}
             className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-[#84CC16] transition-colors shrink-0 ml-2"
           >
             <Download className="w-3.5 h-3.5" />
@@ -1130,6 +1135,82 @@ export default function KeuanganPage() {
           </div>
         )}
       </div>
+
+      {/* PDF Export Modal */}
+      {showPdfModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={() => setShowPdfModal(false)}>
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-gray-100">
+              <h3 className="text-sm font-semibold text-gray-900">Export PDF</h3>
+              <button onClick={() => setShowPdfModal(false)} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+                <X className="w-4 h-4 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="p-4 space-y-3">
+              <p className="text-xs text-gray-500 mb-3">
+                Periode: {getDropdownLabel()}
+              </p>
+
+              <button
+                onClick={() => {
+                  generateSeluruhTransaksiPDF(filteredTransaksi, summary, selectedPeriode, customRange);
+                  setShowPdfModal(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-[#84CC16]/10 hover:border-[#84CC16] hover:text-[#84CC16] transition-colors"
+              >
+                <Download className="w-4 h-4" />
+                <div className="text-left">
+                  <p className="font-medium">Seluruh Transaksi</p>
+                  <p className="text-xs text-gray-500">Tabel lengkap semua transaksi terfilter</p>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  generateIncomeLossPDF(filteredTransaksi, "HARIAN", selectedPeriode, customRange);
+                  setShowPdfModal(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-[#84CC16]/10 hover:border-[#84CC16] hover:text-[#84CC16] transition-colors"
+              >
+                <TrendingUp className="w-4 h-4" />
+                <div className="text-left">
+                  <p className="font-medium">Income/Loss Harian</p>
+                  <p className="text-xs text-gray-500">Agregasi pendapatan & pengeluaran per hari</p>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  generateIncomeLossPDF(filteredTransaksi, "BULANAN", selectedPeriode, customRange);
+                  setShowPdfModal(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-[#84CC16]/10 hover:border-[#84CC16] hover:text-[#84CC16] transition-colors"
+              >
+                <TrendingUp className="w-4 h-4" />
+                <div className="text-left">
+                  <p className="font-medium">Income/Loss Bulanan</p>
+                  <p className="text-xs text-gray-500">Agregasi pendapatan & pengeluaran per bulan</p>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  generateIncomeLossPDF(filteredTransaksi, "TAHUNAN", selectedPeriode, customRange);
+                  setShowPdfModal(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-[#84CC16]/10 hover:border-[#84CC16] hover:text-[#84CC16] transition-colors"
+              >
+                <TrendingUp className="w-4 h-4" />
+                <div className="text-left">
+                  <p className="font-medium">Income/Loss Tahunan</p>
+                  <p className="text-xs text-gray-500">Agregasi pendapatan & pengeluaran per tahun</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </MainLayout>
   );
 }

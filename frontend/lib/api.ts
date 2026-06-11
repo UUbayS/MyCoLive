@@ -698,6 +698,7 @@ export type KuitansiDetail = {
   nomor_kuitansi: string | null;
   nama: string;
   properti_nama: string;
+  alamat: string;
   kamar_nomor: string;
   durasi: number;
   metode_bayar: string;
@@ -705,6 +706,7 @@ export type KuitansiDetail = {
   tgl_bayar: string;
   status: string;
   bukti?: string | null;
+  no_telepon_admin: string | null;
 };
 
 export async function getKeuanganTransaksi(

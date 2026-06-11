@@ -174,7 +174,9 @@ app.get("/kuitansi/:id", requireRole("PEMILIK"), async (c) => {
           include: {
             penghuni: { include: { user: { select: { nama: true } } } },
             kamar: { select: { nomor: true } },
-            properti: { select: { nama: true } },
+            properti: {
+              select: { nama: true, alamat: true, admin_id: true },
+            },
           },
         },
       },
@@ -201,6 +203,11 @@ app.get("/kuitansi/:id", requireRole("PEMILIK"), async (c) => {
       );
     }
 
+    const admin = await prisma.user.findUnique({
+      where: { id: pembayaran.pemesanan.properti?.admin_id || "" },
+      select: { no_telepon: true },
+    });
+
     return c.json({
       status: "success",
       data: {
@@ -208,6 +215,7 @@ app.get("/kuitansi/:id", requireRole("PEMILIK"), async (c) => {
         nomor_kuitansi: pembayaran.nomor_kuitansi,
         nama: pembayaran.pemesanan.penghuni?.user?.nama || "-",
         properti_nama: pembayaran.pemesanan.properti?.nama || "-",
+        alamat: pembayaran.pemesanan.properti?.alamat || "-",
         kamar_nomor: pembayaran.pemesanan.kamar?.nomor || "-",
         durasi: pembayaran.pemesanan.durasi_sewa,
         metode_bayar: pembayaran.metode_bayar,
@@ -215,6 +223,7 @@ app.get("/kuitansi/:id", requireRole("PEMILIK"), async (c) => {
         tgl_bayar: pembayaran.tgl_bayar?.toISOString() || pembayaran.created_at.toISOString(),
         status: pembayaran.status,
         bukti: pembayaran.bukti,
+        no_telepon_admin: admin?.no_telepon || "-",
       },
     });
   } catch (error) {
