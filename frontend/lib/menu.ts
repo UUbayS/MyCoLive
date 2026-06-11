@@ -15,12 +15,21 @@ import {
 export type SubMenuItem = {
   label: string;
   href: string;
+  badgeKey?: string;
+};
+
+export type Badges = {
+  validasiBayar: number;
+  komplain: number;
+  pengajuanCheckout: number;
+  requestDana: number;
 };
 
 export type MenuItem = {
   label: string;
   href: string;
   icon: string;
+  badgeKey?: string;
   submenu?: SubMenuItem[];
 };
 
@@ -61,6 +70,7 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       label: "Komplain",
       href: "/penghuni/komplain",
       icon: "MessageSquareWarning",
+      badgeKey: "komplain",
     },
     {
       label: "Profile",
@@ -79,14 +89,15 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       href: "/pengelola/penghuni",
       icon: "Users",
       submenu: [
-        { label: "Daftar Penghuni", href: "/pengelola/penghuni/daftar" },
-        { label: "Komplain", href: "/pengelola/penghuni/komplain" },
+        { label: "Daftar Penghuni", href: "/pengelola/penghuni/daftar", badgeKey: "pengajuanCheckout" },
+        { label: "Komplain", href: "/pengelola/penghuni/komplain", badgeKey: "komplain" },
       ],
     },
     {
       label: "Request Dana",
       href: "/pengelola/request-dana",
       icon: "Banknote",
+      badgeKey: "requestDana",
     },
     {
       label: "Profil",
@@ -109,9 +120,9 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       href: "/administrator/penghuni",
       icon: "Users",
       submenu: [
-        { label: "Daftar Penghuni", href: "/administrator/penghuni/daftar" },
-        { label: "Validasi Bayar", href: "/administrator/penghuni/validasi" },
-        { label: "Komplain", href: "/administrator/penghuni/komplain" },
+        { label: "Daftar Penghuni", href: "/administrator/penghuni/daftar", badgeKey: "pengajuanCheckout" },
+        { label: "Validasi Bayar", href: "/administrator/penghuni/validasi", badgeKey: "validasiBayar" },
+        { label: "Komplain", href: "/administrator/penghuni/komplain", badgeKey: "komplain" },
       ],
     },
     {

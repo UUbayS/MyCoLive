@@ -69,7 +69,7 @@ export default function TransaksiPage() {
 
   return (
     <MainLayout>
-      <div className="mb-6">
+      <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
         <h1 className="text-xl font-semibold mb-4">Riwayat Transaksi</h1>
 
         {pemesananList.length === 0 ? (

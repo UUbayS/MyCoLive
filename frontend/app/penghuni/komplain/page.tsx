@@ -83,7 +83,7 @@ export default function Komplain() {
 
   return (
     <MainLayout>
-      <div className="mb-4 mb:mb-4">
+      <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Komplain</h1>
           {!noRoom && (

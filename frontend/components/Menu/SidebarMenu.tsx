@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { getUser, AuthUser } from "../../lib/auth";
-import { getMenuByRole, MenuItem, iconMap } from "../../lib/menu";
+import { getMenuByRole, MenuItem, iconMap, Badges } from "../../lib/menu";
+import { useBadges } from "../../lib/BadgesContext";
 
 const STORAGE_KEY = "sidebar-expanded";
 
@@ -14,6 +15,7 @@ export default function SidebarMenu() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
+  const { badges } = useBadges();
 
   useEffect(() => {
     const currentUser = getUser();
@@ -45,7 +47,7 @@ export default function SidebarMenu() {
         // ignore localStorage errors
       }
     }
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (menuItems.length === 0) return;
@@ -91,6 +93,26 @@ export default function SidebarMenu() {
     }));
   };
 
+  const getBadgeCount = (href: string, badgeKey?: string): number | null => {
+    if (!badges || !badgeKey) return null;
+    const count = badges[badgeKey as keyof Badges];
+    return count > 0 ? count : null;
+  };
+
+  const getParentBadgeCount = (item: MenuItem): number | null => {
+    if (!badges || !item.submenu) return null;
+    let total = 0;
+    item.submenu.forEach((sub) => {
+      if (sub.badgeKey) {
+        total += badges[sub.badgeKey as keyof Badges] || 0;
+      }
+    });
+    if (item.badgeKey) {
+      total += badges[item.badgeKey as keyof Badges] || 0;
+    }
+    return total > 0 ? total : null;
+  };
+
   if (!user || menuItems.length === 0) {
     return null;
   }
@@ -105,6 +127,8 @@ export default function SidebarMenu() {
               const active = isActive(item.href);
               const hasSubmenu = item.submenu && item.submenu.length > 0;
               const isExpanded = expandedMenus[item.href];
+              const parentBadge = getParentBadgeCount(item);
+              const directBadge = !hasSubmenu ? getBadgeCount(item.href, item.badgeKey) : null;
 
               return (
                 <li key={item.href}>
@@ -120,6 +144,11 @@ export default function SidebarMenu() {
                       >
                         {IconComponent && <IconComponent className="w-5 h-5" />}
                         <span className="flex-1 text-left">{item.label}</span>
+                        {parentBadge && (
+                          <span className="bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[14px] h-[14px] flex items-center justify-center px-[2px] leading-none">
+                            {parentBadge > 99 ? "99+" : parentBadge}
+                          </span>
+                        )}
                         {isExpanded ? (
                           <ChevronDown className="w-4 h-4" />
                         ) : (
@@ -131,17 +160,23 @@ export default function SidebarMenu() {
                         <ul className="ml-8 mt-1 space-y-1">
                           {item.submenu!.map((sub) => {
                             const subActive = isActive(sub.href);
+                            const subBadge = getBadgeCount(sub.href, sub.badgeKey);
                             return (
                               <li key={sub.href}>
                                 <Link
                                   href={sub.href}
-                                  className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
+                                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
                                     subActive
                                       ? "bg-[#84CC16]/10 text-[#84CC16] font-medium"
                                       : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"
                                   }`}
                                 >
-                                  {sub.label}
+                                  <span className="flex-1">{sub.label}</span>
+                                  {subBadge && (
+                                    <span className="bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[14px] h-[14px] flex items-center justify-center px-[2px] leading-none">
+                                      {subBadge > 99 ? "99+" : subBadge}
+                                    </span>
+                                  )}
                                 </Link>
                               </li>
                             );
@@ -159,7 +194,12 @@ export default function SidebarMenu() {
                       }`}
                     >
                       {IconComponent && <IconComponent className="w-5 h-5" />}
-                      <span>{item.label}</span>
+                      <span className="flex-1">{item.label}</span>
+                      {directBadge && (
+                        <span className="bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[14px] h-[14px] flex items-center justify-center px-[2px] leading-none">
+                          {directBadge > 99 ? "99+" : directBadge}
+                        </span>
+                      )}
                     </Link>
                   )}
                 </li>
