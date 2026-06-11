@@ -694,6 +694,7 @@ app.put("/:id/verifikasi", requireRole("PEMILIK"), async (c) => {
         where: { id: pemesanan.penghuni_id },
         data: {
           kamar_id: pemesanan.kamar_id,
+          status_sewa: "AKTIF",
           tgl_mulai: pemesanan.tgl_masuk,
           tgl_berakhir: new Date(
             pemesanan.tgl_masuk.getTime() +

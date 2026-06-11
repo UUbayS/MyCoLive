@@ -217,8 +217,8 @@ export default function KamarSayaPage() {
   return (
     <MainLayout>
       <div className="max-w-3xl mx-auto px-4 py-6 md:py-8">
+        
         <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-5">Kamar Saya</h1>
-
         {/* Card Kamar */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-4">
           <ImageCarousel images={kamar.gambar || []} alt={properti.nama} height="h-56" />
@@ -299,31 +299,19 @@ export default function KamarSayaPage() {
               </div>
             )}
           </div>
-
-          {/* Warning */}
-          {showWarning && (
-            <div className={`mt-3 p-3 rounded-lg flex items-start gap-2 text-sm ${remainingDays <= 14 ? "bg-red-50 text-red-700" : "bg-yellow-50 text-yellow-700"}`}>
-              <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>
-                {remainingDays <= 14
-                  ? "Segera perpanjang! Sewa berakhir dalam " + remainingDays + " hari."
-                  : "Sewa berakhir dalam " + remainingDays + " hari. Jangan lupa perpanjang."}
-              </span>
-            </div>
-          )}
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3">
+        {/* Action Buttons (Chat & Checkout) */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-4">
           {waNumber && (
             <a
               href={`https://wa.me/${waNumber}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 flex-1 py-3 bg-[#25D366] text-white text-sm font-medium rounded-xl hover:bg-[#128C7E] transition-colors"
+              className="flex items-center justify-center gap-2 flex-1 py-3 bg-[#25D366] text-white text-sm font-medium rounded-xl hover:bg-[#128C7E] transition-colors shadow-sm"
             >
               <MessageCircle className="w-4 h-4" />
-              Chat WhatsApp
+              Chat Admin
             </a>
           )}
           {penghuni.status_sewa === "AKTIF" && (
@@ -343,15 +331,35 @@ export default function KamarSayaPage() {
           )}
         </div>
 
-        {showPayButton && (
-          <button
-            onClick={() => setShowPerpanjangModal(true)}
-            className="w-full mt-3 flex items-center justify-center gap-2 py-3 bg-[#84CC16] text-white text-sm font-medium rounded-xl hover:bg-[#73b814] transition-colors"
-          >
-            <CreditCard className="w-4 h-4" />
-            Bayar Sewa Sekarang
-          </button>
-        )}
+        {/* Action Buttons (Billing & Extension) */}
+        <div className="flex flex-col gap-3">
+          {/* Ada Tagihan/Pemesanan yang belum dibayar */}
+          {hasPending && (
+            <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-red-700 text-sm font-medium">
+                <AlertTriangle className="w-4 h-4" />
+                <span>Anda memiliki tagihan belum dibayar!</span>
+              </div>
+              <Link
+                href="/penghuni/transaksi"
+                className="w-full sm:w-auto px-5 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors text-center"
+              >
+                Lihat Tagihan
+              </Link>
+            </div>
+          )}
+
+          {/* Perpanjang jika kontrak mau habis (<30 hari) DAN tidak ada tagihan tertunda */}
+          {showWarning && !hasPending && penghuni.status_sewa === "AKTIF" && (
+            <button
+              onClick={() => setShowPerpanjangModal(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-[#84CC16] text-white text-sm font-medium rounded-xl hover:bg-[#73b814] transition-colors shadow-sm"
+            >
+              <CreditCard className="w-4 h-4" />
+              Perpanjang Sewa Kamar
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Checkout Modal */}

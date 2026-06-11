@@ -286,6 +286,8 @@ app.put("/:id/checkout", requireRole("PEMILIK"), async (c) => {
   try {
     const id = c.req.param("id");
     const user = c.get("user");
+    const body = await c.req.json();
+    const { alasan } = body;
 
     const penghuni = await prisma.penghuni.findUnique({
       where: { id },
@@ -343,11 +345,16 @@ app.put("/:id/checkout", requireRole("PEMILIK"), async (c) => {
       }
     }
 
-    // Transaction: checkout penghuni + kosongkan kamar
+    // Transaction: checkout penghuni + kosongkan kamar + resolve pengajuan
     const updated = await prisma.$transaction(async (tx) => {
       await tx.kamar.update({
         where: { id: penghuni.kamar_id! },
         data: { status: "KOSONG" }
+      });
+
+      await tx.pengajuanCheckout.updateMany({
+        where: { penghuni_id: id, status: "MENUNGGU" },
+        data: { status: "DITERIMA", admin_id: user.userId, keterangan: alasan || null }
       });
 
       return tx.penghuni.update({
@@ -383,10 +390,13 @@ app.put("/:id/checkout", requireRole("PEMILIK"), async (c) => {
       include: { user: { select: { id: true } } }
     });
     if (penghuniUser?.user) {
+      const notifMsg = alasan
+        ? `Anda telah checkout dari Kamar ${penghuni.kamar?.nomor || "-"}. Alasan: ${alasan}`
+        : `Anda telah checkout dari Kamar ${penghuni.kamar?.nomor || "-"}`;
       await createNotifikasi(
         penghuniUser.user.id,
         "Checkout",
-        `Anda telah checkout dari Kamar ${penghuni.kamar?.nomor || "-"}`,
+        notifMsg,
         "CHECKOUT",
         id
       );

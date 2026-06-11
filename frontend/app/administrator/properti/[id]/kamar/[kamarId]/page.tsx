@@ -322,12 +322,12 @@ export default function AdminDetailKamarPage() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900">Fasilitas Kamar</h2>
           <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">
-            {(kamar.fasilitas_kamar?.length || 0)} fasilitas
+            {(kamar.fasilitas_ruangan?.length || 0)} fasilitas
           </span>
         </div>
-        {kamar.fasilitas_kamar && kamar.fasilitas_kamar.length > 0 ? (
+        {kamar.fasilitas_ruangan && kamar.fasilitas_ruangan.length > 0 ? (
           <div className="flex flex-wrap gap-2">
-            {kamar.fasilitas_kamar.map((f) => (
+            {kamar.fasilitas_ruangan.map((f) => (
               <span
                 key={f.id}
                 className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-lg text-sm flex items-center gap-1.5 font-medium"

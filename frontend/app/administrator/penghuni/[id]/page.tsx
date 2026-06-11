@@ -53,6 +53,7 @@ export default function DetailPenghuniPage() {
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [showCheckoutConfirm, setShowCheckoutConfirm] = useState(false);
+  const [checkoutReason, setCheckoutReason] = useState("");
   const fetchedRef = useRef(false);
 
   useEffect(() => {
@@ -86,10 +87,11 @@ export default function DetailPenghuniPage() {
   const handleCheckout = async () => {
     setCheckoutLoading(true);
     try {
-      const updated = await checkoutPenghuni(penghuniId);
+      const updated = await checkoutPenghuni(penghuniId, checkoutReason);
       if (updated) {
         setPenghuni(updated);
         setShowCheckoutConfirm(false);
+        setCheckoutReason("");
       } else {
         alert("Gagal melakukan check out");
       }
@@ -356,9 +358,19 @@ export default function DetailPenghuniPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-semibold text-gray-900 mb-2">Konfirmasi Check Out</h3>
-            <p className="text-sm text-gray-500 mb-5">
+            <p className="text-sm text-gray-500 mb-3">
               Check out penghuni <strong>{penghuni.user.nama}</strong> dari Kamar {penghuni.kamar?.nomor}? Penghuni akan keluar dari kamar ini dan tidak bisa menyewa kembali kecuali melakukan pemesanan baru.
             </p>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Alasan (opsional)</label>
+              <textarea
+                value={checkoutReason}
+                onChange={(e) => setCheckoutReason(e.target.value)}
+                placeholder="Contoh: Melanggar peraturan, tidak membayar, masa sewa habis, dll."
+                rows={2}
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
+              />
+            </div>
             <div className="flex gap-2">
               <button
                 onClick={() => setShowCheckoutConfirm(false)}

@@ -635,10 +635,11 @@ export async function getKomplainList(): Promise<KomplainData[]> {
   }
 }
 
-export async function checkoutPenghuni(id: string): Promise<PenghuniData | null> {
+export async function checkoutPenghuni(id: string, alasan?: string): Promise<PenghuniData | null> {
   try {
     const res = await apiFetch<{ status: string; data: PenghuniData }>("/api/penghuni/" + id + "/checkout", {
       method: "PUT",
+      body: JSON.stringify({ alasan }),
     });
     return res.data || null;
   } catch {
