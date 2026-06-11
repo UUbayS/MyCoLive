@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, MapPin, Edit, MessageCircle, LogIn, Home } from "lucide-react";
+import { ArrowLeft, MapPin, User, MessageCircle, LogIn, Home } from "lucide-react";
 import ImageCarousel from "../../../../../../components/ImageCarousel";
 import TarifSelector from "../../../../../../components/TarifSelector";
 import { getUser, isAuthenticated } from "../../../../../../lib/auth";
@@ -17,9 +17,8 @@ export default function DetailKamarPage() {
   const propertiId = params.id as string;
 
   const [kamar, setKamar] = useState<KamarData | null>(null);
-  const [properti, setProperti] = useState<PropertiData | null>(null);
+  const [properti] = useState<PropertiData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("1_bulan");
   const [isAktif, setIsAktif] = useState(true);
   const [hasActiveRoom, setHasActiveRoom] = useState(false);
@@ -69,23 +68,6 @@ export default function DetailKamarPage() {
     checkPenghuniRoom();
   }, [isPenghuni]);
 
-
-  const getDisplayAlamat = () => {
-    if (!properti) return "";
-    if (properti.detail_alamat) {
-      return [
-        properti.detail_alamat,
-        properti.kecamatan ? `Kec. ${properti.kecamatan}` : null,
-        properti.kota,
-        properti.provinsi,
-        properti.kode_pos,
-      ]
-        .filter(Boolean)
-        .join(", ");
-    }
-    return properti.alamat;
-  };
-
   const getWhatsAppLink = () => {
     if (!kamar?.properti) return "#";
     const phone = "6281234567890";
@@ -93,14 +75,6 @@ export default function DetailKamarPage() {
       `Halo, saya tertarik dengan kamar ${kamar.nomor} di ${kamar.properti.nama}`
     );
     return `https://wa.me/${phone}?text=${message}`;
-  };
-
-  const getSisaHari = () => {
-    if (!kamar?.penghuni?.tgl_berakhir) return 0;
-    const endDate = new Date(kamar.penghuni.tgl_berakhir);
-    const now = new Date();
-    const diff = endDate.getTime() - now.getTime();
-    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   };
 
   if (loading) {
@@ -166,6 +140,28 @@ export default function DetailKamarPage() {
           <div className="mb-4">
             <ImageCarousel images={kamar.gambar || []} alt={kamar.nomor} />
           </div>
+          {/* Kontak Pengurus */}
+          <div className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm mb-4">
+            <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2 text-sm">
+              <User className="w-4 h-4 text-[#84CC16]" />
+              Kontak Pengurus
+            </h3>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div>
+                <p className="font-medium text-sm text-gray-900">{properti?.admin?.nama || "Pengurus"}</p>
+                <p className="text-xs text-gray-500">Pengelola Properti</p>
+              </div>
+              <a
+                href={getWhatsAppLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2.5 bg-[#25D366] text-white rounded-lg text-sm font-medium hover:bg-[#128C7E] transition-colors"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* Kolom Kanan - Detail */}
@@ -225,6 +221,7 @@ export default function DetailKamarPage() {
           {/* Tarif */}
           {Object.keys(tarif).length > 0 && (
             <div>
+              <h2 className="text-lg font-semibold mb-2">Tarif Ruangan</h2>
               <TarifSelector
                 tarif={tarif}
                 selectedDuration={selectedDuration}
@@ -233,18 +230,7 @@ export default function DetailKamarPage() {
             </div>
           )}
           {/* Tombol Aksi - full width */}
-          <div className="mb-6">
-            <a
-              href={getWhatsAppLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full border-2 border-[#84CC16] text-[#84CC16] py-3 rounded-xl font-medium hover:bg-[#84CC16]/5 transition-colors mb-3"
-            >
-              <MessageCircle className="w-5 h-5" />
-              Chat Pengurus
-            </a>
-            
-
+          <div className="mb-6">        
             {/* Pesan Kamar - for unauthenticated users */}
             {!isLoggedIn && isKosong && (
               <Link

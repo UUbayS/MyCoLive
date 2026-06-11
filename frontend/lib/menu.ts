@@ -99,6 +99,10 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       label: "Properti Saya",
       href: "/administrator/properti",
       icon: "Building2",
+      submenu: [
+        { label: "Kelola Properti", href: "/administrator/properti" },
+        { label: "Kelola Fasilitas", href: "/administrator/fasilitas" },
+      ],
     },
     {
       label: "Penghuni",

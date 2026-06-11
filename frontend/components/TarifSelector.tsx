@@ -33,9 +33,6 @@ const TarifSelector: React.FC<TarifSelectorProps> = ({
 
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-3">
-        Tarif
-      </label>
       <div className="flex flex-wrap gap-2 mb-3">
         {availableDurations.map((duration) => (
           <button

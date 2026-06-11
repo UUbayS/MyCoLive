@@ -2,11 +2,9 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useRouter, useParams } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, Search, SlidersHorizontal, Plus } from "lucide-react";
+import { ArrowLeft, Search, SlidersHorizontal } from "lucide-react";
 import RoomList from "../../../../../components/RoomList";
 import { RoomCardData } from "../../../../../components/RoomCard";
-import { getUser } from "../../../../../lib/auth";
 import { getKamarByProperti, getPropertiById, KamarData } from "../../../../../lib/api";
 import MainLayout from "../../../../../components/Layout/MainLayout";
 
@@ -19,13 +17,8 @@ export default function DaftarKamarPage() {
   const [propertiNama, setPropertiNama] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterStatus] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(false);
-
-  const user = getUser();
-  const isPemilik = user?.role === "PEMILIK";
-  const isPengelola = user?.role === "PENGELOLA";
-  const showEdit = isPemilik;
 
   useEffect(() => {
     if (!propertiId) return;
@@ -42,7 +35,7 @@ export default function DaftarKamarPage() {
         }
 
         const roomData: RoomCardData[] = kamarList
-          .filter((k: KamarData) => isPemilik || k.status !== "MAINTENANCE")
+          .filter((k: KamarData) => k.status !== "MAINTENANCE")
           .map((k: KamarData) => {
             const tarifObj = typeof k.tarif === "object" && k.tarif ? k.tarif as Record<string, number> : {};
             const hargaBulanan = tarifObj["1_bulan"] || Object.values(tarifObj)[0];
@@ -121,15 +114,6 @@ export default function DaftarKamarPage() {
               <p className="text-sm text-gray-500">{propertiNama}</p>
             </div>
           </div>
-          {showEdit && (
-            <Link
-              href={`/administrator/properti/${propertiId}/kamar/tambah`}
-              className="hidden md:flex bg-[#84CC16] text-white px-5 py-2 rounded-full shadow-sm hover:bg-[#73b814] transition-colors items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              Tambah Kamar
-            </Link>
-          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-2 mb-4 p-3 bg-gray-50 rounded-xl text-sm">
@@ -167,45 +151,8 @@ export default function DaftarKamarPage() {
           </button>
         </div>
 
-        {showFilters && (
-          <div className="flex gap-2 mb-4 overflow-x-auto pb-1 scrollbar-hide">
-            {(isPemilik
-              ? ["all", "KOSONG", "TERISI", "MAINTENANCE"]
-              : ["all", "KOSONG", "TERISI"]
-            ).map((status) => (
-              <button
-                key={status}
-                onClick={() => setFilterStatus(status)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                  filterStatus === status
-                    ? "bg-[#84CC16] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                {status === "all"
-                  ? "Semua"
-                  : status === "KOSONG"
-                  ? "Kosong"
-                  : status === "TERISI"
-                  ? "Terisi"
-                  : "Non-Aktif"}
-              </button>
-            ))}
-          </div>
-        )}
-
-        <RoomList rooms={filteredRooms} showEdit={showEdit} />
+        <RoomList rooms={filteredRooms} />
       </div>
-
-      {showEdit && (
-        <Link
-          href={`/administrator/properti/${propertiId}/kamar/tambah`}
-          className="md:hidden fixed bottom-24 right-4 w-14 h-14 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
-          aria-label="Tambah Kamar"
-        >
-          <Plus className="w-6 h-6" />
-        </Link>
-      )}
     </MainLayout>
   );
 }

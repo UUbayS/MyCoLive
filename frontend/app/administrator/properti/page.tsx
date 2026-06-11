@@ -9,6 +9,7 @@ import { getUser } from "../../../lib/auth";
 import MainLayout from "../../../components/Layout/MainLayout";
 import StatsWidget from "../../../components/StatsWidget";
 import PropertyCard from "../../../components/PropertyCard";
+import PropertiTabs from "@/components/PropertiTabs";
 
 export default function AdministratorPropertiPage() {
   const router = useRouter();
@@ -101,6 +102,9 @@ export default function AdministratorPropertiPage() {
             <Plus className="w-4 h-4" />
             Tambah Properti
           </Link>
+        </div>
+        <div className="md:hidden">
+          <PropertiTabs />
         </div>
 
         <StatsWidget

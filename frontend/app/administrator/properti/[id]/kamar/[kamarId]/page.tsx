@@ -5,15 +5,15 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft,
-  MapPin,
   Edit,
   Trash2,
   BedDouble,
   ChevronDown,
   User,
-  AlertTriangle,
-  Wifi,
   Wrench,
+  Wifi,
+  Plus,
+  AlertCircle
 } from "lucide-react";
 import ImageCarousel from "../../../../../../components/ImageCarousel";
 import ConfirmDialog from "../../../../../../components/ConfirmDialog";
@@ -26,11 +26,12 @@ import {
   PropertiData,
 } from "../../../../../../lib/api";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
+import TarifSelector from "@/components/TarifSelector";
 
 const statusConfig = {
-  KOSONG: { label: "Kosong", color: "bg-green-100 text-green-700" },
-  TERISI: { label: "Terisi", color: "bg-blue-100 text-blue-700" },
-  MAINTENANCE: { label: "Maintenance", color: "bg-yellow-100 text-yellow-700" },
+  KOSONG: { icon: BedDouble, label: "Kosong", color: "bg-green-100 text-green-700" },
+  TERISI: { icon: BedDouble, label: "Terisi", color: "bg-blue-100 text-blue-700" },
+  MAINTENANCE: { icon: Wrench, label: "Maintenance", color: "bg-yellow-100 text-yellow-700" },
 };
 
 export default function AdminDetailKamarPage() {
@@ -40,10 +41,10 @@ export default function AdminDetailKamarPage() {
   const propertiId = params.id as string;
 
   const [kamar, setKamar] = useState<KamarData | null>(null);
-  const [properti, setProperti] = useState<PropertiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [selectedDuration, setSelectedDuration] = useState("1_bulan");
 
   useEffect(() => {
     if (!kamarId) return;
@@ -71,22 +72,6 @@ export default function AdminDetailKamarPage() {
 
     fetchKamar();
   }, [kamarId, propertiId, router]);
-
-  const getDisplayAlamat = () => {
-    if (!properti) return "";
-    if (properti.detail_alamat) {
-      return [
-        properti.detail_alamat,
-        properti.kecamatan ? `Kec. ${properti.kecamatan}` : null,
-        properti.kota,
-        properti.provinsi,
-        properti.kode_pos,
-      ]
-        .filter(Boolean)
-        .join(", ");
-    }
-    return properti.alamat;
-  };
 
   const handleDelete = async () => {
     try {
@@ -164,213 +149,230 @@ export default function AdminDetailKamarPage() {
   }
 
   const status = statusConfig[kamar.status as keyof typeof statusConfig];
+  const Icon = status.icon;
 
   return (
     <MainLayout>
       {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-1">
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => router.push(`/administrator/properti/${propertiId}/kamar`)}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 p-2 -ml-2"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors -ml-2"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
-          <h1 className="text-xl font-bold text-gray-900">Kamar {kamar.nomor} - {kamar.properti?.nama || "Properti"} </h1>
-          <Link
-            href={`/administrator/properti/${propertiId}/kamar/${kamarId}/edit`}
-            className="flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm"
-          >
-            <Edit className="w-4 h-4" />
-            <span>Edit</span>
-          </Link>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">
+              Kamar {kamar.nomor} - {kamar.properti?.nama || "Properti"}
+            </h1>
+          </div>
         </div>
+        <Link
+          href={`/administrator/properti/${propertiId}/kamar/${kamarId}/edit`}
+          className="flex items-center gap-2 px-4 py-2 bg-[#84CC16] text-white rounded-lg hover:bg-[#65a30d] transition-colors text-sm font-medium shadow-sm"
+        >
+          <Edit className="w-4 h-4" />
+          <span className="hidden sm:inline">Edit Kamar</span>
+        </Link>
       </div>
 
-      {/* Image Carousel */}
-      <div className="mb-6">
+      {/* Image Carousel & Status Overlay */}
+      <div className="relative mb-6 rounded-xl overflow-hidden shadow-sm">
         <ImageCarousel images={kamar.gambar || []} alt={`Kamar ${kamar.nomor}`} />
-      </div>
-
-      {/* Status Badge */}
-      <div className="mb-6">
-        <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium ${status?.color || "bg-gray-100 text-gray-600"}`}>
-          <BedDouble className="w-4 h-4" />
-          {status?.label || kamar.status}
-        </span>
-      </div>
-
-      {/* Ubah Status */}
-      <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
-        <h2 className="text-lg font-semibold mb-4">Ubah Status</h2>
-        <div className="relative max-w-xs">
-          <select
-            value={kamar.status}
-            onChange={(e) => handleStatusChange(e.target.value)}
-            disabled={updatingStatus}
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#84CC16] appearance-none bg-white"
-          >
-            <option value="KOSONG">Kosong</option>
-            <option value="TERISI">Terisi</option>
-            <option value="MAINTENANCE">Maintenance</option>
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-          {updatingStatus && (
-            <span className="absolute right-8 top-1/2 -translate-y-1/2 text-xs text-gray-500">Updating...</span>
-          )}
+        <div className="absolute bottom-4 right-4 z-10">
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold shadow-md ${status?.color || "bg-gray-100 text-gray-600"}`}>
+            <Icon className="w-4 h-4" />
+            {status?.label || kamar.status}
+          </span>
         </div>
       </div>
 
-      {/* Info Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {/* Informasi Kamar */}
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-semibold mb-4">Informasi Kamar</h2>
-          <div className="space-y-3">
-            <div>
-              <p className="text-sm text-gray-500">Nomor</p>
-              <p className="font-medium text-gray-900">{kamar.nomor}</p>
-            </div>
-            {kamar.tipe && (
-              <div>
-                <p className="text-sm text-gray-500">Tipe</p>
-                <p className="font-medium text-gray-900">{kamar.tipe}</p>
-              </div>
-            )}
-            {kamar.luas && (
-              <div>
-                <p className="text-sm text-gray-500">Luas</p>
-                <p className="font-medium text-gray-900">{kamar.luas}</p>
-              </div>
+      {/* Informasi Kamar & Tarif (Digabungkan) */}
+      <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-gray-100">
+          <h2 className="text-lg font-semibold text-gray-900">Informasi Kamar</h2>
+          {/* Menu Ubah Status (Inline) */}
+          <div className="relative w-full sm:w-auto">
+            <span>Ubah Status: </span>
+            <select
+              value={kamar.status}
+              onChange={(e) => handleStatusChange(e.target.value)}
+              disabled={updatingStatus}
+              className="w-full sm:w-auto pl-3 pr-8 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#84CC16] appearance-none bg-white font-medium cursor-pointer disabled:opacity-50"
+            >
+              <option value="KOSONG">Kosong</option>
+              <option value="TERISI">Terisi</option>
+              <option value="MAINTENANCE">Maintenance</option>
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            {updatingStatus && (
+              <span className="absolute -top-6 right-0 text-xs text-blue-500 font-medium">Menyimpan...</span>
             )}
           </div>
         </div>
 
-        {/* Tarif */}
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-semibold mb-4">Tarif</h2>
-          {Object.keys(tarifObj).length > 0 ? (
-            <div className="space-y-2">
-              {Object.entries(tarifObj).map(([key, value]) => (
-                <div key={key} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-                  <span className="text-sm text-gray-600">
-                    {key === "1_bulan"
-                      ? "1 Bulan"
-                      : key === "3_bulan"
-                      ? "3 Bulan"
-                      : key === "6_bulan"
-                      ? "6 Bulan"
-                      : key === "12_bulan"
-                      ? "1 Tahun"
-                      : key}
-                  </span>
-                  <span className="font-medium text-gray-900">
-                    Rp {value.toLocaleString("id-ID")}
-                  </span>
-                </div>
-              ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Kolom Kiri: Spesifikasi */}
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 items-center border-b border-gray-50 pb-3">
+              <span className="text-sm text-gray-500">Nomor Kamar</span>
+              <span className="text-sm font-medium text-gray-900 col-span-2">{kamar.nomor}</span>
             </div>
-          ) : (
-            <p className="text-sm text-gray-500">Belum ada tarif yang ditentukan</p>
-          )}
+            {kamar.tipe && (
+              <div className="grid grid-cols-3 items-center border-b border-gray-50 pb-3">
+                <span className="text-sm text-gray-500">Tipe</span>
+                <span className="text-sm font-medium text-gray-900 col-span-2">{kamar.tipe}</span>
+              </div>
+            )}
+            {kamar.luas && (
+              <div className="grid grid-cols-3 items-center border-b border-gray-50 pb-3">
+                <span className="text-sm text-gray-500">Luas</span>
+                <span className="text-sm font-medium text-gray-900 col-span-2">{kamar.luas}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Kolom Kanan: Tarif */}
+          <div>
+            {/* Tarif */}
+            <h2 className="text-lg font-semibold text-gray-900">Tarif Kamar</h2>
+            {Object.keys(tarifObj).length > 0 ? (
+              <div>
+                <TarifSelector
+                  tarif={tarifObj}
+                  selectedDuration={selectedDuration}
+                  onSelect={setSelectedDuration}
+                />
+              </div>
+            ) : (
+              <div className="bg-gray-50 p-4 rounded-lg text-center text-sm text-gray-500">
+                Belum ada tarif yang ditentukan
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Penghuni Aktif */}
       <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
-        {/* Penghuni Aktif - hanya PEMILIK */}
-        <h2 className="text-lg font-semibold mb-3">Penghuni Aktif</h2>
-        {kamar.status === "TERISI" && kamar.penghuni ?(
+        <h2 className="text-lg font-semibold mb-4 text-gray-900">Penghuni Aktif</h2>
+        {kamar.status === "TERISI" && kamar.penghuni ? (
           <div>  
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-lg font-semibold text-gray-600">
-                  {kamar.penghuni.user.nama.charAt(0)}
+            <div className="flex items-center gap-4 mb-4 bg-gray-50 p-4 rounded-lg">
+              <div className="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-sm">
+                <span className="text-lg font-bold text-[#84CC16]">
+                  {kamar.penghuni.user.nama.charAt(0).toUpperCase()}
                 </span>
               </div>
               <div>
-                <p className="font-semibold">{kamar.penghuni.user.nama}</p>
+                <p className="font-semibold text-gray-900">{kamar.penghuni.user.nama}</p>
                 <p className="text-sm text-gray-500">
-                  {kamar.penghuni.user.email} | {kamar.penghuni.user.no_telepon || "-"}
+                  {kamar.penghuni.user.no_telepon || kamar.penghuni.user.email}
                 </p>
               </div>
             </div>
 
-            <div className="text-sm text-gray-600 space-y-1 mb-3">
-              <p>
-                Aktif dari:{" "}
-                {kamar.penghuni.tgl_mulai
-                  ? new Date(kamar.penghuni.tgl_mulai).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
-                  : "-"}
-              </p>
-              <p>
-                Jatuh Tempo:{" "}
-                {kamar.penghuni.tgl_berakhir
-                  ? new Date(kamar.penghuni.tgl_berakhir).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
-                  : "-"}
-              </p>
+            <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-5">
+              <div>
+                <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Mulai Masuk</p>
+                <p className="font-medium text-gray-900">
+                  {kamar.penghuni.tgl_mulai ? new Date(kamar.penghuni.tgl_mulai).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }) : "-"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Jatuh Tempo</p>
+                <p className="font-medium text-gray-900">
+                  {kamar.penghuni.tgl_berakhir ? new Date(kamar.penghuni.tgl_berakhir).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }) : "-"}
+                </p>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-green-600 font-medium">
-                {getSisaHari()} Hari tersisa
+            <div className="flex items-center gap-3">
+              <span className="flex-1 bg-green-50 text-green-700 py-2.5 rounded-lg text-sm font-semibold text-center border border-green-100">
+                Sisa {getSisaHari()} Hari
               </span>
-            </div>
-
-            <div className="flex gap-3">
-              <button className="flex-1 border-2 border-red-500 text-red-500 py-2 rounded-xl text-sm font-medium hover:bg-red-50 transition-colors">
+              <button className="flex-1 bg-red-50 text-red-600 py-2.5 rounded-lg text-sm font-semibold hover:bg-red-100 transition-colors border border-red-100">
                 Check-Out
               </button>
               <Link
                 href={`/administrator/penghuni/${kamar.penghuni.id}`}
-                className="flex-1 border-2 border-[#84CC16] text-[#84CC16] py-2 rounded-xl text-sm font-medium text-center hover:bg-[#84CC16]/5 transition-colors"
+                className="flex-1 border-2 border-gray-200 text-gray-700 py-2.5 rounded-lg text-sm font-semibold text-center hover:bg-gray-50 transition-colors"
               >
-                Lihat Detail
+                Detail
               </Link>
             </div>
           </div>
-        ):(
-          <p className="text-sm text-gray-500">Belum ada penghuni</p>
+        ) : (
+          <div className="text-center py-6">
+            <div className="w-14 h-14 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3">
+              <User className="w-6 h-6 text-gray-400" />
+            </div>
+            <p className="text-sm text-gray-500 mb-4">Kamar ini belum memiliki penghuni.</p>
+            <button className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors text-sm">
+              <Plus className="w-4 h-4" />
+              Tambah Penghuni
+            </button>
+          </div>
         )}
       </div>
 
       {/* Fasilitas */}
       <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Fasilitas Ruangan</h2>
-          <span className="text-sm text-gray-500">{(kamar.fasilitas_ruangan?.length || 0)} fasilitas</span>
+          <h2 className="text-lg font-semibold text-gray-900">Fasilitas Kamar</h2>
+          <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">
+            {(kamar.fasilitas_kamar?.length || 0)} fasilitas
+          </span>
         </div>
-        {kamar.fasilitas_ruangan && kamar.fasilitas_ruangan.length > 0 ? (
+        {kamar.fasilitas_kamar && kamar.fasilitas_kamar.length > 0 ? (
           <div className="flex flex-wrap gap-2">
-            {kamar.fasilitas_ruangan.map((f) => (
+            {kamar.fasilitas_kamar.map((f) => (
               <span
                 key={f.id}
-                className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm flex items-center gap-1"
+                className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-lg text-sm flex items-center gap-1.5 font-medium"
               >
-                <Wifi className="w-3 h-3" />
                 {f.nama}
               </span>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-gray-500">Belum ada fasilitas terdaftar</p>
+          <p className="text-sm text-gray-500 italic">Belum ada fasilitas terdaftar</p>
         )}
       </div>
 
-      <div className="mt-8 mb-6">
-        <button
-          onClick={() => setShowDeleteDialog(true)}
-          className="w-full flex items-center justify-center gap-2 border-2 border-red-500 text-red-500 py-3 rounded-xl font-medium hover:bg-red-50 transition-colors"
-        >
-          <Trash2 className="w-4 h-4" />
-          <span>Hapus Kamar</span>
-        </button>
+      {/* Keterangan Tambahan */}
+      <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
+        <h2 className="text-lg font-semibold mb-3 text-gray-900">Keterangan Tambahan</h2>
+        {kamar.deskripsi ? (
+          <p className="text-sm text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-lg border border-gray-100">
+            {kamar.deskripsi}
+          </p>
+        ) : (
+          <p className="text-sm text-gray-500 italic">Tidak ada keterangan tambahan.</p>
+        )}
+      </div>
+
+      {/* Zona Berbahaya */}
+      <div className="bg-red-50 rounded-xl p-5 border border-red-100 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-bold text-red-700 flex items-center gap-2">
+              <AlertCircle className="w-5 h-5" />
+              Zona Berbahaya
+            </h2>
+            <p className="text-sm text-red-600 mt-1">
+              Menghapus kamar ini akan menghilangkan seluruh datanya secara permanen.
+            </p>
+          </div>
+          <button
+            onClick={() => setShowDeleteDialog(true)}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-red-700 transition-colors shadow-sm"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>Hapus Kamar</span>
+          </button>
+        </div>
       </div>
 
       {/* Delete Dialog */}

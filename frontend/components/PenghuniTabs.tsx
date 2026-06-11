@@ -89,7 +89,7 @@ export default function PenghuniTabs() {
             >
               <span>{tab.label}</span>
               {showBadge && (
-                <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[#84CC16] text-white text-[10px] sm:text-xs font-bold rounded-full">
+                <span className="inline-flex items-center justify-center min-w-20px h-5 px-1.5 bg-[#84CC16] text-white text-[10px] sm:text-xs font-bold rounded-full">
                   {count}
                 </span>
               )}
