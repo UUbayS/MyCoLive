@@ -7,7 +7,7 @@ import { ArrowLeft, MapPin, User, MessageCircle, LogIn, Home } from "lucide-reac
 import ImageCarousel from "../../../../../../components/ImageCarousel";
 import TarifSelector from "../../../../../../components/TarifSelector";
 import { getUser, isAuthenticated } from "../../../../../../lib/auth";
-import { getKamarById, getMyPenghuni, KamarData, PropertiData } from "../../../../../../lib/api";
+import { getKamarById, getPropertiById, getMyPenghuni, KamarData, PropertiData } from "../../../../../../lib/api";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
 
 export default function DetailKamarPage() {
@@ -17,7 +17,7 @@ export default function DetailKamarPage() {
   const propertiId = params.id as string;
 
   const [kamar, setKamar] = useState<KamarData | null>(null);
-  const [properti] = useState<PropertiData | null>(null);
+  const [properti, setProperti] = useState<PropertiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedDuration, setSelectedDuration] = useState("1_bulan");
   const [isAktif, setIsAktif] = useState(true);
@@ -36,6 +36,10 @@ export default function DetailKamarPage() {
         const data = await getKamarById(kamarId);
         setKamar(data);
         setIsAktif(data?.status === "KOSONG");
+        if (data?.properti_id) {
+          const propertiData = await getPropertiById(data.properti_id);
+          setProperti(propertiData);
+        }
       } catch (error) {
         console.error("Failed to fetch kamar:", error);
       } finally {
@@ -69,10 +73,10 @@ export default function DetailKamarPage() {
   }, [isPenghuni]);
 
   const getWhatsAppLink = () => {
-    if (!kamar?.properti) return "#";
-    const phone = "6281234567890";
+    if (!properti?.admin?.no_telepon) return "#";
+    const phone = properti.admin.no_telepon.replace(/[^0-9]/g, "");
     const message = encodeURIComponent(
-      `Halo, saya tertarik dengan kamar ${kamar.nomor} di ${kamar.properti.nama}`
+      `Halo, saya tertarik dengan kamar ${kamar?.nomor} di ${kamar?.properti?.nama}`
     );
     return `https://wa.me/${phone}?text=${message}`;
   };

@@ -17,7 +17,7 @@ import keuanganRoutes from "./routes/keuangan";
 import whatsappRoutes from "./routes/whatsapp";
 import notifikasiRoutes from "./routes/notifikasi";
 import badgesRoutes from "./routes/badges";
-import { baileysProvider } from "./services/whatsapp/providers/baileys";
+import pengumumanRoutes from "./routes/pengumuman";
 
 const app = new Hono();
 
@@ -52,9 +52,6 @@ app.route("/api/keuangan", keuanganRoutes);
 app.route("/api/whatsapp", whatsappRoutes);
 app.route("/api/notifikasi", notifikasiRoutes);
 app.route("/api/badges", badgesRoutes);
-
-if (process.env.WHATSAPP_PROVIDER === "baileys") {
-  baileysProvider.initialize().catch(console.error);
-}
+app.route("/api/pengumuman", pengumumanRoutes);
 
 export default app;

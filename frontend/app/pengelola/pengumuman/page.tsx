@@ -75,6 +75,7 @@ export default function PengumumanPengelolaPage() {
         setSuccess(result);
         setJudul("");
         setPesan("");
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         setError("Gagal mengirim pengumuman. Silakan coba lagi.");
       }

@@ -469,4 +469,80 @@ app.put("/change-password", authMiddleware, async (c) => {
   }
 });
 
+app.put("/me", authMiddleware, async (c) => {
+  try {
+    const user = c.get("user");
+    const body = await c.req.json();
+    const { nama, email, no_telepon } = body;
+
+    const updateData: Record<string, any> = {};
+
+    if (nama !== undefined && nama.trim()) {
+      updateData.nama = nama.trim();
+    }
+
+    if (email !== undefined && email.trim()) {
+      const emailLower = email.toLowerCase().trim();
+      const existing = await prisma.user.findFirst({
+        where: { email: emailLower, id: { not: user.userId } },
+      });
+      if (existing) {
+        return c.json(
+          { status: "error", message: "Email sudah digunakan oleh user lain" },
+          400
+        );
+      }
+      updateData.email = emailLower;
+    }
+
+    if (no_telepon !== undefined) {
+      const phone = convertPhone(no_telepon);
+      if (phone) {
+        const existing = await prisma.user.findFirst({
+          where: { no_telepon: phone, id: { not: user.userId } },
+        });
+        if (existing) {
+          return c.json(
+            { status: "error", message: "Nomor telepon sudah digunakan oleh user lain" },
+            400
+          );
+        }
+      }
+      updateData.no_telepon = phone || null;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return c.json(
+        { status: "error", message: "Tidak ada data yang diupdate" },
+        400
+      );
+    }
+
+    const updated = await prisma.user.update({
+      where: { id: user.userId },
+      data: updateData,
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        nama: true,
+        role: true,
+        no_telepon: true,
+        created_at: true,
+      },
+    });
+
+    return c.json({
+      status: "success",
+      data: updated,
+    });
+  } catch (error) {
+    console.error("Update me error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengupdate profil" },
+      500
+    );
+  }
+});
+
 export default app;

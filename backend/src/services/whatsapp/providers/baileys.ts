@@ -69,8 +69,11 @@ class BaileysProvider implements WhatsAppProvider {
           const err = lastDisconnect?.error as any;
           const statusCode = err?.output?.statusCode;
           console.log("[WA] Disconnected — code:", statusCode, err?.message || "");
-          if (statusCode !== DisconnectReason.loggedOut && this.retryCount < this.maxRetry) {
-            const delay = Math.min(5000 * this.retryCount, 30000);
+          if (statusCode === 440) {
+            this.retryCount = this.maxRetry;
+            console.warn("[WA] Conflict (440) — another device is active. Stop reconnect.");
+          } else if (statusCode !== DisconnectReason.loggedOut && this.retryCount < this.maxRetry) {
+            const delay = Math.max(5000, Math.min(5000 * this.retryCount, 30000));
             console.log(`[WA] Auto-reconnect in ${delay / 1000}s...`);
             setTimeout(() => this.initialize(), delay);
           } else if (statusCode === DisconnectReason.loggedOut) {

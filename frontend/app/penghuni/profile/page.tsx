@@ -176,7 +176,7 @@ function EditProfileModal({
     setLoading(true);
 
     try {
-      const result = await updateProfile(profile.id, {
+      const result = await updateProfile({
         nama: nama.trim(),
         email: email.trim().toLowerCase(),
         no_telepon: noTelepon.trim() || null,

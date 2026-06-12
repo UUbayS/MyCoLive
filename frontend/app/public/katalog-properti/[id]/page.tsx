@@ -224,16 +224,16 @@ export default function DetailPropertiPage() {
           </Link>
         </div>
 
-        {/* Kontak Pengurus */}
+        {/* Kontak Pemilik */}
         <div className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm mb-4">
           <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2 text-sm">
             <User className="w-4 h-4 text-[#84CC16]" />
-            Kontak Pengurus
+            Kontak Pemilik
           </h3>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
               <p className="font-medium text-sm text-gray-900">{properti?.admin?.nama || "Pengurus"}</p>
-              <p className="text-xs text-gray-500">Pengelola Properti</p>
+              <p className="text-xs text-gray-500">Pemilik Properti</p>
             </div>
             <a
               href={getWhatsAppLink()}

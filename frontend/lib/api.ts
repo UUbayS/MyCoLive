@@ -300,16 +300,13 @@ export async function getProfile(): Promise<ProfileData | null> {
   }
 }
 
-export async function updateProfile(
-  userId: string,
-  data: {
-    nama: string;
-    email: string;
-    no_telepon?: string | null;
-  }
-): Promise<ProfileData | null> {
+export async function updateProfile(data: {
+  nama: string;
+  email: string;
+  no_telepon?: string | null;
+}): Promise<ProfileData | null> {
   try {
-    const res = await apiFetch<{ status: string; data: ProfileData }>("/api/users/" + userId, {
+    const res = await apiFetch<{ status: string; data: ProfileData }>("/api/auth/me", {
       method: "PUT",
       body: JSON.stringify(data),
     });

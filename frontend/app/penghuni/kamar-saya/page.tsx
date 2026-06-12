@@ -29,6 +29,8 @@ import Modal from "@/components/ui/Modal";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import {
   getMyPenghuni,
+  getPropertiById,
+  PropertiData,
   MyPenghuniData,
   getMyPemesanan,
   PemesananData,
@@ -69,6 +71,7 @@ function daysUntil(dateStr: string | null | undefined): number | null {
 export default function KamarSayaPage() {
   const router = useRouter();
   const [penghuni, setPenghuni] = useState<MyPenghuniData | null>(null);
+  const [propertiData, setPropertiData] = useState<PropertiData | null>(null);
   const [pemesananList, setPemesananList] = useState<PemesananData[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
@@ -99,6 +102,10 @@ export default function KamarSayaPage() {
         ]);
         setPenghuni(penghuniData);
         setPemesananList(pemesananData);
+        if (penghuniData?.kamar?.properti?.id) {
+          const propertiDetail = await getPropertiById(penghuniData.kamar.properti.id);
+          setPropertiData(propertiDetail);
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -200,7 +207,7 @@ export default function KamarSayaPage() {
 
   const kamar = penghuni.kamar;
   const properti = kamar.properti;
-  const waNumber = formatWAPhone(penghuni.user.no_telepon);
+  const waNumber = formatWAPhone(propertiData?.admin?.no_telepon);
   const remainingDays = daysUntil(penghuni.tgl_berakhir);
   const isActive = penghuni.status_sewa === "AKTIF";
   const hasPending = pemesananList.some((p) => p.status === "MENUNGGU" || (p.pembayaran?.status || "").startsWith("DIVERIFIKASI"));
