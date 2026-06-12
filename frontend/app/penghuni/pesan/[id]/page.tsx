@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import { ArrowLeft, CreditCard, QrCode, AlertCircle } from "lucide-react";
 import TarifSelector from "../../../../components/TarifSelector";
 import { getUser, isAuthenticated } from "../../../../lib/auth";
@@ -11,6 +12,7 @@ import MainLayout from "../../../../components/Layout/MainLayout";
 export default function PesanKamarPage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const kamarId = params.id as string;
 
   const [kamar, setKamar] = useState<KamarData | null>(null);
@@ -18,10 +20,12 @@ export default function PesanKamarPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  const [selectedDuration, setSelectedDuration] = useState("1_bulan");
+  const durasiQuery = searchParams.get("durasi");
+  const [selectedDuration, setSelectedDuration] = useState(durasiQuery || "1_bulan");
   const [tglMasuk, setTglMasuk] = useState("");
   const [metodeBayar, setMetodeBayar] = useState<"TRANSFER" | "QRIS">("TRANSFER");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -46,8 +50,8 @@ export default function PesanKamarPage() {
           const paymentData = await getPembayaranInfoByProperti(kamarData.properti.id);
           setPaymentInfo(paymentData);
         }
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
+      } catch (err) {
+        console.error("Failed to fetch data:", err);
       } finally {
         setLoading(false);
       }
@@ -92,11 +96,11 @@ export default function PesanKamarPage() {
       if (result) {
         router.push(`/penghuni/transaksi/${result.id}`);
       } else {
-        alert("Gagal membuat pesanan. Silakan coba lagi.");
+        error("Gagal membuat pesanan. Silakan coba lagi.");
       }
-    } catch (error) {
-      console.error("Create pemesanan error:", error);
-      alert("Terjadi kesalahan saat membuat pesanan.");
+    } catch (err) {
+      console.error("Create pemesanan error:", err);
+      error("Terjadi kesalahan saat membuat pesanan.");
     } finally {
       setSubmitting(false);
     }

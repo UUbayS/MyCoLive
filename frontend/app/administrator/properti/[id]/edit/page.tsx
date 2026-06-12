@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useToast } from "../../../../../lib/ToastContext";
 import { ArrowLeft } from "lucide-react";
 import ImageUploader from "../../../../../components/ImageUploader";
 import AddressFields from "../../../../../components/AddressFields";
-import FacilitySelector from "../../../../../components/FacilitySelector";
-import { getPropertiById, updateProperti } from "../../../../../lib/api";
+import FacilityChips from "../../../../../components/FacilityChips";
+import FacilitySelectorModal from "../../../../../components/FacilitySelectorModal";
+import { getPropertiById, updateProperti, getFasilitasList, FasilitasData } from "../../../../../lib/api";
 import { getUser, isAuthenticated } from "../../../../../lib/auth";
 import MainLayout from "../../../../../components/Layout/MainLayout";
 
@@ -31,6 +33,9 @@ export default function EditPropertiPage() {
     fasilitas_umum_ids: [] as string[],
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [facilities, setFacilities] = useState<FasilitasData[]>([]);
+  const [showFacilityModal, setShowFacilityModal] = useState(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (typeof window !== "undefined" && !isAuthenticated()) {
@@ -49,7 +54,10 @@ export default function EditPropertiPage() {
 
     const fetchProperti = async () => {
       try {
-        const data = await getPropertiById(propertiId);
+        const [data, fasilitasData] = await Promise.all([
+          getPropertiById(propertiId),
+          getFasilitasList("UMUM"),
+        ]);
         if (data) {
           setFormData({
             nama: data.nama,
@@ -65,8 +73,9 @@ export default function EditPropertiPage() {
             fasilitas_umum_ids: data.fasilitas_umum?.map((f) => f.id) || [],
           });
         }
-      } catch (error) {
-        console.error("Failed to fetch properti:", error);
+        setFacilities(fasilitasData);
+      } catch (err) {
+        console.error("Failed to fetch properti:", err);
       } finally {
         setFetching(false);
       }
@@ -112,11 +121,11 @@ export default function EditPropertiPage() {
         if (result) {
         router.push(`/administrator/properti/${propertiId}`);
       } else {
-        alert("Gagal mengupdate properti. Silakan coba lagi.");
+        error("Gagal mengupdate properti. Silakan coba lagi.");
       }
-    } catch (error) {
-      console.error("Update properti error:", error);
-      alert("Terjadi kesalahan saat mengupdate properti.");
+    } catch (err) {
+      console.error("Update properti error:", err);
+      error("Terjadi kesalahan saat mengupdate properti.");
     } finally {
       setLoading(false);
     }
@@ -222,10 +231,21 @@ export default function EditPropertiPage() {
             />
           </div>
 
-          <FacilitySelector
-            jenis="UMUM"
+          <FacilityChips
             selectedIds={formData.fasilitas_umum_ids}
-            onChange={(ids) => setFormData({ ...formData, fasilitas_umum_ids: ids })}
+            facilities={facilities}
+            label="Fasilitas Umum"
+            onOpen={() => setShowFacilityModal(true)}
+          />
+
+          <FacilitySelectorModal
+            isOpen={showFacilityModal}
+            onClose={() => setShowFacilityModal(false)}
+            selectedIds={formData.fasilitas_umum_ids}
+            jenis="UMUM"
+            onSave={(ids) => {
+              setFormData({ ...formData, fasilitas_umum_ids: ids });
+            }}
             showManagement={true}
           />
 

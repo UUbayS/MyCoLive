@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Search, ChevronRight, Download, ChevronDown, Wallet, TrendingUp, Calendar, ChevronLeft, X } from "lucide-react";
+import { Search, ChevronRight, Download, ChevronDown, Wallet, TrendingUp, Calendar, ChevronLeft } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -14,6 +14,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import MainLayout from "@/components/Layout/MainLayout";
+import Modal from "@/components/ui/Modal";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import {
   getPropertiList,
@@ -524,24 +525,15 @@ function DatePickerModal({
     }
   }, [startDate, endDate]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={onClose}>
-      <div
-        className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <h3 className="text-sm font-semibold text-gray-900">Pilih Rentang Tanggal</h3>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
-            <X className="w-4 h-4 text-gray-500" />
-          </button>
-        </div>
-
-        {/* Inputs */}
-        <div className="p-4 space-y-3">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Pilih Rentang Tanggal"
+      size="sm"
+    >
+      {/* Inputs */}
+      <div className="space-y-3">
           <div className="flex items-center gap-3">
             <div className="flex-1">
               <label className="text-xs text-gray-500 mb-1 block">Tanggal Mulai</label>
@@ -580,7 +572,7 @@ function DatePickerModal({
         </div>
 
         {/* Quick Month Select */}
-        <div className="px-4 pb-2">
+        <div className="pt-4 pb-2">
           <p className="text-xs text-gray-500 mb-2">Pilih Bulan</p>
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
             {quickMonths.map((m) => (
@@ -596,7 +588,7 @@ function DatePickerModal({
         </div>
 
         {/* Calendar */}
-        <div className="px-4 pb-2">
+        <div className="pt-2 pb-2">
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={prevMonth}
@@ -678,7 +670,7 @@ function DatePickerModal({
         </div>
 
         {/* Aggregation Type */}
-        <div className="px-4 py-3 border-t border-gray-100">
+        <div className="py-3 border-t border-gray-100">
           <p className="text-xs text-gray-500 mb-2">Tipe Agregasi</p>
           <div className="flex gap-2">
             {["HARIAN", "BULANAN", "KUARTIL"].map((a) => (
@@ -698,7 +690,7 @@ function DatePickerModal({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-4 border-t border-gray-100">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           <button
             onClick={handleClear}
             className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
@@ -717,8 +709,7 @@ function DatePickerModal({
             Terapkan
           </button>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }
 
@@ -1137,17 +1128,13 @@ export default function KeuanganPage() {
       </div>
 
       {/* PDF Export Modal */}
-      {showPdfModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={() => setShowPdfModal(false)}>
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-4 border-b border-gray-100">
-              <h3 className="text-sm font-semibold text-gray-900">Export PDF</h3>
-              <button onClick={() => setShowPdfModal(false)} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
-                <X className="w-4 h-4 text-gray-500" />
-              </button>
-            </div>
-
-            <div className="p-4 space-y-3">
+      <Modal
+        isOpen={showPdfModal}
+        onClose={() => setShowPdfModal(false)}
+        title="Export PDF"
+        size="sm"
+      >
+        <div className="space-y-3">
               <p className="text-xs text-gray-500 mb-3">
                 Periode: {getDropdownLabel()}
               </p>
@@ -1207,10 +1194,8 @@ export default function KeuanganPage() {
                   <p className="text-xs text-gray-500">Agregasi pendapatan & pengeluaran per tahun</p>
                 </div>
               </button>
-            </div>
-          </div>
         </div>
-      )}
+      </Modal>
     </MainLayout>
   );
 }

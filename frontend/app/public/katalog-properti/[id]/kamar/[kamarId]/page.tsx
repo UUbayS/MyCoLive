@@ -234,7 +234,7 @@ export default function DetailKamarPage() {
             {/* Pesan Kamar - for unauthenticated users */}
             {!isLoggedIn && isKosong && (
               <Link
-                href={`/auth/login?redirect=/penghuni/pesan/${kamarId}`}
+                href={`/auth/login?redirect=${encodeURIComponent(`/penghuni/pesan/${kamarId}?durasi=${selectedDuration}`)}`}
                 className="flex items-center justify-center gap-2 w-full bg-[#84CC16] text-white py-3 rounded-xl font-medium text-center hover:bg-[#73b814] transition-colors"
               >
                 <LogIn className="w-5 h-5" />
@@ -245,7 +245,7 @@ export default function DetailKamarPage() {
             {/* Pesan Kamar - for penghuni without active room */}
             {isPenghuni && isKosong && !checkingRoom && !hasActiveRoom && (
               <Link
-                href={`/penghuni/pesan/${kamarId}`}
+                href={`/penghuni/pesan/${kamarId}?durasi=${selectedDuration}`}
                 className="flex items-center justify-center gap-2 w-full bg-[#84CC16] text-white py-3 rounded-xl font-medium text-center hover:bg-[#73b814] transition-colors"
               >
                 <Home className="w-5 h-5" />

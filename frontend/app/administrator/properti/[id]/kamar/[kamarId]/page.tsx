@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useToast } from "../../../../../../lib/ToastContext";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -45,6 +46,7 @@ export default function AdminDetailKamarPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("1_bulan");
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!kamarId) return;
@@ -63,8 +65,8 @@ export default function AdminDetailKamarPage() {
           return;
         }
         setKamar(data);
-      } catch (error) {
-        console.error("Failed to fetch kamar:", error);
+      } catch (err) {
+        console.error("Failed to fetch kamar:", err);
       } finally {
         setLoading(false);
       }
@@ -79,11 +81,11 @@ export default function AdminDetailKamarPage() {
       if (success) {
         router.push(`/administrator/properti/${propertiId}/kamar`);
       } else {
-        alert("Gagal menghapus kamar. Pastikan kamar tidak sedang ditempati.");
+        error("Gagal menghapus kamar. Pastikan kamar tidak sedang ditempati.");
       }
-    } catch (error) {
-      console.error("Delete error:", error);
-      alert("Terjadi kesalahan saat menghapus kamar.");
+    } catch (err) {
+      console.error("Delete error:", err);
+      error("Terjadi kesalahan saat menghapus kamar.");
     } finally {
       setShowDeleteDialog(false);
     }
@@ -97,11 +99,11 @@ export default function AdminDetailKamarPage() {
       if (updated) {
         setKamar(updated);
       } else {
-        alert("Gagal mengubah status kamar.");
+        error("Gagal mengubah status kamar.");
       }
-    } catch (error) {
-      console.error("Status update error:", error);
-      alert("Terjadi kesalahan saat mengubah status.");
+    } catch (err) {
+      console.error("Status update error:", err);
+      error("Terjadi kesalahan saat mengubah status.");
     } finally {
       setUpdatingStatus(false);
     }
@@ -309,10 +311,6 @@ export default function AdminDetailKamarPage() {
               <User className="w-6 h-6 text-gray-400" />
             </div>
             <p className="text-sm text-gray-500 mb-4">Kamar ini belum memiliki penghuni.</p>
-            <button className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors text-sm">
-              <Plus className="w-4 h-4" />
-              Tambah Penghuni
-            </button>
           </div>
         )}
       </div>

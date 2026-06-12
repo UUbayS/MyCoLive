@@ -2,10 +2,10 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "../../../lib/ToastContext";
 import {
   Banknote,
   Plus,
-  X,
   Loader2,
   Clock,
   Building2,
@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
 import ImageUploader from "../../../components/ImageUploader";
+import Modal from "../../../components/ui/Modal";
 import { getUser, isAuthenticated } from "../../../lib/auth";
 import {
   getPropertiList,
@@ -51,6 +52,7 @@ export default function RequestDanaPengelolaPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPropertiDropdown, setShowPropertiDropdown] = useState(false);
+  const { success, error } = useToast();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -148,12 +150,13 @@ export default function RequestDanaPengelolaPage() {
         });
         const updated = await getMyDanaList();
         setDanaList(updated);
+        success("Pengajuan dana berhasil dikirim");
       } else {
-        alert("Gagal mengajukan dana");
+        error("Gagal mengajukan dana");
       }
     } catch (err) {
       console.error(err);
-      alert("Terjadi kesalahan saat mengajukan dana");
+      error("Terjadi kesalahan saat mengajukan dana");
     } finally {
       setSubmitting(false);
     }
@@ -278,26 +281,13 @@ export default function RequestDanaPengelolaPage() {
       </div>
 
       {/* Modal Ajukan Dana */}
-      {showModal && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-          onClick={() => setShowModal(false)}
-        >
-          <div
-            className="bg-white rounded-xl w-full max-w-lg p-5 max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">Ajukan Dana</h3>
-              <button
-                onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title="Ajukan Dana"
+        size="md"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Properti</label>
                 <div className="relative" ref={dropdownRef}>
@@ -411,41 +401,25 @@ export default function RequestDanaPengelolaPage() {
                 )}
                 Ajukan Dana
               </button>
-            </form>
-          </div>
-        </div>
-      )}
+        </form>
+      </Modal>
 
       {/* Modal Foto */}
-      {selectedFoto && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedFoto(null)}
-        >
-          <div
-            className="bg-white rounded-xl w-full max-w-lg p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold">Foto Pengajuan</h3>
-              <button
-                onClick={() => setSelectedFoto(null)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={selectedFoto}
-                alt="Foto Pengajuan"
-                className="w-full h-full object-contain"
-              />
-            </div>
-          </div>
+      <Modal
+        isOpen={!!selectedFoto}
+        onClose={() => setSelectedFoto(null)}
+        title="Foto Pengajuan"
+        size="lg"
+      >
+        <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={selectedFoto || ""}
+            alt="Foto Pengajuan"
+            className="w-full h-full object-contain"
+          />
         </div>
-      )}
+      </Modal>
     </MainLayout>
   );
 }

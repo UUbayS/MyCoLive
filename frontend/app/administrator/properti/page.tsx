@@ -2,14 +2,16 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "../../../lib/ToastContext";
 import Link from "next/link";
-import { Plus, Building2, AlertTriangle } from "lucide-react";
+import { Plus, Building2 } from "lucide-react";
 import { getPropertiList, deleteProperti, PropertiData } from "../../../lib/api";
 import { getUser } from "../../../lib/auth";
 import MainLayout from "../../../components/Layout/MainLayout";
 import StatsWidget from "../../../components/StatsWidget";
 import PropertyCard from "../../../components/PropertyCard";
 import PropertiTabs from "@/components/PropertiTabs";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default function AdministratorPropertiPage() {
   const router = useRouter();
@@ -19,6 +21,7 @@ export default function AdministratorPropertiPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<PropertiData | null>(null);
   const fetchedRef = useRef(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (fetchedRef.current) return;
@@ -79,8 +82,9 @@ export default function AdministratorPropertiPage() {
         ...prev,
         totalProperti: prev.totalProperti - 1,
       }));
+      success("Properti berhasil dihapus");
     } catch {
-      alert("Gagal menghapus properti");
+      error("Gagal menghapus properti");
     } finally {
       setShowDeleteModal(false);
       setPropertyToDelete(null);
@@ -169,39 +173,19 @@ export default function AdministratorPropertiPage() {
           <span>Tambah Properti</span>
         </Link>
 
-        {/* Delete Confirmation Modal */}
-        {showDeleteModal && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
-            <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                  <AlertTriangle className="w-5 h-5 text-red-600" />
-                </div>
-                <h3 className="text-lg font-semibold">Hapus Properti?</h3>
-              </div>
-              <p className="text-sm text-gray-600 mb-6">
-                Properti <strong>&ldquo;{propertyToDelete?.nama}&rdquo;</strong> akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => {
-                    setShowDeleteModal(false);
-                    setPropertyToDelete(null);
-                  }}
-                  className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
-                >
-                  Batal
-                </button>
-                <button
-                  onClick={confirmDelete}
-                  className="flex-1 py-2.5 rounded-xl bg-red-600 text-white font-medium hover:bg-red-700 transition-colors"
-                >
-                  Hapus
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <ConfirmDialog
+          isOpen={showDeleteModal}
+          title="Hapus Properti?"
+          message={`Properti "${propertyToDelete?.nama}" akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.`}
+          confirmLabel="Hapus"
+          cancelLabel="Batal"
+          danger
+          onConfirm={confirmDelete}
+          onCancel={() => {
+            setShowDeleteModal(false);
+            setPropertyToDelete(null);
+          }}
+        />
       </div>
 
       

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import Link from "next/link";
 import {
   User,
@@ -9,7 +10,6 @@ import {
   Phone,
   ChevronLeft,
   Trash2,
-  Loader2,
   Shield,
   Banknote,
   Calendar,
@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
 import OperatorTabs from "@/components/OperatorTabs";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getUserList, deleteUser, getPengajuanDanaList, OperatorUserData, PengajuanDanaData } from "@/lib/api";
 
@@ -30,6 +31,7 @@ export default function DetailOperatorPage() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const fetchedRef = useRef(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -67,14 +69,17 @@ export default function DetailOperatorPage() {
   const handleDelete = async () => {
     setDeleteLoading(true);
     try {
-      const success = await deleteUser(operatorId);
-      if (success) {
-        router.push("/administrator/operator/daftar");
+      const result = await deleteUser(operatorId);
+      if (result) {
+        success("Operator berhasil dihapus");
+        setTimeout(() => {
+          router.push("/administrator/operator/daftar");
+        }, 1500);
       } else {
-        alert("Gagal menghapus operator");
+        error("Gagal menghapus operator");
       }
     } catch {
-      alert("Terjadi kesalahan saat menghapus operator");
+      error("Terjadi kesalahan saat menghapus operator");
     } finally {
       setDeleteLoading(false);
       setShowDeleteConfirm(false);
@@ -257,42 +262,16 @@ export default function DetailOperatorPage() {
         </div>
       </div>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-          onClick={() => setShowDeleteConfirm(false)}
-        >
-          <div
-            className="bg-white rounded-xl w-full max-w-sm p-5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="font-semibold text-gray-900 mb-2">Konfirmasi Hapus</h3>
-            <p className="text-sm text-gray-500 mb-5">
-              Apakah Anda yakin ingin menghapus operator <strong>{operator.nama}</strong>? Tindakan ini tidak bisa dibatalkan.
-            </p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setShowDeleteConfirm(false)}
-                className="flex-1 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Batal
-              </button>
-              <button
-                onClick={handleDelete}
-                disabled={deleteLoading}
-                className="flex-1 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
-              >
-                {deleteLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-                ) : (
-                  "Hapus"
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Konfirmasi Hapus"
+        message={`Apakah Anda yakin ingin menghapus operator ${operator.nama}? Tindakan ini tidak bisa dibatalkan.`}
+        confirmLabel={deleteLoading ? "Menghapus..." : "Hapus"}
+        cancelLabel="Batal"
+        danger
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </MainLayout>
   );
 }

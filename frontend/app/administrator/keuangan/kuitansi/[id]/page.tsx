@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft, Download, Eye, CheckCircle } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
+import Modal from "@/components/ui/Modal";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getKuitansiDetail, KuitansiDetail } from "@/lib/api";
 import { generateKuitansiPDF } from "@/lib/pdf-export";
@@ -171,32 +172,24 @@ export default function KuitansiPage() {
       </div>
 
       {/* Modal Bukti Bayar */}
-      {showBukti && detail.bukti && (
-        <div
-          className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
+      <Modal
+        isOpen={showBukti && !!detail.bukti}
+        onClose={() => setShowBukti(false)}
+        title="Bukti Pembayaran"
+        size="lg"
+      >
+        <img
+          src={detail.bukti || ""}
+          alt="Bukti Bayar"
+          className="w-full rounded-lg object-contain bg-gray-50"
+        />
+        <button
           onClick={() => setShowBukti(false)}
+          className="mt-4 w-full py-2.5 bg-[#84CC16] text-white rounded-xl text-sm font-medium hover:bg-[#84CC16]/90 transition-colors"
         >
-          <div
-            className="bg-white rounded-xl max-w-md w-full p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="text-sm font-semibold text-gray-900 mb-3">
-              Bukti Pembayaran
-            </p>
-            <img
-              src={detail.bukti}
-              alt="Bukti Bayar"
-              className="w-full rounded-lg object-contain bg-gray-50"
-            />
-            <button
-              onClick={() => setShowBukti(false)}
-              className="mt-4 w-full py-2.5 bg-[#84CC16] text-white rounded-xl text-sm font-medium hover:bg-[#84CC16]/90 transition-colors"
-            >
-              Tutup
-            </button>
-          </div>
-        </div>
-      )}
+          Tutup
+        </button>
+      </Modal>
     </MainLayout>
   );
 }

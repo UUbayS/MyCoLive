@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, Building2, Wind, Loader2, Check } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 import { getUser, isAuthenticated } from "../../../lib/auth";
 import { getFasilitasList, createFasilitas, deleteFasilitas, FasilitasData } from "../../../lib/api";
 import PropertiTabs from "@/components/PropertiTabs";
@@ -15,6 +16,8 @@ export default function AdminFasilitasPage() {
   const [newFacilityName, setNewFacilityName] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -50,7 +53,12 @@ export default function AdminFasilitasPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Hapus fasilitas ini?")) return;
+    setItemToDelete(id);
+    setShowConfirmDialog(true);
+  };
+
+  const actualDelete = async (id: string | null) => {
+    if (!id) return;
     const success = await deleteFasilitas(id);
     if (success) {
       setFacilities((prev) => prev.filter((f) => f.id !== id));
@@ -157,6 +165,16 @@ export default function AdminFasilitasPage() {
           </div>
         )}
       </div>
+      <ConfirmDialog
+        isOpen={showConfirmDialog}
+        title="Hapus Fasilitas?"
+        message="Fasilitas ini akan dihapus secara permanen."
+        confirmLabel="Hapus"
+        cancelLabel="Batal"
+        danger={true}
+        onConfirm={() => { actualDelete(itemToDelete); setShowConfirmDialog(false); }}
+        onCancel={() => setShowConfirmDialog(false)}
+      />
     </MainLayout>
   );
 }

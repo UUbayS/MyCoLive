@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "../../../lib/ToastContext";
 import Link from "next/link";
 import {
   BedDouble,
@@ -24,6 +25,7 @@ import {
 } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
 import ImageCarousel from "@/components/ImageCarousel";
+import Modal from "@/components/ui/Modal";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import {
   getMyPenghuni,
@@ -76,6 +78,7 @@ export default function KamarSayaPage() {
   const [checkoutKeterangan, setCheckoutKeterangan] = useState("");
   const [selectedDurasi, setSelectedDurasi] = useState("");
   const [selectedMetode, setSelectedMetode] = useState("TRANSFER");
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -113,7 +116,7 @@ export default function KamarSayaPage() {
         keterangan: checkoutKeterangan 
       });
       if (result) {
-        alert("Pengajuan checkout berhasil dikirim. Menunggu persetujuan admin.");
+        success("Pengajuan checkout berhasil dikirim. Menunggu persetujuan admin.");
         setShowCheckoutModal(false);
         setCheckoutKeterangan("");
         // Refresh data
@@ -124,11 +127,11 @@ export default function KamarSayaPage() {
         setPenghuni(penghuniData);
         setPemesananList(pemesananData);
       } else {
-        alert("Gagal mengajukan checkout. Silakan coba lagi.");
+        error("Gagal mengajukan checkout. Silakan coba lagi.");
       }
     } catch (err) {
       console.error("Checkout error:", err);
-      alert("Terjadi kesalahan saat mengajukan checkout.");
+      error("Terjadi kesalahan saat mengajukan checkout.");
     } finally {
       setCheckoutLoading(false);
     }
@@ -154,11 +157,11 @@ export default function KamarSayaPage() {
       if (newPemesanan) {
         router.push(`/penghuni/transaksi/${newPemesanan.id}`);
       } else {
-        alert("Gagal membuat pemesanan perpanjang");
+        error("Gagal membuat pemesanan perpanjang");
       }
     } catch (err) {
       console.error(err);
-      alert("Terjadi kesalahan");
+      error("Terjadi kesalahan");
     } finally {
       setPerpanjangLoading(false);
     }
@@ -362,51 +365,51 @@ export default function KamarSayaPage() {
         </div>
       </div>
 
-      {/* Checkout Modal */}
-      {showCheckoutModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={() => setShowCheckoutModal(false)}>
-          <div className="bg-white rounded-xl w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
-            <h3 className="font-semibold text-gray-900 mb-2">Konfirmasi Check-out</h3>
-            <p className="text-sm text-gray-500 mb-3">
-              Ajukan check-out dari kamar ini? Admin akan memproses pengajuan Anda dalam 1x24 jam.
-            </p>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Alasan (opsional)</label>
-              <textarea
-                value={checkoutKeterangan}
-                onChange={(e) => setCheckoutKeterangan(e.target.value)}
-                placeholder="Contoh: Pindah ke kost lain, sudah lulus, dll."
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] resize-none"
-              />
-            </div>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => setShowCheckoutModal(false)} 
-                disabled={checkoutLoading}
-                className="flex-1 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
-              >
-                Batal
-              </button>
-              <button 
-                onClick={handleCheckout} 
-                disabled={checkoutLoading}
-                className="flex-1 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {checkoutLoading ? "Mengirim..." : "Ya, Ajukan"}
-              </button>
-            </div>
-          </div>
+      <Modal
+        isOpen={showCheckoutModal}
+        onClose={() => setShowCheckoutModal(false)}
+        title="Konfirmasi Check-out"
+        size="sm"
+      >
+        <p className="text-sm text-gray-500 mb-3">
+          Ajukan check-out dari kamar ini? Admin akan memproses pengajuan Anda dalam 1x24 jam.
+        </p>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Alasan (opsional)</label>
+          <textarea
+            value={checkoutKeterangan}
+            onChange={(e) => setCheckoutKeterangan(e.target.value)}
+            placeholder="Contoh: Pindah ke kost lain, sudah lulus, dll."
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] resize-none"
+          />
         </div>
-      )}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowCheckoutModal(false)}
+            disabled={checkoutLoading}
+            className="flex-1 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
+            Batal
+          </button>
+          <button
+            onClick={handleCheckout}
+            disabled={checkoutLoading}
+            className="flex-1 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {checkoutLoading ? "Mengirim..." : "Ya, Ajukan"}
+          </button>
+        </div>
+      </Modal>
 
       {/* Perpanjang Modal */}
-      {showPerpanjangModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={() => setShowPerpanjangModal(false)}>
-          <div className="bg-white rounded-xl w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
-            <h3 className="font-semibold text-gray-900 mb-4">Perpanjang Sewa</h3>
-
-            <div className="mb-4">
+      <Modal
+        isOpen={showPerpanjangModal}
+        onClose={() => setShowPerpanjangModal(false)}
+        title="Perpanjang Sewa"
+        size="sm"
+      >
+        <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Durasi Sewa</label>
               <select
                 value={selectedDurasi}
@@ -441,21 +444,19 @@ export default function KamarSayaPage() {
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <button onClick={() => setShowPerpanjangModal(false)} className="flex-1 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
-                Batal
-              </button>
-              <button
-                onClick={handlePerpanjang}
-                disabled={!selectedDurasi || perpanjangLoading}
-                className="flex-1 py-2.5 bg-[#84CC16] text-white text-sm font-medium rounded-lg hover:bg-[#73b814] transition-colors disabled:opacity-50"
-              >
-                {perpanjangLoading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Bayar Sekarang"}
-              </button>
-            </div>
-          </div>
+        <div className="flex gap-2">
+          <button onClick={() => setShowPerpanjangModal(false)} className="flex-1 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+            Batal
+          </button>
+          <button
+            onClick={handlePerpanjang}
+            disabled={!selectedDurasi || perpanjangLoading}
+            className="flex-1 py-2.5 bg-[#84CC16] text-white text-sm font-medium rounded-lg hover:bg-[#73b814] transition-colors disabled:opacity-50"
+          >
+            {perpanjangLoading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Bayar Sekarang"}
+          </button>
         </div>
-      )}
+      </Modal>
     </MainLayout>
   );
 }

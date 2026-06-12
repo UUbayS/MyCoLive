@@ -2,11 +2,11 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import {
   MessageSquareWarning,
   CheckCircle,
   Clock,
-  XCircle,
   Loader2,
   User,
   Wrench,
@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import MainLayout from "../../../../components/Layout/MainLayout";
 import PengelolaPenghuniTabs from "../../../../components/PengelolaPenghuniTabs";
+import Modal from "../../../../components/ui/Modal";
 import { getUser, isAuthenticated } from "../../../../lib/auth";
 import { getKomplainList, updateKomplainStatus, KomplainData } from "../../../../lib/api";
 
@@ -41,6 +42,7 @@ export default function KomplainPengelolaPage() {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const fetchedRef = useRef(false);
+  const { success, error } = useToast();
 
   const baruCount = komplainList.filter((k) => k.status === "BARU").length;
 
@@ -89,7 +91,7 @@ export default function KomplainPengelolaPage() {
       setKomplainList(updated);
     } catch (err) {
       console.error(err);
-      alert("Gagal update status komplain");
+      error("Gagal update status komplain");
     } finally {
       setProcessingId(null);
     }
@@ -246,35 +248,21 @@ export default function KomplainPengelolaPage() {
       </div>
 
       {/* Image Modal */}
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div
-            className="bg-white rounded-xl w-full max-w-lg p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold">Foto Komplain</h3>
-              <button
-                onClick={() => setSelectedImage(null)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <XCircle className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={selectedImage}
-                alt="Foto Komplain"
-                className="w-full h-full object-contain"
-              />
-            </div>
-          </div>
+      <Modal
+        isOpen={!!selectedImage}
+        onClose={() => setSelectedImage(null)}
+        title="Foto Komplain"
+        size="lg"
+      >
+        <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={selectedImage || ""}
+            alt="Foto Komplain"
+            className="w-full h-full object-contain"
+          />
         </div>
-      )}
+      </Modal>
     </MainLayout>
   );
 }

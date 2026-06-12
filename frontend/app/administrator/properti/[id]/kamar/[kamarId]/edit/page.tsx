@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useToast } from "../../../../../../../lib/ToastContext";
 import { ArrowLeft } from "lucide-react";
 import ImageUploader from "../../../../../../../components/ImageUploader";
-import FacilitySelector from "../../../../../../../components/FacilitySelector";
-import { getKamarById, updateKamar, KamarData } from "../../../../../../../lib/api";
+import FacilityChips from "../../../../../../../components/FacilityChips";
+import FacilitySelectorModal from "../../../../../../../components/FacilitySelectorModal";
+import { getKamarById, updateKamar, KamarData, getFasilitasList, FasilitasData } from "../../../../../../../lib/api";
 import { getUser, isAuthenticated } from "../../../../../../../lib/auth";
 import MainLayout from "../../../../../../../components/Layout/MainLayout";
 
@@ -30,6 +32,9 @@ export default function EditKamarPage() {
     gambar: [] as string[],
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [facilities, setFacilities] = useState<FasilitasData[]>([]);
+  const [showFacilityModal, setShowFacilityModal] = useState(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (typeof window !== "undefined" && !isAuthenticated()) {
@@ -48,7 +53,10 @@ export default function EditKamarPage() {
 
     const fetchKamar = async () => {
       try {
-        const data = await getKamarById(kamarId);
+        const [data, fasilitasData] = await Promise.all([
+          getKamarById(kamarId),
+          getFasilitasList("RUANGAN"),
+        ]);
         if (data) {
           const luasParts = data.luas?.split(" - ") || [];
           const lantai = luasParts[0] || "";
@@ -68,8 +76,9 @@ export default function EditKamarPage() {
             gambar: data.gambar || [],
           });
         }
-      } catch (error) {
-        console.error("Failed to fetch kamar:", error);
+        setFacilities(fasilitasData);
+      } catch (err) {
+        console.error("Failed to fetch kamar:", err);
       } finally {
         setFetching(false);
       }
@@ -114,11 +123,11 @@ export default function EditKamarPage() {
       if (result) {
         router.push(`/administrator/properti/${propertiId}/kamar/${kamarId}`);
       } else {
-        alert("Gagal mengupdate kamar. Silakan coba lagi.");
+        error("Gagal mengupdate kamar. Silakan coba lagi.");
       }
-    } catch (error) {
-      console.error("Update kamar error:", error);
-      alert("Terjadi kesalahan saat mengupdate kamar.");
+    } catch (err) {
+      console.error("Update kamar error:", err);
+      error("Terjadi kesalahan saat mengupdate kamar.");
     } finally {
       setLoading(false);
     }
@@ -204,10 +213,21 @@ export default function EditKamarPage() {
             />
           </div>
 
-          <FacilitySelector
-            jenis="RUANGAN"
+          <FacilityChips
             selectedIds={formData.fasilitas_ids}
-            onChange={(ids) => setFormData({ ...formData, fasilitas_ids: ids })}
+            facilities={facilities}
+            label="Fasilitas Ruangan"
+            onOpen={() => setShowFacilityModal(true)}
+          />
+
+          <FacilitySelectorModal
+            isOpen={showFacilityModal}
+            onClose={() => setShowFacilityModal(false)}
+            selectedIds={formData.fasilitas_ids}
+            jenis="RUANGAN"
+            onSave={(ids) => {
+              setFormData({ ...formData, fasilitas_ids: ids });
+            }}
             showManagement={true}
           />
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import Link from "next/link";
 import {
   User,
@@ -17,6 +18,7 @@ import {
   Loader2,
 } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
+import Modal from "@/components/ui/Modal";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getPenghuniById, PenghuniData, checkoutPenghuni } from "@/lib/api";
 
@@ -55,6 +57,7 @@ export default function DetailPenghuniPage() {
   const [showCheckoutConfirm, setShowCheckoutConfirm] = useState(false);
   const [checkoutReason, setCheckoutReason] = useState("");
   const fetchedRef = useRef(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -92,11 +95,12 @@ export default function DetailPenghuniPage() {
         setPenghuni(updated);
         setShowCheckoutConfirm(false);
         setCheckoutReason("");
+        success("Check out berhasil dilakukan");
       } else {
-        alert("Gagal melakukan check out");
+        error("Gagal melakukan check out");
       }
     } catch {
-      alert("Terjadi kesalahan saat check out");
+      error("Terjadi kesalahan saat check out");
     } finally {
       setCheckoutLoading(false);
     }
@@ -347,52 +351,45 @@ export default function DetailPenghuniPage() {
         </div>
       </div>
 
-      {/* Checkout Confirmation Modal */}
-      {showCheckoutConfirm && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-          onClick={() => setShowCheckoutConfirm(false)}
-        >
-          <div
-            className="bg-white rounded-xl w-full max-w-sm p-5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="font-semibold text-gray-900 mb-2">Konfirmasi Check Out</h3>
-            <p className="text-sm text-gray-500 mb-3">
-              Check out penghuni <strong>{penghuni.user.nama}</strong> dari Kamar {penghuni.kamar?.nomor}? Penghuni akan keluar dari kamar ini dan tidak bisa menyewa kembali kecuali melakukan pemesanan baru.
-            </p>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Alasan (opsional)</label>
-              <textarea
-                value={checkoutReason}
-                onChange={(e) => setCheckoutReason(e.target.value)}
-                placeholder="Contoh: Melanggar peraturan, tidak membayar, masa sewa habis, dll."
-                rows={2}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
-              />
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setShowCheckoutConfirm(false)}
-                className="flex-1 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Batal
-              </button>
-              <button
-                onClick={handleCheckout}
-                disabled={checkoutLoading}
-                className="flex-1 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
-              >
-                {checkoutLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-                ) : (
-                  "Ya, Check Out"
-                )}
-              </button>
-            </div>
-          </div>
+      <Modal
+        isOpen={showCheckoutConfirm}
+        onClose={() => setShowCheckoutConfirm(false)}
+        title="Konfirmasi Check Out"
+        size="sm"
+      >
+        <p className="text-sm text-gray-500 mb-3">
+          Check out penghuni <strong>{penghuni.user.nama}</strong> dari Kamar {penghuni.kamar?.nomor}? Penghuni akan keluar dari kamar ini dan tidak bisa menyewa kembali kecuali melakukan pemesanan baru.
+        </p>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Alasan (opsional)</label>
+          <textarea
+            value={checkoutReason}
+            onChange={(e) => setCheckoutReason(e.target.value)}
+            placeholder="Contoh: Melanggar peraturan, tidak membayar, masa sewa habis, dll."
+            rows={2}
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
+          />
         </div>
-      )}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowCheckoutConfirm(false)}
+            className="flex-1 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Batal
+          </button>
+          <button
+            onClick={handleCheckout}
+            disabled={checkoutLoading}
+            className="flex-1 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+          >
+            {checkoutLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin mx-auto" />
+            ) : (
+              "Ya, Check Out"
+            )}
+          </button>
+        </div>
+      </Modal>
     </MainLayout>
   );
 }

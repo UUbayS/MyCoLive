@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import { ArrowLeft, Plus, ChevronDown, Check, Eye, EyeOff } from "lucide-react";
 import MainLayout from "../../../../components/Layout/MainLayout";
 import { getUser, isAuthenticated } from "../../../../lib/auth";
@@ -33,6 +34,7 @@ export default function TambahOperatorPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (typeof window !== "undefined" && !isAuthenticated()) {
@@ -115,10 +117,12 @@ export default function TambahOperatorPage() {
       });
 
       if (result) {
-        alert("Operator berhasil ditambahkan!");
-        router.push("/administrator/operator/daftar");
+        success("Operator berhasil ditambahkan!");
+        setTimeout(() => {
+          router.push("/administrator/operator/daftar");
+        }, 1500);
       } else {
-        alert("Gagal menambahkan operator. Silakan coba lagi.");
+        error("Gagal menambahkan operator. Silakan coba lagi.");
       }
     } catch (error: any) {
       console.error("Create operator error:", error);
@@ -128,7 +132,7 @@ export default function TambahOperatorPage() {
       } else if (msg.includes("Username sudah digunakan")) {
         setErrors((prev) => ({ ...prev, username: "Username sudah digunakan" }));
       } else {
-        alert("Terjadi kesalahan saat menambahkan operator.");
+        error("Terjadi kesalahan saat menambahkan operator.");
       }
     } finally {
       setLoading(false);

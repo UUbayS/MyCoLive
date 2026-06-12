@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useToast } from "../../../../../../lib/ToastContext";
 import { ArrowLeft } from "lucide-react";
 import ImageUploader from "../../../../../../components/ImageUploader";
-import FacilitySelector from "../../../../../../components/FacilitySelector";
-import { createKamar } from "../../../../../../lib/api";
+import FacilityChips from "../../../../../../components/FacilityChips";
+import FacilitySelectorModal from "../../../../../../components/FacilitySelectorModal";
+import { createKamar, getFasilitasList, FasilitasData } from "../../../../../../lib/api";
 import { getUser, isAuthenticated } from "../../../../../../lib/auth";
 import MainLayout from "../../../../../../components/Layout/MainLayout";
 
@@ -28,6 +30,9 @@ export default function TambahKamarPage() {
     gambar: [] as string[],
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [facilities, setFacilities] = useState<FasilitasData[]>([]);
+  const [showFacilityModal, setShowFacilityModal] = useState(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (typeof window !== "undefined" && !isAuthenticated()) {
@@ -39,6 +44,9 @@ export default function TambahKamarPage() {
     if (user && user.role !== "PEMILIK") {
       router.push("/public/katalog-properti");
     }
+
+    // Load fasilitas untuk chips
+    getFasilitasList("RUANGAN").then(setFacilities);
   }, [router]);
 
   const validate = () => {
@@ -77,11 +85,11 @@ export default function TambahKamarPage() {
       if (result) {
         router.push(`/administrator/properti/${propertiId}/kamar`);
       } else {
-        alert("Gagal menambahkan kamar. Silakan coba lagi.");
+        error("Gagal menambahkan kamar. Silakan coba lagi.");
       }
-    } catch (error) {
-      console.error("Create kamar error:", error);
-      alert("Terjadi kesalahan saat menambahkan kamar.");
+    } catch (err) {
+      console.error("Create kamar error:", err);
+      error("Terjadi kesalahan saat menambahkan kamar.");
     } finally {
       setLoading(false);
     }
@@ -152,10 +160,21 @@ export default function TambahKamarPage() {
             />
           </div>
 
-          <FacilitySelector
-            jenis="RUANGAN"
+          <FacilityChips
             selectedIds={formData.fasilitas_ids}
-            onChange={(ids) => setFormData({ ...formData, fasilitas_ids: ids })}
+            facilities={facilities}
+            label="Fasilitas Ruangan"
+            onOpen={() => setShowFacilityModal(true)}
+          />
+
+          <FacilitySelectorModal
+            isOpen={showFacilityModal}
+            onClose={() => setShowFacilityModal(false)}
+            selectedIds={formData.fasilitas_ids}
+            jenis="RUANGAN"
+            onSave={(ids) => {
+              setFormData({ ...formData, fasilitas_ids: ids });
+            }}
             showManagement={true}
           />
 

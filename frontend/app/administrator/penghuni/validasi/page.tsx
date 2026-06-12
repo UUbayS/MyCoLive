@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import {
   Receipt,
   CheckCircle,
@@ -12,10 +13,11 @@ import {
   User,
   BedDouble,
   Loader2,
-  AlertTriangle,
 } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
 import PenghuniTabs from "@/components/PenghuniTabs";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import Modal from "@/components/ui/Modal";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getAllPemesanan, verifikasiPemesanan, PemesananData } from "@/lib/api";
 
@@ -49,6 +51,7 @@ export default function ValidasiPembayaranPage() {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null);
   const fetchedRef = useRef(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -95,9 +98,10 @@ export default function ValidasiPembayaranPage() {
       await verifikasiPemesanan(id, status);
       const updated = await getAllPemesanan();
       setPemesananList(updated);
+      success(status === "DITERIMA" ? "Pesanan berhasil diterima" : "Pesanan berhasil ditolak");
     } catch (err) {
       console.error(err);
-      alert("Gagal memverifikasi pesanan");
+      error("Gagal memverifikasi pesanan");
     } finally {
       setProcessingId(null);
       setConfirmAction(null);
@@ -248,84 +252,37 @@ export default function ValidasiPembayaranPage() {
         )}
       </div>
 
-      {/* Modal Konfirmasi */}
-      {confirmAction && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-          onClick={() => setConfirmAction(null)}
-        >
-          <div
-            className="bg-white rounded-xl w-full max-w-sm p-5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5 text-yellow-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Konfirmasi</h3>
-                <p className="text-sm text-gray-500">
-                  Apakah Anda yakin ingin {confirmAction.label} pesanan ini?
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setConfirmAction(null)}
-                className="flex-1 px-4 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Batal
-              </button>
-              <button
-                onClick={() => handleVerifikasi(confirmAction.id, confirmAction.status)}
-                disabled={processingId === confirmAction.id}
-                className={`flex-1 px-4 py-2.5 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 ${
-                  confirmAction.status === "DITERIMA"
-                    ? "bg-green-600 hover:bg-green-700"
-                    : "bg-red-600 hover:bg-red-700"
-                }`}
-              >
-                {processingId === confirmAction.id ? (
-                  <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-                ) : (
-                  "Ya, Konfirmasi"
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        isOpen={!!confirmAction}
+        title="Konfirmasi"
+        message={`Apakah Anda yakin ingin ${confirmAction?.label} pesanan ini?`}
+        confirmLabel={processingId === confirmAction?.id ? "Memproses..." : "Ya, Konfirmasi"}
+        cancelLabel="Batal"
+        danger={confirmAction?.status === "DITOLAK"}
+        onConfirm={() => {
+          if (confirmAction) {
+            handleVerifikasi(confirmAction.id, confirmAction.status);
+          }
+        }}
+        onCancel={() => setConfirmAction(null)}
+      />
 
       {/* Modal Bukti */}
-      {selectedBukti && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedBukti(null)}
-        >
-          <div
-            className="bg-white rounded-xl w-full max-w-lg p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold">Bukti Pembayaran</h3>
-              <button
-                onClick={() => setSelectedBukti(null)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <XCircle className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={selectedBukti}
-                alt="Bukti Pembayaran"
-                className="w-full h-full object-contain"
-              />
-            </div>
-          </div>
+      <Modal
+        isOpen={!!selectedBukti}
+        onClose={() => setSelectedBukti(null)}
+        title="Bukti Pembayaran"
+        size="lg"
+      >
+        <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={selectedBukti || ""}
+            alt="Bukti Pembayaran"
+            className="w-full h-full object-contain"
+          />
         </div>
-      )}
+      </Modal>
     </MainLayout>
   );
 }

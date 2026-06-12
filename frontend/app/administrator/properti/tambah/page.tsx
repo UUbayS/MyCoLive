@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import { ArrowLeft } from "lucide-react";
 import ImageUploader from "../../../../components/ImageUploader";
 import AddressFields from "../../../../components/AddressFields";
-import FacilitySelector from "../../../../components/FacilitySelector";
-import { createProperti } from "../../../../lib/api";
+import FacilityChips from "../../../../components/FacilityChips";
+import FacilitySelectorModal from "../../../../components/FacilitySelectorModal";
+import { createProperti, getFasilitasList, FasilitasData } from "../../../../lib/api";
 import { getUser, isAuthenticated } from "../../../../lib/auth";
 import MainLayout from "../../../../components/Layout/MainLayout";
 
@@ -27,6 +29,9 @@ export default function TambahPropertiPage() {
     fasilitas_umum_ids: [] as string[],
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [facilities, setFacilities] = useState<FasilitasData[]>([]);
+  const [showFacilityModal, setShowFacilityModal] = useState(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (typeof window !== "undefined" && !isAuthenticated()) {
@@ -38,6 +43,9 @@ export default function TambahPropertiPage() {
     if (user && user.role !== "PEMILIK") {
       router.push("/public/katalog-properti");
     }
+
+    // Load fasilitas untuk chips
+    getFasilitasList("UMUM").then(setFacilities);
   }, [router]);
 
   const handleAddressChange = (field: string, value: string) => {
@@ -77,11 +85,11 @@ export default function TambahPropertiPage() {
       if (result) {
         router.push("/administrator/properti");
       } else {
-        alert("Gagal menambahkan properti. Silakan coba lagi.");
+        error("Gagal menambahkan properti. Silakan coba lagi.");
       }
-    } catch (error) {
-      console.error("Create properti error:", error);
-      alert("Terjadi kesalahan saat menambahkan properti.");
+    } catch (err) {
+      console.error("Create properti error:", err);
+      error("Terjadi kesalahan saat menambahkan properti.");
     } finally {
       setLoading(false);
     }
@@ -172,10 +180,21 @@ export default function TambahPropertiPage() {
             />
           </div>
 
-          <FacilitySelector
-            jenis="UMUM"
+          <FacilityChips
             selectedIds={formData.fasilitas_umum_ids}
-            onChange={(ids) => setFormData({ ...formData, fasilitas_umum_ids: ids })}
+            facilities={facilities}
+            label="Fasilitas Umum"
+            onOpen={() => setShowFacilityModal(true)}
+          />
+
+          <FacilitySelectorModal
+            isOpen={showFacilityModal}
+            onClose={() => setShowFacilityModal(false)}
+            selectedIds={formData.fasilitas_umum_ids}
+            jenis="UMUM"
+            onSave={(ids) => {
+              setFormData({ ...formData, fasilitas_umum_ids: ids });
+            }}
             showManagement={true}
           />
 

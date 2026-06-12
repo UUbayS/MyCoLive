@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import Link from "next/link";
 import { ArrowLeft, CreditCard, QrCode, CheckCircle, Clock, AlertCircle } from "lucide-react";
 import ImageUploader from "../../../../components/ImageUploader";
@@ -32,7 +33,8 @@ export default function DetailTransaksiPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [bukti, setBukti] = useState<string>("");
-  const [success, setSuccess] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -54,8 +56,8 @@ export default function DetailTransaksiPage() {
         if (pemesananData?.pembayaran?.bukti) {
           setBukti(pemesananData.pembayaran.bukti);
         }
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
+      } catch (err) {
+        console.error("Failed to fetch data:", err);
       } finally {
         setLoading(false);
       }
@@ -67,7 +69,7 @@ export default function DetailTransaksiPage() {
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!bukti) {
-      alert("Upload bukti pembayaran terlebih dahulu.");
+      error("Upload bukti pembayaran terlebih dahulu.");
       return;
     }
 
@@ -75,15 +77,15 @@ export default function DetailTransaksiPage() {
     try {
       const result = await uploadBuktiBayar(pemesananId, bukti);
       if (result) {
-        setSuccess(true);
+        setUploadSuccess(true);
         const updated = await getPemesananById(pemesananId);
         setPemesanan(updated);
       } else {
-        alert("Gagal mengupload bukti. Silakan coba lagi.");
+        error("Gagal mengupload bukti. Silakan coba lagi.");
       }
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Terjadi kesalahan saat upload bukti.");
+    } catch (err) {
+      console.error("Upload error:", err);
+      error("Terjadi kesalahan saat upload bukti.");
     } finally {
       setSubmitting(false);
     }
@@ -261,7 +263,7 @@ export default function DetailTransaksiPage() {
               />
             </div>
 
-            {success && (
+            {uploadSuccess && (
               <div className="flex items-center gap-2 p-3 bg-green-50 rounded-xl text-green-700 text-sm">
                 <CheckCircle className="w-5 h-5" />
                 <span>Bukti berhasil diupload. Menunggu verifikasi pengurus.</span>

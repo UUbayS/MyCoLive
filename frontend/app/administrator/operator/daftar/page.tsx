@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import Link from "next/link";
 import {
   Search,
@@ -28,6 +29,7 @@ export default function DaftarOperatorPage() {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const fetchedRef = useRef(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -74,26 +76,6 @@ export default function DaftarOperatorPage() {
 
     setFilteredList(result);
   }, [search, operatorList]);
-
-  const handleDelete = async (id: string) => {
-    setProcessingId(id);
-    try {
-      const success = await deleteUser(id);
-      if (success) {
-        const updated = operatorList.filter((o) => o.id !== id);
-        setOperatorList(updated);
-        setFilteredList(updated);
-      } else {
-        alert("Gagal menghapus operator");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Gagal menghapus operator");
-    } finally {
-      setProcessingId(null);
-      setConfirmDelete(null);
-    }
-  };
 
   return (
     <MainLayout>

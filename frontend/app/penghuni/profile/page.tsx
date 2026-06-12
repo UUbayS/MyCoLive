@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Lock, LogOut, X, Eye, EyeOff, User, Mail, Phone } from "lucide-react";
+import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
+import Modal from "../../../components/ui/Modal";
 import { getProfile, updateProfile, changePassword, ProfileData } from "../../../lib/api";
 import { clearAuth } from "../../../lib/auth";
 
@@ -195,81 +196,75 @@ function EditProfileModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center">
-      <div className="bg-white w-full md:max-w-md md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-black">Edit Profil</h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X size={20} className="text-gray-500" />
-          </button>
-        </div>
-
-        <div className="p-4 space-y-4">
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nama Lengkap
-            </label>
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <User size={20} />
-              </div>
-              <input
-                type="text"
-                placeholder="Nama lengkap"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={nama}
-                onChange={(e) => setNama(e.target.value)}
-              />
-            </div>
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title="Edit Profil"
+      position="bottom"
+      size="md"
+    >
+      <div className="space-y-4">
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
+            {error}
           </div>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email
-            </label>
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <Mail size={20} />
-              </div>
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Nama Lengkap
+          </label>
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+              <User size={20} />
             </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nomor Telepon
-            </label>
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <Phone size={20} />
-              </div>
-              <input
-                type="tel"
-                placeholder="Nomor telepon"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={noTelepon}
-                onChange={(e) => setNoTelepon(e.target.value)}
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="Nama lengkap"
+              className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+            />
           </div>
         </div>
 
-        <div className="p-4 border-t border-gray-200">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Email
+          </label>
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+              <Mail size={20} />
+            </div>
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Nomor Telepon
+          </label>
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+              <Phone size={20} />
+            </div>
+            <input
+              type="tel"
+              placeholder="Nomor telepon"
+              className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+              value={noTelepon}
+              onChange={(e) => setNoTelepon(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="pt-2">
           <button
             onClick={handleSave}
             disabled={loading}
@@ -289,7 +284,7 @@ function EditProfileModal({
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }
 
@@ -341,19 +336,14 @@ function ResetPasswordModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center">
-      <div className="bg-white w-full md:max-w-md md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-black">Reset Password</h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X size={20} className="text-gray-500" />
-          </button>
-        </div>
-
-        <div className="p-4 space-y-4">
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title="Reset Password"
+      position="bottom"
+      size="md"
+    >
+      <div className="space-y-4">
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
               {error}
@@ -436,7 +426,7 @@ function ResetPasswordModal({
           </div>
         </div>
 
-        <div className="p-4 border-t border-gray-200">
+        <div className="pt-2">
           <button
             onClick={handleReset}
             disabled={loading}
@@ -455,7 +445,6 @@ function ResetPasswordModal({
             )}
           </button>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }

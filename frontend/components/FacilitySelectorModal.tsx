@@ -1,24 +1,31 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
-import { Search, Plus, Trash2, Loader2 } from "lucide-react";
+import { Search, Plus, Trash2, Loader2, Check } from "lucide-react";
+import Modal from "./ui/Modal";
 import ConfirmDialog from "./ConfirmDialog";
 import { getFasilitasList, createFasilitas, deleteFasilitas, FasilitasData } from "../lib/api";
 import { getUser } from "../lib/auth";
 
-interface FacilitySelectorProps {
+interface FacilitySelectorModalProps {
+  isOpen: boolean;
+  onClose: () => void;
   selectedIds: string[];
   jenis: "RUANGAN" | "UMUM";
-  onChange: (selectedIds: string[]) => void;
+  onSave: (ids: string[]) => void;
   showManagement?: boolean;
 }
 
-const FacilitySelector: React.FC<FacilitySelectorProps> = ({
+export default function FacilitySelectorModal({
+  isOpen,
+  onClose,
   selectedIds,
   jenis,
-  onChange,
+  onSave,
   showManagement = false,
-}) => {
+}: FacilitySelectorModalProps) {
   const [facilities, setFacilities] = useState<FasilitasData[]>([]);
+  const [localSelectedIds, setLocalSelectedIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [newFacility, setNewFacility] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,8 +36,14 @@ const FacilitySelector: React.FC<FacilitySelectorProps> = ({
   useEffect(() => {
     const user = getUser();
     setIsAdmin(user?.role === "PEMILIK");
-    loadFacilities();
-  }, [jenis]);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setLocalSelectedIds([...selectedIds]);
+      loadFacilities();
+    }
+  }, [isOpen, selectedIds]);
 
   const loadFacilities = async () => {
     setLoading(true);
@@ -44,18 +57,16 @@ const FacilitySelector: React.FC<FacilitySelectorProps> = ({
   );
 
   const toggleFacility = (id: string) => {
-    if (selectedIds.includes(id)) {
-      onChange(selectedIds.filter((fid) => fid !== id));
-    } else {
-      onChange([...selectedIds, id]);
-    }
+    setLocalSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id]
+    );
   };
 
   const handleSelectAll = () => {
-    if (selectedIds.length === facilities.length) {
-      onChange([]);
+    if (localSelectedIds.length === facilities.length) {
+      setLocalSelectedIds([]);
     } else {
-      onChange(facilities.map((f) => f.id));
+      setLocalSelectedIds(facilities.map((f) => f.id));
     }
   };
 
@@ -63,7 +74,9 @@ const FacilitySelector: React.FC<FacilitySelectorProps> = ({
     if (!newFacility.trim()) return;
     const result = await createFasilitas(newFacility.trim(), jenis);
     if (result) {
-      setFacilities((prev) => [...prev, result].sort((a, b) => a.nama.localeCompare(b.nama)));
+      setFacilities((prev) =>
+        [...prev, result].sort((a, b) => a.nama.localeCompare(b.nama))
+      );
       setNewFacility("");
     }
   };
@@ -78,20 +91,27 @@ const FacilitySelector: React.FC<FacilitySelectorProps> = ({
     const success = await deleteFasilitas(id);
     if (success) {
       setFacilities((prev) => prev.filter((f) => f.id !== id));
-      onChange(selectedIds.filter((fid) => fid !== id));
+      setLocalSelectedIds((prev) => prev.filter((fid) => fid !== id));
     }
   };
 
-  const allSelected = facilities.length > 0 && selectedIds.length === facilities.length;
+  const handleSave = () => {
+    onSave(localSelectedIds);
+    onClose();
+  };
+
+  const allSelected =
+    facilities.length > 0 && localSelectedIds.length === facilities.length;
 
   return (
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        Fasilitas {jenis === "RUANGAN" ? "Ruangan" : "Umum"}
-      </label>
-
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={`Pilih Fasilitas ${jenis === "RUANGAN" ? "Ruangan" : "Umum"}`}
+      size="md"
+    >
       {showManagement && isAdmin && (
-        <div className="mb-3">
+        <div className="mb-4">
           <div className="flex gap-2 mb-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -130,7 +150,7 @@ const FacilitySelector: React.FC<FacilitySelectorProps> = ({
               type="checkbox"
               checked={allSelected}
               onChange={handleSelectAll}
-              className="w-4 h-4 shrink-0 rounded border-2 border-gray-300 accent-[#84CC16] checked:border-[#84CC16] cursor-pointer"
+              className="w-4 h-4 shrink-0 rounded border-2 border-gray-300 accent-[#84CC16]  cursor-pointer"
             />
             <label className="text-sm text-gray-700 cursor-pointer select-none">Pilih Semua</label>
           </div>
@@ -142,15 +162,15 @@ const FacilitySelector: React.FC<FacilitySelectorProps> = ({
           <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
         </div>
       ) : (
-        <div className="space-y-2 max-h-60 overflow-y-auto">
+        <div className="space-y-2 max-h-60 overflow-y-auto mb-4">
           {filteredFacilities.map((facility) => {
-            const isSelected = selectedIds.includes(facility.id);
+            const isSelected = localSelectedIds.includes(facility.id);
             return (
               <div
                 key={facility.id}
                 className={`flex items-center justify-between p-3 rounded-xl border transition-colors ${
                   isSelected
-                    ? "border-[#84CC16] bg-[#84CC16]/5"
+                    ? "border-[#84CC16] bg-[#84CC16]/5 "
                     : "border-gray-200 bg-white"
                 }`}
               >
@@ -184,6 +204,28 @@ const FacilitySelector: React.FC<FacilitySelectorProps> = ({
           )}
         </div>
       )}
+
+      <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+        <span className="text-sm text-gray-500">
+          {localSelectedIds.length} fasilitas dipilih
+        </span>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            className="px-4 py-2 bg-[#84CC16] text-white rounded-xl text-sm font-medium hover:bg-[#73b814] transition-colors"
+          >
+            Simpan
+          </button>
+        </div>
+      </div>
       <ConfirmDialog
         isOpen={showConfirmDialog}
         title="Hapus Fasilitas?"
@@ -194,8 +236,6 @@ const FacilitySelector: React.FC<FacilitySelectorProps> = ({
         onConfirm={() => { actualDelete(itemToDelete); setShowConfirmDialog(false); }}
         onCancel={() => setShowConfirmDialog(false)}
       />
-    </div>
+    </Modal>
   );
-};
-
-export default FacilitySelector;
+}

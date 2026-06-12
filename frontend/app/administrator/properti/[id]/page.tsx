@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useToast } from "../../../../lib/ToastContext";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -35,6 +36,7 @@ export default function AdminDetailPropertiPage() {
   const [loading, setLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showFullKebijakan, setShowFullKebijakan] = useState(false);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!propertiId) return;
@@ -53,8 +55,8 @@ export default function AdminDetailPropertiPage() {
           return;
         }
         setProperti(data);
-      } catch (error) {
-        console.error("Failed to fetch properti:", error);
+      } catch (err) {
+        console.error("Failed to fetch properti:", err);
       } finally {
         setLoading(false);
       }
@@ -65,15 +67,18 @@ export default function AdminDetailPropertiPage() {
 
   const handleDelete = async () => {
     try {
-      const success = await deleteProperti(propertiId);
-      if (success) {
-        router.push("/administrator/properti");
+      const result = await deleteProperti(propertiId);
+      if (result) {
+        success("Properti berhasil dihapus");
+        setTimeout(() => {
+          router.push("/administrator/properti");
+        }, 1500);
       } else {
-        alert("Gagal menghapus properti. Pastikan tidak ada kamar atau penghuni aktif.");
+        error("Gagal menghapus properti. Pastikan tidak ada kamar atau penghuni aktif.");
       }
-    } catch (error) {
-      console.error("Delete error:", error);
-      alert("Terjadi kesalahan saat menghapus properti.");
+    } catch (err) {
+      console.error("Delete error:", err);
+      error("Terjadi kesalahan saat menghapus properti.");
     } finally {
       setShowDeleteDialog(false);
     }
@@ -192,7 +197,7 @@ export default function AdminDetailPropertiPage() {
             className="flex items-center gap-2 px-4 py-2 bg-[#84CC16] text-white rounded-lg hover:bg-[#65a30d] transition-colors text-sm font-medium shadow-sm"
           >
             <Edit className="w-4 h-4" />
-            <span className="hidden sm:inline">Edit Kamar</span>
+            <span className="hidden sm:inline">Edit Properti</span>
           </Link>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useToast } from "../../../../../lib/ToastContext";
 import Link from "next/link";
 import { ArrowLeft, Search, SlidersHorizontal, Plus, Trash2, Pencil, ChevronDown, Users, Wrench, BedDouble } from "lucide-react";
 import { getUser } from "../../../../../lib/auth";
@@ -36,6 +37,7 @@ export default function AdminDaftarKamarPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [kamarToDelete, setKamarToDelete] = useState<KamarData | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+  const { success, error } = useToast();
 
   useEffect(() => {
     if (!propertiId) return;
@@ -57,8 +59,8 @@ export default function AdminDaftarKamarPage() {
           setProperti(propertiData);
         }
         setKamarList(kamarData);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
+      } catch (err) {
+        console.error("Failed to fetch data:", err);
       } finally {
         setLoading(false);
       }
@@ -75,11 +77,11 @@ export default function AdminDaftarKamarPage() {
       if (success) {
         setKamarList((prev) => prev.filter((k) => k.id !== kamarToDelete.id));
       } else {
-        alert("Gagal menghapus kamar. Pastikan kamar tidak sedang ditempati.");
+        error("Gagal menghapus kamar. Pastikan kamar tidak sedang ditempati.");
       }
-    } catch (error) {
-      console.error("Delete error:", error);
-      alert("Terjadi kesalahan saat menghapus kamar.");
+    } catch (err) {
+      console.error("Delete error:", err);
+      error("Terjadi kesalahan saat menghapus kamar.");
     } finally {
       setShowDeleteDialog(false);
       setKamarToDelete(null);
@@ -95,11 +97,11 @@ export default function AdminDaftarKamarPage() {
           prev.map((k) => (k.id === kamarId ? { ...k, status: newStatus } : k))
         );
       } else {
-        alert("Gagal mengubah status kamar.");
+        error("Gagal mengubah status kamar.");
       }
-    } catch (error) {
-      console.error("Status update error:", error);
-      alert("Terjadi kesalahan saat mengubah status.");
+    } catch (err) {
+      console.error("Status update error:", err);
+      error("Terjadi kesalahan saat mengubah status.");
     } finally {
       setUpdatingStatus(null);
     }
