@@ -115,25 +115,31 @@ export default function DetailKamarPage() {
 
   return (
     <MainLayout>
-      {/* Header - full width */}
+      {/* Header */}
       <div className="mb-4 md:mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div className="text-center flex-1">
-            <h1 className="text-xl font-semibold">Kamar {kamar.nomor}</h1>
-            {kamar.properti && (
-              <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
-                <MapPin className="w-3 h-3" />
-                <span>{kamar.properti?.nama || "Properti"} - {kamar.properti.alamat}</span>
-              </div>
-            )}
+        <div className="flex items-center justify-between w-full">
+          <div className="flex-1 flex justify-start">
+            <button
+              onClick={() => router.push(`/administrator/properti/${propertiId}/kamar`)}
+              className="p-1 -ml-1 text-gray-600 hover:text-gray-900 transition-colors"
+              aria-label="Kembali"
+            >
+              <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
+            </button>
+          </div>
+          <div className="text-center px-2 flex-auto">
+            <h1 className="text-lg md:text-xl font-semibold line-clamp-1">
+              Kamar {kamar.nomor} - {kamar.properti?.nama || "Properti"}
+            </h1>
+          </div>
+          <div className="flex-1 flex justify-end">
           </div>
         </div>
+        {kamar.properti && (
+          <p className="w-full text-sm text-gray-500 mt-2 text-center px-4 md:px-0 justify-center">
+            {kamar.properti.alamat}
+          </p>
+        )}
       </div>
 
       {/* Desktop: 2 kolom | Mobile: 1 kolom */}

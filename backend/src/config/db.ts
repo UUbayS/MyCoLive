@@ -7,4 +7,82 @@ const connection = new pg.Pool({
 });
 
 const adapter = new PrismaPg(connection);
-export const prisma = new PrismaClient({ adapter });
+const basePrisma = new PrismaClient({ adapter });
+
+export const prisma = basePrisma.$extends({
+  query: {
+    user: {
+      async findMany({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async findFirst({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async findUnique({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async count({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+    },
+    properti: {
+      async findMany({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async findFirst({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async findUnique({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async count({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+    },
+    kamar: {
+      async findMany({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async findFirst({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async findUnique({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async count({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+    },
+    operator: {
+      async findMany({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async findFirst({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async findUnique({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+      async count({ args, query }) {
+        args.where = { ...args.where, deleted_at: null };
+        return query(args);
+      },
+    },
+  },
+});
+

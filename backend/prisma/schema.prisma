@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/client"
+  previewFeatures = ["partialIndexes"]
 }
 
 datasource db {
@@ -83,14 +84,15 @@ enum JenisFasilitas {
 
 model User {
   id        String   @id @default(cuid())
-  username  String   @unique
-  email     String   @unique
+  username  String
+  email     String
   password  String
   nama      String
   role      Role
-  no_telepon String?  @unique
+  no_telepon String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  deleted_at DateTime?
 
   penghuni    Penghuni?
   operator   Operator[]
@@ -102,6 +104,10 @@ model User {
   // Relation opposite: admin yang memproses checkout
   pengajuanCheckoutAdmin PengajuanCheckout[]
   pengumuman             Pengumuman[]
+
+  @@unique([username], map: "User_username_key", where: { deleted_at: null })
+  @@unique([email], map: "User_email_key", where: { deleted_at: null })
+  @@unique([no_telepon], map: "User_no_telepon_key", where: { deleted_at: null })
 }
 
 model AdminSettings {
@@ -141,6 +147,7 @@ model Properti {
   gambar     String[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  deleted_at DateTime?
 
   admin_id   String
   admin      User     @relation(fields: [admin_id], references: [id])
@@ -166,6 +173,7 @@ model Kamar {
   status     StatusKamar @default(KOSONG)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  deleted_at DateTime?
 
   properti_id String
   properti    Properti @relation(fields: [properti_id], references: [id])
@@ -175,7 +183,7 @@ model Kamar {
   pengajuanCheckout PengajuanCheckout[]
   fasilitas_ruangan Fasilitas[]
 
-  @@unique([properti_id, nomor])
+  @@unique([properti_id, nomor], where: { deleted_at: null })
 }
 
 model Pemesanan {
@@ -237,6 +245,7 @@ model Operator {
   id          String   @id @default(cuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  deleted_at DateTime?
 
   user_id     String
   user        User     @relation(fields: [user_id], references: [id])
@@ -247,7 +256,7 @@ model Operator {
   // Relation opposite
   pengajuanDana PengajuanDana[]
 
-  @@unique([user_id, properti_id])
+  @@unique([user_id, properti_id], where: { deleted_at: null })
 }
 
 model Komplain {

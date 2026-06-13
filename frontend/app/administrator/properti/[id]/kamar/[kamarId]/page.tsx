@@ -12,6 +12,7 @@ import {
   ChevronDown,
   User,
   Wrench,
+  MapPin,
   Wifi,
   Plus,
   AlertCircle
@@ -156,27 +157,38 @@ export default function AdminDetailKamarPage() {
   return (
     <MainLayout>
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => router.push(`/administrator/properti/${propertiId}/kamar`)}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors -ml-2"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
-          </button>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">
+      <div className="mb-4 md:mb-6">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex-1 flex justify-start">
+            <button
+              onClick={() => router.push(`/administrator/properti/${propertiId}/kamar`)}
+              className="p-1 -ml-1 text-gray-600 hover:text-gray-900 transition-colors"
+              aria-label="Kembali"
+            >
+              <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
+            </button>
+          </div>
+          <div className="text-center px-2 flex-auto">
+            <h1 className="text-lg md:text-xl font-semibold line-clamp-1">
               Kamar {kamar.nomor} - {kamar.properti?.nama || "Properti"}
             </h1>
           </div>
+          <div className="flex-1 flex justify-end">
+            <Link
+              href={`/administrator/properti/${propertiId}/kamar/${kamarId}/edit`}
+              className="flex items-center gap-1.5 md:gap-2 px-3 py-1.5 md:py-2 bg-[#84CC16] text-white rounded-lg hover:bg-[#65a30d] transition-all text-sm font-medium shadow-sm"
+            >
+              <Edit className="w-4 h-4" />
+              <span className="hidden md:inline">Edit Kamar</span>
+              <span className="md:hidden">Edit</span>
+            </Link>
+          </div>
         </div>
-        <Link
-          href={`/administrator/properti/${propertiId}/kamar/${kamarId}/edit`}
-          className="flex items-center gap-2 px-4 py-2 bg-[#84CC16] text-white rounded-lg hover:bg-[#65a30d] transition-colors text-sm font-medium shadow-sm"
-        >
-          <Edit className="w-4 h-4" />
-          <span className="hidden sm:inline">Edit Kamar</span>
-        </Link>
+        {kamar.properti && (
+          <p className="w-full text-sm text-gray-500 mt-2 text-center px-4 md:px-0 justify-center">
+            {kamar.properti.alamat}
+          </p>
+        )}
       </div>
 
       {/* Image Carousel & Status Overlay */}

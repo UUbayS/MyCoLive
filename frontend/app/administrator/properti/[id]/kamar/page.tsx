@@ -73,8 +73,12 @@ export default function AdminDaftarKamarPage() {
     if (!kamarToDelete) return;
 
     try {
-      const success = await deleteKamar(kamarToDelete.id);
-      if (success) {
+      const result = await deleteKamar(kamarToDelete.id);
+      if (result) {
+        success("Properti berhasil dihapus");
+        setTimeout(() => {
+          router.push("/administrator/properti/${propertiId}/kamar");
+        }, 1500);
         setKamarList((prev) => prev.filter((k) => k.id !== kamarToDelete.id));
       } else {
         error("Gagal menghapus kamar. Pastikan kamar tidak sedang ditempati.");
@@ -164,7 +168,7 @@ export default function AdminDaftarKamarPage() {
           </div>
           <Link
             href={`/administrator/properti/${propertiId}/kamar/tambah`}
-            className="flex bg-[#84CC16] text-white px-5 py-2 rounded-full shadow-sm hover:bg-[#73b814] transition-colors items-center gap-2"
+            className="hidden md:block bg-[#84CC16] text-white px-5 py-2 rounded-full shadow-sm hover:bg-[#73b814] transition-colors items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Tambah Kamar
@@ -285,25 +289,6 @@ export default function AdminDaftarKamarPage() {
                   <div className="p-4">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="text-lg font-semibold">Kamar {kamar.nomor}</h3>
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => router.push(`/administrator/properti/${propertiId}/kamar/${kamar.id}/edit`)}
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="Edit"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setKamarToDelete(kamar);
-                            setShowDeleteDialog(true);
-                          }}
-                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                          title="Hapus"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
                     </div>
 
                     {kamar.tipe && (
@@ -317,26 +302,6 @@ export default function AdminDaftarKamarPage() {
                         Rp {hargaBulanan.toLocaleString("id-ID")}/bulan
                       </p>
                     )}
-
-                    {/* Status Dropdown */}
-                    <div className="pt-3 border-t border-gray-100">
-                      <div className="relative">
-                        <select
-                          value={kamar.status}
-                          onChange={(e) => handleStatusChange(kamar.id, e.target.value)}
-                          disabled={updatingStatus === kamar.id}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#84CC16] appearance-none bg-white"
-                        >
-                          <option value="KOSONG">Kosong</option>
-                          <option value="TERISI">Terisi</option>
-                          <option value="MAINTENANCE">Maintenance</option>
-                        </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                        {updatingStatus === kamar.id && (
-                          <span className="absolute right-8 top-1/2 -translate-y-1/2 text-xs text-gray-500">Updating...</span>
-                        )}
-                      </div>
-                    </div>
                   </div>
                 </Link>  
               </div>

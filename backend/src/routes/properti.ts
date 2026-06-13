@@ -16,7 +16,9 @@ app.get("/", authMiddleware, async (c) => {
       properti = await prisma.properti.findMany({
         where: { admin_id: user.userId },
         include: {
-          kamar: true,
+          kamar: {
+            where: { deleted_at: null }
+          },
           fasilitas_umum: true,
           _count: {
             select: { kamar: true }
@@ -35,7 +37,9 @@ app.get("/", authMiddleware, async (c) => {
       properti = await prisma.properti.findMany({
         where: { id: { in: propertiIds } },
         include: {
-          kamar: true,
+          kamar: {
+            where: { deleted_at: null }
+          },
           fasilitas_umum: true,
           _count: {
             select: { kamar: true }
@@ -64,7 +68,7 @@ app.get("/", authMiddleware, async (c) => {
       kebijakan: p.kebijakan,
       gambar: p.gambar,
       created_at: p.created_at,
-      total_kamar: p._count.kamar,
+      total_kamar: p.kamar.length,
       kamar_kosong: p.kamar.filter((k: any) => k.status === "KOSONG").length,
       fasilitas_umum: p.fasilitas_umum,
       kamar: p.kamar.map((k: any) => ({
@@ -181,6 +185,7 @@ app.get("/:id", authMiddleware, async (c) => {
           }
         },
         kamar: {
+          where: { deleted_at: null },
           select: {
             id: true,
             nomor: true,
@@ -205,7 +210,11 @@ app.get("/:id", authMiddleware, async (c) => {
 
     return c.json({
       status: "success",
-      data: properti,
+      data: {
+        ...properti,
+        total_kamar: properti.kamar.length,
+        kamar_kosong: properti.kamar.filter((k: any) => k.status === "KOSONG").length,
+      },
     });
   } catch (error) {
     console.error("Get properti error:", error);
@@ -322,17 +331,6 @@ app.delete("/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
       );
     }
 
-    const kamarCount = await prisma.kamar.count({
-      where: { properti_id: id }
-    });
-
-    if (kamarCount > 0) {
-      return c.json(
-        { status: "error", message: "Tidak bisa hapus properti yang masih punya kamar" },
-        400
-      );
-    }
-
     const penghuniAktif = await prisma.penghuni.count({
       where: {
         kamar: { properti_id: id },
@@ -361,13 +359,20 @@ app.delete("/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
       );
     }
 
-    await prisma.properti.delete({
-      where: { id }
-    });
+    await prisma.$transaction([
+      prisma.kamar.updateMany({
+        where: { properti_id: id },
+        data: { deleted_at: new Date(), gambar: [] }
+      }),
+      prisma.properti.update({
+        where: { id },
+        data: { deleted_at: new Date(), gambar: [] }
+      })
+    ]);
 
     return c.json({
       status: "success",
-      message: "Properti berhasil dihapus",
+      message: "Properti dan kamar terkait berhasil dihapus",
     });
   } catch (error) {
     console.error("Delete properti error:", error);

@@ -359,8 +359,23 @@ app.delete("/kamar/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
       );
     }
 
-    await prisma.kamar.delete({
-      where: { id }
+    const penghuniAktif = await prisma.penghuni.count({
+      where: {
+        kamar_id: id,
+        status_sewa: "AKTIF"
+      }
+    });
+
+    if (penghuniAktif > 0) {
+      return c.json(
+        { status: "error", message: "Tidak bisa hapus kamar yang masih ditempati penghuni aktif" },
+        400
+      );
+    }
+
+    await prisma.kamar.update({
+      where: { id },
+      data: { deleted_at: new Date(), gambar: [] }
     });
 
     return c.json({

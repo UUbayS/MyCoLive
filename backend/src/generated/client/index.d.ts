@@ -2552,6 +2552,7 @@ export namespace Prisma {
     no_telepon: string | null
     created_at: Date | null
     updated_at: Date | null
+    deleted_at: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2564,6 +2565,7 @@ export namespace Prisma {
     no_telepon: string | null
     created_at: Date | null
     updated_at: Date | null
+    deleted_at: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2576,6 +2578,7 @@ export namespace Prisma {
     no_telepon: number
     created_at: number
     updated_at: number
+    deleted_at: number
     _all: number
   }
 
@@ -2590,6 +2593,7 @@ export namespace Prisma {
     no_telepon?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2602,6 +2606,7 @@ export namespace Prisma {
     no_telepon?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2614,6 +2619,7 @@ export namespace Prisma {
     no_telepon?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     _all?: true
   }
 
@@ -2699,6 +2705,7 @@ export namespace Prisma {
     no_telepon: string | null
     created_at: Date
     updated_at: Date
+    deleted_at: Date | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2728,6 +2735,7 @@ export namespace Prisma {
     no_telepon?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     penghuni?: boolean | User$penghuniArgs<ExtArgs>
     operator?: boolean | User$operatorArgs<ExtArgs>
     properti?: boolean | User$propertiArgs<ExtArgs>
@@ -2747,6 +2755,7 @@ export namespace Prisma {
     no_telepon?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2759,6 +2768,7 @@ export namespace Prisma {
     no_telepon?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2771,9 +2781,10 @@ export namespace Prisma {
     no_telepon?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "nama" | "role" | "no_telepon" | "created_at" | "updated_at", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "nama" | "role" | "no_telepon" | "created_at" | "updated_at" | "deleted_at", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     penghuni?: boolean | User$penghuniArgs<ExtArgs>
     operator?: boolean | User$operatorArgs<ExtArgs>
@@ -2806,6 +2817,7 @@ export namespace Prisma {
       no_telepon: string | null
       created_at: Date
       updated_at: Date
+      deleted_at: Date | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -3244,6 +3256,7 @@ export namespace Prisma {
     readonly no_telepon: FieldRef<"User", 'String'>
     readonly created_at: FieldRef<"User", 'DateTime'>
     readonly updated_at: FieldRef<"User", 'DateTime'>
+    readonly deleted_at: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -5992,6 +6005,7 @@ export namespace Prisma {
     kebijakan: string | null
     created_at: Date | null
     updated_at: Date | null
+    deleted_at: Date | null
     admin_id: string | null
   }
 
@@ -6009,6 +6023,7 @@ export namespace Prisma {
     kebijakan: string | null
     created_at: Date | null
     updated_at: Date | null
+    deleted_at: Date | null
     admin_id: string | null
   }
 
@@ -6027,6 +6042,7 @@ export namespace Prisma {
     gambar: number
     created_at: number
     updated_at: number
+    deleted_at: number
     admin_id: number
     _all: number
   }
@@ -6046,6 +6062,7 @@ export namespace Prisma {
     kebijakan?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     admin_id?: true
   }
 
@@ -6063,6 +6080,7 @@ export namespace Prisma {
     kebijakan?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     admin_id?: true
   }
 
@@ -6081,6 +6099,7 @@ export namespace Prisma {
     gambar?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     admin_id?: true
     _all?: true
   }
@@ -6172,6 +6191,7 @@ export namespace Prisma {
     gambar: string[]
     created_at: Date
     updated_at: Date
+    deleted_at: Date | null
     admin_id: string
     _count: PropertiCountAggregateOutputType | null
     _min: PropertiMinAggregateOutputType | null
@@ -6207,6 +6227,7 @@ export namespace Prisma {
     gambar?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     admin_id?: boolean
     admin?: boolean | UserDefaultArgs<ExtArgs>
     kamar?: boolean | Properti$kamarArgs<ExtArgs>
@@ -6235,6 +6256,7 @@ export namespace Prisma {
     gambar?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     admin_id?: boolean
     admin?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["properti"]>
@@ -6254,6 +6276,7 @@ export namespace Prisma {
     gambar?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     admin_id?: boolean
     admin?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["properti"]>
@@ -6273,10 +6296,11 @@ export namespace Prisma {
     gambar?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     admin_id?: boolean
   }
 
-  export type PropertiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nama" | "alamat" | "provinsi" | "kota" | "kecamatan" | "kode_pos" | "detail_alamat" | "jenis" | "deskripsi" | "kebijakan" | "gambar" | "created_at" | "updated_at" | "admin_id", ExtArgs["result"]["properti"]>
+  export type PropertiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nama" | "alamat" | "provinsi" | "kota" | "kecamatan" | "kode_pos" | "detail_alamat" | "jenis" | "deskripsi" | "kebijakan" | "gambar" | "created_at" | "updated_at" | "deleted_at" | "admin_id", ExtArgs["result"]["properti"]>
   export type PropertiInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | UserDefaultArgs<ExtArgs>
     kamar?: boolean | Properti$kamarArgs<ExtArgs>
@@ -6324,6 +6348,7 @@ export namespace Prisma {
       gambar: string[]
       created_at: Date
       updated_at: Date
+      deleted_at: Date | null
       admin_id: string
     }, ExtArgs["result"]["properti"]>
     composites: {}
@@ -6771,6 +6796,7 @@ export namespace Prisma {
     readonly gambar: FieldRef<"Properti", 'String[]'>
     readonly created_at: FieldRef<"Properti", 'DateTime'>
     readonly updated_at: FieldRef<"Properti", 'DateTime'>
+    readonly deleted_at: FieldRef<"Properti", 'DateTime'>
     readonly admin_id: FieldRef<"Properti", 'String'>
   }
     
@@ -7402,6 +7428,7 @@ export namespace Prisma {
     status: $Enums.StatusKamar | null
     created_at: Date | null
     updated_at: Date | null
+    deleted_at: Date | null
     properti_id: string | null
   }
 
@@ -7414,6 +7441,7 @@ export namespace Prisma {
     status: $Enums.StatusKamar | null
     created_at: Date | null
     updated_at: Date | null
+    deleted_at: Date | null
     properti_id: string | null
   }
 
@@ -7428,6 +7456,7 @@ export namespace Prisma {
     status: number
     created_at: number
     updated_at: number
+    deleted_at: number
     properti_id: number
     _all: number
   }
@@ -7442,6 +7471,7 @@ export namespace Prisma {
     status?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     properti_id?: true
   }
 
@@ -7454,6 +7484,7 @@ export namespace Prisma {
     status?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     properti_id?: true
   }
 
@@ -7468,6 +7499,7 @@ export namespace Prisma {
     status?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     properti_id?: true
     _all?: true
   }
@@ -7555,6 +7587,7 @@ export namespace Prisma {
     status: $Enums.StatusKamar
     created_at: Date
     updated_at: Date
+    deleted_at: Date | null
     properti_id: string
     _count: KamarCountAggregateOutputType | null
     _min: KamarMinAggregateOutputType | null
@@ -7586,6 +7619,7 @@ export namespace Prisma {
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     properti_id?: boolean
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
     pemesanan?: boolean | Kamar$pemesananArgs<ExtArgs>
@@ -7606,6 +7640,7 @@ export namespace Prisma {
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     properti_id?: boolean
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["kamar"]>
@@ -7621,6 +7656,7 @@ export namespace Prisma {
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     properti_id?: boolean
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["kamar"]>
@@ -7636,10 +7672,11 @@ export namespace Prisma {
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     properti_id?: boolean
   }
 
-  export type KamarOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nomor" | "tipe" | "luas" | "deskripsi" | "tarif" | "gambar" | "status" | "created_at" | "updated_at" | "properti_id", ExtArgs["result"]["kamar"]>
+  export type KamarOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nomor" | "tipe" | "luas" | "deskripsi" | "tarif" | "gambar" | "status" | "created_at" | "updated_at" | "deleted_at" | "properti_id", ExtArgs["result"]["kamar"]>
   export type KamarInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
     pemesanan?: boolean | Kamar$pemesananArgs<ExtArgs>
@@ -7675,6 +7712,7 @@ export namespace Prisma {
       status: $Enums.StatusKamar
       created_at: Date
       updated_at: Date
+      deleted_at: Date | null
       properti_id: string
     }, ExtArgs["result"]["kamar"]>
     composites: {}
@@ -8114,6 +8152,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Kamar", 'StatusKamar'>
     readonly created_at: FieldRef<"Kamar", 'DateTime'>
     readonly updated_at: FieldRef<"Kamar", 'DateTime'>
+    readonly deleted_at: FieldRef<"Kamar", 'DateTime'>
     readonly properti_id: FieldRef<"Kamar", 'String'>
   }
     
@@ -12187,6 +12226,7 @@ export namespace Prisma {
     id: string | null
     created_at: Date | null
     updated_at: Date | null
+    deleted_at: Date | null
     user_id: string | null
     properti_id: string | null
   }
@@ -12195,6 +12235,7 @@ export namespace Prisma {
     id: string | null
     created_at: Date | null
     updated_at: Date | null
+    deleted_at: Date | null
     user_id: string | null
     properti_id: string | null
   }
@@ -12203,6 +12244,7 @@ export namespace Prisma {
     id: number
     created_at: number
     updated_at: number
+    deleted_at: number
     user_id: number
     properti_id: number
     _all: number
@@ -12213,6 +12255,7 @@ export namespace Prisma {
     id?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     user_id?: true
     properti_id?: true
   }
@@ -12221,6 +12264,7 @@ export namespace Prisma {
     id?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     user_id?: true
     properti_id?: true
   }
@@ -12229,6 +12273,7 @@ export namespace Prisma {
     id?: true
     created_at?: true
     updated_at?: true
+    deleted_at?: true
     user_id?: true
     properti_id?: true
     _all?: true
@@ -12310,6 +12355,7 @@ export namespace Prisma {
     id: string
     created_at: Date
     updated_at: Date
+    deleted_at: Date | null
     user_id: string
     properti_id: string
     _count: OperatorCountAggregateOutputType | null
@@ -12335,6 +12381,7 @@ export namespace Prisma {
     id?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     user_id?: boolean
     properti_id?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -12347,6 +12394,7 @@ export namespace Prisma {
     id?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     user_id?: boolean
     properti_id?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -12357,6 +12405,7 @@ export namespace Prisma {
     id?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     user_id?: boolean
     properti_id?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -12367,11 +12416,12 @@ export namespace Prisma {
     id?: boolean
     created_at?: boolean
     updated_at?: boolean
+    deleted_at?: boolean
     user_id?: boolean
     properti_id?: boolean
   }
 
-  export type OperatorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "created_at" | "updated_at" | "user_id" | "properti_id", ExtArgs["result"]["operator"]>
+  export type OperatorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "created_at" | "updated_at" | "deleted_at" | "user_id" | "properti_id", ExtArgs["result"]["operator"]>
   export type OperatorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
@@ -12398,6 +12448,7 @@ export namespace Prisma {
       id: string
       created_at: Date
       updated_at: Date
+      deleted_at: Date | null
       user_id: string
       properti_id: string
     }, ExtArgs["result"]["operator"]>
@@ -12829,6 +12880,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Operator", 'String'>
     readonly created_at: FieldRef<"Operator", 'DateTime'>
     readonly updated_at: FieldRef<"Operator", 'DateTime'>
+    readonly deleted_at: FieldRef<"Operator", 'DateTime'>
     readonly user_id: FieldRef<"Operator", 'String'>
     readonly properti_id: FieldRef<"Operator", 'String'>
   }
@@ -18950,7 +19002,8 @@ export namespace Prisma {
     role: 'role',
     no_telepon: 'no_telepon',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
+    deleted_at: 'deleted_at'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -18994,6 +19047,7 @@ export namespace Prisma {
     gambar: 'gambar',
     created_at: 'created_at',
     updated_at: 'updated_at',
+    deleted_at: 'deleted_at',
     admin_id: 'admin_id'
   };
 
@@ -19011,6 +19065,7 @@ export namespace Prisma {
     status: 'status',
     created_at: 'created_at',
     updated_at: 'updated_at',
+    deleted_at: 'deleted_at',
     properti_id: 'properti_id'
   };
 
@@ -19067,6 +19122,7 @@ export namespace Prisma {
     id: 'id',
     created_at: 'created_at',
     updated_at: 'updated_at',
+    deleted_at: 'deleted_at',
     user_id: 'user_id',
     properti_id: 'properti_id'
   };
@@ -19455,6 +19511,7 @@ export namespace Prisma {
     no_telepon?: StringNullableFilter<"User"> | string | null
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"User"> | Date | string | null
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
     operator?: OperatorListRelationFilter
     properti?: PropertiListRelationFilter
@@ -19473,6 +19530,7 @@ export namespace Prisma {
     no_telepon?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     penghuni?: PenghuniOrderByWithRelationInput
     operator?: OperatorOrderByRelationAggregateInput
     properti?: PropertiOrderByRelationAggregateInput
@@ -19494,6 +19552,7 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"User"> | Date | string | null
     penghuni?: XOR<PenghuniNullableScalarRelationFilter, PenghuniWhereInput> | null
     operator?: OperatorListRelationFilter
     properti?: PropertiListRelationFilter
@@ -19512,6 +19571,7 @@ export namespace Prisma {
     no_telepon?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -19530,6 +19590,7 @@ export namespace Prisma {
     no_telepon?: StringNullableWithAggregatesFilter<"User"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   }
 
   export type AdminSettingsWhereInput = {
@@ -19668,6 +19729,7 @@ export namespace Prisma {
     gambar?: StringNullableListFilter<"Properti">
     created_at?: DateTimeFilter<"Properti"> | Date | string
     updated_at?: DateTimeFilter<"Properti"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"Properti"> | Date | string | null
     admin_id?: StringFilter<"Properti"> | string
     admin?: XOR<UserScalarRelationFilter, UserWhereInput>
     kamar?: KamarListRelationFilter
@@ -19695,6 +19757,7 @@ export namespace Prisma {
     gambar?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     admin_id?: SortOrder
     admin?: UserOrderByWithRelationInput
     kamar?: KamarOrderByRelationAggregateInput
@@ -19725,6 +19788,7 @@ export namespace Prisma {
     gambar?: StringNullableListFilter<"Properti">
     created_at?: DateTimeFilter<"Properti"> | Date | string
     updated_at?: DateTimeFilter<"Properti"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"Properti"> | Date | string | null
     admin_id?: StringFilter<"Properti"> | string
     admin?: XOR<UserScalarRelationFilter, UserWhereInput>
     kamar?: KamarListRelationFilter
@@ -19752,6 +19816,7 @@ export namespace Prisma {
     gambar?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     admin_id?: SortOrder
     _count?: PropertiCountOrderByAggregateInput
     _max?: PropertiMaxOrderByAggregateInput
@@ -19776,6 +19841,7 @@ export namespace Prisma {
     gambar?: StringNullableListFilter<"Properti">
     created_at?: DateTimeWithAggregatesFilter<"Properti"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Properti"> | Date | string
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"Properti"> | Date | string | null
     admin_id?: StringWithAggregatesFilter<"Properti"> | string
   }
 
@@ -19793,6 +19859,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFilter<"Kamar"> | $Enums.StatusKamar
     created_at?: DateTimeFilter<"Kamar"> | Date | string
     updated_at?: DateTimeFilter<"Kamar"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"Kamar"> | Date | string | null
     properti_id?: StringFilter<"Kamar"> | string
     properti?: XOR<PropertiScalarRelationFilter, PropertiWhereInput>
     pemesanan?: PemesananListRelationFilter
@@ -19812,6 +19879,7 @@ export namespace Prisma {
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     properti_id?: SortOrder
     properti?: PropertiOrderByWithRelationInput
     pemesanan?: PemesananOrderByRelationAggregateInput
@@ -19835,6 +19903,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFilter<"Kamar"> | $Enums.StatusKamar
     created_at?: DateTimeFilter<"Kamar"> | Date | string
     updated_at?: DateTimeFilter<"Kamar"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"Kamar"> | Date | string | null
     properti_id?: StringFilter<"Kamar"> | string
     properti?: XOR<PropertiScalarRelationFilter, PropertiWhereInput>
     pemesanan?: PemesananListRelationFilter
@@ -19854,6 +19923,7 @@ export namespace Prisma {
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     properti_id?: SortOrder
     _count?: KamarCountOrderByAggregateInput
     _max?: KamarMaxOrderByAggregateInput
@@ -19874,6 +19944,7 @@ export namespace Prisma {
     status?: EnumStatusKamarWithAggregatesFilter<"Kamar"> | $Enums.StatusKamar
     created_at?: DateTimeWithAggregatesFilter<"Kamar"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Kamar"> | Date | string
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"Kamar"> | Date | string | null
     properti_id?: StringWithAggregatesFilter<"Kamar"> | string
   }
 
@@ -20137,6 +20208,7 @@ export namespace Prisma {
     id?: StringFilter<"Operator"> | string
     created_at?: DateTimeFilter<"Operator"> | Date | string
     updated_at?: DateTimeFilter<"Operator"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"Operator"> | Date | string | null
     user_id?: StringFilter<"Operator"> | string
     properti_id?: StringFilter<"Operator"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -20148,6 +20220,7 @@ export namespace Prisma {
     id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     user_id?: SortOrder
     properti_id?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -20163,6 +20236,7 @@ export namespace Prisma {
     NOT?: OperatorWhereInput | OperatorWhereInput[]
     created_at?: DateTimeFilter<"Operator"> | Date | string
     updated_at?: DateTimeFilter<"Operator"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"Operator"> | Date | string | null
     user_id?: StringFilter<"Operator"> | string
     properti_id?: StringFilter<"Operator"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -20174,6 +20248,7 @@ export namespace Prisma {
     id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     user_id?: SortOrder
     properti_id?: SortOrder
     _count?: OperatorCountOrderByAggregateInput
@@ -20188,6 +20263,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Operator"> | string
     created_at?: DateTimeWithAggregatesFilter<"Operator"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Operator"> | Date | string
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"Operator"> | Date | string | null
     user_id?: StringWithAggregatesFilter<"Operator"> | string
     properti_id?: StringWithAggregatesFilter<"Operator"> | string
   }
@@ -20591,6 +20667,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
@@ -20609,6 +20686,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
@@ -20627,6 +20705,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
@@ -20645,6 +20724,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
@@ -20663,6 +20743,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -20675,6 +20756,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -20687,6 +20769,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AdminSettingsCreateInput = {
@@ -20830,6 +20913,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin: UserCreateNestedOneWithoutPropertiInput
     kamar?: KamarCreateNestedManyWithoutPropertiInput
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
@@ -20856,6 +20940,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
@@ -20882,6 +20967,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
@@ -20908,6 +20994,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
@@ -20934,6 +21021,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
   }
 
@@ -20952,6 +21040,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PropertiUncheckedUpdateManyInput = {
@@ -20969,6 +21058,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
   }
 
@@ -20983,6 +21073,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti: PropertiCreateNestedOneWithoutKamarInput
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
@@ -21001,6 +21092,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti_id: string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
@@ -21019,6 +21111,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
@@ -21037,6 +21130,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti_id?: StringFieldUpdateOperationsInput | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
@@ -21055,6 +21149,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti_id: string
   }
 
@@ -21069,6 +21164,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type KamarUncheckedUpdateManyInput = {
@@ -21082,6 +21178,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti_id?: StringFieldUpdateOperationsInput | string
   }
 
@@ -21358,6 +21455,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     user: UserCreateNestedOneWithoutOperatorInput
     properti: PropertiCreateNestedOneWithoutOperatorInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutOperatorInput
@@ -21367,6 +21465,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     user_id: string
     properti_id: string
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutOperatorInput
@@ -21376,6 +21475,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutOperatorNestedInput
     properti?: PropertiUpdateOneRequiredWithoutOperatorNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutOperatorNestedInput
@@ -21385,6 +21485,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user_id?: StringFieldUpdateOperationsInput | string
     properti_id?: StringFieldUpdateOperationsInput | string
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutOperatorNestedInput
@@ -21394,6 +21495,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     user_id: string
     properti_id: string
   }
@@ -21402,12 +21504,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type OperatorUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user_id?: StringFieldUpdateOperationsInput | string
     properti_id?: StringFieldUpdateOperationsInput | string
   }
@@ -21860,6 +21964,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type PenghuniNullableScalarRelationFilter = {
     is?: PenghuniWhereInput | null
     isNot?: PenghuniWhereInput | null
@@ -21925,6 +22040,7 @@ export namespace Prisma {
     no_telepon?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -21937,6 +22053,7 @@ export namespace Prisma {
     no_telepon?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -21949,6 +22066,7 @@ export namespace Prisma {
     no_telepon?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -22009,6 +22127,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type UserScalarRelationFilter = {
@@ -22164,6 +22296,7 @@ export namespace Prisma {
     gambar?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
     admin_id?: SortOrder
   }
 
@@ -22181,6 +22314,7 @@ export namespace Prisma {
     kebijakan?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
     admin_id?: SortOrder
   }
 
@@ -22198,6 +22332,7 @@ export namespace Prisma {
     kebijakan?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
     admin_id?: SortOrder
   }
 
@@ -22269,6 +22404,7 @@ export namespace Prisma {
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
     properti_id?: SortOrder
   }
 
@@ -22281,6 +22417,7 @@ export namespace Prisma {
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
     properti_id?: SortOrder
   }
 
@@ -22293,6 +22430,7 @@ export namespace Prisma {
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
     properti_id?: SortOrder
   }
 
@@ -22460,17 +22598,6 @@ export namespace Prisma {
     not?: NestedEnumStatusPembayaranFilter<$PrismaModel> | $Enums.StatusPembayaran
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type PemesananScalarRelationFilter = {
     is?: PemesananWhereInput
     isNot?: PemesananWhereInput
@@ -22520,20 +22647,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStatusPembayaranFilter<$PrismaModel>
     _max?: NestedEnumStatusPembayaranFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumStatusSewaFilter<$PrismaModel = never> = {
@@ -22600,6 +22713,7 @@ export namespace Prisma {
     id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
     user_id?: SortOrder
     properti_id?: SortOrder
   }
@@ -22608,6 +22722,7 @@ export namespace Prisma {
     id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
     user_id?: SortOrder
     properti_id?: SortOrder
   }
@@ -22616,6 +22731,7 @@ export namespace Prisma {
     id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    deleted_at?: SortOrder
     user_id?: SortOrder
     properti_id?: SortOrder
   }
@@ -23003,6 +23119,10 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type PenghuniUpdateOneWithoutUserNestedInput = {
@@ -23891,10 +24011,6 @@ export namespace Prisma {
     set?: $Enums.StatusPembayaran
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type PemesananUpdateOneRequiredWithoutPembayaranNestedInput = {
     create?: XOR<PemesananCreateWithoutPembayaranInput, PemesananUncheckedCreateWithoutPembayaranInput>
     connectOrCreate?: PemesananCreateOrConnectWithoutPembayaranInput
@@ -24343,6 +24459,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -24421,6 +24548,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumJenisFasilitasFilter<$PrismaModel = never> = {
@@ -24565,17 +24706,6 @@ export namespace Prisma {
     not?: NestedEnumStatusPembayaranFilter<$PrismaModel> | $Enums.StatusPembayaran
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumStatusPembayaranWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusPembayaran | EnumStatusPembayaranFieldRefInput<$PrismaModel>
     in?: $Enums.StatusPembayaran[] | ListEnumStatusPembayaranFieldRefInput<$PrismaModel>
@@ -24584,20 +24714,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStatusPembayaranFilter<$PrismaModel>
     _max?: NestedEnumStatusPembayaranFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumStatusSewaFilter<$PrismaModel = never> = {
@@ -24733,6 +24849,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti: PropertiCreateNestedOneWithoutOperatorInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutOperatorInput
   }
@@ -24741,6 +24858,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti_id: string
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutOperatorInput
   }
@@ -24770,6 +24888,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     kamar?: KamarCreateNestedManyWithoutPropertiInput
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
     operator?: OperatorCreateNestedManyWithoutPropertiInput
@@ -24795,6 +24914,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
@@ -24955,6 +25075,7 @@ export namespace Prisma {
     id?: StringFilter<"Operator"> | string
     created_at?: DateTimeFilter<"Operator"> | Date | string
     updated_at?: DateTimeFilter<"Operator"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"Operator"> | Date | string | null
     user_id?: StringFilter<"Operator"> | string
     properti_id?: StringFilter<"Operator"> | string
   }
@@ -24993,6 +25114,7 @@ export namespace Prisma {
     gambar?: StringNullableListFilter<"Properti">
     created_at?: DateTimeFilter<"Properti"> | Date | string
     updated_at?: DateTimeFilter<"Properti"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"Properti"> | Date | string | null
     admin_id?: StringFilter<"Properti"> | string
   }
 
@@ -25094,6 +25216,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
@@ -25111,6 +25234,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
@@ -25144,6 +25268,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
@@ -25161,6 +25286,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
@@ -25179,6 +25305,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti: PropertiCreateNestedOneWithoutKamarInput
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
@@ -25196,6 +25323,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti_id: string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
@@ -25222,6 +25350,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin: UserCreateNestedOneWithoutPropertiInput
     kamar?: KamarCreateNestedManyWithoutPropertiInput
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
@@ -25247,6 +25376,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
@@ -25292,6 +25422,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFilter<"Kamar"> | $Enums.StatusKamar
     created_at?: DateTimeFilter<"Kamar"> | Date | string
     updated_at?: DateTimeFilter<"Kamar"> | Date | string
+    deleted_at?: DateTimeNullableFilter<"Kamar"> | Date | string | null
     properti_id?: StringFilter<"Kamar"> | string
   }
 
@@ -25321,6 +25452,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     operator?: OperatorCreateNestedManyWithoutUserInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
@@ -25338,6 +25470,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
@@ -25361,6 +25494,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
@@ -25378,6 +25512,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
@@ -25432,6 +25567,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     user: UserCreateNestedOneWithoutOperatorInput
     pengajuanDana?: PengajuanDanaCreateNestedManyWithoutOperatorInput
   }
@@ -25440,6 +25576,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     user_id: string
     pengajuanDana?: PengajuanDanaUncheckedCreateNestedManyWithoutOperatorInput
   }
@@ -25625,6 +25762,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     operator?: OperatorUpdateManyWithoutUserNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
@@ -25642,6 +25780,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
@@ -25851,6 +25990,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin: UserCreateNestedOneWithoutPropertiInput
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
     operator?: OperatorCreateNestedManyWithoutPropertiInput
@@ -25876,6 +26016,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
@@ -26039,6 +26180,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
@@ -26064,6 +26206,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
@@ -26170,6 +26313,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti: PropertiCreateNestedOneWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
@@ -26187,6 +26331,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti_id: string
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
@@ -26244,6 +26389,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin: UserCreateNestedOneWithoutPropertiInput
     kamar?: KamarCreateNestedManyWithoutPropertiInput
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
@@ -26269,6 +26415,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
@@ -26333,6 +26480,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
@@ -26350,6 +26498,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti_id?: StringFieldUpdateOperationsInput | string
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
@@ -26419,6 +26568,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
@@ -26444,6 +26594,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
@@ -26569,6 +26720,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
@@ -26586,6 +26738,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
@@ -26609,6 +26762,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti: PropertiCreateNestedOneWithoutKamarInput
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutCreateNestedManyWithoutKamarInput
@@ -26626,6 +26780,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti_id: string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedCreateNestedManyWithoutKamarInput
@@ -26762,6 +26917,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
@@ -26779,6 +26935,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
@@ -26808,6 +26965,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
@@ -26825,6 +26983,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti_id?: StringFieldUpdateOperationsInput | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
@@ -26889,6 +27048,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsCreateNestedOneWithoutUserInput
@@ -26906,6 +27066,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
     settings?: AdminSettingsUncheckedCreateNestedOneWithoutUserInput
@@ -26933,6 +27094,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin: UserCreateNestedOneWithoutPropertiInput
     kamar?: KamarCreateNestedManyWithoutPropertiInput
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
@@ -26958,6 +27120,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
@@ -27028,6 +27191,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUpdateOneWithoutUserNestedInput
@@ -27045,6 +27209,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
     settings?: AdminSettingsUncheckedUpdateOneWithoutUserNestedInput
@@ -27078,6 +27243,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
@@ -27103,6 +27269,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
@@ -27175,6 +27342,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin: UserCreateNestedOneWithoutPropertiInput
     kamar?: KamarCreateNestedManyWithoutPropertiInput
     operator?: OperatorCreateNestedManyWithoutPropertiInput
@@ -27200,6 +27368,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
     operator?: OperatorUncheckedCreateNestedManyWithoutPropertiInput
@@ -27278,6 +27447,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
@@ -27303,6 +27473,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
@@ -27317,6 +27488,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     user: UserCreateNestedOneWithoutOperatorInput
     properti: PropertiCreateNestedOneWithoutOperatorInput
   }
@@ -27325,6 +27497,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     user_id: string
     properti_id: string
   }
@@ -27349,6 +27522,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin: UserCreateNestedOneWithoutPropertiInput
     kamar?: KamarCreateNestedManyWithoutPropertiInput
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
@@ -27374,6 +27548,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
@@ -27404,6 +27579,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutOperatorNestedInput
     properti?: PropertiUpdateOneRequiredWithoutOperatorNestedInput
   }
@@ -27412,6 +27588,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user_id?: StringFieldUpdateOperationsInput | string
     properti_id?: StringFieldUpdateOperationsInput | string
   }
@@ -27442,6 +27619,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
@@ -27467,6 +27645,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
@@ -27492,6 +27671,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin: UserCreateNestedOneWithoutPropertiInput
     kamar?: KamarCreateNestedManyWithoutPropertiInput
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
@@ -27517,6 +27697,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
@@ -27542,6 +27723,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
@@ -27559,6 +27741,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
@@ -27597,6 +27780,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
@@ -27622,6 +27806,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
@@ -27653,6 +27838,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
@@ -27670,6 +27856,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
@@ -27719,6 +27906,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti: PropertiCreateNestedOneWithoutKamarInput
     pemesanan?: PemesananCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniCreateNestedOneWithoutKamarInput
@@ -27736,6 +27924,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti_id: string
     pemesanan?: PemesananUncheckedCreateNestedManyWithoutKamarInput
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutKamarInput
@@ -27762,6 +27951,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin: UserCreateNestedOneWithoutPropertiInput
     kamar?: KamarCreateNestedManyWithoutPropertiInput
     komplain?: KomplainCreateNestedManyWithoutPropertiInput
@@ -27787,6 +27977,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     admin_id: string
     kamar?: KamarUncheckedCreateNestedManyWithoutPropertiInput
     komplain?: KomplainUncheckedCreateNestedManyWithoutPropertiInput
@@ -27812,6 +28003,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniCreateNestedOneWithoutUserInput
     operator?: OperatorCreateNestedManyWithoutUserInput
     properti?: PropertiCreateNestedManyWithoutAdminInput
@@ -27829,6 +28021,7 @@ export namespace Prisma {
     no_telepon?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     penghuni?: PenghuniUncheckedCreateNestedOneWithoutUserInput
     operator?: OperatorUncheckedCreateNestedManyWithoutUserInput
     properti?: PropertiUncheckedCreateNestedManyWithoutAdminInput
@@ -27900,6 +28093,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
@@ -27917,6 +28111,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti_id?: StringFieldUpdateOperationsInput | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
@@ -27949,6 +28144,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
@@ -27974,6 +28170,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
@@ -28005,6 +28202,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUpdateOneWithoutUserNestedInput
     operator?: OperatorUpdateManyWithoutUserNestedInput
     properti?: PropertiUpdateManyWithoutAdminNestedInput
@@ -28022,6 +28220,7 @@ export namespace Prisma {
     no_telepon?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     penghuni?: PenghuniUncheckedUpdateOneWithoutUserNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutUserNestedInput
     properti?: PropertiUncheckedUpdateManyWithoutAdminNestedInput
@@ -28033,6 +28232,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     properti_id: string
   }
 
@@ -28051,6 +28251,7 @@ export namespace Prisma {
     gambar?: PropertiCreategambarInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
   }
 
   export type PengajuanCheckoutCreateManyAdminInput = {
@@ -28076,6 +28277,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti?: PropertiUpdateOneRequiredWithoutOperatorNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutOperatorNestedInput
   }
@@ -28084,6 +28286,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti_id?: StringFieldUpdateOperationsInput | string
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutOperatorNestedInput
   }
@@ -28092,6 +28295,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti_id?: StringFieldUpdateOperationsInput | string
   }
 
@@ -28110,6 +28314,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUpdateManyWithoutPropertiNestedInput
@@ -28135,6 +28340,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
     operator?: OperatorUncheckedUpdateManyWithoutPropertiNestedInput
@@ -28160,6 +28366,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PengajuanCheckoutUpdateWithoutAdminInput = {
@@ -28229,6 +28436,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti?: PropertiUpdateOneRequiredWithoutKamarNestedInput
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
@@ -28246,6 +28454,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti_id?: StringFieldUpdateOperationsInput | string
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
@@ -28263,6 +28472,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     properti_id?: StringFieldUpdateOperationsInput | string
   }
 
@@ -28281,6 +28491,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin?: UserUpdateOneRequiredWithoutPropertiNestedInput
     kamar?: KamarUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUpdateManyWithoutPropertiNestedInput
@@ -28306,6 +28517,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
     kamar?: KamarUncheckedUpdateManyWithoutPropertiNestedInput
     komplain?: KomplainUncheckedUpdateManyWithoutPropertiNestedInput
@@ -28331,6 +28543,7 @@ export namespace Prisma {
     gambar?: PropertiUpdategambarInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admin_id?: StringFieldUpdateOperationsInput | string
   }
 
@@ -28345,6 +28558,7 @@ export namespace Prisma {
     status?: $Enums.StatusKamar
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
   }
 
   export type KomplainCreateManyPropertiInput = {
@@ -28363,6 +28577,7 @@ export namespace Prisma {
     id?: string
     created_at?: Date | string
     updated_at?: Date | string
+    deleted_at?: Date | string | null
     user_id: string
   }
 
@@ -28421,6 +28636,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pemesanan?: PemesananUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUpdateManyWithoutKamarNestedInput
@@ -28438,6 +28654,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pemesanan?: PemesananUncheckedUpdateManyWithoutKamarNestedInput
     penghuni?: PenghuniUncheckedUpdateOneWithoutKamarNestedInput
     pengajuanCheckout?: PengajuanCheckoutUncheckedUpdateManyWithoutKamarNestedInput
@@ -28455,6 +28672,7 @@ export namespace Prisma {
     status?: EnumStatusKamarFieldUpdateOperationsInput | $Enums.StatusKamar
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type KomplainUpdateWithoutPropertiInput = {
@@ -28497,6 +28715,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutOperatorNestedInput
     pengajuanDana?: PengajuanDanaUpdateManyWithoutOperatorNestedInput
   }
@@ -28505,6 +28724,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user_id?: StringFieldUpdateOperationsInput | string
     pengajuanDana?: PengajuanDanaUncheckedUpdateManyWithoutOperatorNestedInput
   }
@@ -28513,6 +28733,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user_id?: StringFieldUpdateOperationsInput | string
   }
 

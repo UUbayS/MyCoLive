@@ -353,9 +353,16 @@ app.delete("/:id", async (c) => {
       );
     }
 
-    await prisma.user.delete({
-      where: { id },
-    });
+    await prisma.$transaction([
+      prisma.operator.updateMany({
+        where: { user_id: id },
+        data: { deleted_at: new Date() }
+      }),
+      prisma.user.update({
+        where: { id },
+        data: { deleted_at: new Date() }
+      })
+    ]);
 
     return c.json({
       status: "success",

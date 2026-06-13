@@ -83,28 +83,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, actions, detailLi
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-semibold text-gray-900 truncate">{property.nama}</h3>
             </div>
-            {isAdmin && (
-              <div className="flex items-center gap-1 ml-2">
-                <button
-                  onClick={() => actions.onEdit?.(property.id)}
-                  className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  title="Edit"
-                >
-                  <Pencil className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => actions.onDelete?.(property.id)}
-                  className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                  title="Hapus"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            )}
           </div>
           
           <div className="flex items-center gap-1.5 text-sm text-gray-600 mb-3">
-            <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
             <p className="truncate">{getDisplayAlamat(property)}</p>
           </div>
           

@@ -16,12 +16,17 @@ app.get("/", async (c) => {
         },
         fasilitas_umum: true,
         kamar: {
+          where: { deleted_at: null },
           include: {
             fasilitas_ruangan: true,
           }
         },
         _count: {
-          select: { kamar: true }
+          select: { 
+            kamar: {
+              where: { deleted_at: null }
+            } 
+          }
         }
       },
       orderBy: { created_at: "desc" }
@@ -79,12 +84,17 @@ app.get("/:id", async (c) => {
         },
         fasilitas_umum: true,
         kamar: {
+          where: { deleted_at: null },
           include: {
             fasilitas_ruangan: true,
           }
         },
         _count: {
-          select: { kamar: true }
+          select: { 
+            kamar: {
+              where: { deleted_at: null }
+            } 
+          }
         }
       }
     });

@@ -129,7 +129,8 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role',
   no_telepon: 'no_telepon',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at'
 };
 
 exports.Prisma.AdminSettingsScalarFieldEnum = {
@@ -164,6 +165,7 @@ exports.Prisma.PropertiScalarFieldEnum = {
   gambar: 'gambar',
   created_at: 'created_at',
   updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
   admin_id: 'admin_id'
 };
 
@@ -178,6 +180,7 @@ exports.Prisma.KamarScalarFieldEnum = {
   status: 'status',
   created_at: 'created_at',
   updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
   properti_id: 'properti_id'
 };
 
@@ -222,6 +225,7 @@ exports.Prisma.OperatorScalarFieldEnum = {
   id: 'id',
   created_at: 'created_at',
   updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
   user_id: 'user_id',
   properti_id: 'properti_id'
 };

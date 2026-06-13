@@ -11,7 +11,7 @@ import {
   Edit,
   Trash2,
   DoorOpen,
-  Plus,
+  AlertCircle,
   Wifi,
   ChevronRight,
   ShieldCheck,
@@ -50,6 +50,7 @@ export default function AdminDetailPropertiPage() {
     const fetchProperti = async () => {
       try {
         const data = await getPropertiById(propertiId);
+
         if (!data) {
           router.push("/administrator/properti");
           return;
@@ -127,7 +128,7 @@ export default function AdminDetailPropertiPage() {
   const kamarList = properti?.kamar || [];
   const totalKamar = kamarList.length;
   const stats = {
-    total: kamarList.length,
+    total: totalKamar,
     kosong: kamarList.filter((k) => k.status === "KOSONG").length,
     terisi: kamarList.filter((k) => k.status === "TERISI").length,
     maintenance: kamarList.filter((k) => k.status === "MAINTENANCE").length,
@@ -138,7 +139,7 @@ export default function AdminDetailPropertiPage() {
   properti?.kamar?.forEach((kamar) => {
     kamar.fasilitas_ruangan?.forEach((f) => fasilitasRuangan.add(f.nama));
   });
-  const allFasilitas = [...fasilitasUmum.map((f) => f.nama), ...Array.from(fasilitasRuangan)];
+  const allFasilitas = [...fasilitasUmum.map((f) => f.nama)];
   const fasilitasList = Array.from(new Set(allFasilitas));
 
   if (loading) {
@@ -187,20 +188,26 @@ export default function AdminDetailPropertiPage() {
                 {getJenisLabel(properti.jenis)}
               </span>
             </div>
-            <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
+            <div className="hidden md:flex items-center justify-center gap-1 text-sm text-gray-500">
               <MapPin className="w-4 h-4" />
               <span>{getDisplayAlamat()}</span>
             </div>
           </div>
           <Link
             href={`/administrator/properti/${propertiId}/edit`}
-            className="flex items-center gap-2 px-4 py-2 bg-[#84CC16] text-white rounded-lg hover:bg-[#65a30d] transition-colors text-sm font-medium shadow-sm"
+            className="flex items-center gap-2 px-2 py-2 bg-[#84CC16] text-white rounded-lg hover:bg-[#65a30d] transition-colors text-sm font-medium shadow-sm"
           >
             <Edit className="w-4 h-4" />
             <span className="hidden sm:inline">Edit Properti</span>
+            <span className="md:hidden">Edit</span>
           </Link>
         </div>
+        <div className="flex md:hidden items-center justify-center gap-1 text-xs text-gray-500">
+          <MapPin className="w-4 h-4" />
+          <span>{getDisplayAlamat()}</span>
+        </div>   
       </div>
+      
 
       {/* Stats Dashboard */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -319,14 +326,26 @@ export default function AdminDetailPropertiPage() {
         </a>
       </div>
       
-      <div className="mt-8 mb-6">
-        <button
-          onClick={() => setShowDeleteDialog(true)}
-          className="w-full flex items-center justify-center gap-2 border-2 border-red-500 text-red-500 py-3 rounded-xl font-medium hover:bg-red-50 transition-colors"
-        >
-          <Trash2 className="w-4 h-4" />
-          <span>Hapus Properti</span>
-        </button>
+      {/* Zona Berbahaya */}
+      <div className="bg-red-50 rounded-xl p-5 border border-red-100 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-bold text-red-700 flex items-center gap-2">
+              <AlertCircle className="w-5 h-5" />
+              Zona Berbahaya
+            </h2>
+            <p className="text-sm text-red-600 mt-1">
+              Menghapus properti ini akan menghilangkan seluruh datanya beserta data kamarnya secara permanen.
+            </p>
+          </div>
+          <button
+            onClick={() => setShowDeleteDialog(true)}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-red-700 transition-colors shadow-sm"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>Hapus Properti</span>
+          </button>
+        </div>
       </div>
 
       {/* Delete Dialog */}

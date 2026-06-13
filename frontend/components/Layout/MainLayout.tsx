@@ -24,7 +24,7 @@ export default function MainLayout({ children, submenuTabs }: MainLayoutProps) {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 mb-4">
       <Header />
 
       <div className="flex pt-16">
@@ -34,7 +34,7 @@ export default function MainLayout({ children, submenuTabs }: MainLayoutProps) {
           {submenuTabs && submenuTabs.length > 0 && (
             <SubmenuTabs tabs={submenuTabs} />
           )}
-          <main className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-10 lg:py-12 text-black">{children}</main>
+          <main className="max-w-7xl mx-auto px-4 py-12 md:px-6 md:py-10 lg:py-12 text-black">{children}</main>
         </div>
       </div>
 

@@ -90,7 +90,7 @@ export default function DetailPropertiPage() {
   };
 
   const kamarList = properti?.kamar || [];
-  const totalKamar = kamarList.length;
+  const totalKamar = properti?.total_kamar;
   const kamarKosong = kamarList.filter(k => k.status === "KOSONG").length;
   const kamarTerisi = kamarList.filter(k => k.status === "TERISI").length;
   const kamarMaintenance = kamarList.filter(k => k.status === "MAINTENANCE").length;
@@ -100,7 +100,7 @@ export default function DetailPropertiPage() {
   properti?.kamar?.forEach((kamar) => {
     kamar.fasilitas_ruangan?.forEach((f) => fasilitasRuangan.add(f.nama));
   });
-  const allFasilitas = [...fasilitasUmum.map((f) => f.nama), ...Array.from(fasilitasRuangan)];
+  const allFasilitas = [...fasilitasUmum.map((f) => f.nama)];
   const fasilitasList = Array.from(new Set(allFasilitas));
 
   const stats = [
@@ -144,7 +144,6 @@ export default function DetailPropertiPage() {
 
   return (
     <MainLayout>
-      <div className="w-full max-w-3xl mx-auto py-6 md:py-8">
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-1">
@@ -296,7 +295,6 @@ export default function DetailPropertiPage() {
             Buka di Google Maps
           </a>
         </div>
-      </div>
     </MainLayout>
   );
 }
