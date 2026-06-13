@@ -6,8 +6,9 @@ import { useToast } from "../../../../lib/ToastContext";
 import Link from "next/link";
 import { ArrowLeft, CreditCard, QrCode, CheckCircle, Clock, AlertCircle } from "lucide-react";
 import ImageUploader from "../../../../components/ImageUploader";
+import ConfirmDialog from "../../../../components/ConfirmDialog";
 import { getUser, isAuthenticated } from "../../../../lib/auth";
-import { getPemesananById, uploadBuktiBayar, PemesananData } from "../../../../lib/api";
+import { getPemesananById, uploadBuktiBayar, batalkanPemesanan, PemesananData } from "../../../../lib/api";
 import MainLayout from "../../../../components/Layout/MainLayout";
 
 const statusPemesananLabel: Record<string, { label: string; color: string }> = {
@@ -15,6 +16,7 @@ const statusPemesananLabel: Record<string, { label: string; color: string }> = {
   DITERIMA: { label: "Diterima", color: "bg-green-100 text-green-700" },
   DITOLAK: { label: "Ditolak", color: "bg-red-100 text-red-700" },
   SELESAI: { label: "Selesai", color: "bg-blue-100 text-blue-700" },
+  DIBATALKAN: { label: "Dibatalkan", color: "bg-gray-100 text-gray-700" },
 };
 
 const statusPembayaranLabel: Record<string, { label: string; color: string }> = {
@@ -22,6 +24,7 @@ const statusPembayaranLabel: Record<string, { label: string; color: string }> = 
   DIVERIFIKASI: { label: "Menunggu Verifikasi", color: "bg-yellow-100 text-yellow-700" },
   DITERIMA: { label: "Lunas", color: "bg-green-100 text-green-700" },
   DITOLAK: { label: "Ditolak", color: "bg-red-100 text-red-700" },
+  DIBATALKAN: { label: "Dibatalkan", color: "bg-gray-100 text-gray-700" },
 };
 
 export default function DetailTransaksiPage() {
@@ -34,6 +37,7 @@ export default function DetailTransaksiPage() {
   const [submitting, setSubmitting] = useState(false);
   const [bukti, setBukti] = useState<string>("");
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
   const { success, error } = useToast();
 
   useEffect(() => {
@@ -90,6 +94,27 @@ export default function DetailTransaksiPage() {
       setSubmitting(false);
     }
   };
+
+  const handleCancel = async () => {
+    setSubmitting(true);
+    try {
+      const result = await batalkanPemesanan(pemesananId);
+      if (result) {
+        success("Pesanan berhasil dibatalkan.");
+        const updated = await getPemesananById(pemesananId);
+        setPemesanan(updated);
+      } else {
+        error("Gagal membatalkan pesanan. Silakan coba lagi.");
+      }
+    } catch (err) {
+      console.error("Cancel error:", err);
+      error("Terjadi kesalahan saat membatalkan pesanan.");
+    } finally {
+      setSubmitting(false);
+      setIsCancelDialogOpen(false);
+    }
+  };
+
 
   if (loading) {
     return (
@@ -270,21 +295,41 @@ export default function DetailTransaksiPage() {
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={submitting || !bukti}
-              className="w-full bg-[#84CC16] text-white py-3 rounded-xl font-medium hover:bg-[#73b814] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {submitting ? "Mengupload..." : "Konfirmasi Pembayaran"}
-            </button>
+            <div className="space-y-2 flex items-center gap-2 border-red-600">
+              <button
+                type="button"
+                onClick={() => setIsCancelDialogOpen(true)}
+                disabled={submitting}
+                className="w-full bg-red-50 border border-red-600 text-red-600 py-3 rounded-xl font-medium hover:bg-red-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Batalkan Pesanan
+              </button>
+              <button
+                type="submit"
+                disabled={submitting || !bukti}
+                className="w-full bg-[#84CC16] text-white py-3 rounded-xl font-medium hover:bg-[#73b814] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submitting ? "Mengupload..." : "Konfirmasi Pembayaran"}
+              </button>
+            </div>
           </form>
         ) : canUpload && !hasPaymentInfo ? (
-          <button
-            disabled
-            className="w-full bg-gray-300 text-white py-3 rounded-xl font-medium cursor-not-allowed opacity-50"
-          >
-            Konfirmasi Pembayaran
-          </button>
+          <div className="space-y-2">
+            <button
+              disabled
+              className="w-full bg-gray-300 text-white py-3 rounded-xl font-medium cursor-not-allowed opacity-50"
+            >
+              Konfirmasi Pembayaran
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsCancelDialogOpen(true)}
+              disabled={submitting}
+              className="w-full bg-red-50 text-red-600 py-3 rounded-xl font-medium hover:bg-red-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Batalkan Pesanan
+            </button>
+          </div>
         ) : isWaitingVerification ? (
           <div className="flex items-center gap-2 p-4 bg-yellow-50 rounded-xl text-yellow-700 text-sm">
             <Clock className="w-5 h-5" />
@@ -309,6 +354,17 @@ export default function DetailTransaksiPage() {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        isOpen={isCancelDialogOpen}
+        title="Batalkan Pesanan"
+        message="Apakah Anda yakin ingin membatalkan pesanan ini? Aksi ini tidak dapat dikembalikan."
+        confirmLabel={submitting ? "Membatalkan..." : "Ya, Batalkan"}
+        cancelLabel="Batal"
+        onConfirm={handleCancel}
+        onCancel={() => setIsCancelDialogOpen(false)}
+        danger = {true}
+      />
     </MainLayout>
   );
 }

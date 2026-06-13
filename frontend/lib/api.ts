@@ -432,6 +432,17 @@ export async function uploadBuktiBayar(id: string, bukti: string): Promise<Pemba
   }
 }
 
+export async function batalkanPemesanan(id: string): Promise<PemesananData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: PemesananData }>("/api/pemesanan/" + id + "/batalkan", {
+      method: "POST",
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getTempatPembayaran(): Promise<AdminSettingsData | null> {
   try {
     const res = await apiFetch<{ status: string; data: AdminSettingsData | null }>("/api/tempatpembayaran");

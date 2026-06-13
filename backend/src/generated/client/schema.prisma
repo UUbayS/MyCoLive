@@ -37,6 +37,7 @@ enum StatusPemesanan {
   DITERIMA
   DITOLAK
   SELESAI
+  DIBATALKAN
 }
 
 enum StatusPembayaran {
@@ -44,6 +45,7 @@ enum StatusPembayaran {
   DIVERIFIKASI
   DITERIMA
   DITOLAK
+  DIBATALKAN
 }
 
 enum StatusKomplain {

@@ -763,4 +763,83 @@ app.put("/:id/verifikasi", requireRole("PEMILIK"), async (c) => {
   }
 });
 
+// Batalkan pemesanan (PENGHUNI)
+app.post("/:id/batalkan", requireRole("PENGHUNI"), async (c) => {
+  try {
+    const id = c.req.param("id");
+    const user = c.get("user");
+
+    const pemesanan = await prisma.pemesanan.findUnique({
+      where: { id },
+      include: {
+        penghuni: true,
+        properti: { select: { admin_id: true, nama: true } },
+        kamar: { select: { nomor: true } },
+        pembayaran: true,
+      },
+    });
+
+    if (!pemesanan) {
+      return c.json({ status: "error", message: "Pesanan tidak ditemukan" }, 404);
+    }
+
+    if (pemesanan.penghuni.user_id !== user.userId) {
+      return c.json({ status: "error", message: "Tidak punya akses" }, 403);
+    }
+
+    if (pemesanan.status !== "MENUNGGU") {
+      return c.json({ status: "error", message: "Pesanan tidak dapat dibatalkan" }, 400);
+    }
+
+    const updatedPemesanan = await prisma.pemesanan.update({
+      where: { id },
+      data: { status: "DIBATALKAN" as any },
+    });
+
+    if (pemesanan.pembayaran) {
+      await prisma.pembayaran.update({
+        where: { pemesanan_id: id },
+        data: { status: "DIBATALKAN" as any },
+      });
+    }
+
+    // Notifikasi ke PEMILIK
+    const penghuniUser = await prisma.user.findUnique({
+      where: { id: user.userId },
+      select: { nama: true }
+    });
+    const namaPenghuni = penghuniUser?.nama || "Penghuni";
+    const namaKamar = pemesanan.kamar?.nomor || "-";
+    const namaProperti = pemesanan.properti.nama;
+
+    await createNotifikasi(
+      pemesanan.properti.admin_id,
+      "Pemesanan Dibatalkan",
+      `${namaPenghuni} membatalkan pesanan untuk Kamar ${namaKamar} di ${namaProperti}`,
+      "PEMESANAN",
+      id,
+    );
+
+    const pemilik = await prisma.user.findUnique({
+      where: { id: pemesanan.properti.admin_id },
+      select: { no_telepon: true },
+    });
+
+    if (pemilik?.no_telepon) {
+      sendWhatsAppBroadcast(
+        [pemilik.no_telepon],
+        templateWa.pemesananDibatalkan(namaPenghuni, namaKamar, namaProperti),
+      ).catch(console.error);
+    }
+
+    return c.json({
+      status: "success",
+      data: updatedPemesanan,
+    });
+  } catch (error) {
+    console.error("Batalkan pemesanan error:", error);
+    return c.json({ status: "error", message: "Gagal membatalkan pesanan" }, 500);
+  }
+});
+
 export default app;

@@ -128,7 +128,8 @@ export const StatusPemesanan: {
   MENUNGGU: 'MENUNGGU',
   DITERIMA: 'DITERIMA',
   DITOLAK: 'DITOLAK',
-  SELESAI: 'SELESAI'
+  SELESAI: 'SELESAI',
+  DIBATALKAN: 'DIBATALKAN'
 };
 
 export type StatusPemesanan = (typeof StatusPemesanan)[keyof typeof StatusPemesanan]
@@ -138,7 +139,8 @@ export const StatusPembayaran: {
   MENUNGGU: 'MENUNGGU',
   DIVERIFIKASI: 'DIVERIFIKASI',
   DITERIMA: 'DITERIMA',
-  DITOLAK: 'DITOLAK'
+  DITOLAK: 'DITOLAK',
+  DIBATALKAN: 'DIBATALKAN'
 };
 
 export type StatusPembayaran = (typeof StatusPembayaran)[keyof typeof StatusPembayaran]

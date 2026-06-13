@@ -42,6 +42,14 @@ export const templateWa = {
     return `*Pemesanan Ditolak*\n\nHalo ${namaPenghuni}, maaf pemesanan Anda untuk:\n\nKamar: ${namaKamar}\nProperti: ${namaProperti}\n\ntelah ditolak. Silakan hubungi pengelola untuk informasi lebih lanjut.`;
   },
 
+  pemesananDibatalkan(
+    namaPenghuni: string,
+    namaKamar: string,
+    namaProperti: string,
+  ) {
+    return `*Pemesanan Dibatalkan*\n\nPemesanan oleh:\nPenghuni: ${namaPenghuni}\nKamar: ${namaKamar}\nProperti: ${namaProperti}\n\ntelah dibatalkan oleh penghuni.`;
+  },
+
   komplainBaru(
     namaPenghuni: string,
     jenis: string,

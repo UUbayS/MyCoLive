@@ -347,14 +347,16 @@ exports.StatusPemesanan = exports.$Enums.StatusPemesanan = {
   MENUNGGU: 'MENUNGGU',
   DITERIMA: 'DITERIMA',
   DITOLAK: 'DITOLAK',
-  SELESAI: 'SELESAI'
+  SELESAI: 'SELESAI',
+  DIBATALKAN: 'DIBATALKAN'
 };
 
 exports.StatusPembayaran = exports.$Enums.StatusPembayaran = {
   MENUNGGU: 'MENUNGGU',
   DIVERIFIKASI: 'DIVERIFIKASI',
   DITERIMA: 'DITERIMA',
-  DITOLAK: 'DITOLAK'
+  DITOLAK: 'DITOLAK',
+  DIBATALKAN: 'DIBATALKAN'
 };
 
 exports.StatusSewa = exports.$Enums.StatusSewa = {

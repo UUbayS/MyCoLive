@@ -218,53 +218,6 @@ export default function PesanKamarPage() {
             {errors.metode && <p className="text-xs text-red-500 mt-1">{errors.metode}</p>}
           </div>
 
-          {/* Info Pembayaran */}
-          {hasPaymentInfo && (
-            <div className="p-4 bg-gray-50 rounded-xl space-y-3">
-              <h3 className="text-sm font-semibold text-gray-700">Informasi Pembayaran</h3>
-
-              {metodeBayar === "TRANSFER" && (
-                <div className="space-y-2 text-sm">
-                  {paymentInfo?.bank && (
-                    <p>
-                      <span className="text-gray-500">Bank:</span>{" "}
-                      <span className="font-medium">{paymentInfo.bank}</span>
-                    </p>
-                  )}
-                  {paymentInfo?.nomor_rekening && (
-                    <p>
-                      <span className="text-gray-500">No. Rekening:</span>{" "}
-                      <span className="font-medium">{paymentInfo.nomor_rekening}</span>
-                    </p>
-                  )}
-                  {paymentInfo?.nama_rekening && (
-                    <p>
-                      <span className="text-gray-500">Atas Nama:</span>{" "}
-                      <span className="font-medium">{paymentInfo.nama_rekening}</span>
-                    </p>
-                  )}
-                  {!paymentInfo?.bank && !paymentInfo?.nomor_rekening && !paymentInfo?.nama_rekening && (
-                    <p className="text-sm text-gray-500">Data rekening belum lengkap</p>
-                  )}
-                </div>
-              )}
-
-              {metodeBayar === "QRIS" && (
-                <div>
-                  {paymentInfo?.qris_image ? (
-                    <img
-                      src={paymentInfo.qris_image}
-                      alt="QRIS"
-                      className="w-48 h-auto mx-auto rounded-lg"
-                    />
-                  ) : (
-                    <p className="text-sm text-gray-500 text-center">QRIS belum diatur</p>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
           {/* Total Bayar */}
           <div className="flex items-center justify-between p-4 bg-[#84CC16]/5 rounded-xl border border-[#84CC16]/20">
             <span className="text-sm font-medium text-gray-700">Total Bayar</span>

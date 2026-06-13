@@ -26,6 +26,7 @@ const statusPemesananBadge: Record<string, { label: string; color: string }> = {
   DITERIMA: { label: "Diterima", color: "bg-green-100 text-green-700" },
   DITOLAK: { label: "Ditolak", color: "bg-red-100 text-red-700" },
   SELESAI: { label: "Selesai", color: "bg-blue-100 text-blue-700" },
+  DIBATALKAN: { label: "Dibatalkan", color: "bg-gray-100 text-gray-700" },
 };
 
 const statusPembayaranBadge: Record<string, { label: string; color: string }> = {
@@ -33,6 +34,7 @@ const statusPembayaranBadge: Record<string, { label: string; color: string }> = 
   DIVERIFIKASI: { label: "Menunggu Verifikasi", color: "bg-yellow-100 text-yellow-700" },
   DITERIMA: { label: "Lunas", color: "bg-green-100 text-green-700" },
   DITOLAK: { label: "Ditolak", color: "bg-red-100 text-red-700" },
+  DIBATALKAN: { label: "Dibatalkan", color: "bg-gray-100 text-gray-700" },
 };
 
 type ConfirmAction = {
