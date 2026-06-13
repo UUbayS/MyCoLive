@@ -702,6 +702,13 @@ app.put("/:id/verifikasi", requireRole("PEMILIK"), async (c) => {
           ),
         },
       });
+    } else if (status === "DITOLAK") {
+      if (pemesanan.pembayaran) {
+        await prisma.pembayaran.update({
+          where: { pemesanan_id: id },
+          data: { status: "DITOLAK" },
+        });
+      }
     }
 
     // Notifikasi ke PENGHUNI

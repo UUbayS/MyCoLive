@@ -46,7 +46,7 @@ export default function ValidasiPembayaranPage() {
   const [pemesananList, setPemesananList] = useState<PemesananData[]>([]);
   const [filteredList, setFilteredList] = useState<PemesananData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"all" | "pending" | "verified">("all");
+  const [activeTab, setActiveTab] = useState<"all" | "pending" | "verified" | "reject">("all");
   const [selectedBukti, setSelectedBukti] = useState<string | null>(null);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null);
@@ -88,7 +88,9 @@ export default function ValidasiPembayaranPage() {
     } else if (activeTab === "pending") {
       setFilteredList(pemesananList.filter((p) => p.status === "MENUNGGU"));
     } else if (activeTab === "verified") {
-      setFilteredList(pemesananList.filter((p) => p.status !== "MENUNGGU"));
+      setFilteredList(pemesananList.filter((p) => p.status === "DITERIMA"));
+    } else if  (activeTab === "reject"){
+      setFilteredList(pemesananList.filter((p) => p.status === "DITOLAK"));
     }
   }, [activeTab, pemesananList]);
 
@@ -109,6 +111,8 @@ export default function ValidasiPembayaranPage() {
   };
 
   const pendingCount = pemesananList.filter((p) => p.status === "MENUNGGU").length;
+  const validCount  = pemesananList.filter((p) => p.status === "DITERIMA").length;
+  const rejectCount  = pemesananList.filter((p) => p.status === "DITOLAK").length;
 
   return (
     <MainLayout>
@@ -124,7 +128,8 @@ export default function ValidasiPembayaranPage() {
           {[
             { key: "all" as const, label: "Semua", count: pemesananList.length },
             { key: "pending" as const, label: "Menunggu", count: pendingCount },
-            { key: "verified" as const, label: "Terverifikasi", count: pemesananList.length - pendingCount },
+            { key: "verified" as const, label: "Terverifikasi", count: validCount },
+            { key: "reject" as const, label: "Ditolak", count: rejectCount },
           ].map((tab) => (
             <button
               key={tab.key}

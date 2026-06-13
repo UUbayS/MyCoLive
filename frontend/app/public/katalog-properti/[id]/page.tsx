@@ -160,14 +160,8 @@ export default function DetailPropertiPage() {
                   {getJenisLabel(properti.jenis)}
                 </span>
               </div>
-              <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
-                <MapPin className="w-4 h-4" />
-                <span>{getDisplayAlamat()}</span>
-              </div>
             </div>
-            <div>
-
-            </div>
+            <div></div>
           </div>
         </div>
         {/* Image Carousel */}

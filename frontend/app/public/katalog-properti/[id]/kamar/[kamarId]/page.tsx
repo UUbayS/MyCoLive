@@ -129,17 +129,16 @@ export default function DetailKamarPage() {
           </div>
           <div className="text-center px-2 flex-auto">
             <h1 className="text-lg md:text-xl font-semibold line-clamp-1">
-              Kamar {kamar.nomor} - {kamar.properti?.nama || "Properti"}
+              Kamar {kamar.nomor}
             </h1>
+            <span className="text-sm font-light line-clamp-1">
+               {kamar.properti?.nama || "Properti"}
+            </span>
+            
           </div>
           <div className="flex-1 flex justify-end">
           </div>
         </div>
-        {kamar.properti && (
-          <p className="w-full text-sm text-gray-500 mt-2 text-center px-4 md:px-0 justify-center">
-            {kamar.properti.alamat}
-          </p>
-        )}
       </div>
 
       {/* Desktop: 2 kolom | Mobile: 1 kolom */}

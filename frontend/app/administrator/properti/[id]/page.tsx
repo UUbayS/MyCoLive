@@ -201,11 +201,7 @@ export default function AdminDetailPropertiPage() {
             <span className="hidden sm:inline">Edit Properti</span>
             <span className="md:hidden">Edit</span>
           </Link>
-        </div>
-        <div className="flex md:hidden items-center justify-center gap-1 text-xs text-gray-500">
-          <MapPin className="w-4 h-4" />
-          <span>{getDisplayAlamat()}</span>
-        </div>   
+        </div>  
       </div>
       
 

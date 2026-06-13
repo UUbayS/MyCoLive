@@ -170,8 +170,11 @@ export default function AdminDetailKamarPage() {
           </div>
           <div className="text-center px-2 flex-auto">
             <h1 className="text-lg md:text-xl font-semibold line-clamp-1">
-              Kamar {kamar.nomor} - {kamar.properti?.nama || "Properti"}
+              Kamar {kamar.nomor}
             </h1>
+            <h2 className="text-sm font-light line-clamp-1">
+               {kamar.properti?.nama || "Properti"}
+            </h2>
           </div>
           <div className="flex-1 flex justify-end">
             <Link
@@ -184,11 +187,6 @@ export default function AdminDetailKamarPage() {
             </Link>
           </div>
         </div>
-        {kamar.properti && (
-          <p className="w-full text-sm text-gray-500 mt-2 text-center px-4 md:px-0 justify-center">
-            {kamar.properti.alamat}
-          </p>
-        )}
       </div>
 
       {/* Image Carousel & Status Overlay */}
@@ -204,7 +202,7 @@ export default function AdminDetailKamarPage() {
 
       {/* Informasi Kamar & Tarif (Digabungkan) */}
       <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-gray-100">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-gray-300">
           <h2 className="text-lg font-semibold text-gray-900">Informasi Kamar</h2>
           {/* Menu Ubah Status (Inline) */}
           <div className="relative w-full sm:w-auto">
@@ -228,7 +226,7 @@ export default function AdminDetailKamarPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Kolom Kiri: Spesifikasi */}
-          <div className="space-y-4">
+          <div className="space-y-4 md:border-r md:border-gray-200 md:pr-8">
             <div className="grid grid-cols-3 items-center border-b border-gray-50 pb-3">
               <span className="text-sm text-gray-500">Nomor Kamar</span>
               <span className="text-sm font-medium text-gray-900 col-span-2">{kamar.nomor}</span>
@@ -248,7 +246,7 @@ export default function AdminDetailKamarPage() {
           </div>
 
           {/* Kolom Kanan: Tarif */}
-          <div>
+          <div className="md:pl-8">
             {/* Tarif */}
             <h2 className="text-lg font-semibold text-gray-900">Tarif Kamar</h2>
             {Object.keys(tarifObj).length > 0 ? (
