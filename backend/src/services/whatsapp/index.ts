@@ -20,6 +20,11 @@ export interface BroadcastResult {
   }>;
 }
 
+export interface PersonalizedRecipient {
+  nomor: string;
+  pesan: string;
+}
+
 function getProvider(): WhatsAppProvider {
   console.log("[WA] Using provider: baileys");
   return require("./providers/baileys").baileysProvider;
@@ -30,27 +35,27 @@ export async function sendWhatsAppBroadcast(
   pesan: string
 ): Promise<BroadcastResult> {
   const provider = getProvider();
-  
+
   const detail: BroadcastResult["detail"] = [];
   let berhasil = 0;
   let gagal = 0;
 
   for (const nomor of nomorList) {
     const result = await provider.sendMessage(nomor, pesan);
-    
+
     if (result.success) {
       berhasil++;
       detail.push({
         nomor,
         status: "terkirim",
-        messageId: result.messageId
+        messageId: result.messageId,
       });
     } else {
       gagal++;
       detail.push({
         nomor,
         status: "gagal",
-        error: result.error
+        error: result.error,
       });
     }
   }
@@ -59,7 +64,44 @@ export async function sendWhatsAppBroadcast(
     total_penerima: nomorList.length,
     berhasil,
     gagal,
-    detail
+    detail,
+  };
+}
+
+export async function sendPersonalizedBroadcast(
+  recipients: PersonalizedRecipient[]
+): Promise<BroadcastResult> {
+  const provider = getProvider();
+
+  const detail: BroadcastResult["detail"] = [];
+  let berhasil = 0;
+  let gagal = 0;
+
+  for (const { nomor, pesan } of recipients) {
+    const result = await provider.sendMessage(nomor, pesan);
+
+    if (result.success) {
+      berhasil++;
+      detail.push({
+        nomor,
+        status: "terkirim",
+        messageId: result.messageId,
+      });
+    } else {
+      gagal++;
+      detail.push({
+        nomor,
+        status: "gagal",
+        error: result.error,
+      });
+    }
+  }
+
+  return {
+    total_penerima: recipients.length,
+    berhasil,
+    gagal,
+    detail,
   };
 }
 
