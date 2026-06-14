@@ -5,10 +5,12 @@ import makeWASocket, {
 import pino from "pino";
 import QRCode from "qrcode";
 import path from "path";
+import fs from "fs/promises";
 import type { WASocket } from "@whiskeysockets/baileys";
 import { WhatsAppProvider, WhatsAppResult } from "../index";
 
 const logger = pino({ level: "silent" });
+const SESSION_DIR = "whatsapp-session";
 
 class BaileysProvider implements WhatsAppProvider {
   private sock: WASocket | null = null;
@@ -30,7 +32,7 @@ class BaileysProvider implements WhatsAppProvider {
     console.log(`[WA] Initializing... (attempt ${this.retryCount}/${this.maxRetry})`);
 
     try {
-      const { state, saveCreds } = await useMultiFileAuthState("whatsapp-session");
+      const { state, saveCreds } = await useMultiFileAuthState(SESSION_DIR);
       console.log("[WA] Auth state loaded, connecting...");
 
       this.sock = makeWASocket({
@@ -72,13 +74,27 @@ class BaileysProvider implements WhatsAppProvider {
           if (statusCode === 440) {
             this.retryCount = this.maxRetry;
             console.warn("[WA] Conflict (440) — another device is active. Stop reconnect.");
+          } else if (statusCode === DisconnectReason.loggedOut) {
+            this.retryCount = this.maxRetry;
+            this.qr = null;
+            this.qrDataUrl = null;
+            if (this.sock) {
+              try { this.sock.end(undefined); } catch { /* ignore */ }
+              this.sock = null;
+            }
+            console.warn("[WA] Logged out from WA side — auto-clearing session and generating fresh QR");
+            this.clearSession()
+              .then((ok) => {
+                if (ok) {
+                  this.retryCount = 0;
+                  this.initialize().catch(console.error);
+                }
+              })
+              .catch(console.error);
           } else if (statusCode !== DisconnectReason.loggedOut && this.retryCount < this.maxRetry) {
             const delay = Math.max(5000, Math.min(5000 * this.retryCount, 30000));
             console.log(`[WA] Auto-reconnect in ${delay / 1000}s...`);
             setTimeout(() => this.initialize(), delay);
-          } else if (statusCode === DisconnectReason.loggedOut) {
-            this.retryCount = this.maxRetry;
-            console.warn("[WA] Logged out — delete whatsapp-session/ and call /connect");
           } else {
             console.warn("[WA] Max retry reached — call POST /api/whatsapp/connect to retry");
           }
@@ -96,6 +112,54 @@ class BaileysProvider implements WhatsAppProvider {
   resetRetry() {
     this.retryCount = 0;
     console.log("[WA] Retry counter reset — ready to connect");
+  }
+
+  private async clearSession(): Promise<boolean> {
+    try {
+      const sessionPath = path.resolve(SESSION_DIR);
+      await fs.rm(sessionPath, { recursive: true, force: true });
+      console.log(`[WA] Session files cleared at ${sessionPath}`);
+      return true;
+    } catch (err) {
+      console.error("[WA] Failed to clear session files:", err);
+      return false;
+    }
+  }
+
+  private teardownSocket(): void {
+    if (this.sock) {
+      try { this.sock.end(undefined); } catch { /* ignore */ }
+      this.sock = null;
+    }
+    this.connected = false;
+    this.qr = null;
+    this.qrDataUrl = null;
+  }
+
+  async disconnect(): Promise<{ success: boolean; message: string }> {
+    console.log("[WA] Disconnect requested");
+
+    this.retryCount = this.maxRetry;
+    this.initializing = false;
+
+    if (this.sock) {
+      Promise.race([
+        this.sock.logout().catch(() => {}),
+        new Promise((resolve) => setTimeout(resolve, 3000)),
+      ]).catch(() => {});
+    }
+
+    this.teardownSocket();
+
+    const cleared = await this.clearSession();
+    if (!cleared) {
+      return { success: false, message: "Gagal menghapus file sesi lokal" };
+    }
+
+    this.retryCount = 0;
+
+    console.log("[WA] Disconnected — ready for fresh QR scan");
+    return { success: true, message: "WhatsApp berhasil diputuskan" };
   }
 
   async sendMessage(nomor: string, pesan: string): Promise<WhatsAppResult> {

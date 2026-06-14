@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone, Wallet, Building, CreditCard, QrCode as QrCodeIcon, Wifi, WifiOff, RefreshCw } from "lucide-react";
+import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone, Wallet, Building, CreditCard, QrCode as QrCodeIcon, Wifi, WifiOff, RefreshCw, Unplug } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
 import Modal from "../../../components/ui/Modal";
-import { getProfile, updateProfile, changePassword, getTempatPembayaran, updateTempatPembayaran, getWhatsappStatus, connectWhatsapp, ProfileData, AdminSettingsData, WhatsAppStatus } from "../../../lib/api";
+import ConfirmDialog from "../../../components/ConfirmDialog";
+import { getProfile, updateProfile, changePassword, getTempatPembayaran, updateTempatPembayaran, getWhatsappStatus, connectWhatsapp, disconnectWhatsapp, ProfileData, AdminSettingsData, WhatsAppStatus } from "../../../lib/api";
 import { clearAuth } from "../../../lib/auth";
 
 export default function ProfileAdminPage() {
@@ -20,6 +21,8 @@ export default function ProfileAdminPage() {
   const [whatsappStatus, setWhatsappStatus] = useState<WhatsAppStatus | null>(null);
   const [whatsappConnecting, setWhatsappConnecting] = useState(false);
   const [whatsappLoading, setWhatsappLoading] = useState(false);
+  const [whatsappDisconnecting, setWhatsappDisconnecting] = useState(false);
+  const [showDisconnectDialog, setShowDisconnectDialog] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -89,6 +92,22 @@ export default function ProfileAdminPage() {
       console.error("Failed to connect WhatsApp");
     } finally {
       setWhatsappConnecting(false);
+    }
+  };
+
+  const handleDisconnectWhatsapp = async () => {
+    setWhatsappDisconnecting(true);
+    try {
+      const result = await disconnectWhatsapp();
+      if (result) {
+        const data = await getWhatsappStatus();
+        setWhatsappStatus(data);
+      }
+    } catch (err) {
+      console.error("Failed to disconnect WhatsApp", err);
+    } finally {
+      setWhatsappDisconnecting(false);
+      setShowDisconnectDialog(false);
     }
   };
 
@@ -294,6 +313,17 @@ export default function ProfileAdminPage() {
                   {whatsappConnecting ? "Menghubungkan..." : "Hubungkan WhatsApp"}
                 </button>
               )}
+
+              {whatsappStatus?.connected && (
+                <button
+                  onClick={() => setShowDisconnectDialog(true)}
+                  disabled={whatsappDisconnecting}
+                  className="w-full bg-white border border-red-200 text-red-500 py-3 rounded-xl font-medium text-sm hover:bg-red-50 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Unplug size={16} />
+                  Putuskan WhatsApp
+                </button>
+              )}
             </div>
 
             {/* Logout */}
@@ -344,6 +374,19 @@ export default function ProfileAdminPage() {
           onSuccess={refreshPayment}
         />
       )}
+
+      <ConfirmDialog
+        isOpen={showDisconnectDialog}
+        title="Putuskan WhatsApp?"
+        message="Sesi WhatsApp akan diputuskan dan file sesi lokal akan dihapus. Anda harus scan QR ulang untuk menghubungkan kembali (berguna jika ingin ganti nomor atau HP reset)."
+        confirmLabel={whatsappDisconnecting ? "Memutuskan..." : "Ya, Putuskan"}
+        cancelLabel="Batal"
+        danger
+        onConfirm={handleDisconnectWhatsapp}
+        onCancel={() => {
+          if (!whatsappDisconnecting) setShowDisconnectDialog(false);
+        }}
+      />
     </MainLayout>
   );
 }

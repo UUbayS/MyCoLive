@@ -82,4 +82,21 @@ app.post("/connect", requireRole("PEMILIK"), async (c) => {
   }
 });
 
+// Disconnect WhatsApp session (PEMILIK only)
+app.post("/disconnect", requireRole("PEMILIK"), async (c) => {
+  try {
+    const result = await baileysProvider.disconnect();
+    return c.json({
+      status: result.success ? "success" : "error",
+      message: result.message,
+    });
+  } catch (error) {
+    console.error("WhatsApp disconnect error:", error);
+    return c.json(
+      { status: "error", message: "Gagal memutuskan WhatsApp" },
+      500
+    );
+  }
+});
+
 export default app;

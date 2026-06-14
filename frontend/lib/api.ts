@@ -1056,3 +1056,14 @@ export async function connectWhatsapp(): Promise<{ message: string } | null> {
     return null;
   }
 }
+
+export async function disconnectWhatsapp(): Promise<{ message: string } | null> {
+  try {
+    const res = await apiFetch<{ status: string; message: string }>("/api/whatsapp/disconnect", {
+      method: "POST",
+    });
+    return res;
+  } catch {
+    return null;
+  }
+}
