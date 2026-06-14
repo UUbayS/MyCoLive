@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Search, ChevronRight, Download, ChevronDown, Wallet, TrendingUp, Calendar, ChevronLeft } from "lucide-react";
+import { Search, ChevronRight, Download, ChevronDown, Wallet, TrendingUp, Calendar, ChevronLeft, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -41,8 +41,8 @@ const tipeLabels: Record<string, string> = {
 };
 
 const periodeLabels: Record<string, string> = {
-  SEBULAN: "Sebulan Terakhir",
-  SETAHUN: "Setahun Terakhir",
+  SEBULAN: "Bulan Ini",
+  SETAHUN: "Tahun Ini",
   KUSTOM: "Pilih Rentang Tanggal",
 };
 
@@ -90,6 +90,13 @@ function endOfMonth(date: Date) {
   d.setMonth(d.getMonth() + 1);
   d.setDate(0);
   d.setHours(23, 59, 59, 999);
+  return d;
+}
+
+function startOfYear(date: Date) {
+  const d = new Date(date);
+  d.setMonth(0, 1);
+  d.setHours(0, 0, 0, 0);
   return d;
 }
 
@@ -159,12 +166,10 @@ function clampDate(date: Date, min: Date, max: Date) {
 function getPeriodBounds(periode: string, customRange: { start: Date | null; end: Date | null }) {
   const now = new Date();
   if (periode === "SEBULAN") {
-    const start = addDays(now, -29);
-    return { start: startOfDay(start), end: endOfDay(now) };
+    return { start: startOfMonth(now), end: endOfDay(now) };
   }
   if (periode === "SETAHUN") {
-    const start = addMonths(now, -11);
-    return { start: startOfDay(start), end: endOfDay(now) };
+    return { start: startOfYear(now), end: endOfDay(now) };
   }
   if (periode === "KUSTOM" && customRange.start && customRange.end) {
     return { start: startOfDay(customRange.start), end: endOfDay(customRange.end) };
@@ -938,33 +943,66 @@ export default function KeuanganPage() {
         {/* Summary + Chart Cards */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-            <div className="h-36 bg-gray-100 rounded-xl animate-pulse" />
+            <div className="flex flex-col gap-3">
+              <div className="h-24 bg-gray-100 rounded-xl animate-pulse" />
+              <div className="h-20 bg-gray-100 rounded-xl animate-pulse" />
+              <div className="h-20 bg-gray-100 rounded-xl animate-pulse" />
+            </div>
             <div className="h-36 bg-gray-100 rounded-xl animate-pulse" />
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-            {/* Card Kiri: Total Bersih */}
-            <div className="bg-white rounded-xl shadow-sm p-5 border border-gray-100 flex items-center gap-4">
-              <div className="w-12 h-12 bg-[#84CC16]/10 rounded-xl flex items-center justify-center shrink-0">
-                <Wallet className="w-6 h-6 text-[#84CC16]" />
+            {/* Kolom Kiri: Summary Cards */}
+            <div className="flex flex-col gap-3">
+              {/* Card: Total Bersih */}
+              <div className="bg-white rounded-xl shadow-sm p-5 border border-gray-100 flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#84CC16]/10 rounded-xl flex items-center justify-center shrink-0">
+                  <Wallet className="w-6 h-6 text-[#84CC16]" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 mb-0.5">Total Bersih</p>
+                  <p className="text-xl font-bold text-gray-900">
+                    {formatRupiah(summary.total_bersih)}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-gray-500 mb-0.5">Total Bersih</p>
-                <p className="text-xl font-bold text-gray-900">
-                  {formatRupiah(summary.total_bersih)}
-                </p>
+
+              {/* Card: Total Penghasilan */}
+              <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 flex items-center gap-4">
+                <div className="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center shrink-0">
+                  <ArrowDownLeft className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 mb-0.5">Total Penghasilan</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {formatRupiah(summary.total_pendapatan)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Card: Total Pengeluaran */}
+              <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 flex items-center gap-4">
+                <div className="w-11 h-11 bg-red-100 rounded-xl flex items-center justify-center shrink-0">
+                  <ArrowUpRight className="w-5 h-5 text-red-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 mb-0.5">Total Pengeluaran</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {formatRupiah(summary.total_pengeluaran)}
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Card Kanan: Line Chart */}
-            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 flex flex-col h-full">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5">
                   <TrendingUp className="w-4 h-4 text-[#84CC16]" />
                   <p className="text-sm font-semibold text-gray-900">{chartTitle}</p>
                 </div>
               </div>
-              <div className="h-28">
+              <div className="flex-1 min-h-0">
                 {chartData.length === 0 ? (
                   <div className="flex items-center justify-center h-full text-xs text-gray-400">
                     Tidak ada data untuk periode ini

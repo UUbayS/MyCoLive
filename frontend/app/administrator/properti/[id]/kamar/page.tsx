@@ -168,7 +168,7 @@ export default function AdminDaftarKamarPage() {
           </div>
           <Link
             href={`/administrator/properti/${propertiId}/kamar/tambah`}
-            className="hidden md:block bg-[#84CC16] text-white px-5 py-2 rounded-full shadow-sm hover:bg-[#73b814] transition-colors items-center gap-2"
+            className="hidden md:flex bg-[#84CC16] text-white px-4 py-4 rounded-full shadow-sm hover:bg-[#73b814] transition-colors items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Tambah Kamar

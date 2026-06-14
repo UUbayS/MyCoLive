@@ -17,8 +17,8 @@ function formatDate(dateStr: string) {
 }
 
 function getPeriodLabel(periode: string, customRange?: { start: Date | null; end: Date | null }) {
-  if (periode === "SEBULAN") return "Sebulan Terakhir";
-  if (periode === "SETAHUN") return "Setahun Terakhir";
+  if (periode === "SEBULAN") return "Bulan Ini";
+  if (periode === "SETAHUN") return "Tahun Ini";
   if (periode === "KUSTOM" && customRange?.start && customRange?.end) {
     return `${customRange.start.toLocaleDateString("id-ID")} - ${customRange.end.toLocaleDateString("id-ID")}`;
   }

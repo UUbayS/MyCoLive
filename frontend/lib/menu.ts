@@ -130,7 +130,7 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       ],
     },
     {
-      label: "Managemen Keuangan",
+      label: "Manajemen Keuangan",
       href: "/administrator/keuangan",
       icon: "Wallet",
     },
