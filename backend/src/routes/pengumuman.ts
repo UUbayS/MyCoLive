@@ -167,7 +167,15 @@ app.post("/", async (c) => {
         .map((u) => u.no_telepon)
         .filter(Boolean) as string[];
       if (waPhones.length > 0) {
-        const result = await sendWhatsAppBroadcast(waPhones, pesan);
+        const tanggal = new Date().toLocaleDateString("id-ID", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        const formattedPesan = `📢 *${judul}*\n\n${pesan}\n\n———————————————\n🏠 _MyCoLive_\n📅 ${tanggal}`;
+
+        const result = await sendWhatsAppBroadcast(waPhones, formattedPesan);
         waBerhasil = result.berhasil;
         waGagal = result.gagal;
       }
