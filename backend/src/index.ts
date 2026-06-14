@@ -19,6 +19,7 @@ import whatsappRoutes from "./routes/whatsapp";
 import notifikasiRoutes from "./routes/notifikasi";
 import badgesRoutes from "./routes/badges";
 import pengumumanRoutes from "./routes/pengumuman";
+import eventsRoutes from "./routes/events";
 
 const app = new Hono();
 
@@ -54,5 +55,6 @@ app.route("/api/whatsapp", whatsappRoutes);
 app.route("/api/notifikasi", notifikasiRoutes);
 app.route("/api/badges", badgesRoutes);
 app.route("/api/pengumuman", pengumumanRoutes);
+app.route("/api/events", eventsRoutes);
 
 export default app;

@@ -4,6 +4,7 @@ import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 import { createNotifikasi } from "../utils/notifikasi";
 import { sendWhatsAppBroadcast } from "../services/whatsapp";
 import { templateWa } from "../utils/template-wa";
+import { eventBus } from "../lib/event-bus";
 
 const app = new Hono<AppEnv>();
 
@@ -133,6 +134,10 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
         "PEMESANAN",
         pemesanan.id,
       );
+      eventBus.publish(kamar.properti.admin_id, "pemesanan:baru", {
+        id: pemesanan.id,
+        status: pemesanan.status,
+      });
       const pemilik = await prisma.user.findUnique({
         where: { id: kamar.properti.admin_id },
         select: { no_telepon: true },
@@ -311,6 +316,10 @@ app.post("/perpanjang", requireRole("PENGHUNI"), async (c) => {
         "PEMESANAN",
         pemesanan.id,
       );
+      eventBus.publish(kamar.properti.admin_id, "pemesanan:baru", {
+        id: pemesanan.id,
+        status: pemesanan.status,
+      });
       const pemilik = await prisma.user.findUnique({
         where: { id: kamar.properti.admin_id },
         select: { no_telepon: true },
@@ -555,6 +564,10 @@ app.post("/:id/bayar", async (c) => {
         "PEMBAYARAN",
         id,
       );
+      eventBus.publish(pemesananData.properti.admin_id, "pemesanan:update", {
+        id,
+        status: "MENUNGGU",
+      });
       const pemilik = await prisma.user.findUnique({
         where: { id: pemesananData.properti.admin_id },
         select: { no_telepon: true },
@@ -725,6 +738,10 @@ app.put("/:id/verifikasi", requireRole("PEMILIK"), async (c) => {
         "PEMESANAN",
         id,
       );
+      eventBus.publish(penghuniData.user.id, "pemesanan:status", {
+        id,
+        status,
+      });
       if (penghuniData.user.no_telepon) {
         if (status === "DITERIMA") {
           const appUrl = process.env.APP_URL || "http://localhost:3000";
@@ -819,6 +836,10 @@ app.post("/:id/batalkan", requireRole("PENGHUNI"), async (c) => {
       "PEMESANAN",
       id,
     );
+    eventBus.publish(pemesanan.properti.admin_id, "pemesanan:update", {
+      id,
+      status: "DIBATALKAN",
+    });
 
     const pemilik = await prisma.user.findUnique({
       where: { id: pemesanan.properti.admin_id },
