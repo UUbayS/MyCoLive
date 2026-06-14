@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Search, SlidersHorizontal } from "lucide-react";
 import RoomList from "../../../../../components/RoomList";
 import { RoomCardData } from "../../../../../components/RoomCard";
 import { getKamarByProperti, getPropertiById, KamarData } from "../../../../../lib/api";
+import { useRealtime } from "../../../../../lib/useRealtime";
 import MainLayout from "../../../../../components/Layout/MainLayout";
 
 export default function DaftarKamarPage() {
@@ -20,47 +21,50 @@ export default function DaftarKamarPage() {
   const [filterStatus] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(false);
 
+  const fetchData = useCallback(async () => {
+    try {
+      const [properti, kamarList] = await Promise.all([
+        getPropertiById(propertiId),
+        getKamarByProperti(propertiId),
+      ]);
+
+      if (properti) {
+        setPropertiNama(properti.nama);
+      }
+
+      const roomData: RoomCardData[] = kamarList
+        .filter((k: KamarData) => k.status !== "MAINTENANCE")
+        .map((k: KamarData) => {
+          const tarifObj = typeof k.tarif === "object" && k.tarif ? k.tarif as Record<string, number> : {};
+          const hargaBulanan = tarifObj["1_bulan"] || Object.values(tarifObj)[0];
+          return {
+            id: k.id,
+            nomor: k.nomor,
+            lantai: k.luas?.split(" - ")[0] || "1",
+            luas: k.luas?.split(" - ")[1] || k.luas,
+            harga: typeof hargaBulanan === "number" ? hargaBulanan : undefined,
+            status: k.status,
+            gambar: k.gambar?.[0],
+            propertiId,
+          };
+        });
+
+      setRooms(roomData);
+    } catch (error) {
+      console.error("Failed to fetch rooms:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [propertiId]);
+
   useEffect(() => {
     if (!propertiId) return;
-
-    const fetchData = async () => {
-      try {
-        const [properti, kamarList] = await Promise.all([
-          getPropertiById(propertiId),
-          getKamarByProperti(propertiId),
-        ]);
-
-        if (properti) {
-          setPropertiNama(properti.nama);
-        }
-
-        const roomData: RoomCardData[] = kamarList
-          .filter((k: KamarData) => k.status !== "MAINTENANCE")
-          .map((k: KamarData) => {
-            const tarifObj = typeof k.tarif === "object" && k.tarif ? k.tarif as Record<string, number> : {};
-            const hargaBulanan = tarifObj["1_bulan"] || Object.values(tarifObj)[0];
-            return {
-              id: k.id,
-              nomor: k.nomor,
-              lantai: k.luas?.split(" - ")[0] || "1",
-              luas: k.luas?.split(" - ")[1] || k.luas,
-              harga: typeof hargaBulanan === "number" ? hargaBulanan : undefined,
-              status: k.status,
-              gambar: k.gambar?.[0],
-              propertiId,
-            };
-          });
-
-        setRooms(roomData);
-      } catch (error) {
-        console.error("Failed to fetch rooms:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [propertiId]);
+  }, [propertiId, fetchData]);
+
+  useRealtime("kamar:update", () => fetchData());
+  useRealtime("pemesanan:status", () => fetchData());
+  useRealtime("pemesanan:update", () => fetchData());
 
   const filteredRooms = useMemo(() => {
     let result = rooms;

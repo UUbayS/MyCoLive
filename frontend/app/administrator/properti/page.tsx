@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../../lib/ToastContext";
 import Link from "next/link";
 import { Plus, Building2 } from "lucide-react";
 import { getPropertiList, deleteProperti, PropertiData } from "../../../lib/api";
 import { getUser } from "../../../lib/auth";
+import { useRealtime } from "../../../lib/useRealtime";
 import MainLayout from "../../../components/Layout/MainLayout";
 import StatsWidget from "../../../components/StatsWidget";
 import PropertyCard from "../../../components/PropertyCard";
@@ -23,6 +24,30 @@ export default function AdministratorPropertiPage() {
   const fetchedRef = useRef(false);
   const { success, error } = useToast();
 
+  const fetchProperties = useCallback(async () => {
+    try {
+      const result = await getPropertiList();
+      setProperties(result);
+
+      const totalKamar = result.reduce((sum, p) => sum + (p.total_kamar || 0), 0);
+      const totalTerisi = result.reduce((sum, p) => {
+        const kosong = p.kamar_kosong || 0;
+        const total = p.total_kamar || 0;
+        return sum + (total - kosong);
+      }, 0);
+
+      setStats({
+        totalProperti: result.length,
+        totalKamar,
+        totalTerisi,
+      });
+    } catch {
+      setProperties([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
@@ -33,32 +58,12 @@ export default function AdministratorPropertiPage() {
       return;
     }
 
-    const fetchProperties = async () => {
-      try {
-        const result = await getPropertiList();
-        setProperties(result);
-
-        const totalKamar = result.reduce((sum, p) => sum + (p.total_kamar || 0), 0);
-        const totalTerisi = result.reduce((sum, p) => {
-          const kosong = p.kamar_kosong || 0;
-          const total = p.total_kamar || 0;
-          return sum + (total - kosong);
-        }, 0);
-
-        setStats({
-          totalProperti: result.length,
-          totalKamar,
-          totalTerisi,
-        });
-      } catch {
-        setProperties([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProperties();
-  }, [router]);
+  }, [router, fetchProperties]);
+
+  useRealtime("kamar:update", () => fetchProperties());
+  useRealtime("pemesanan:status", () => fetchProperties());
+  useRealtime("pemesanan:update", () => fetchProperties());
 
   const handleDelete = (id: string) => {
     const property = properties.find((p) => p.id === id);

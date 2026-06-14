@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../../../lib/ToastContext";
 import {
@@ -20,6 +20,7 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import Modal from "@/components/ui/Modal";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getAllPemesanan, verifikasiPemesanan, PemesananData } from "@/lib/api";
+import { useRealtime } from "@/lib/useRealtime";
 
 const statusPemesananBadge: Record<string, { label: string; color: string }> = {
   MENUNGGU: { label: "Menunggu", color: "bg-yellow-100 text-yellow-700" },
@@ -55,6 +56,18 @@ export default function ValidasiPembayaranPage() {
   const fetchedRef = useRef(false);
   const { success, error } = useToast();
 
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await getAllPemesanan();
+      setPemesananList(data);
+      setFilteredList(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/auth/login");
@@ -69,20 +82,12 @@ export default function ValidasiPembayaranPage() {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
 
-    const fetchData = async () => {
-      try {
-        const data = await getAllPemesanan();
-        setPemesananList(data);
-        setFilteredList(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [router]);
+  }, [router, fetchData]);
+
+  useRealtime("pemesanan:baru", () => fetchData());
+  useRealtime("pemesanan:update", () => fetchData());
+  useRealtime("pemesanan:status", () => fetchData());
 
   useEffect(() => {
     if (activeTab === "all") {
@@ -100,8 +105,7 @@ export default function ValidasiPembayaranPage() {
     setProcessingId(id);
     try {
       await verifikasiPemesanan(id, status);
-      const updated = await getAllPemesanan();
-      setPemesananList(updated);
+      await fetchData();
       success(status === "DITERIMA" ? "Pesanan berhasil diterima" : "Pesanan berhasil ditolak");
     } catch (err) {
       console.error(err);

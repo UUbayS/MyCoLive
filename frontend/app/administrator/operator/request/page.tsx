@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../../../lib/ToastContext";
 import {
@@ -19,6 +19,7 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import Modal from "@/components/ui/Modal";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getPengajuanDanaList, updatePengajuanDanaStatus, PengajuanDanaData } from "@/lib/api";
+import { useRealtime } from "@/lib/useRealtime";
 
 const statusBadge: Record<string, { label: string; color: string }> = {
   MENUNGGU: { label: "Menunggu", color: "bg-yellow-100 text-yellow-700" },
@@ -42,6 +43,18 @@ export default function RequestDanaPage() {
   const fetchedRef = useRef(false);
   const { success, error } = useToast();
 
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await getPengajuanDanaList();
+      setDanaList(data);
+      setFilteredList(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/auth/login");
@@ -56,20 +69,11 @@ export default function RequestDanaPage() {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
 
-    const fetchData = async () => {
-      try {
-        const data = await getPengajuanDanaList();
-        setDanaList(data);
-        setFilteredList(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [router]);
+  }, [router, fetchData]);
+
+  useRealtime("dana:baru", () => fetchData());
+  useRealtime("dana:status", () => fetchData());
 
   useEffect(() => {
     if (activeTab === "all") {

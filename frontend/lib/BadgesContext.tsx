@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { getAccessToken } from "./auth";
 import type { Badges } from "./menu";
+import { useRealtime, realtimeClient } from "./useRealtime";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -34,9 +35,18 @@ export function BadgesProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     fetchBadges();
-    const interval = setInterval(fetchBadges, 30000);
+    // Fallback polling tiap 60 detik, jaga-jaga kalau SSE drop
+    const interval = setInterval(fetchBadges, 60000);
     return () => clearInterval(interval);
   }, [fetchBadges]);
+
+  useRealtime("notifikasi", () => fetchBadges());
+  useRealtime("pemesanan:baru", () => fetchBadges());
+  useRealtime("pemesanan:status", () => fetchBadges());
+  useRealtime("komplain:baru", () => fetchBadges());
+  useRealtime("komplain:status", () => fetchBadges());
+  useRealtime("dana:baru", () => fetchBadges());
+  useRealtime("dana:status", () => fetchBadges());
 
   return (
     <BadgesContext.Provider value={{ badges, refresh: fetchBadges }}>
@@ -48,3 +58,5 @@ export function BadgesProvider({ children }: { children: React.ReactNode }) {
 export function useBadges() {
   return useContext(BadgesContext);
 }
+
+export { realtimeClient };

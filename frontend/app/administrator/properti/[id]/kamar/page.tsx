@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useToast } from "../../../../../lib/ToastContext";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import {
   KamarData,
   PropertiData,
 } from "../../../../../lib/api";
+import { useRealtime } from "../../../../../lib/useRealtime";
 import MainLayout from "../../../../../components/Layout/MainLayout";
 import ConfirmDialog from "../../../../../components/ConfirmDialog";
 
@@ -39,6 +40,24 @@ export default function AdminDaftarKamarPage() {
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const { success, error } = useToast();
 
+  const fetchData = useCallback(async () => {
+    try {
+      const [propertiData, kamarData] = await Promise.all([
+        getPropertiById(propertiId),
+        getKamarByProperti(propertiId),
+      ]);
+
+      if (propertiData) {
+        setProperti(propertiData);
+      }
+      setKamarList(kamarData);
+    } catch (err) {
+      console.error("Failed to fetch data:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [propertiId]);
+
   useEffect(() => {
     if (!propertiId) return;
 
@@ -48,26 +67,12 @@ export default function AdminDaftarKamarPage() {
       return;
     }
 
-    const fetchData = async () => {
-      try {
-        const [propertiData, kamarData] = await Promise.all([
-          getPropertiById(propertiId),
-          getKamarByProperti(propertiId),
-        ]);
-
-        if (propertiData) {
-          setProperti(propertiData);
-        }
-        setKamarList(kamarData);
-      } catch (err) {
-        console.error("Failed to fetch data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [propertiId, router]);
+  }, [propertiId, router, fetchData]);
+
+  useRealtime("kamar:update", () => fetchData());
+  useRealtime("pemesanan:status", () => fetchData());
+  useRealtime("pemesanan:update", () => fetchData());
 
   const handleDelete = async () => {
     if (!kamarToDelete) return;

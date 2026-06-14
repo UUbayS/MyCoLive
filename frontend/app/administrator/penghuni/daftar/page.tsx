@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -17,6 +17,7 @@ import MainLayout from "@/components/Layout/MainLayout";
 import PenghuniTabs from "@/components/PenghuniTabs";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getPenghuniList, PenghuniData, getPropertiList, PropertiData } from "@/lib/api";
+import { useRealtime } from "@/lib/useRealtime";
 
 const statusBadge: Record<string, { label: string; color: string }> = {
   "Belum Menyewa": { label: "Belum Menyewa", color: "bg-gray-100 text-gray-600" },
@@ -38,6 +39,22 @@ export default function DaftarPenghuniPage() {
   const [propertiFilter, setPropertiFilter] = useState("");
   const fetchedRef = useRef(false);
 
+  const fetchData = useCallback(async () => {
+    try {
+      const [penghuniData, propertiData] = await Promise.all([
+        getPenghuniList(),
+        getPropertiList(),
+      ]);
+      setPenghuniList(penghuniData);
+      setFilteredList(penghuniData);
+      setPropertiList(propertiData);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/auth/login");
@@ -52,24 +69,12 @@ export default function DaftarPenghuniPage() {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
 
-    const fetchData = async () => {
-      try {
-        const [penghuniData, propertiData] = await Promise.all([
-          getPenghuniList(),
-          getPropertiList(),
-        ]);
-        setPenghuniList(penghuniData);
-        setFilteredList(penghuniData);
-        setPropertiList(propertiData);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [router]);
+  }, [router, fetchData]);
+
+  useRealtime("pemesanan:status", () => fetchData());
+  useRealtime("komplain:baru", () => fetchData());
+  useRealtime("komplain:status", () => fetchData());
 
   useEffect(() => {
     let result = [...penghuniList];

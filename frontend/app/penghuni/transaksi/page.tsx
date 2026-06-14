@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Clock, CheckCircle, XCircle, CreditCard, Eye } from "lucide-react";
 import { getUser, isAuthenticated } from "../../../lib/auth";
 import { getMyPemesanan, PemesananData } from "../../../lib/api";
+import { useRealtime } from "../../../lib/useRealtime";
 import MainLayout from "../../../components/Layout/MainLayout";
 
 const statusPemesananBadge: Record<string, { label: string; color: string }> = {
@@ -29,6 +30,17 @@ export default function TransaksiPage() {
   const [pemesananList, setPemesananList] = useState<PemesananData[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await getMyPemesanan();
+      setPemesananList(data);
+    } catch (error) {
+      console.error("Failed to fetch pemesanan:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/auth/login");
@@ -40,19 +52,11 @@ export default function TransaksiPage() {
       return;
     }
 
-    const fetchData = async () => {
-      try {
-        const data = await getMyPemesanan();
-        setPemesananList(data);
-      } catch (error) {
-        console.error("Failed to fetch pemesanan:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [router]);
+  }, [router, fetchData]);
+
+  useRealtime("pemesanan:status", () => fetchData());
+  useRealtime("pemesanan:update", () => fetchData());
 
   if (loading) {
     return (
