@@ -21,16 +21,8 @@ export interface BroadcastResult {
 }
 
 function getProvider(): WhatsAppProvider {
-  const provider = process.env.WHATSAPP_PROVIDER || "whapi";
-
-  switch (provider) {
-    case "baileys":
-      return require("./providers/baileys").baileysProvider;
-    case "whapi":
-      return new (require("./providers/whapi").WhapiProvider)();
-    default:
-      return new (require("./providers/whapi").WhapiProvider)();
-  }
+  console.log("[WA] Using provider: baileys");
+  return require("./providers/baileys").baileysProvider;
 }
 
 export async function sendWhatsAppBroadcast(
