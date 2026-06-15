@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AtSign, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import AuthLayout from "../../../components/Layout/AuthLayout";
+import { setAuth } from "@/lib/auth";
+import { realtimeClient } from "@/lib/useRealtime";
 
 function LoginForm() {
   const router = useRouter();
@@ -49,9 +51,8 @@ function LoginForm() {
 
       const { user, accessToken, refreshToken } = result.data;
 
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      localStorage.setItem("user", JSON.stringify(user));
+      setAuth({ user, accessToken, refreshToken });
+      realtimeClient.reconnect();
 
       // If redirect URL exists, navigate there
       if (redirectUrl) {

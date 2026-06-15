@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Building2, Users, Wallet, Mail, Phone, MapPin, Plus, Building2Icon } from "lucide-react";
 import { getUser, isAuthenticated } from "../lib/auth";
 import { getKatalogProperti, getPropertiList, PropertiData } from "../lib/api";
+import { useRealtime } from "../lib/useRealtime";
 import AuthLayout from "../components/Layout/AuthLayout";
 import MainLayout from "../components/Layout/MainLayout";
 import PropertyList from "../components/PropertyList";
@@ -45,60 +46,63 @@ export default function Home() {
     check();
   }, [router, isPemilik, isPengelola]);
 
+  const fetchProperties = useCallback(async () => {
+    try {
+      let data: PropertyCardData[] = [];
+
+      if (isPemilik || isPengelola) {
+        const result = await getPropertiList();
+        data = result.map((p: PropertiData) => ({
+          id: p.id,
+          nama: p.nama,
+          alamat: p.alamat,
+          total_kamar: p.total_kamar,
+          kamar_kosong: p.kamar_kosong,
+          gambar: p.gambar?.[0],
+        }));
+
+        if (isPemilik) {
+          const totalKamar = result.reduce((sum, p: PropertiData) => sum + (p.total_kamar || 0), 0);
+          const totalTerisi = result.reduce((sum, p: PropertiData) => {
+            const kosong = p.kamar_kosong || 0;
+            const total = p.total_kamar || 0;
+            return sum + (total - kosong);
+          }, 0);
+          setStats({
+            totalProperti: result.length,
+            totalKamar,
+            totalTerisi,
+          });
+        }
+      } else {
+        const result = await getKatalogProperti();
+        data = result.map((p: PropertiData) => ({
+          id: p.id,
+          nama: p.nama,
+          alamat: p.alamat,
+          total_kamar: p.total_kamar,
+          kamar_kosong: p.kamar_kosong,
+          gambar: p.gambar?.[0],
+        }));
+      }
+
+      setProperties(data);
+    } catch {
+      setProperties([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [isPemilik, isPengelola]);
+
   useEffect(() => {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
-
-    const fetchProperties = async () => {
-      try {
-        let data: PropertyCardData[] = [];
-
-        if (isPemilik || isPengelola) {
-          const result = await getPropertiList();
-          data = result.map((p: PropertiData) => ({
-            id: p.id,
-            nama: p.nama,
-            alamat: p.alamat,
-            total_kamar: p.total_kamar,
-            kamar_kosong: p.kamar_kosong,
-            gambar: p.gambar?.[0],
-          }));
-
-          if (isPemilik) {
-            const totalKamar = result.reduce((sum, p: PropertiData) => sum + (p.total_kamar || 0), 0);
-            const totalTerisi = result.reduce((sum, p: PropertiData) => {
-              const kosong = p.kamar_kosong || 0;
-              const total = p.total_kamar || 0;
-              return sum + (total - kosong);
-            }, 0);
-            setStats({
-              totalProperti: result.length,
-              totalKamar,
-              totalTerisi,
-            });
-          }
-        } else {
-          const result = await getKatalogProperti();
-          data = result.map((p: PropertiData) => ({
-            id: p.id,
-            nama: p.nama,
-            alamat: p.alamat,
-            total_kamar: p.total_kamar,
-            kamar_kosong: p.kamar_kosong,
-            gambar: p.gambar?.[0],
-          }));
-        }
-
-        setProperties(data);
-      } catch {
-        setProperties([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProperties();
-  }, [isPemilik, isPengelola]);
+  }, [fetchProperties]);
+
+  useRealtime("kamar:update", () => fetchProperties());
+  useRealtime("pemesanan:status", () => fetchProperties());
+  useRealtime("pemesanan:update", () => fetchProperties());
 
   if (checking) {
     return (

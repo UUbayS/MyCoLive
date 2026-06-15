@@ -27,6 +27,7 @@ import {
   generateSeluruhTransaksiPDF,
   generateIncomeLossPDF,
 } from "@/lib/pdf-export";
+import { useRealtime } from "@/lib/useRealtime";
 
 const statusBadgeStyle: Record<string, string> = {
   Lunas: "bg-green-100 text-green-700",
@@ -766,25 +767,29 @@ export default function KeuanganPage() {
     fetchData();
   }, [router]);
 
-  useEffect(() => {
-    const fetchKeuangan = async () => {
-      setLoading(true);
-      try {
-        const result = await getKeuanganTransaksi(
-          selectedProperti === "SEMUA" ? undefined : selectedProperti,
-          selectedTipe,
-          search.trim() || undefined
-        );
-        setData(result);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchKeuangan();
+  const fetchKeuangan = useCallback(async () => {
+    setLoading(true);
+    try {
+      const result = await getKeuanganTransaksi(
+        selectedProperti === "SEMUA" ? undefined : selectedProperti,
+        selectedTipe,
+        search.trim() || undefined
+      );
+      setData(result);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   }, [selectedProperti, selectedTipe, search]);
+
+  useEffect(() => {
+    fetchKeuangan();
+  }, [fetchKeuangan]);
+
+  useRealtime("pemesanan:status", () => fetchKeuangan());
+  useRealtime("pemesanan:update", () => fetchKeuangan());
+  useRealtime("dana:status", () => fetchKeuangan());
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

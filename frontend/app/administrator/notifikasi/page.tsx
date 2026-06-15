@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, CheckCheck, Loader2, Clock } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getNotifikasiList, markNotifikasiAsRead, markAllNotifikasiAsRead, NotifikasiData } from "@/lib/api";
+import { useRealtime } from "@/lib/useRealtime";
 
 export default function AdministratorNotifikasiPage() {
   const router = useRouter();
@@ -14,6 +15,17 @@ export default function AdministratorNotifikasiPage() {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [markingAll, setMarkingAll] = useState(false);
   const fetchedRef = useRef(false);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await getNotifikasiList();
+      setNotifications(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -29,19 +41,10 @@ export default function AdministratorNotifikasiPage() {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
 
-    const fetchData = async () => {
-      try {
-        const data = await getNotifikasiList();
-        setNotifications(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [router]);
+  }, [router, fetchData]);
+
+  useRealtime("notifikasi", () => fetchData());
 
   const handleClick = async (notif: NotifikasiData) => {
     if (notif.is_read) return;

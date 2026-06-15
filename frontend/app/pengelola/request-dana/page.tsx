@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../../lib/ToastContext";
 import {
@@ -24,6 +24,7 @@ import {
   PropertiData,
   PengajuanDanaData,
 } from "../../../lib/api";
+import { useRealtime } from "../../../lib/useRealtime";
 
 const statusBadge: Record<string, { label: string; color: string }> = {
   MENUNGGU: { label: "Menunggu", color: "bg-yellow-100 text-yellow-700" },
@@ -55,6 +56,22 @@ export default function RequestDanaPengelolaPage() {
   const { success, error } = useToast();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const fetchData = useCallback(async () => {
+    try {
+      const [danaData, propertiData] = await Promise.all([
+        getMyDanaList(),
+        getPropertiList(),
+      ]);
+      setDanaList(danaData);
+      setFilteredList(danaData);
+      setPropertiList(propertiData);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/auth/login");
@@ -69,24 +86,11 @@ export default function RequestDanaPengelolaPage() {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
 
-    const fetchData = async () => {
-      try {
-        const [danaData, propertiData] = await Promise.all([
-          getMyDanaList(),
-          getPropertiList(),
-        ]);
-        setDanaList(danaData);
-        setFilteredList(danaData);
-        setPropertiList(propertiData);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [router]);
+  }, [router, fetchData]);
+
+  useRealtime("dana:baru", () => fetchData());
+  useRealtime("dana:status", () => fetchData());
 
   useEffect(() => {
     if (activeTab === "all") {

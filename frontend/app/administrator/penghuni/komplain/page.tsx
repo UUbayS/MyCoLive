@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../../../lib/ToastContext";
 import {
@@ -19,6 +19,7 @@ import PenghuniTabs from "@/components/PenghuniTabs";
 import Modal from "@/components/ui/Modal";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getKomplainList, updateKomplainStatus, KomplainData } from "@/lib/api";
+import { useRealtime } from "@/lib/useRealtime";
 
 const jenisIcon: Record<string, typeof Wrench> = {
   FASILITAS: Wrench,
@@ -46,6 +47,18 @@ export default function KomplainAdminPage() {
 
   const baruCount = komplainList.filter((k) => k.status === "BARU").length;
 
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await getKomplainList();
+      setKomplainList(data);
+      setFilteredList(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/auth/login");
@@ -60,20 +73,11 @@ export default function KomplainAdminPage() {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
 
-    const fetchData = async () => {
-      try {
-        const data = await getKomplainList();
-        setKomplainList(data);
-        setFilteredList(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [router]);
+  }, [router, fetchData]);
+
+  useRealtime("komplain:baru", () => fetchData());
+  useRealtime("komplain:status", () => fetchData());
 
   useEffect(() => {
     if (statusFilter) {
@@ -87,8 +91,7 @@ export default function KomplainAdminPage() {
     setProcessingId(id);
     try {
       await updateKomplainStatus(id, status);
-      const updated = await getKomplainList();
-      setKomplainList(updated);
+      await fetchData();
     } catch (err) {
       console.error(err);
       error("Gagal update status komplain");

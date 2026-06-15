@@ -1,4 +1,5 @@
 import { prisma } from "../config/db";
+import { eventBus } from "../lib/event-bus";
 
 export async function createNotifikasi(
   userId: string,
@@ -8,7 +9,7 @@ export async function createNotifikasi(
   relatedId?: string
 ) {
   try {
-    await prisma.notifikasi.create({
+    const notifikasi = await prisma.notifikasi.create({
       data: {
         user_id: userId,
         judul,
@@ -18,8 +19,11 @@ export async function createNotifikasi(
         is_read: false,
       },
     });
+    eventBus.publish(userId, "notifikasi", notifikasi);
+    return notifikasi;
   } catch (error) {
     console.error("Create notifikasi error:", error);
+    return null;
   }
 }
 
@@ -42,10 +46,13 @@ export async function createNotifikasiBulk(
       is_read: false,
     }));
 
-    await prisma.notifikasi.createMany({
+    const notifikasiList = await prisma.notifikasi.createMany({
       data,
     });
+    eventBus.publish(userIds, "notifikasi", { userIds, judul, pesan, tipe, relatedId });
+    return notifikasiList;
   } catch (error) {
     console.error("Create notifikasi bulk error:", error);
+    return null;
   }
 }

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import MainLayout from "../../../components/Layout/MainLayout";
 import KomplainCard from "../../../components/KomplainCard";
 import KomplainFormModal from "../../../components/KomplainFormModal";
 import { apiFetch } from "../../../lib/auth";
+import { useRealtime } from "../../../lib/useRealtime";
 import { Plus, CheckCircle } from "lucide-react";
 
 interface Komplain {
@@ -27,11 +28,22 @@ export default function Komplain() {
   const fetchedRef = useRef(false);
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const fetchKomplain = useCallback(async () => {
+    try {
+      const komplainRes = await apiFetch<{ data: Komplain[] }>("/api/komplain/my");
+      setKomplainList(komplainRes.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
 
-    const fetchData = async () => {
+    const init = async () => {
       try {
         const penghuniRes = await apiFetch<{ data: { kamar: { properti: { id: string } } | null } }>("/api/penghuni/me");
         if (penghuniRes.data.kamar) {
@@ -43,25 +55,20 @@ export default function Komplain() {
         console.error(err);
         setNoRoom(true);
       }
-
-      try {
-        const komplainRes = await apiFetch<{ data: Komplain[] }>("/api/komplain/my");
-        setKomplainList(komplainRes.data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+      await fetchKomplain();
     };
 
-    fetchData();
+    init();
 
     return () => {
       if (successTimerRef.current) {
         clearTimeout(successTimerRef.current);
       }
     };
-  }, []);
+  }, [fetchKomplain]);
+
+  useRealtime("komplain:baru", () => fetchKomplain());
+  useRealtime("komplain:status", () => fetchKomplain());
 
   const handleSuccess = () => {
     if (successTimerRef.current) {
@@ -69,9 +76,7 @@ export default function Komplain() {
     }
     setShowSuccess(true);
 
-    apiFetch<{ data: Komplain[] }>("/api/komplain/my")
-      .then((res) => setKomplainList(res.data))
-      .catch((err) => console.error(err));
+    fetchKomplain();
 
     successTimerRef.current = setTimeout(() => {
       setShowSuccess(false);

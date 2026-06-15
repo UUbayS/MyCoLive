@@ -6,6 +6,7 @@ import { Bell, LogOut, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getUser, clearAuth, isAuthenticated, AuthUser } from "../lib/auth";
+import { realtimeClient } from "../lib/useRealtime";
 import { getNotifikasiList } from "../lib/api";
 import logoMyCoLive from "../assets/myCoLive.svg";
 
@@ -74,6 +75,7 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
+    realtimeClient.disconnect();
     clearAuth();
     setIsLoggedIn(false);
     setUser(null);

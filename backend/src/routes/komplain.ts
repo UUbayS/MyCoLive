@@ -4,6 +4,7 @@ import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 import { createNotifikasi } from "../utils/notifikasi";
 import { sendWhatsAppBroadcast } from "../services/whatsapp";
 import { templateWa } from "../utils/template-wa";
+import { eventBus } from "../lib/event-bus";
 
 const app = new Hono<AppEnv>();
 
@@ -104,6 +105,7 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
         where: { properti_id },
         include: { user: { select: { id: true, no_telepon: true } } },
       });
+      const operatorUserIds: string[] = [];
       for (const op of operators) {
         await createNotifikasi(
           op.user.id,
@@ -112,7 +114,14 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
           "KOMPLAIN",
           komplain.id,
         );
+        operatorUserIds.push(op.user.id);
       }
+
+      const recipients = [propertiData.admin_id, ...operatorUserIds];
+      eventBus.publish(recipients, "komplain:baru", {
+        id: komplain.id,
+        status: komplain.status,
+      });
 
       const pemilik = await prisma.user.findUnique({
         where: { id: propertiData.admin_id },
@@ -390,6 +399,10 @@ app.put("/:id", async (c) => {
         "KOMPLAIN",
         id,
       );
+      eventBus.publish(komplainData.penghuni.user.id, "komplain:status", {
+        id,
+        status,
+      });
       if (komplainData.penghuni.user.no_telepon) {
         const msg =
           status === "DIPROSES"

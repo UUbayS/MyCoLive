@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
+import { eventBus } from "../lib/event-bus";
 
 const app = new Hono<AppEnv>();
 
@@ -115,6 +116,12 @@ app.post("/properti/:propertiId/kamar", authMiddleware, requireRole("PEMILIK"), 
           }
         }
       }
+    });
+
+    eventBus.publish(user.userId, "kamar:update", {
+      id: kamar.id,
+      created: true,
+      properti_id: propertiId,
     });
 
     return c.json({
@@ -313,6 +320,12 @@ app.put("/kamar/:id", authMiddleware, async (c) => {
         }
       });
 
+      eventBus.publish(existingKamar.properti.admin_id, "kamar:update", {
+        id,
+        status,
+        properti_id: existingKamar.properti_id,
+      });
+
       return c.json({
         status: "success",
         data: kamar,
@@ -376,6 +389,12 @@ app.delete("/kamar/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
     await prisma.kamar.update({
       where: { id },
       data: { deleted_at: new Date(), gambar: [] }
+    });
+
+    eventBus.publish(existingKamar.properti.admin_id, "kamar:update", {
+      id,
+      deleted: true,
+      properti_id: existingKamar.properti_id,
     });
 
     return c.json({

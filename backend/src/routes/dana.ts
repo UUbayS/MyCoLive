@@ -4,6 +4,7 @@ import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 import { createNotifikasi } from "../utils/notifikasi";
 import { sendWhatsAppBroadcast } from "../services/whatsapp";
 import { templateWa } from "../utils/template-wa";
+import { eventBus } from "../lib/event-bus";
 
 const app = new Hono<AppEnv>();
 
@@ -102,6 +103,10 @@ app.post("/", requireRole("PENGELOLA"), async (c) => {
       "DANA",
       pengajuan.id,
     );
+    eventBus.publish(properti.admin_id, "dana:baru", {
+      id: pengajuan.id,
+      status: pengajuan.status,
+    });
     const pemilik = await prisma.user.findUnique({
       where: { id: properti.admin_id },
       select: { no_telepon: true },
@@ -332,6 +337,10 @@ app.put("/:id", requireRole("PEMILIK"), async (c) => {
         "DANA",
         id,
       );
+      eventBus.publish(pengajuanData.operator.user.id, "dana:status", {
+        id,
+        status,
+      });
       if (pengajuanData.operator.user.no_telepon) {
         const msg =
           status === "DITERIMA"
