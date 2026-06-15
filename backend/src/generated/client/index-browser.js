@@ -135,12 +135,19 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.AdminSettingsScalarFieldEnum = {
   id: 'id',
-  nama_rekening: 'nama_rekening',
-  nomor_rekening: 'nomor_rekening',
-  bank: 'bank',
   qris_image: 'qris_image',
   updated_at: 'updated_at',
   user_id: 'user_id'
+};
+
+exports.Prisma.BankAccountScalarFieldEnum = {
+  id: 'id',
+  nama_rekening: 'nama_rekening',
+  nomor_rekening: 'nomor_rekening',
+  bank: 'bank',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  admin_settings_id: 'admin_settings_id'
 };
 
 exports.Prisma.FasilitasScalarFieldEnum = {
@@ -207,7 +214,8 @@ exports.Prisma.PembayaranScalarFieldEnum = {
   nomor_kuitansi: 'nomor_kuitansi',
   created_at: 'created_at',
   updated_at: 'updated_at',
-  pemesanan_id: 'pemesanan_id'
+  pemesanan_id: 'pemesanan_id',
+  bank_account_id: 'bank_account_id'
 };
 
 exports.Prisma.PenghuniScalarFieldEnum = {
@@ -393,6 +401,7 @@ exports.StatusPengajuanCheckout = exports.$Enums.StatusPengajuanCheckout = {
 exports.Prisma.ModelName = {
   User: 'User',
   AdminSettings: 'AdminSettings',
+  BankAccount: 'BankAccount',
   Fasilitas: 'Fasilitas',
   Properti: 'Properti',
   Kamar: 'Kamar',

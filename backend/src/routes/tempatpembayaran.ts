@@ -10,9 +10,10 @@ app.use("*", authMiddleware);
 app.get("/", requireRole("PEMILIK"), async (c) => {
   try {
     const user = c.get("user");
-    
+
     const settings = await prisma.adminSettings.findUnique({
-      where: { user_id: user.userId }
+      where: { user_id: user.userId },
+      include: { bank_accounts: true },
     });
 
     if (!settings) {
@@ -40,17 +41,18 @@ app.get("/", requireRole("PEMILIK"), async (c) => {
 app.get("/:propertiId", async (c) => {
   try {
     const propertiId = c.req.param("propertiId");
-    const user = c.get("user");
 
     const properti = await prisma.properti.findUnique({
       where: { id: propertiId },
       include: {
         admin: {
           include: {
-            settings: true
-          }
-        }
-      }
+            settings: {
+              include: { bank_accounts: true },
+            },
+          },
+        },
+      },
     });
 
     if (!properti) {
@@ -79,10 +81,8 @@ app.get("/:propertiId", async (c) => {
     return c.json({
       status: "success",
       data: {
-        nama_rekening: settings.nama_rekening,
-        nomor_rekening: settings.nomor_rekening,
-        bank: settings.bank,
         qris_image: settings.qris_image,
+        bank_accounts: settings.bank_accounts,
       },
     });
   } catch (error) {
@@ -99,23 +99,49 @@ app.put("/", requireRole("PEMILIK"), async (c) => {
   try {
     const user = c.get("user");
     const body = await c.req.json();
-    const { nama_rekening, nomor_rekening, bank, qris_image } = body;
+    const { qris_image, bank_accounts } = body;
 
-    const settings = await prisma.adminSettings.upsert({
-      where: { user_id: user.userId },
-      update: {
-        nama_rekening: nama_rekening || undefined,
-        nomor_rekening: nomor_rekening || undefined,
-        bank: bank || undefined,
-        qris_image: qris_image || undefined,
-      },
-      create: {
-        user_id: user.userId,
-        nama_rekening: nama_rekening || null,
-        nomor_rekening: nomor_rekening || null,
-        bank: bank || null,
-        qris_image: qris_image || null,
-      },
+    const accounts = Array.isArray(bank_accounts) ? bank_accounts : [];
+    const validAccounts = accounts
+      .filter(
+        (a: any) =>
+          typeof a.nama_rekening === "string" &&
+          a.nama_rekening.trim() &&
+          typeof a.nomor_rekening === "string" &&
+          a.nomor_rekening.trim() &&
+          typeof a.bank === "string" &&
+          a.bank.trim()
+      )
+      .map((a: any) => ({
+        nama_rekening: a.nama_rekening.trim(),
+        nomor_rekening: a.nomor_rekening.trim(),
+        bank: a.bank.trim(),
+      }));
+
+    const settings = await prisma.$transaction(async (tx) => {
+      const settings = await tx.adminSettings.upsert({
+        where: { user_id: user.userId },
+        update: { qris_image: qris_image || null },
+        create: { user_id: user.userId, qris_image: qris_image || null },
+      });
+
+      await tx.bankAccount.deleteMany({
+        where: { admin_settings_id: settings.id },
+      });
+
+      if (validAccounts.length > 0) {
+        await tx.bankAccount.createMany({
+          data: validAccounts.map((a) => ({
+            ...a,
+            admin_settings_id: settings.id,
+          })),
+        });
+      }
+
+      return tx.adminSettings.findUnique({
+        where: { id: settings.id },
+        include: { bank_accounts: true },
+      });
     });
 
     return c.json({

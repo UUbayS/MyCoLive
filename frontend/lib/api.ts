@@ -368,6 +368,15 @@ export type PemesananData = {
   pembayaran?: PembayaranData;
 };
 
+export type BankAccount = {
+  id: string;
+  nama_rekening: string;
+  nomor_rekening: string;
+  bank: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
 export type PembayaranData = {
   id: string;
   metode_bayar: string;
@@ -375,14 +384,13 @@ export type PembayaranData = {
   status: string;
   tgl_bayar?: string;
   created_at: string;
+  bank_account?: BankAccount | null;
 };
 
 export type AdminSettingsData = {
   id: string;
-  nama_rekening?: string | null;
-  nomor_rekening?: string | null;
-  bank?: string | null;
   qris_image?: string | null;
+  bank_accounts: BankAccount[];
 };
 
 export async function createPemesanan(data: {
@@ -390,6 +398,7 @@ export async function createPemesanan(data: {
   durasi_sewa: number;
   tgl_masuk: string;
   metode_bayar: string;
+  bank_account_id?: string;
 }): Promise<PemesananData | null> {
   try {
     const res = await apiFetch<{ status: string; data: PemesananData }>("/api/pemesanan", {
@@ -453,10 +462,8 @@ export async function getTempatPembayaran(): Promise<AdminSettingsData | null> {
 }
 
 export async function updateTempatPembayaran(data: {
-  nama_rekening?: string | null;
-  nomor_rekening?: string | null;
-  bank?: string | null;
   qris_image?: string | null;
+  bank_accounts: { nama_rekening: string; nomor_rekening: string; bank: string }[];
 }): Promise<AdminSettingsData | null> {
   try {
     const res = await apiFetch<{ status: string; data: AdminSettingsData }>("/api/tempatpembayaran", {
@@ -596,6 +603,7 @@ export async function createPerpanjangPemesanan(data: {
   durasi_sewa: number;
   tgl_masuk: string;
   metode_bayar: string;
+  bank_account_id?: string;
 }): Promise<PemesananData | null> {
   try {
     const res = await apiFetch<{ status: string; data: PemesananData }>("/api/pemesanan/perpanjang", {

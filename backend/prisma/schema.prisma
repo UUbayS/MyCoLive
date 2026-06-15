@@ -114,14 +114,25 @@ model User {
 
 model AdminSettings {
   id            String   @id @default(cuid())
-  nama_rekening String?
-  nomor_rekening String?
-  bank          String?
   qris_image    String?
-  updated_at   DateTime @updatedAt
+  updated_at    DateTime @updatedAt
 
-  user_id     String   @unique
-  user        User     @relation(fields: [user_id], references: [id])
+  user_id       String   @unique
+  user          User     @relation(fields: [user_id], references: [id])
+  bank_accounts BankAccount[]
+}
+
+model BankAccount {
+  id             String   @id @default(cuid())
+  nama_rekening  String
+  nomor_rekening String
+  bank           String
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  admin_settings_id String
+  admin_settings    AdminSettings @relation(fields: [admin_settings_id], references: [id], onDelete: Cascade)
+  pembayaran        Pembayaran[]
 }
 
 model Fasilitas {
@@ -222,6 +233,9 @@ model Pembayaran {
 
   pemesanan_id String   @unique
   pemesanan   Pemesanan @relation(fields: [pemesanan_id], references: [id])
+
+  bank_account_id String?
+  bank_account    BankAccount? @relation(fields: [bank_account_id], references: [id])
 }
 
 model Penghuni {

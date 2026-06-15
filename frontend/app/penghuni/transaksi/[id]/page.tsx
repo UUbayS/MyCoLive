@@ -152,11 +152,10 @@ export default function DetailTransaksiPage() {
 
   // Data rekening dari response pemesanan
   const settings = pemesanan.properti?.admin?.settings;
-  const hasPaymentInfo = settings && (
-    settings.nama_rekening ||
-    settings.nomor_rekening ||
-    settings.bank ||
-    settings.qris_image
+  const selectedBankAccount = pemesanan.pembayaran?.bank_account;
+  const hasPaymentInfo = !!(
+    settings &&
+    (settings.bank_accounts.length > 0 || settings.qris_image)
   );
 
   return (
@@ -231,26 +230,23 @@ export default function DetailTransaksiPage() {
             <h3 className="text-sm font-semibold text-gray-700 mb-3">Informasi Pembayaran</h3>
             {pemesanan.metode_bayar === "TRANSFER" ? (
               <div className="space-y-2 text-sm">
-                {settings?.bank && (
-                  <p>
-                    <span className="text-gray-500">Bank:</span>{" "}
-                    <span className="font-medium">{settings.bank}</span>
-                  </p>
-                )}
-                {settings?.nomor_rekening && (
-                  <p>
-                    <span className="text-gray-500">No. Rekening:</span>{" "}
-                    <span className="font-medium">{settings.nomor_rekening}</span>
-                  </p>
-                )}
-                {settings?.nama_rekening && (
-                  <p>
-                    <span className="text-gray-500">Atas Nama:</span>{" "}
-                    <span className="font-medium">{settings.nama_rekening}</span>
-                  </p>
-                )}
-                {!settings?.bank && !settings?.nomor_rekening && !settings?.nama_rekening && (
-                  <p className="text-sm text-gray-500">Data rekening belum lengkap</p>
+                {selectedBankAccount ? (
+                  <>
+                    <p>
+                      <span className="text-gray-500">Bank:</span>{" "}
+                      <span className="font-medium">{selectedBankAccount.bank}</span>
+                    </p>
+                    <p>
+                      <span className="text-gray-500">No. Rekening:</span>{" "}
+                      <span className="font-medium">{selectedBankAccount.nomor_rekening}</span>
+                    </p>
+                    <p>
+                      <span className="text-gray-500">Atas Nama:</span>{" "}
+                      <span className="font-medium">{selectedBankAccount.nama_rekening}</span>
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-500">Data rekening belum tersedia</p>
                 )}
               </div>
             ) : (

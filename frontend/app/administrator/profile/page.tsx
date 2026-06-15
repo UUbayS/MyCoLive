@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone, Wallet, Building, CreditCard, QrCode as QrCodeIcon, Wifi, WifiOff, RefreshCw, Unplug } from "lucide-react";
+import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone, Wallet, Building, CreditCard, QrCode as QrCodeIcon, Wifi, WifiOff, RefreshCw, Unplug, Plus, Trash2 } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
 import Modal from "../../../components/ui/Modal";
 import ConfirmDialog from "../../../components/ConfirmDialog";
@@ -202,33 +202,24 @@ export default function ProfileAdminPage() {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                 </div>
-              ) : paymentInfo && (paymentInfo.nama_rekening || paymentInfo.nomor_rekening || paymentInfo.bank || paymentInfo.qris_image) ? (
-                <div className="space-y-3">
-                  {paymentInfo.nama_rekening && (
-                    <div className="flex items-start gap-3">
-                      <User size={18} className="text-gray-400 mt-0.5" />
-                      <div>
-                        <p className="text-xs text-gray-500">Nama Pemilik Rekening</p>
-                        <p className="text-sm font-medium text-black">{paymentInfo.nama_rekening}</p>
-                      </div>
-                    </div>
-                  )}
-                  {paymentInfo.bank && (
-                    <div className="flex items-start gap-3">
-                      <Building size={18} className="text-gray-400 mt-0.5" />
-                      <div>
-                        <p className="text-xs text-gray-500">Bank</p>
-                        <p className="text-sm font-medium text-black">{paymentInfo.bank}</p>
-                      </div>
-                    </div>
-                  )}
-                  {paymentInfo.nomor_rekening && (
-                    <div className="flex items-start gap-3">
-                      <CreditCard size={18} className="text-gray-400 mt-0.5" />
-                      <div>
-                        <p className="text-xs text-gray-500">Nomor Rekening</p>
-                        <p className="text-sm font-medium text-black">{paymentInfo.nomor_rekening}</p>
-                      </div>
+              ) : !!(
+                paymentInfo &&
+                (paymentInfo.bank_accounts.length > 0 || paymentInfo.qris_image)
+              ) ? (
+                <div className="space-y-4">
+                  {paymentInfo.bank_accounts.length > 0 && (
+                    <div className="space-y-3">
+                      <p className="text-xs text-gray-500">Rekening Bank</p>
+                      {paymentInfo.bank_accounts.map((account) => (
+                        <div key={account.id} className="bg-gray-50 rounded-xl p-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Building size={16} className="text-[#8dc63f]" />
+                            <span className="text-sm font-semibold text-black">{account.bank}</span>
+                          </div>
+                          <p className="text-sm font-medium text-black">{account.nomor_rekening}</p>
+                          <p className="text-xs text-gray-500">a.n. {account.nama_rekening}</p>
+                        </div>
+                      ))}
                     </div>
                   )}
                   {paymentInfo.qris_image && (
@@ -687,23 +678,57 @@ function EditPaymentModal({
   onClose: () => void;
   onSuccess: () => void;
 }) {
-  const [namaRekening, setNamaRekening] = useState(paymentInfo?.nama_rekening || "");
-  const [nomorRekening, setNomorRekening] = useState(paymentInfo?.nomor_rekening || "");
-  const [bank, setBank] = useState(paymentInfo?.bank || "");
   const [qrisImage, setQrisImage] = useState(paymentInfo?.qris_image || "");
+  const [accounts, setAccounts] = useState(
+    paymentInfo?.bank_accounts?.length
+      ? paymentInfo.bank_accounts.map((acc) => ({
+          id: acc.id,
+          nama_rekening: acc.nama_rekening,
+          nomor_rekening: acc.nomor_rekening,
+          bank: acc.bank,
+        }))
+      : [{ id: "", nama_rekening: "", nomor_rekening: "", bank: "" }]
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const updateAccount = (index: number, field: string, value: string) => {
+    const updated = [...accounts];
+    updated[index] = { ...updated[index], [field]: value };
+    setAccounts(updated);
+  };
+
+  const addAccount = () => {
+    setAccounts([...accounts, { id: "", nama_rekening: "", nomor_rekening: "", bank: "" }]);
+  };
+
+  const removeAccount = (index: number) => {
+    const updated = accounts.filter((_, i) => i !== index);
+    setAccounts(updated.length ? updated : [{ id: "", nama_rekening: "", nomor_rekening: "", bank: "" }]);
+  };
+
   const handleSave = async () => {
     setError("");
+
+    const validAccounts = accounts.filter(
+      (acc) => acc.bank.trim() && acc.nomor_rekening.trim() && acc.nama_rekening.trim()
+    );
+
+    if (validAccounts.length === 0 && !qrisImage.trim()) {
+      setError("Isi minimal satu rekening atau URL QRIS");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const result = await updateTempatPembayaran({
-        nama_rekening: namaRekening.trim() || null,
-        nomor_rekening: nomorRekening.trim() || null,
-        bank: bank.trim() || null,
         qris_image: qrisImage.trim() || null,
+        bank_accounts: validAccounts.map((acc) => ({
+          nama_rekening: acc.nama_rekening.trim(),
+          nomor_rekening: acc.nomor_rekening.trim(),
+          bank: acc.bank.trim(),
+        })),
       });
 
       if (result) {
@@ -722,107 +747,123 @@ function EditPaymentModal({
   return (
     <Modal isOpen={true} onClose={onClose} title="Edit Informasi Pembayaran" position="bottom" size="md">
       <div className="p-4 space-y-4">
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
-              {error}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
+            {error}
+          </div>
+        )}
+
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="block text-sm font-medium text-gray-700">Daftar Rekening Bank</label>
+            <button
+              type="button"
+              onClick={addAccount}
+              className="flex items-center gap-1 text-sm font-medium text-[#8dc63f] hover:text-[#7ab332] transition-colors"
+            >
+              <Plus size={16} />
+              Tambah
+            </button>
+          </div>
+
+          {accounts.map((account, index) => (
+            <div key={index} className="bg-gray-50 rounded-xl p-3 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium text-gray-500">Rekening {index + 1}</span>
+                {accounts.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeAccount(index)}
+                    className="text-red-500 hover:text-red-600 transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Bank</label>
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                    <Building size={18} />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Contoh: BCA, Mandiri, BNI"
+                    className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                    value={account.bank}
+                    onChange={(e) => updateAccount(index, "bank", e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Nomor Rekening</label>
+                  <input
+                    type="text"
+                    placeholder="Nomor rekening"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                    value={account.nomor_rekening}
+                    onChange={(e) => updateAccount(index, "nomor_rekening", e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Atas Nama</label>
+                  <input
+                    type="text"
+                    placeholder="Nama pemilik"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                    value={account.nama_rekening}
+                    onChange={(e) => updateAccount(index, "nama_rekening", e.target.value)}
+                  />
+                </div>
+              </div>
             </div>
+          ))}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            URL Gambar QRIS
+          </label>
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+              <QrCodeIcon size={20} />
+            </div>
+            <input
+              type="text"
+              placeholder="https://example.com/qris.png"
+              className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+              value={qrisImage}
+              onChange={(e) => setQrisImage(e.target.value)}
+            />
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Masukkan URL gambar QRIS. Gunakan layanan image hosting untuk mengunggah gambar.
+          </p>
+        </div>
+      </div>
+
+      <div className="pt-2 p-4">
+        <button
+          onClick={handleSave}
+          disabled={loading}
+          className="w-full bg-[#8dc63f] text-white py-4 rounded-2xl font-semibold text-base shadow-lg shadow-[#8dc63f]/25 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Menyimpan...
+            </span>
+          ) : (
+            "Simpan"
           )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nama Pemilik Rekening
-            </label>
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <User size={20} />
-              </div>
-              <input
-                type="text"
-                placeholder="Nama pemilik rekening"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={namaRekening}
-                onChange={(e) => setNamaRekening(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Bank
-            </label>
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <Building size={20} />
-              </div>
-              <input
-                type="text"
-                placeholder="Contoh: BCA, Mandiri, BNI"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={bank}
-                onChange={(e) => setBank(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nomor Rekening
-            </label>
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <CreditCard size={20} />
-              </div>
-              <input
-                type="text"
-                placeholder="Nomor rekening"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={nomorRekening}
-                onChange={(e) => setNomorRekening(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              URL Gambar QRIS
-            </label>
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <QrCodeIcon size={20} />
-              </div>
-              <input
-                type="text"
-                placeholder="https://example.com/qris.png"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={qrisImage}
-                onChange={(e) => setQrisImage(e.target.value)}
-              />
-            </div>
-            <p className="text-xs text-gray-500 mt-1">
-              Masukkan URL gambar QRIS. Gunakan layanan image hosting untuk mengunggah gambar.
-            </p>
-          </div>
-        </div>
-
-        <div className="pt-2">
-          <button
-            onClick={handleSave}
-            disabled={loading}
-            className="w-full bg-[#8dc63f] text-white py-4 rounded-2xl font-semibold text-base shadow-lg shadow-[#8dc63f]/25 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Menyimpan...
-              </span>
-            ) : (
-              "Simpan"
-            )}
-          </button>
-        </div>
-      </Modal>
+        </button>
+      </div>
+    </Modal>
   );
 }

@@ -13,6 +13,7 @@ app.use("*", authMiddleware);
 async function getSettings(adminId: string) {
   return prisma.adminSettings.findUnique({
     where: { user_id: adminId },
+    include: { bank_accounts: true },
   });
 }
 
@@ -21,7 +22,7 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
   try {
     const user = c.get("user");
     const body = await c.req.json();
-    const { kamar_id, durasi_sewa, tgl_masuk, metode_bayar } = body;
+    const { kamar_id, durasi_sewa, tgl_masuk, metode_bayar, bank_account_id } = body;
 
     if (!kamar_id || !durasi_sewa || !tgl_masuk || !metode_bayar) {
       return c.json(
@@ -74,12 +75,32 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
     }
 
     const settings = await getSettings(kamar.properti.admin_id);
+
+    let selectedBankAccount = null;
+    if (metode_bayar === "TRANSFER") {
+      if (!bank_account_id) {
+        return c.json(
+          { status: "error", message: "Pilih rekening bank tujuan" },
+          400,
+        );
+      }
+      selectedBankAccount = settings?.bank_accounts.find(
+        (acc) => acc.id === bank_account_id
+      );
+      if (!selectedBankAccount) {
+        return c.json(
+          { status: "error", message: "Rekening bank tidak ditemukan" },
+          400,
+        );
+      }
+    }
+
     const metodeInfo =
       metode_bayar === "TRANSFER"
         ? {
-            rekening: settings?.nomor_rekening,
-            atas_nama: settings?.nama_rekening,
-            bank: settings?.bank,
+            rekening: selectedBankAccount?.nomor_rekening,
+            atas_nama: selectedBankAccount?.nama_rekening,
+            bank: selectedBankAccount?.bank,
           }
         : { qris_image: settings?.qris_image };
 
@@ -117,6 +138,7 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
         pemesanan_id: pemesanan.id,
         metode_bayar,
         status: "MENUNGGU",
+        bank_account_id: selectedBankAccount?.id || null,
       },
     });
 
@@ -177,7 +199,7 @@ app.post("/perpanjang", requireRole("PENGHUNI"), async (c) => {
   try {
     const user = c.get("user");
     const body = await c.req.json();
-    const { durasi_sewa, tgl_masuk, metode_bayar } = body;
+    const { durasi_sewa, tgl_masuk, metode_bayar, bank_account_id } = body;
 
     if (!durasi_sewa || !tgl_masuk || !metode_bayar) {
       return c.json(
@@ -252,12 +274,32 @@ app.post("/perpanjang", requireRole("PENGHUNI"), async (c) => {
     }
 
     const settings = await getSettings(kamar.properti.admin_id);
+
+    let selectedBankAccount = null;
+    if (metode_bayar === "TRANSFER") {
+      if (!bank_account_id) {
+        return c.json(
+          { status: "error", message: "Pilih rekening bank tujuan" },
+          400,
+        );
+      }
+      selectedBankAccount = settings?.bank_accounts.find(
+        (acc) => acc.id === bank_account_id
+      );
+      if (!selectedBankAccount) {
+        return c.json(
+          { status: "error", message: "Rekening bank tidak ditemukan" },
+          400,
+        );
+      }
+    }
+
     const metodeInfo =
       metode_bayar === "TRANSFER"
         ? {
-            rekening: settings?.nomor_rekening,
-            atas_nama: settings?.nama_rekening,
-            bank: settings?.bank,
+            rekening: selectedBankAccount?.nomor_rekening,
+            atas_nama: selectedBankAccount?.nama_rekening,
+            bank: selectedBankAccount?.bank,
           }
         : { qris_image: settings?.qris_image };
 
@@ -295,6 +337,7 @@ app.post("/perpanjang", requireRole("PENGHUNI"), async (c) => {
         pemesanan_id: pemesanan.id,
         metode_bayar,
         status: "MENUNGGU",
+        bank_account_id: selectedBankAccount?.id || null,
       },
     });
 
@@ -388,18 +431,19 @@ app.get("/my", async (c) => {
             admin: {
               include: {
                 settings: {
-                  select: {
-                    nama_rekening: true,
-                    nomor_rekening: true,
-                    bank: true,
-                    qris_image: true,
+                  include: {
+                    bank_accounts: true,
                   },
                 },
               },
             },
           },
         },
-        pembayaran: true,
+        pembayaran: {
+          include: {
+            bank_account: true,
+          },
+        },
       },
       orderBy: { created_at: "desc" },
     });
@@ -429,11 +473,8 @@ app.get("/:id", async (c) => {
             admin: {
               include: {
                 settings: {
-                  select: {
-                    nama_rekening: true,
-                    nomor_rekening: true,
-                    bank: true,
-                    qris_image: true,
+                  include: {
+                    bank_accounts: true,
                   },
                 },
               },
@@ -452,7 +493,11 @@ app.get("/:id", async (c) => {
             },
           },
         },
-        pembayaran: true,
+        pembayaran: {
+          include: {
+            bank_account: true,
+          },
+        },
       },
     });
 
