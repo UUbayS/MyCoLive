@@ -4,8 +4,6 @@ import { authMiddleware, requireRole, AppEnv } from "../middleware/auth";
 
 const app = new Hono<AppEnv>();
 
-app.use("*", authMiddleware);
-
 // Get all fasilitas (filter by jenis: RUANGAN or UMUM)
 app.get("/", async (c) => {
   try {
@@ -35,7 +33,7 @@ app.get("/", async (c) => {
 });
 
 // Create fasilitas (PEMILIK only)
-app.post("/", requireRole("PEMILIK"), async (c) => {
+app.post("/", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {
     const body = await c.req.json();
     const { nama, jenis } = body;
@@ -89,7 +87,7 @@ app.post("/", requireRole("PEMILIK"), async (c) => {
 });
 
 // Delete fasilitas (PEMILIK only) - with dependency check
-app.delete("/:id", requireRole("PEMILIK"), async (c) => {
+app.delete("/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {
     const id = c.req.param("id");
 

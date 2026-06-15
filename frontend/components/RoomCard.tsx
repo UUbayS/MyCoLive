@@ -13,6 +13,7 @@ export type RoomCardData = {
   gambar?: string;
   propertiId: string;
   showEdit?: boolean;
+  basePath?: string;
 };
 
 const formatRupiah = (num?: number) => {
@@ -25,7 +26,7 @@ const RoomCard: React.FC<{ room: RoomCardData }> = ({ room }) => {
   const isTerisi = room.status === "TERISI";
   const isMaintenance = room.status === "MAINTENANCE";
   return (
-    <Link href={`/public/katalog-properti/${room.propertiId}/kamar/${room.id}`}>
+    <Link href={`${room.basePath || "/public/katalog-properti"}/${room.propertiId}/kamar/${room.id}`}>
       <div className="rounded-2xl bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         <div className="h-40 w-full bg-gray-200 flex items-center justify-center relative">
           {room.gambar ? (

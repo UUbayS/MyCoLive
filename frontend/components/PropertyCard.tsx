@@ -56,7 +56,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, actions, detailLi
   const isAvailable = (property.kamar_kosong ?? 0) > 0;
   const isAdmin = !!actions;
   const linkTarget = detailLink || `/public/katalog-properti/${property.id}`;
-  const manageTarget = manageLink || `/public/katalog-properti/${property.id}/kamar`;
+  const manageTarget = manageLink || `/administrator/properti/${property.id}/kamar`;
   
   return (
     <div className="rounded-xl bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow">

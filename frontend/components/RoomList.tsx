@@ -5,9 +5,10 @@ import RoomCard, { RoomCardData } from "./RoomCard";
 interface RoomListProps {
   rooms: RoomCardData[];
   showEdit?: boolean;
+  basePath?: string;
 }
 
-const RoomList: React.FC<RoomListProps> = ({ rooms, showEdit = false }) => {
+const RoomList: React.FC<RoomListProps> = ({ rooms, showEdit = false, basePath }) => {
   if (rooms.length === 0) {
     return (
       <div className="text-center py-12 text-gray-500">
@@ -19,7 +20,7 @@ const RoomList: React.FC<RoomListProps> = ({ rooms, showEdit = false }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {rooms.map((room) => (
-        <RoomCard key={room.id} room={{ ...room, showEdit }} />
+        <RoomCard key={room.id} room={{ ...room, showEdit, basePath }} />
       ))}
     </div>
   );

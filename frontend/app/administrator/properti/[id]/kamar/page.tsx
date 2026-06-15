@@ -75,11 +75,8 @@ export default function AdminDaftarKamarPage() {
     try {
       const result = await deleteKamar(kamarToDelete.id);
       if (result) {
-        success("Properti berhasil dihapus");
-        setTimeout(() => {
-          router.push("/administrator/properti/${propertiId}/kamar");
-        }, 1500);
         setKamarList((prev) => prev.filter((k) => k.id !== kamarToDelete.id));
+        success("Kamar berhasil dihapus");
       } else {
         error("Gagal menghapus kamar. Pastikan kamar tidak sedang ditempati.");
       }
