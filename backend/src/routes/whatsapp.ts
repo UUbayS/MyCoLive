@@ -53,12 +53,15 @@ app.post("/broadcast", requireRole("PEMILIK"), async (c) => {
   }
 });
 
-app.get("/status", requireRole("PEMILIK"), async (c) => {
+app.get("/status", requireRole("PEMILIK", "PENGELOLA"), async (c) => {
+  const user = c.get("user") as any;
+  const isPemilik = user?.role === "PEMILIK";
+
   return c.json({
     status: "success",
     data: {
       connected: baileysProvider.isConnected(),
-      qr: baileysProvider.getQRDataUrl() || baileysProvider.getQR(),
+      qr: isPemilik ? (baileysProvider.getQRDataUrl() || baileysProvider.getQR()) : null,
     },
   });
 });

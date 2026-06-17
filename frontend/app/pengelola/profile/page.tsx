@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone, Wallet, Building, CreditCard, QrCode as QrCodeIcon, Wifi, WifiOff, RefreshCw, Unplug, Plus, Trash2 } from "lucide-react";
+import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone, Wallet, Building, Plus, Trash2 } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
 import Modal from "../../../components/ui/Modal";
-import ConfirmDialog from "../../../components/ConfirmDialog";
-import { getProfile, updateProfile, changePassword, getPengelolaRekening, updatePengelolaRekening, getWhatsappStatus, connectWhatsapp, disconnectWhatsapp, ProfileData, PengelolaBankAccountData, WhatsAppStatus } from "../../../lib/api";
+import { getProfile, updateProfile, changePassword, getPengelolaRekening, updatePengelolaRekening, ProfileData, PengelolaBankAccountData } from "../../../lib/api";
 import { clearAuth } from "../../../lib/auth";
 
 export default function ProfileAdminPage() {
@@ -18,11 +17,7 @@ export default function ProfileAdminPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [whatsappStatus, setWhatsappStatus] = useState<WhatsAppStatus | null>(null);
-  const [whatsappConnecting, setWhatsappConnecting] = useState(false);
-  const [whatsappLoading, setWhatsappLoading] = useState(false);
-  const [whatsappDisconnecting, setWhatsappDisconnecting] = useState(false);
-  const [showDisconnectDialog, setShowDisconnectDialog] = useState(false);
+
 
   useEffect(() => {
     let mounted = true;
@@ -30,25 +25,18 @@ export default function ProfileAdminPage() {
     async function loadData() {
       const profileData = await getProfile();
       const paymentData = await getPengelolaRekening();
-      const waData = await getWhatsappStatus();
       if (mounted) {
         setProfile(profileData);
         setPaymentInfo(paymentData);
-        setWhatsappStatus(waData);
         setLoadingProfile(false);
         setLoadingPayment(false);
       }
     }
 
     loadData();
-    const waInterval = setInterval(async () => {
-      const waData = await getWhatsappStatus();
-      if (mounted) setWhatsappStatus(waData);
-    }, 5000);
 
     return () => {
       mounted = false;
-      clearInterval(waInterval);
     };
   }, []);
 
@@ -79,45 +67,6 @@ export default function ProfileAdminPage() {
     setPaymentInfo(data);
     setLoadingPayment(false);
   };
-
-  {/*}
-  const handleConnectWhatsapp = async () => {
-    setWhatsappConnecting(true);
-    try {
-      await connectWhatsapp();
-      setTimeout(async () => {
-        const data = await getWhatsappStatus();
-        setWhatsappStatus(data);
-      }, 2000);
-    } catch {
-      console.error("Failed to connect WhatsApp");
-    } finally {
-      setWhatsappConnecting(false);
-    }
-  };
-
-  const handleDisconnectWhatsapp = async () => {
-    setWhatsappDisconnecting(true);
-    try {
-      const result = await disconnectWhatsapp();
-      if (result) {
-        const data = await getWhatsappStatus();
-        setWhatsappStatus(data);
-      }
-    } catch (err) {
-      console.error("Failed to disconnect WhatsApp", err);
-    } finally {
-      setWhatsappDisconnecting(false);
-      setShowDisconnectDialog(false);
-    }
-  };
-
-  const refreshWhatsapp = async () => {
-    setWhatsappLoading(true);
-    const data = await getWhatsappStatus();
-    setWhatsappStatus(data);
-    setWhatsappLoading(false);
-  };*/}
 
   const isLoading = loadingProfile || loadingPayment;
 
@@ -232,74 +181,6 @@ export default function ProfileAdminPage() {
               )}
             </div>
 
-            {/* WhatsApp Connect
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  {whatsappStatus?.connected ? (
-                    <Wifi size={20} className="text-green-500" />
-                  ) : (
-                    <WifiOff size={20} className="text-gray-400" />
-                  )}
-                  <h2 className="text-base font-semibold text-black">WhatsApp</h2>
-                </div>
-                <button
-                  onClick={refreshWhatsapp}
-                  disabled={whatsappLoading}
-                  className="text-sm font-medium text-[#8dc63f] hover:text-[#7ab332] transition-colors disabled:opacity-50"
-                >
-                  <RefreshCw size={16} className={`inline mr-1 ${whatsappLoading ? "animate-spin" : ""}`} />
-                  Refresh
-                </button>
-              </div>
-
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`w-3 h-3 rounded-full ${whatsappStatus?.connected ? "bg-green-500" : "bg-gray-300"}`} />
-                <span className="text-sm text-gray-600">
-                  {whatsappStatus?.connected ? "Terhubung" : "Tidak terhubung"}
-                </span>
-              </div>
-
-              {whatsappStatus?.qr && !whatsappStatus?.connected && (
-                <div className="flex flex-col items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-200 mb-4">
-                  <QrCodeIcon size={20} className="text-green-600" />
-                  <p className="text-sm text-center text-gray-700">
-                    Scan QR code dengan WhatsApp
-                  </p>
-                  <img
-                    src={whatsappStatus.qr}
-                    alt="WhatsApp QR Code"
-                    className="w-48 h-48 border-2 border-green-300 rounded-lg bg-white p-2"
-                  />
-                  <p className="text-xs text-gray-500 text-center">
-                    Buka WhatsApp → Pengaturan → Perangkat Tertaut → Scan QR
-                  </p>
-                </div>
-              )}
-
-              {!whatsappStatus?.connected && (
-                <button
-                  onClick={handleConnectWhatsapp}
-                  disabled={whatsappConnecting}
-                  className="w-full bg-[#8dc63f] text-white py-3 rounded-xl font-medium text-sm shadow-lg shadow-[#8dc63f]/25 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  <RefreshCw size={16} className={`${whatsappConnecting ? "animate-spin" : ""}`} />
-                  {whatsappConnecting ? "Menghubungkan..." : "Hubungkan WhatsApp"}
-                </button>
-              )}
-
-              {whatsappStatus?.connected && (
-                <button
-                  onClick={() => setShowDisconnectDialog(true)}
-                  disabled={whatsappDisconnecting}
-                  className="w-full bg-white border border-red-200 text-red-500 py-3 rounded-xl font-medium text-sm hover:bg-red-50 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  <Unplug size={16} />
-                  Putuskan WhatsApp
-                </button>
-              )}
-            </div>*/}
-
             {/* Logout */}
             <button
               onClick={handleLogout}
@@ -349,19 +230,7 @@ export default function ProfileAdminPage() {
         />
       )}
 
-      {/*}
-      <ConfirmDialog
-        isOpen={showDisconnectDialog}
-        title="Putuskan WhatsApp?"
-        message="Sesi WhatsApp akan diputuskan dan file sesi lokal akan dihapus. Anda harus scan QR ulang untuk menghubungkan kembali (berguna jika ingin ganti nomor atau HP reset)."
-        confirmLabel={whatsappDisconnecting ? "Memutuskan..." : "Ya, Putuskan"}
-        cancelLabel="Batal"
-        danger
-        onConfirm={handleDisconnectWhatsapp}
-        onCancel={() => {
-          if (!whatsappDisconnecting) setShowDisconnectDialog(false);
-        }}
-      />*/}
+
     </MainLayout>
   );
 }

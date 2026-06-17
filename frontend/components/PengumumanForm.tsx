@@ -7,6 +7,8 @@ import {
   kirimPengumuman,
   PengumumanResult,
   PengumumanTarget,
+  getWhatsappStatus,
+  WhatsAppStatus,
 } from "../lib/api";
 import {
   PENGUMUMAN_TEMPLATES,
@@ -121,9 +123,16 @@ export default function PengumumanForm({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState<PengumumanResult | null>(null);
   const [showVarMenu, setShowVarMenu] = useState(false);
+  const [waStatus, setWaStatus] = useState<WhatsAppStatus | null>(null);
 
   const pesanRef = useRef<HTMLTextAreaElement>(null);
   const varMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    getWhatsappStatus().then((res) => {
+      if (res) setWaStatus(res);
+    });
+  }, []);
 
   useEffect(() => {
     if (propertiList.length > 0 && !propertiId) {
@@ -250,6 +259,19 @@ export default function PengumumanForm({
         <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-2">
           <AlertCircle className="w-5 h-5" />
           <span>{error}</span>
+        </div>
+      )}
+
+      {waStatus && (
+        <div className={`p-4 rounded-xl border flex items-center gap-3 ${waStatus.connected ? "bg-green-50 border-green-200 text-green-700" : "bg-amber-50 border-amber-200 text-amber-700"}`}>
+          <div className="flex-1">
+            <h3 className="font-semibold text-sm">{waStatus.connected ? "✅ WhatsApp Terhubung" : "⚠️ WhatsApp Belum Terhubung"}</h3>
+            <p className="text-xs mt-1 opacity-90">
+              {waStatus.connected
+                ? "Anda dapat mengirim pengumuman melalui WhatsApp secara langsung."
+                : "Pengumuman melalui WhatsApp tidak dapat dikirim karena server belum terhubung. Hubungi Pemilik untuk scan QR code di Profil."}
+            </p>
+          </div>
         </div>
       )}
 
