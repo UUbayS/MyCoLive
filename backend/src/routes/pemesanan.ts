@@ -143,39 +143,6 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
       },
     });
 
-    // Notifikasi ke PEMILIK
-    const penghuniUser = await prisma.penghuni.findUnique({
-      where: { user_id: user.userId },
-      include: { user: { select: { nama: true } } },
-    });
-    if (penghuniUser?.user?.nama) {
-      await createNotifikasi(
-        kamar.properti.admin_id,
-        "Pemesanan Baru",
-        `${penghuniUser.user.nama} memesan Kamar ${kamar.nomor} di ${kamar.properti.nama}`,
-        "PEMESANAN",
-        pemesanan.id,
-      );
-      eventBus.publish(kamar.properti.admin_id, "pemesanan:baru", {
-        id: pemesanan.id,
-        status: pemesanan.status,
-      });
-      const pemilik = await prisma.user.findUnique({
-        where: { id: kamar.properti.admin_id },
-        select: { no_telepon: true },
-      });
-      if (pemilik?.no_telepon) {
-        sendWhatsAppBroadcast(
-          [pemilik.no_telepon],
-          templateWa.pemesananBaru(
-            penghuniUser.user.nama,
-            kamar.nomor,
-            kamar.properti.nama,
-          ),
-        ).catch(console.error);
-      }
-    }
-
     return c.json(
       {
         status: "success",
@@ -345,39 +312,6 @@ app.post("/perpanjang", requireRole("PENGHUNI"), async (c) => {
         bank_account_id: selectedBankAccount?.id || null,
       },
     });
-
-    // Notifikasi ke PEMILIK
-    const penghuniUser = await prisma.penghuni.findUnique({
-      where: { user_id: user.userId },
-      include: { user: { select: { nama: true } } },
-    });
-    if (penghuniUser?.user?.nama) {
-      await createNotifikasi(
-        kamar.properti.admin_id,
-        "Perpanjang Sewa",
-        `${penghuniUser.user.nama} memperpanjang sewa Kamar ${kamar.nomor} di ${kamar.properti.nama}`,
-        "PEMESANAN",
-        pemesanan.id,
-      );
-      eventBus.publish(kamar.properti.admin_id, "pemesanan:baru", {
-        id: pemesanan.id,
-        status: pemesanan.status,
-      });
-      const pemilik = await prisma.user.findUnique({
-        where: { id: kamar.properti.admin_id },
-        select: { no_telepon: true },
-      });
-      if (pemilik?.no_telepon) {
-        sendWhatsAppBroadcast(
-          [pemilik.no_telepon],
-          templateWa.perpanjangSewa(
-            penghuniUser.user.nama,
-            kamar.nomor,
-            kamar.properti.nama,
-          ),
-        ).catch(console.error);
-      }
-    }
 
     return c.json(
       {
@@ -644,6 +578,9 @@ app.get("/", requireRole("PEMILIK"), async (c) => {
       where: {
         properti: {
           admin_id: user.userId,
+        },
+        pembayaran: {
+          status: "DIVERIFIKASI",
         },
       },
       include: {

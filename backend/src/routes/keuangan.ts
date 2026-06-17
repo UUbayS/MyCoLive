@@ -53,7 +53,7 @@ app.get("/transaksi", requireRole("PEMILIK"), async (c) => {
         where: {
           status: "MENUNGGU",
           properti_id: { in: propertiIds },
-          pembayaran: { status: "MENUNGGU" },
+          pembayaran: { status: "DIVERIFIKASI" },
         },
         include: {
           penghuni: { include: { user: { select: { nama: true } } } },

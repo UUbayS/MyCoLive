@@ -47,11 +47,7 @@ app.get("/", async (c) => {
         badges.validasiBayar = await prisma.pemesanan.count({
           where: {
             properti_id: { in: propertiIds },
-            OR: [
-              { status: "MENUNGGU" },
-              { pembayaran: { status: "DIVERIFIKASI" } },
-              { pembayaran: { status: "MENUNGGU" } },
-            ]
+            pembayaran: { status: "DIVERIFIKASI" },
           }
         });
       }

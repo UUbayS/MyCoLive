@@ -93,7 +93,7 @@ export default function ValidasiPembayaranPage() {
     if (activeTab === "all") {
       setFilteredList(pemesananList);
     } else if (activeTab === "pending") {
-      setFilteredList(pemesananList.filter((p) => p.status === "MENUNGGU"));
+      setFilteredList(pemesananList.filter((p) => p.status === "MENUNGGU" && p.pembayaran?.status === "DIVERIFIKASI"));
     } else if (activeTab === "verified") {
       setFilteredList(pemesananList.filter((p) => p.status === "DITERIMA"));
     } else if  (activeTab === "reject"){
@@ -116,7 +116,7 @@ export default function ValidasiPembayaranPage() {
     }
   };
 
-  const pendingCount = pemesananList.filter((p) => p.status === "MENUNGGU").length;
+  const pendingCount = pemesananList.filter((p) => p.status === "MENUNGGU" && p.pembayaran?.status === "DIVERIFIKASI").length;
   const validCount  = pemesananList.filter((p) => p.status === "DITERIMA").length;
   const rejectCount  = pemesananList.filter((p) => p.status === "DITOLAK").length;
 

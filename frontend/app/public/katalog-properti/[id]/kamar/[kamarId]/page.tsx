@@ -120,7 +120,7 @@ export default function DetailKamarPage() {
         <div className="flex items-center justify-between w-full">
           <div className="flex-1 flex justify-start">
             <button
-              onClick={() => router.push(`/administrator/properti/${propertiId}/kamar`)}
+              onClick={() => router.back()}
               className="p-1 -ml-1 text-gray-600 hover:text-gray-900 transition-colors"
               aria-label="Kembali"
             >
