@@ -21,8 +21,10 @@ import {
   getPropertiList,
   getMyDanaList,
   createPengajuanDana,
+  getPengelolaRekening,
   PropertiData,
   PengajuanDanaData,
+  PengelolaBankAccountData,
 } from "../../../lib/api";
 import { useRealtime } from "../../../lib/useRealtime";
 
@@ -37,6 +39,7 @@ export default function RequestDanaPengelolaPage() {
   const [danaList, setDanaList] = useState<PengajuanDanaData[]>([]);
   const [filteredList, setFilteredList] = useState<PengajuanDanaData[]>([]);
   const [propertiList, setPropertiList] = useState<PropertiData[]>([]);
+  const [bankAccounts, setBankAccounts] = useState<PengelolaBankAccountData[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"all" | "pending" | "accepted" | "rejected">("all");
   const [showModal, setShowModal] = useState(false);
@@ -58,13 +61,15 @@ export default function RequestDanaPengelolaPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const [danaData, propertiData] = await Promise.all([
+      const [danaData, propertiData, accountsData] = await Promise.all([
         getMyDanaList(),
         getPropertiList(),
+        getPengelolaRekening(),
       ]);
       setDanaList(danaData);
       setFilteredList(danaData);
       setPropertiList(propertiData);
+      setBankAccounts(accountsData);
     } catch (err) {
       console.error(err);
     } finally {
@@ -375,15 +380,26 @@ export default function RequestDanaPengelolaPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">No. Rekening</label>
-                <input
-                  type="text"
-                  value={formData.no_rekening}
-                  onChange={(e) => setFormData({ ...formData, no_rekening: e.target.value })}
-                  placeholder="1234567890"
-                  className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent ${
-                    errors.no_rekening ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
+                {bankAccounts.length === 0 ? (
+                  <div className="text-sm text-red-500 py-2 border border-red-200 bg-red-50 rounded-xl px-4">
+                    Belum ada rekening bank. Silakan tambahkan rekening di menu <strong>Profil</strong> terlebih dahulu.
+                  </div>
+                ) : (
+                  <select
+                    value={formData.no_rekening}
+                    onChange={(e) => setFormData({ ...formData, no_rekening: e.target.value })}
+                    className={`w-full px-4 py-2.5 border rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent ${
+                      errors.no_rekening ? "border-red-500" : "border-gray-300"
+                    }`}
+                  >
+                    <option value="">Pilih rekening tujuan</option>
+                    {bankAccounts.map((acc) => (
+                      <option key={acc.id} value={`${acc.bank} - ${acc.nomor_rekening} (a.n. ${acc.nama_rekening})`}>
+                        {acc.bank} - {acc.nomor_rekening} (a.n. {acc.nama_rekening})
+                      </option>
+                    ))}
+                  </select>
+                )}
                 {errors.no_rekening && <p className="text-xs text-red-500 mt-1">{errors.no_rekening}</p>}
               </div>
 
@@ -395,7 +411,7 @@ export default function RequestDanaPengelolaPage() {
 
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || bankAccounts.length === 0}
                 className="w-full bg-[#84CC16] text-white py-3 rounded-xl font-medium hover:bg-[#73b814] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {submitting ? (

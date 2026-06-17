@@ -78,31 +78,10 @@ app.post("/", requireRole("PENGHUNI"), async (c) => {
     const settings = await getSettings(kamar.properti.admin_id);
 
     let selectedBankAccount = null;
-    if (metode_bayar === "TRANSFER") {
-      if (!bank_account_id) {
-        return c.json(
-          { status: "error", message: "Pilih rekening bank tujuan" },
-          400,
-        );
-      }
-      selectedBankAccount = settings?.bank_accounts.find(
-        (acc) => acc.id === bank_account_id
-      );
-      if (!selectedBankAccount) {
-        return c.json(
-          { status: "error", message: "Rekening bank tidak ditemukan" },
-          400,
-        );
-      }
-    }
 
-    const metodeInfo =
+    const metodeInfo: any =
       metode_bayar === "TRANSFER"
-        ? {
-            rekening: selectedBankAccount?.nomor_rekening,
-            atas_nama: selectedBankAccount?.nama_rekening,
-            bank: selectedBankAccount?.bank,
-          }
+        ? {}
         : { qris_image: settings?.qris_image };
 
     const pemesanan = await prisma.pemesanan.create({
@@ -248,31 +227,10 @@ app.post("/perpanjang", requireRole("PENGHUNI"), async (c) => {
     const settings = await getSettings(kamar.properti.admin_id);
 
     let selectedBankAccount = null;
-    if (metode_bayar === "TRANSFER") {
-      if (!bank_account_id) {
-        return c.json(
-          { status: "error", message: "Pilih rekening bank tujuan" },
-          400,
-        );
-      }
-      selectedBankAccount = settings?.bank_accounts.find(
-        (acc) => acc.id === bank_account_id
-      );
-      if (!selectedBankAccount) {
-        return c.json(
-          { status: "error", message: "Rekening bank tidak ditemukan" },
-          400,
-        );
-      }
-    }
 
-    const metodeInfo =
+    const metodeInfo: any =
       metode_bayar === "TRANSFER"
-        ? {
-            rekening: selectedBankAccount?.nomor_rekening,
-            atas_nama: selectedBankAccount?.nama_rekening,
-            bank: selectedBankAccount?.bank,
-          }
+        ? {}
         : { qris_image: settings?.qris_image };
 
     const pemesanan = await prisma.pemesanan.create({
@@ -578,9 +536,6 @@ app.get("/", requireRole("PEMILIK"), async (c) => {
       where: {
         properti: {
           admin_id: user.userId,
-        },
-        pembayaran: {
-          status: "DIVERIFIKASI",
         },
       },
       include: {

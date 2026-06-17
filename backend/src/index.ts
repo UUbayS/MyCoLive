@@ -20,6 +20,7 @@ import notifikasiRoutes from "./routes/notifikasi";
 import badgesRoutes from "./routes/badges";
 import pengumumanRoutes from "./routes/pengumuman";
 import eventsRoutes from "./routes/events";
+import pengelolarekeningRoutes from "./routes/pengelolarekening";
 
 const app = new Hono();
 
@@ -56,5 +57,6 @@ app.route("/api/notifikasi", notifikasiRoutes);
 app.route("/api/badges", badgesRoutes);
 app.route("/api/pengumuman", pengumumanRoutes);
 app.route("/api/events", eventsRoutes);
+app.route("/api/rekening-pengelola", pengelolarekeningRoutes);
 
 export default app;

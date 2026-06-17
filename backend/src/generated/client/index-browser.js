@@ -150,6 +150,16 @@ exports.Prisma.BankAccountScalarFieldEnum = {
   admin_settings_id: 'admin_settings_id'
 };
 
+exports.Prisma.PengelolaBankAccountScalarFieldEnum = {
+  id: 'id',
+  nama_rekening: 'nama_rekening',
+  nomor_rekening: 'nomor_rekening',
+  bank: 'bank',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  user_id: 'user_id'
+};
+
 exports.Prisma.FasilitasScalarFieldEnum = {
   id: 'id',
   nama: 'nama',
@@ -402,6 +412,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   AdminSettings: 'AdminSettings',
   BankAccount: 'BankAccount',
+  PengelolaBankAccount: 'PengelolaBankAccount',
   Fasilitas: 'Fasilitas',
   Properti: 'Properti',
   Kamar: 'Kamar',

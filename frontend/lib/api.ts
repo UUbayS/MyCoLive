@@ -411,6 +411,13 @@ export type AdminSettingsData = {
   bank_accounts: BankAccount[];
 };
 
+export type PengelolaBankAccountData = {
+  id: string;
+  nama_rekening: string;
+  nomor_rekening: string;
+  bank: string;
+};
+
 export async function createPemesanan(data: {
   kamar_id: string;
   durasi_sewa: number;
@@ -502,6 +509,29 @@ export async function getPembayaranInfoByProperti(propertiId: string): Promise<A
     return res.data || null;
   } catch {
     return null;
+  }
+}
+
+export async function getPengelolaRekening(): Promise<PengelolaBankAccountData[]> {
+  try {
+    const res = await apiFetch<{ status: string; data: PengelolaBankAccountData[] }>("/api/rekening-pengelola");
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function updatePengelolaRekening(data: {
+  bank_accounts: { nama_rekening: string; nomor_rekening: string; bank: string }[];
+}): Promise<PengelolaBankAccountData[]> {
+  try {
+    const res = await apiFetch<{ status: string; data: PengelolaBankAccountData[] }>("/api/rekening-pengelola", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+    return res.data || [];
+  } catch {
+    return [];
   }
 }
 

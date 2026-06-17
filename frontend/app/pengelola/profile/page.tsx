@@ -6,13 +6,13 @@ import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone, Wallet, Building,
 import MainLayout from "../../../components/Layout/MainLayout";
 import Modal from "../../../components/ui/Modal";
 import ConfirmDialog from "../../../components/ConfirmDialog";
-import { getProfile, updateProfile, changePassword, getTempatPembayaran, updateTempatPembayaran, getWhatsappStatus, connectWhatsapp, disconnectWhatsapp, ProfileData, AdminSettingsData, WhatsAppStatus } from "../../../lib/api";
+import { getProfile, updateProfile, changePassword, getPengelolaRekening, updatePengelolaRekening, getWhatsappStatus, connectWhatsapp, disconnectWhatsapp, ProfileData, PengelolaBankAccountData, WhatsAppStatus } from "../../../lib/api";
 import { clearAuth } from "../../../lib/auth";
 
 export default function ProfileAdminPage() {
   const router = useRouter();
   const [profile, setProfile] = useState<ProfileData | null>(null);
-  const [paymentInfo, setPaymentInfo] = useState<AdminSettingsData | null>(null);
+  const [paymentInfo, setPaymentInfo] = useState<PengelolaBankAccountData[]>([]);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [loadingPayment, setLoadingPayment] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -29,7 +29,7 @@ export default function ProfileAdminPage() {
 
     async function loadData() {
       const profileData = await getProfile();
-      const paymentData = await getTempatPembayaran();
+      const paymentData = await getPengelolaRekening();
       const waData = await getWhatsappStatus();
       if (mounted) {
         setProfile(profileData);
@@ -75,7 +75,7 @@ export default function ProfileAdminPage() {
 
   const refreshPayment = async () => {
     setLoadingPayment(true);
-    const data = await getTempatPembayaran();
+    const data = await getPengelolaRekening();
     setPaymentInfo(data);
     setLoadingPayment(false);
   };
@@ -203,39 +203,21 @@ export default function ProfileAdminPage() {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                 </div>
-              ) : !!(
-                paymentInfo &&
-                (paymentInfo.bank_accounts.length > 0 || paymentInfo.qris_image)
-              ) ? (
+              ) : paymentInfo && paymentInfo.length > 0 ? (
                 <div className="space-y-4">
-                  {paymentInfo.bank_accounts.length > 0 && (
-                    <div className="space-y-3">
-                      <p className="text-xs text-gray-500">Rekening Bank</p>
-                      {paymentInfo.bank_accounts.map((account) => (
-                        <div key={account.id} className="bg-gray-50 rounded-xl p-3">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Building size={16} className="text-[#8dc63f]" />
-                            <span className="text-sm font-semibold text-black">{account.bank}</span>
-                          </div>
-                          <p className="text-sm font-medium text-black">{account.nomor_rekening}</p>
-                          <p className="text-xs text-gray-500">a.n. {account.nama_rekening}</p>
+                  <div className="space-y-3">
+                    <p className="text-xs text-gray-500">Rekening Bank</p>
+                    {paymentInfo.map((account) => (
+                      <div key={account.id} className="bg-gray-50 rounded-xl p-3">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Building size={16} className="text-[#8dc63f]" />
+                          <span className="text-sm font-semibold text-black">{account.bank}</span>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                  {paymentInfo.qris_image && (
-                    <div className="flex items-start gap-3">
-                      <QrCodeIcon size={18} className="text-gray-400 mt-0.5" />
-                      <div>
-                        <p className="text-xs text-gray-500 mb-1">QRIS</p>
-                        <img
-                          src={paymentInfo.qris_image}
-                          alt="QRIS"
-                          className="w-32 h-32 object-contain border border-gray-200 rounded-lg"
-                        />
+                        <p className="text-sm font-medium text-black">{account.nomor_rekening}</p>
+                        <p className="text-xs text-gray-500">a.n. {account.nama_rekening}</p>
                       </div>
-                    </div>
-                  )}
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <div className="text-center py-4">
@@ -676,14 +658,13 @@ function EditPaymentModal({
   onClose,
   onSuccess,
 }: {
-  paymentInfo: AdminSettingsData | null;
+  paymentInfo: PengelolaBankAccountData[];
   onClose: () => void;
   onSuccess: () => void;
 }) {
-  const [qrisImage, setQrisImage] = useState(paymentInfo?.qris_image || "");
   const [accounts, setAccounts] = useState(
-    paymentInfo?.bank_accounts?.length
-      ? paymentInfo.bank_accounts.map((acc) => ({
+    paymentInfo?.length
+      ? paymentInfo.map((acc) => ({
           id: acc.id,
           nama_rekening: acc.nama_rekening,
           nomor_rekening: acc.nomor_rekening,
@@ -716,16 +697,15 @@ function EditPaymentModal({
       (acc) => acc.bank.trim() && acc.nomor_rekening.trim() && acc.nama_rekening.trim()
     );
 
-    if (validAccounts.length === 0 && !qrisImage.trim()) {
-      setError("Isi minimal satu rekening atau URL QRIS");
+    if (validAccounts.length === 0) {
+      setError("Isi minimal satu rekening");
       return;
     }
 
     setLoading(true);
 
     try {
-      const result = await updateTempatPembayaran({
-        qris_image: qrisImage.trim() || null,
+      const result = await updatePengelolaRekening({
         bank_accounts: validAccounts.map((acc) => ({
           nama_rekening: acc.nama_rekening.trim(),
           nomor_rekening: acc.nomor_rekening.trim(),
@@ -823,27 +803,6 @@ function EditPaymentModal({
               </div>
             </div>
           ))}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            URL Gambar QRIS
-          </label>
-          <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-              <QrCodeIcon size={20} />
-            </div>
-            <input
-              type="text"
-              placeholder="https://example.com/qris.png"
-              className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-              value={qrisImage}
-              onChange={(e) => setQrisImage(e.target.value)}
-            />
-          </div>
-          <p className="text-xs text-gray-500 mt-1">
-            Masukkan URL gambar QRIS. Gunakan layanan image hosting untuk mengunggah gambar.
-          </p>
         </div>
       </div>
 

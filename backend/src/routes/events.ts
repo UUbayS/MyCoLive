@@ -41,15 +41,14 @@ app.get("/", async (c) => {
       writeEvent("ping", { ts: Date.now() });
     }, HEARTBEAT_MS);
 
-    stream.onAbort(() => {
-      unsubscribe();
-      clearInterval(heartbeat);
-    });
-
     // Keep connection alive sampai abort
-    while (!stream.aborted) {
-      await stream.sleep(1000);
-    }
+    await new Promise<void>((resolve) => {
+      stream.onAbort(() => {
+        unsubscribe();
+        clearInterval(heartbeat);
+        resolve();
+      });
+    });
   });
 });
 

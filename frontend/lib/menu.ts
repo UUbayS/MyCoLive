@@ -140,7 +140,7 @@ export const menuConfig: Record<Role, MenuItem[]> = {
       icon: "Wrench",
       submenu: [
         { label: "Daftar Operator", href: "/administrator/operator/daftar" },
-        { label: "Request", href: "/administrator/operator/request" },
+        { label: "Request", href: "/administrator/operator/request", badgeKey: "requestDana" },
       ],
     },
     {

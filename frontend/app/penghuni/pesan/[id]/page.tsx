@@ -24,7 +24,6 @@ export default function PesanKamarPage() {
   const [selectedDuration, setSelectedDuration] = useState(durasiQuery || "1_bulan");
   const [tglMasuk, setTglMasuk] = useState("");
   const [metodeBayar, setMetodeBayar] = useState<"TRANSFER" | "QRIS">("TRANSFER");
-  const [bankAccountId, setBankAccountId] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const { success, error } = useToast();
 
@@ -74,9 +73,6 @@ export default function PesanKamarPage() {
     if (!selectedDuration) newErrors.durasi = "Pilih durasi sewa";
     if (!tglMasuk) newErrors.tglMasuk = "Pilih tanggal masuk";
     if (!metodeBayar) newErrors.metode = "Pilih metode pembayaran";
-    if (metodeBayar === "TRANSFER" && !bankAccountId) {
-      newErrors.bankAccount = "Pilih rekening bank tujuan";
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -93,7 +89,6 @@ export default function PesanKamarPage() {
         durasi_sewa: durasi,
         tgl_masuk: tglMasuk,
         metode_bayar: metodeBayar,
-        bank_account_id: metodeBayar === "TRANSFER" ? bankAccountId : undefined,
       });
 
       if (result) {
@@ -235,28 +230,7 @@ export default function PesanKamarPage() {
             </div>
             {errors.metode && <p className="text-xs text-red-500 mt-1">{errors.metode}</p>}
 
-            {metodeBayar === "TRANSFER" && paymentInfo && paymentInfo.bank_accounts.length > 0 && (
-              <div className="mt-3">
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Pilih Rekening Tujuan
-                </label>
-                <select
-                  value={bankAccountId}
-                  onChange={(e) => setBankAccountId(e.target.value)}
-                  className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#84CC16] bg-white ${
-                    errors.bankAccount ? "border-red-500" : "border-gray-300"
-                  }`}
-                >
-                  <option value="">-- Pilih rekening --</option>
-                  {paymentInfo.bank_accounts.map((acc) => (
-                    <option key={acc.id} value={acc.id}>
-                      {acc.bank} - {acc.nomor_rekening} a.n. {acc.nama_rekening}
-                    </option>
-                  ))}
-                </select>
-                {errors.bankAccount && <p className="text-xs text-red-500 mt-1">{errors.bankAccount}</p>}
-              </div>
-            )}
+
           </div>
 
           {/* Total Bayar */}

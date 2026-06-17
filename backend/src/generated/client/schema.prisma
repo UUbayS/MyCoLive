@@ -100,12 +100,13 @@ model User {
   operator Operator[]
 
   // Relation opposite: PEMILIK owns properti
-  properti               Properti[]
+  properti                Properti[]
   // Relation opposite: settings
-  settings               AdminSettings?
+  settings                AdminSettings?
   // Relation opposite: admin yang memproses checkout
-  pengajuanCheckoutAdmin PengajuanCheckout[]
-  pengumuman             Pengumuman[]
+  pengajuanCheckoutAdmin  PengajuanCheckout[]
+  pengumuman              Pengumuman[]
+  pengelola_bank_accounts PengelolaBankAccount[]
 
   @@unique([username], map: "User_username_key", where: { deleted_at: null })
   @@unique([email], map: "User_email_key", where: { deleted_at: null })
@@ -133,6 +134,18 @@ model BankAccount {
   admin_settings_id String
   admin_settings    AdminSettings @relation(fields: [admin_settings_id], references: [id], onDelete: Cascade)
   pembayaran        Pembayaran[]
+}
+
+model PengelolaBankAccount {
+  id             String   @id @default(cuid())
+  nama_rekening  String
+  nomor_rekening String
+  bank           String
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Fasilitas {
