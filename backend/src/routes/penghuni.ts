@@ -103,7 +103,11 @@ app.get("/", async (c) => {
     }
 
     // Ambil SEMUA penghuni yang ada di properti ini (dengan atau tanpa kamar)
-    const whereClause: any = {};
+    const whereClause: any = {
+      user: {
+        deleted_at: null
+      }
+    };
 
     if (status && ["AKTIF", "BERAKHIR"].includes(status)) {
       whereClause.status_sewa = status;

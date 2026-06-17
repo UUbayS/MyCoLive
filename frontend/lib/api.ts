@@ -349,6 +349,17 @@ export async function resetUserPassword(
   }
 }
 
+export async function deleteAccount(): Promise<{ status: string; message: string } | null> {
+  try {
+    const res = await apiFetch<{ status: string; message: string }>("/api/auth/me", {
+      method: "DELETE",
+    });
+    return res;
+  } catch (error: any) {
+    throw error;
+  }
+}
+
 // ─── PEMESANAN & PEMBAYARAN ───
 
 export type PemesananData = {

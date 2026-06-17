@@ -59,8 +59,9 @@ export default function ValidasiPembayaranPage() {
   const fetchData = useCallback(async () => {
     try {
       const data = await getAllPemesanan();
-      setPemesananList(data);
-      setFilteredList(data);
+      const filtered = data.filter((p) => !(p.status === "MENUNGGU" && p.pembayaran?.status === "MENUNGGU"));
+      setPemesananList(filtered);
+      setFilteredList(filtered);
     } catch (err) {
       console.error(err);
     } finally {

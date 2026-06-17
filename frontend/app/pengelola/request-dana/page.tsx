@@ -12,6 +12,7 @@ import {
   Eye,
   ChevronDown,
   Check,
+  Copy,
 } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
 import ImageUploader from "../../../components/ImageUploader";
@@ -58,6 +59,11 @@ export default function RequestDanaPengelolaPage() {
   const [showPropertiDropdown, setShowPropertiDropdown] = useState(false);
   const { success, error } = useToast();
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    success("No. Rekening berhasil disalin!");
+  };
 
   const fetchData = useCallback(async () => {
     try {
@@ -269,7 +275,17 @@ export default function RequestDanaPengelolaPage() {
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-gray-500">No. Rekening</p>
-                      <p className="text-sm font-medium text-gray-900">{d.no_rekening}</p>
+                      <div className="flex items-center gap-2 justify-end mt-1">
+                        <p className="text-sm font-medium text-gray-900">{d.no_rekening}</p>
+                        <button
+                          type="button"
+                          onClick={() => handleCopy(d.no_rekening)}
+                          className="text-[#84CC16] hover:text-[#73b814] p-1 rounded hover:bg-[#84CC16]/10 transition-colors"
+                          title="Salin No. Rekening"
+                        >
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
 

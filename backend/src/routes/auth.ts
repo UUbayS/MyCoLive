@@ -1,4 +1,4 @@
-﻿import { Hono } from "hono";
+import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { hashPassword, verifyPassword } from "../utils/password";
 import { generateAccessToken, generateRefreshToken, verifyToken } from "../utils/jwt";
@@ -540,6 +540,96 @@ app.put("/me", authMiddleware, async (c) => {
     console.error("Update me error:", error);
     return c.json(
       { status: "error", message: "Gagal mengupdate profil" },
+      500
+    );
+  }
+});
+
+app.delete("/me", authMiddleware, async (c) => {
+  try {
+    const user = c.get("user");
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: user.userId },
+      include: { penghuni: true },
+    });
+
+    if (!existingUser) {
+      return c.json(
+        { status: "error", message: "User tidak ditemukan" },
+        404
+      );
+    }
+
+    if (existingUser.role === "PEMILIK") {
+      const activeProperti = await prisma.properti.findFirst({
+        where: { admin_id: user.userId, deleted_at: null },
+      });
+      if (activeProperti) {
+        return c.json(
+          {
+            status: "error",
+            message: "Harap hapus semua properti Anda terlebih dahulu sebelum menghapus akun",
+          },
+          400
+        );
+      }
+    }
+
+    const txOperations: any[] = [];
+
+    if (existingUser.role === "PENGHUNI" && existingUser.penghuni) {
+      if (existingUser.penghuni.kamar_id) {
+        txOperations.push(
+          prisma.kamar.update({
+            where: { id: existingUser.penghuni.kamar_id },
+            data: { status: "KOSONG" },
+          })
+        );
+      }
+      txOperations.push(
+        prisma.penghuni.update({
+          where: { user_id: user.userId },
+          data: {
+            kamar_id: null,
+            status_sewa: "BERAKHIR",
+            tgl_berakhir: new Date(),
+          },
+        })
+      );
+    }
+
+    if (existingUser.role === "PENGELOLA") {
+      txOperations.push(
+        prisma.operator.updateMany({
+          where: { user_id: user.userId },
+          data: { deleted_at: new Date() },
+        })
+      );
+      txOperations.push(
+        prisma.pengelolaBankAccount.deleteMany({
+          where: { user_id: user.userId },
+        })
+      );
+    }
+
+    txOperations.push(
+      prisma.user.update({
+        where: { id: user.userId },
+        data: { deleted_at: new Date() },
+      })
+    );
+
+    await prisma.$transaction(txOperations);
+
+    return c.json({
+      status: "success",
+      message: "Akun berhasil dihapus",
+    });
+  } catch (error) {
+    console.error("Delete me error:", error);
+    return c.json(
+      { status: "error", message: "Gagal menghapus akun" },
       500
     );
   }

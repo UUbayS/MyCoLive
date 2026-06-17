@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone, Wallet, Building, Plus, Trash2 } from "lucide-react";
+import { Pencil, Lock, LogOut, Eye, EyeOff, User, Mail, Phone, Wallet, Building, Plus, Trash2, AlertTriangle, AlertCircle } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
 import Modal from "../../../components/ui/Modal";
-import { getProfile, updateProfile, changePassword, getPengelolaRekening, updatePengelolaRekening, ProfileData, PengelolaBankAccountData } from "../../../lib/api";
+import { getProfile, updateProfile, changePassword, getPengelolaRekening, updatePengelolaRekening, deleteAccount, ProfileData, PengelolaBankAccountData } from "../../../lib/api";
 import { clearAuth } from "../../../lib/auth";
 
 export default function ProfileAdminPage() {
@@ -17,6 +17,7 @@ export default function ProfileAdminPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 
   useEffect(() => {
@@ -187,13 +188,35 @@ export default function ProfileAdminPage() {
               className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-2xl p-4 hover:bg-gray-50 active:scale-[0.98] transition-all"
             >
               <div className="flex items-center gap-3">
-                <LogOut size={20} className="text-red-500" />
-                <span className="text-base font-semibold text-red-500">Log Out</span>
+                <LogOut size={20} className="text-red-600" />
+                <span className="text-base font-medium text-red-600">Log Out</span>
               </div>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-gray-400">
                 <path d="M7 4L13 10L7 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
+
+            {/* Zona Berbahaya */}
+            <div className="bg-red-50 rounded-xl p-5 border border-red-100 mb-8 mt-12">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-lg font-bold text-red-700 flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5" />
+                    Zona Berbahaya
+                  </h2>
+                  <p className="text-sm text-red-600 mt-1">
+                    Menghapus akun Anda akan menghilangkan akses login secara permanen.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowDeleteModal(true)}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-red-700 transition-colors shadow-sm"
+                >
+                  <Trash2 className="w-8 h-8" />
+                  <span>Hapus Akun</span>
+                </button>
+              </div>
+            </div>
           </>
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-gray-500">
@@ -227,6 +250,13 @@ export default function ProfileAdminPage() {
           paymentInfo={paymentInfo}
           onClose={() => setShowPaymentModal(false)}
           onSuccess={refreshPayment}
+        />
+      )}
+
+      {showDeleteModal && (
+        <DeleteAccountModal
+          onClose={() => setShowDeleteModal(false)}
+          onSuccess={handleLogout}
         />
       )}
 
@@ -693,6 +723,92 @@ function EditPaymentModal({
             "Simpan"
           )}
         </button>
+      </div>
+    </Modal>
+  );
+}
+
+function DeleteAccountModal({
+  onClose,
+  onSuccess,
+}: {
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleDelete = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const result = await deleteAccount();
+      if (result && result.status === "success") {
+        onSuccess();
+      } else {
+        setError(result?.message || "Gagal menghapus akun");
+      }
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Gagal menghapus akun");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title="Hapus Akun"
+      position="bottom"
+      size="md"
+    >
+      <div className="space-y-6">
+        <div className="flex flex-col items-center justify-center text-center space-y-4 py-4">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+            <AlertTriangle size={32} className="text-red-500" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Anda yakin ingin menghapus akun?</h3>
+            <p className="text-sm text-gray-500">
+              Tindakan ini tidak dapat dibatalkan. Data Anda tidak akan dihapus secara permanen dari sistem kami demi menjaga riwayat transaksi, namun Anda tidak akan bisa login kembali menggunakan akun ini.
+            </p>
+          </div>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
+            {error}
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-3 pt-2">
+          <button
+            onClick={onClose}
+            disabled={loading}
+            className="w-full py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-2xl transition-colors disabled:opacity-50"
+          >
+            Batal
+          </button>
+          <button
+            onClick={handleDelete}
+            disabled={loading}
+            className="w-full py-4 bg-red-500 hover:bg-red-600 text-white font-medium rounded-2xl shadow-lg shadow-red-500/25 active:scale-[0.98] transition-all disabled:opacity-50 flex justify-center items-center gap-2"
+          >
+            {loading ? (
+              <>
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Memproses...
+              </>
+            ) : (
+              "Ya, Hapus Akun"
+            )}
+          </button>
+        </div>
       </div>
     </Modal>
   );

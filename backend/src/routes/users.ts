@@ -395,6 +395,7 @@ app.delete("/:id", async (c) => {
 
     const existingUser = await prisma.user.findUnique({
       where: { id },
+      include: { penghuni: true },
     });
 
     if (!existingUser) {
@@ -404,16 +405,66 @@ app.delete("/:id", async (c) => {
       );
     }
 
-    await prisma.$transaction([
-      prisma.operator.updateMany({
-        where: { user_id: id },
-        data: { deleted_at: new Date() }
-      }),
+    if (existingUser.role === "PEMILIK") {
+      const activeProperti = await prisma.properti.findFirst({
+        where: { admin_id: id, deleted_at: null },
+      });
+      if (activeProperti) {
+        return c.json(
+          {
+            status: "error",
+            message: "User masih memiliki properti aktif. Harap hapus properti terlebih dahulu.",
+          },
+          400
+        );
+      }
+    }
+
+    const txOperations: any[] = [];
+
+    if (existingUser.role === "PENGHUNI" && existingUser.penghuni) {
+      if (existingUser.penghuni.kamar_id) {
+        txOperations.push(
+          prisma.kamar.update({
+            where: { id: existingUser.penghuni.kamar_id },
+            data: { status: "KOSONG" },
+          })
+        );
+      }
+      txOperations.push(
+        prisma.penghuni.update({
+          where: { user_id: id },
+          data: {
+            kamar_id: null,
+            status_sewa: "BERAKHIR",
+            tgl_berakhir: new Date(),
+          },
+        })
+      );
+    }
+
+    if (existingUser.role === "PENGELOLA") {
+      txOperations.push(
+        prisma.operator.updateMany({
+          where: { user_id: id },
+          data: { deleted_at: new Date() },
+        })
+      );
+      txOperations.push(
+        prisma.pengelolaBankAccount.deleteMany({
+          where: { user_id: id },
+        })
+      );
+    }
+
+    txOperations.push(
       prisma.user.update({
         where: { id },
-        data: { deleted_at: new Date() }
+        data: { deleted_at: new Date() },
       })
-    ]);
+    );
+
+    await prisma.$transaction(txOperations);
 
     return c.json({
       status: "success",

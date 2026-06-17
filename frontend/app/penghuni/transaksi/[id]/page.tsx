@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useToast } from "../../../../lib/ToastContext";
 import Link from "next/link";
-import { ArrowLeft, CreditCard, QrCode, CheckCircle, Clock, AlertCircle } from "lucide-react";
+import { ArrowLeft, CreditCard, QrCode, CheckCircle, Clock, AlertCircle, Copy } from "lucide-react";
 import ImageUploader from "../../../../components/ImageUploader";
 import ConfirmDialog from "../../../../components/ConfirmDialog";
 import { getUser, isAuthenticated } from "../../../../lib/auth";
@@ -39,6 +39,11 @@ export default function DetailTransaksiPage() {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
   const { success, error } = useToast();
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    success("No. Rekening berhasil disalin!");
+  };
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -237,10 +242,18 @@ export default function DetailTransaksiPage() {
                           <span className="text-gray-500">Bank:</span>{" "}
                           <span className="font-medium">{acc.bank}</span>
                         </p>
-                        <p>
+                        <div className="flex items-center gap-2">
                           <span className="text-gray-500">No. Rekening:</span>{" "}
                           <span className="font-medium">{acc.nomor_rekening}</span>
-                        </p>
+                          <button
+                            type="button"
+                            onClick={() => handleCopy(acc.nomor_rekening)}
+                            className="text-[#84CC16] hover:text-[#73b814] p-1 rounded hover:bg-[#84CC16]/10 transition-colors"
+                            title="Salin No. Rekening"
+                          >
+                            <Copy className="w-4 h-4" />
+                          </button>
+                        </div>
                         <p>
                           <span className="text-gray-500">Atas Nama:</span>{" "}
                           <span className="font-medium">{acc.nama_rekening}</span>

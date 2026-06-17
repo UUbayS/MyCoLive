@@ -634,8 +634,8 @@ function DatePickerModal({
             ))}
           </div>
 
-          {/* Days - Fixed height grid */}
-          <div className="grid grid-cols-7 gap-1 min-h-[240px]">
+          {/* Days */}
+          <div className="grid grid-cols-7 gap-1 min-h-240px">
             {Array.from({ length: firstDay }).map((_, i) => (
               <div key={`empty-${i}`} className="h-8 w-8" />
             ))}
@@ -668,7 +668,6 @@ function DatePickerModal({
                 </button>
               );
             })}
-            {/* Fill remaining cells to maintain grid height */}
             {Array.from({ length: Math.max(0, 42 - firstDay - daysInMonth) }).map((_, i) => (
               <div key={`fill-${i}`} className="h-8 w-8" />
             ))}
@@ -898,7 +897,7 @@ export default function KeuanganPage() {
               onClick={() => setShowPeriodeDropdown(!showPeriodeDropdown)}
               className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 hover:border-gray-300 transition-colors"
             >
-              <span className="truncate max-w-[140px]">{getDropdownLabel()}</span>
+              <span className="truncate max-w-140px">{getDropdownLabel()}</span>
               <ChevronDown className="w-3.5 h-3.5 text-gray-400 shrink-0" />
             </button>
             {showPeriodeDropdown && (

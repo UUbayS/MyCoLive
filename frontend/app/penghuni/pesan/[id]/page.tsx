@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useToast } from "../../../../lib/ToastContext";
-import { ArrowLeft, CreditCard, QrCode, AlertCircle } from "lucide-react";
+import { ArrowLeft, CreditCard, QrCode, AlertCircle, Calendar } from "lucide-react";
 import TarifSelector from "../../../../components/TarifSelector";
 import { getUser, isAuthenticated } from "../../../../lib/auth";
 import { getKamarById, createPemesanan, getPembayaranInfoByProperti, KamarData, AdminSettingsData } from "../../../../lib/api";
 import MainLayout from "../../../../components/Layout/MainLayout";
+import SingleDatePickerModal from "../../../../components/ui/SingleDatePickerModal";
 
 export default function PesanKamarPage() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function PesanKamarPage() {
   const durasiQuery = searchParams.get("durasi");
   const [selectedDuration, setSelectedDuration] = useState(durasiQuery || "1_bulan");
   const [tglMasuk, setTglMasuk] = useState("");
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [metodeBayar, setMetodeBayar] = useState<"TRANSFER" | "QRIS">("TRANSFER");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const { success, error } = useToast();
@@ -170,17 +172,33 @@ export default function PesanKamarPage() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Tanggal Masuk
             </label>
-            <input
-              type="date"
-              value={tglMasuk}
-              onChange={(e) => setTglMasuk(e.target.value)}
-              min={new Date().toISOString().split("T")[0]}
-              className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#84CC16] ${
-                errors.tglMasuk ? "border-red-500" : "border-gray-300"
+            <button
+              type="button"
+              onClick={() => setShowDatePicker(true)}
+              className={`w-full flex items-center justify-between px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#84CC16] transition-colors ${
+                errors.tglMasuk ? "border-red-500" : "border-gray-300 bg-white"
               }`}
-            />
+            >
+              <span className={tglMasuk ? "text-gray-900" : "text-gray-400"}>
+                {tglMasuk ? new Date(tglMasuk).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }) : "Pilih Tanggal Masuk"}
+              </span>
+              <Calendar className="w-4 h-4 text-gray-400" />
+            </button>
             {errors.tglMasuk && <p className="text-xs text-red-500 mt-1">{errors.tglMasuk}</p>}
           </div>
+
+          <SingleDatePickerModal
+            isOpen={showDatePicker}
+            onClose={() => setShowDatePicker(false)}
+            onApply={(date) => {
+              const offset = date.getTimezoneOffset();
+              const localDate = new Date(date.getTime() - offset * 60 * 1000);
+              setTglMasuk(localDate.toISOString().split("T")[0]);
+            }}
+            initialDate={tglMasuk ? new Date(tglMasuk) : new Date()}
+            minDate={new Date()}
+            title="Pilih Tanggal Masuk"
+          />
 
           {/* Metode Pembayaran */}
           <div>
@@ -216,11 +234,7 @@ export default function PesanKamarPage() {
               ):(
                 <button
                   type="button"
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-colors ${
-                    metodeBayar === "QRIS"
-                      ? "border-[#84CC16]/5 bg-[#84CC16]/5 text-[#84CC16]"
-                      : "border-gray-200 text-gray-600 hover:bg-gray-50"
-                  }`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-colors border-gray-200 text-gray-300 hover:bg-gray-50`}
                 >
                   <QrCode className="w-5 h-5" />
                   <span className="text-sm font-medium">QRIS</span>
