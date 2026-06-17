@@ -193,10 +193,12 @@ export default function RequestDanaPage() {
                         Rp {(d.jumlah || 0).toLocaleString("id-ID")}
                       </p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs text-gray-500">No. Rekening</p>
-                      <p className="text-sm font-medium text-gray-900">{d.no_rekening}</p>
-                    </div>
+                    {isPending && (
+                      <div className="text-right">
+                        <p className="text-xs text-gray-500">No. Rekening</p>
+                        <p className="text-sm font-medium text-gray-900">{d.no_rekening}</p>
+                      </div>
+                    )}    
                   </div>
 
                   {/* Foto */}

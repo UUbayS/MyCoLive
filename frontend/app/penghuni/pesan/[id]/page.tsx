@@ -205,18 +205,33 @@ export default function PesanKamarPage() {
                 <CreditCard className="w-5 h-5" />
                 <span className="text-sm font-medium">Transfer Bank</span>
               </button>
-              <button
-                type="button"
-                onClick={() => setMetodeBayar("QRIS")}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-colors ${
-                  metodeBayar === "QRIS"
-                    ? "border-[#84CC16] bg-[#84CC16]/5 text-[#84CC16]"
-                    : "border-gray-200 text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                <QrCode className="w-5 h-5" />
-                <span className="text-sm font-medium">QRIS</span>
-              </button>
+              {paymentInfo?.qris_image ?(
+                <button
+                  type="button"
+                  onClick={() => setMetodeBayar("QRIS")}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-colors ${
+                    metodeBayar === "QRIS"
+                      ? "border-[#84CC16] bg-[#84CC16]/5 text-[#84CC16]"
+                      : "border-gray-200 text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  <QrCode className="w-5 h-5" />
+                  <span className="text-sm font-medium">QRIS</span>
+                </button>
+              ):(
+                <button
+                  type="button"
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-colors ${
+                    metodeBayar === "QRIS"
+                      ? "border-[#84CC16]/5 bg-[#84CC16]/5 text-[#84CC16]"
+                      : "border-gray-200 text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  <QrCode className="w-5 h-5" />
+                  <span className="text-sm font-medium">QRIS</span>
+                </button>
+              )}
+              
             </div>
             {errors.metode && <p className="text-xs text-red-500 mt-1">{errors.metode}</p>}
 

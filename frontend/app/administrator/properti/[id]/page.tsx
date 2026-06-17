@@ -195,7 +195,7 @@ export default function AdminDetailPropertiPage() {
           </div>
           <Link
             href={`/administrator/properti/${propertiId}/edit`}
-            className="flex items-center gap-2 px-2 py-2 bg-[#84CC16] text-white rounded-lg hover:bg-[#65a30d] transition-colors text-sm font-medium shadow-sm"
+            className="flex items-center gap-2 md:px-4 md:py-4 px-2 py-2 bg-[#84CC16] text-white rounded-lg hover:bg-[#65a30d] transition-colors text-sm font-medium shadow-sm"
           >
             <Edit className="w-4 h-4" />
             <span className="hidden sm:inline">Edit Properti</span>

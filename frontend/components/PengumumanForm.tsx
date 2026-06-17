@@ -38,6 +38,12 @@ const defaultTargets = [
   { value: "CUSTOM", label: "User Tertentu (Manual)" },
 ];
 
+interface EarliestNode {
+  start: number;
+  end: number;
+  node: React.ReactNode;
+}
+
 function formatWAInline(text: string, keyPrefix = "k"): React.ReactNode {
   const nodes: React.ReactNode[] = [];
   let remaining = text;
@@ -45,8 +51,8 @@ function formatWAInline(text: string, keyPrefix = "k"): React.ReactNode {
   while (remaining.length > 0) {
     const boldMatch = /\*([^*\n]+)\*/.exec(remaining);
     const italicMatch = /_([^_\n]+)_/.exec(remaining);
-    let earliest: { start: number; end: number; node: React.ReactNode } | null = null;
-    if (boldMatch && (!earliest || boldMatch.index < earliest.start)) {
+    let earliest: EarliestNode | null = null;
+    if (boldMatch) {
       earliest = {
         start: boldMatch.index,
         end: boldMatch.index + boldMatch[0].length,
@@ -356,7 +362,7 @@ export default function PengumumanForm({
           <div className="bg-white rounded-xl shadow-sm p-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Pesan</label>
             <div className="mb-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 flex gap-2">
-              <Lightbulb className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <Lightbulb className="w-4 h-4 shrink-0 mt-0.5" />
               <span>
                 <strong>Tips:</strong> Gunakan bahasa sopan, sebutkan deadline jelas, dan
                 panggil nama penerima agar lebih personal.
@@ -380,7 +386,7 @@ export default function PengumumanForm({
                   📋 Sisipkan Variabel
                 </button>
                 {showVarMenu && (
-                  <div className="absolute bottom-full left-0 mb-2 bg-white border border-gray-200 rounded-lg shadow-lg p-1 z-20 min-w-[240px]">
+                  <div className="absolute bottom-full left-0 mb-2 bg-white border border-gray-200 rounded-lg shadow-lg p-1 z-20 min-w-240px">
                     <div className="px-3 py-2 text-xs font-semibold text-gray-500 border-b">
                       Klik untuk sisipkan di kursor
                     </div>
@@ -470,7 +476,7 @@ export default function PengumumanForm({
                   <span className="text-gray-400">·</span>
                   <span>Kamar A-12</span>
                 </div>
-                <div className="bg-[#DCF8C6] rounded-lg p-2.5 text-[13px] leading-relaxed text-gray-900 whitespace-pre-wrap break-words">
+                <div className="bg-[#DCF8C6] rounded-lg p-2.5 text-[13px] leading-relaxed text-gray-900 whitespace-pre-wrap wrap-break-words">
                   <PreviewBubble text={previewText} isEmpty={isEmpty} />
                 </div>
                 <div className="text-[10px] text-gray-400 text-right mt-1">

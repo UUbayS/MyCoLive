@@ -281,6 +281,57 @@ app.get("/:id", async (c) => {
   }
 });
 
+app.put("/:id/reset-password", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const body = await c.req.json();
+    const { newPassword } = body;
+
+    if (!newPassword) {
+      return c.json(
+        { status: "error", message: "Password baru wajib diisi" },
+        400
+      );
+    }
+
+    if (newPassword.length < 8) {
+      return c.json(
+        { status: "error", message: "Password minimal 8 karakter" },
+        400
+      );
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!existingUser) {
+      return c.json(
+        { status: "error", message: "User tidak ditemukan" },
+        404
+      );
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+
+    await prisma.user.update({
+      where: { id },
+      data: { password: hashedPassword },
+    });
+
+    return c.json({
+      status: "success",
+      message: "Password berhasil direset",
+    });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mereset password" },
+      500
+    );
+  }
+});
+
 app.put("/:id", async (c) => {
   try {
     const id = c.req.param("id");

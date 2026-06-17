@@ -331,6 +331,24 @@ export async function changePassword(
   }
 }
 
+export async function resetUserPassword(
+  userId: string,
+  newPassword: string
+): Promise<{ status: string; message: string } | null> {
+  try {
+    const res = await apiFetch<{ status: string; message: string }>(
+      `/api/users/${userId}/reset-password`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ newPassword }),
+      }
+    );
+    return res;
+  } catch (error: any) {
+    throw error;
+  }
+}
+
 // ─── PEMESANAN & PEMBAYARAN ───
 
 export type PemesananData = {

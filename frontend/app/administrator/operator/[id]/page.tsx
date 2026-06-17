@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -13,13 +13,17 @@ import {
   Shield,
   Banknote,
   Calendar,
-  Clock,
+  AlertCircle,
+  Lock,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
 import OperatorTabs from "@/components/OperatorTabs";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { getUser, isAuthenticated } from "@/lib/auth";
-import { getUserList, deleteUser, getPengajuanDanaList, OperatorUserData, PengajuanDanaData } from "@/lib/api";
+import Modal from "@/components/ui/Modal";
+import { getUserList, deleteUser, resetUserPassword, getPengajuanDanaList, OperatorUserData, PengajuanDanaData } from "@/lib/api";
 
 export default function DetailOperatorPage() {
   const router = useRouter();
@@ -30,6 +34,7 @@ export default function DetailOperatorPage() {
   const [loading, setLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const fetchedRef = useRef(false);
   const { success, error } = useToast();
 
@@ -120,7 +125,7 @@ export default function DetailOperatorPage() {
     <MainLayout>
       <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
         <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Operator Properti</h1>
-        <h2 className="hidden md:block text-base font-medium text-gray-600 mb-4">Operator Properti — Detail Operator</h2>
+        <h2 className="hidden md:block text-base font-medium text-gray-600 mb-4">Operator Properti â€” Detail Operator</h2>
         <div className="md:hidden">
           <OperatorTabs />
         </div>
@@ -174,18 +179,6 @@ export default function DetailOperatorPage() {
               </span>
             </div>
           </div>
-
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3 mt-5 pt-4 border-t border-gray-100">
-            <button
-              onClick={() => setShowDeleteConfirm(true)}
-              disabled={deleteLoading}
-              className="flex items-center justify-center gap-2 flex-1 py-2.5 border-2 border-red-500 text-red-500 text-sm font-medium rounded-xl hover:bg-red-50 transition-colors disabled:opacity-50"
-            >
-              <Trash2 className="w-4 h-4" />
-              Hapus Operator
-            </button>
-          </div>
         </div>
 
         {/* Properti Info */}
@@ -207,7 +200,7 @@ export default function DetailOperatorPage() {
         )}
 
         {/* Riwayat Pengajuan Dana */}
-        <div className="bg-white rounded-xl shadow-sm p-4 md:p-5">
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-5 mb-4">
           <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
             <Banknote className="w-4 h-4" />
             Riwayat Pengajuan Dana
@@ -244,7 +237,7 @@ export default function DetailOperatorPage() {
                         </span>
                       </div>
                       <p className="text-xs text-gray-500">
-                        {d.properti?.nama || "-"} • {new Date(d.created_at).toLocaleDateString("id-ID", {
+                        {d.properti?.nama || "-"} â€¢ {new Date(d.created_at).toLocaleDateString("id-ID", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",
@@ -260,6 +253,48 @@ export default function DetailOperatorPage() {
             </div>
           )}
         </div>
+
+        <button
+          onClick={() => setShowPasswordModal(true)}
+          className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-2xl px-4 py-8 hover:bg-gray-50 active:scale-[0.98] transition-all mb-4"
+        >
+          <div className="flex items-center gap-3">
+            <Lock size={20} className="text-gray-600" />
+            <span className="text-base font-medium text-black">Reset Password</span>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-gray-400">
+            <path d="M7 4L13 10L7 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+
+{showPasswordModal && (
+  <ResetPasswordModal
+    userId={operatorId}
+    onClose={() => setShowPasswordModal(false)}
+  />
+)}
+
+        {/* Zona Berbahaya */}
+        <div className="bg-red-50 rounded-xl p-5 border border-red-100 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-red-700 flex items-center gap-2">
+                <AlertCircle className="w-5 h-5" />
+                Zona Berbahaya
+              </h2>
+              <p className="text-sm text-red-600 mt-1">
+                Menghapus akun Operator ini akan menghilangkan seluruh datanya secara permanen.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-red-700 transition-colors shadow-sm"
+            >
+              <Trash2 className="w-4 h-4" />
+              <span>Hapus Operator</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <ConfirmDialog
@@ -273,5 +308,135 @@ export default function DetailOperatorPage() {
         onCancel={() => setShowDeleteConfirm(false)}
       />
     </MainLayout>
+  );
+}
+
+function ResetPasswordModal({
+  userId,
+  onClose,
+}: {
+  userId: string;
+  onClose: () => void;
+}) {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleReset = async () => {
+    setError("");
+
+    if (!newPassword || !confirmPassword) {
+      setError("Semua field wajib diisi");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setError("Password baru minimal 8 karakter");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError("Password baru dan konfirmasi tidak cocok");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result = await resetUserPassword(userId, newPassword);
+
+      if (result && result.status === "success") {
+        onClose();
+      }
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Gagal mengubah password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Modal isOpen={true} onClose={onClose} title="Reset Password" position="bottom" size="md">
+      <div className="p-4 space-y-4">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
+              {error}
+            </div>
+          )}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Password Baru
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                <Lock size={20} />
+              </div>
+              <input
+                type={showNew ? "text" : "password"}
+                placeholder="Password baru"
+                className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowNew(!showNew)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 p-1 active:scale-90 transition-transform"
+              >
+                {showNew ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Konfirmasi Password Baru
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                <Lock size={20} />
+              </div>
+              <input
+                type={showConfirm ? "text" : "password"}
+                placeholder="Konfirmasi password baru"
+                className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 p-1 active:scale-90 transition-transform"
+              >
+                {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-2">
+          <button
+            onClick={handleReset}
+            disabled={loading}
+            className="w-full bg-[#8dc63f] text-white py-4 rounded-2xl font-semibold text-base shadow-lg shadow-[#8dc63f]/25 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Menyimpan...
+              </span>
+            ) : (
+              "Simpan"
+            )}
+          </button>
+        </div>
+      </Modal>
   );
 }
