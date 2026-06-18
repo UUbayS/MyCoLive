@@ -120,109 +120,145 @@ function RegisterForm() {
           )}
 
           <div className="space-y-3 flex-1">
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <User size={20} />
+            <div>
+              <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Username
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <User size={20} />
+                </div>
+                <input
+                  id="username"
+                  type="text"
+                  autoCapitalize="none"
+                  autoComplete="username"
+                  placeholder="Username"
+                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                />
               </div>
-              <input
-                type="text"
-                autoCapitalize="none"
-                autoComplete="username"
-                placeholder="Username"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              />
             </div>
 
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <User size={20} />
+            <div>
+              <label htmlFor="nama_lengkap" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Nama Lengkap
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <User size={20} />
+                </div>
+                <input
+                  id="nama_lengkap"
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Nama Lengkap"
+                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  value={formData.nama_lengkap}
+                  onChange={(e) => setFormData({ ...formData, nama_lengkap: e.target.value })}
+                />
               </div>
-              <input
-                type="text"
-                autoComplete="name"
-                placeholder="Nama Lengkap"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={formData.nama_lengkap}
-                onChange={(e) => setFormData({ ...formData, nama_lengkap: e.target.value })}
-              />
             </div>
 
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <Phone size={20} />
+            <div>
+              <label htmlFor="no_telepon" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                No. Telepon
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <Phone size={20} />
+                </div>
+                <div className="absolute left-12 top-1/2 -translate-y-1/2 text-sm text-gray-500 pointer-events-none">
+                  +62
+                </div>
+                <input
+                  id="no_telepon"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  placeholder="812..."
+                  className="w-full pl-20 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  value={formData.no_telepon}
+                  onChange={(e) => setFormData({ ...formData, no_telepon: e.target.value })}
+                />
               </div>
-              <div className="absolute left-12 top-1/2 -translate-y-1/2 text-sm text-gray-500 pointer-events-none">
-                +62
-              </div>
-              <input
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                placeholder="812..."
-                className="w-full pl-20 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={formData.no_telepon}
-                onChange={(e) => setFormData({ ...formData, no_telepon: e.target.value })}
-              />
             </div>
 
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <AtSign size={20} />
+            <div>
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Email
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <AtSign size={20} />
+                </div>
+                <input
+                  id="email"
+                  type="email"
+                  inputMode="email"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                  placeholder="Email"
+                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                />
               </div>
-              <input
-                type="email"
-                inputMode="email"
-                autoCapitalize="none"
-                autoComplete="email"
-                placeholder="Email"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              />
             </div>
 
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <Lock size={20} />
+            <div>
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <Lock size={20} />
+                </div>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  placeholder="Password (min. 8 karakter)"
+                  className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 p-1 active:scale-90 transition-transform"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
-              <input
-                type={showPassword ? "text" : "password"}
-                autoComplete="new-password"
-                placeholder="Password (min. 8 karakter)"
-                className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 p-1 active:scale-90 transition-transform"
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
             </div>
 
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <Lock size={20} />
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Konfirmasi Password
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <Lock size={20} />
+                </div>
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  placeholder="Konfirmasi Password"
+                  className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  value={formData.confirmPassword}
+                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 p-1 active:scale-90 transition-transform"
+                >
+                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={18} />}
+                </button>
               </div>
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                autoComplete="new-password"
-                placeholder="Konfirmasi Password"
-                className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
-                value={formData.confirmPassword}
-                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 p-1 active:scale-90 transition-transform"
-              >
-                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={18} />}
-              </button>
             </div>
           </div>
 
