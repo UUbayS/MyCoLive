@@ -12,6 +12,7 @@ build
 Dockerfile
 .dockerignore
 README.md
+package-lock.json
 bun.lockb
 .DS_Store
 coverage
