@@ -6,6 +6,18 @@ import { User, Phone, Lock, AtSign, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^\d{9,15}$/;
+
+type RegisterField =
+  | "username"
+  | "nama_lengkap"
+  | "no_telepon"
+  | "email"
+  | "password"
+  | "confirmPassword";
+type FieldErrors = Partial<Record<RegisterField, string>>;
+
 function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -20,6 +32,7 @@ function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [loading, setLoading] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState("");
 
@@ -30,35 +43,42 @@ function RegisterForm() {
     }
   }, [searchParams]);
 
+  const updateField = (field: RegisterField, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
+  };
+
   const handleRegister = async () => {
     setError("");
 
-    const { username, nama_lengkap, no_telepon, email, password, confirmPassword } = formData;
+    const {
+      username,
+      nama_lengkap,
+      no_telepon,
+      email,
+      password,
+      confirmPassword,
+    } = formData;
 
-    if (!username.trim()) {
-      setError("Username wajib diisi");
-      return;
-    }
-    if (!nama_lengkap.trim()) {
-      setError("Nama lengkap wajib diisi");
-      return;
-    }
-    if (!email.trim()) {
-      setError("Email wajib diisi");
-      return;
-    }
-    if (!password) {
-      setError("Password wajib diisi");
-      return;
-    }
-    if (password.length < 8) {
-      setError("Password minimal 8 karakter");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Password dan konfirmasi password tidak cocok");
-      return;
-    }
+    const errors: FieldErrors = {};
+    if (!username.trim()) errors.username = "Username wajib diisi";
+    else if (!/^[a-zA-Z0-9._]+$/.test(username.trim()))
+      errors.username =
+        "Username hanya boleh huruf, angka, titik, dan garis bawah";
+    if (!nama_lengkap.trim()) errors.nama_lengkap = "Nama lengkap wajib diisi";
+    if (!email.trim()) errors.email = "Email wajib diisi";
+    else if (!EMAIL_RE.test(email.trim()))
+      errors.email = "Format email tidak valid";
+    if (no_telepon.trim() && !PHONE_RE.test(no_telepon.trim()))
+      errors.no_telepon = "Nomor HP harus 9-15 digit angka";
+    if (!password) errors.password = "Password wajib diisi";
+    else if (password.length < 8)
+      errors.password = "Password minimal 8 karakter";
+    if (password !== confirmPassword)
+      errors.confirmPassword = "Konfirmasi password tidak cocok";
+
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) return;
 
     setLoading(true);
 
@@ -75,7 +95,7 @@ function RegisterForm() {
             email: email.trim(),
             password,
           }),
-        }
+        },
       );
 
       const result = await res.json();
@@ -98,11 +118,25 @@ function RegisterForm() {
         router.push("/penghuni/kamar-saya");
       }
     } catch {
-      setError("Tidak dapat terhubung ke server. Pastikan backend sedang berjalan.");
+      setError(
+        "Tidak dapat terhubung ke server. Pastikan backend sedang berjalan.",
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  const inputClass = (hasError: boolean, pl: string, pr: string) =>
+    `w-full ${pl} ${pr} py-4 bg-gray-50 border rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all ${
+      hasError
+        ? "border-red-300 focus:ring-red-400"
+        : "border-gray-200 focus:ring-[#8dc63f]"
+    }`;
+
+  const errorText = (field: RegisterField) =>
+    fieldErrors[field] ? (
+      <p className="text-red-500 text-xs mt-1.5">{fieldErrors[field]}</p>
+    ) : null;
 
   return (
     <AuthLayout>
@@ -110,7 +144,9 @@ function RegisterForm() {
         <div className="flex-1 flex flex-col w-full max-w-sm mx-auto gap-5 py-6">
           <div className="text-center mb-1">
             <h1 className="text-3xl font-bold text-[#1a1a1a]">Daftar</h1>
-            <p className="text-sm text-gray-400 mt-1">Buat akun penghuni baru</p>
+            <p className="text-sm text-gray-400 mt-1">
+              Buat akun penghuni baru
+            </p>
           </div>
 
           {error && (
@@ -121,7 +157,10 @@ function RegisterForm() {
 
           <div className="space-y-3 flex-1">
             <div>
-              <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-1.5">
+              <label
+                htmlFor="username"
+                className="block text-sm font-semibold text-gray-700 mb-1.5"
+              >
                 Username
               </label>
               <div className="relative">
@@ -134,15 +173,24 @@ function RegisterForm() {
                   autoCapitalize="none"
                   autoComplete="username"
                   placeholder="Username"
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  maxLength={50}
+                  className={inputClass(
+                    !!fieldErrors.username,
+                    "pl-12",
+                    "pr-4",
+                  )}
                   value={formData.username}
-                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  onChange={(e) => updateField("username", e.target.value)}
                 />
               </div>
+              {errorText("username")}
             </div>
 
             <div>
-              <label htmlFor="nama_lengkap" className="block text-sm font-semibold text-gray-700 mb-1.5">
+              <label
+                htmlFor="nama_lengkap"
+                className="block text-sm font-semibold text-gray-700 mb-1.5"
+              >
                 Nama Lengkap
               </label>
               <div className="relative">
@@ -154,15 +202,24 @@ function RegisterForm() {
                   type="text"
                   autoComplete="name"
                   placeholder="Nama Lengkap"
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  maxLength={100}
+                  className={inputClass(
+                    !!fieldErrors.nama_lengkap,
+                    "pl-12",
+                    "pr-4",
+                  )}
                   value={formData.nama_lengkap}
-                  onChange={(e) => setFormData({ ...formData, nama_lengkap: e.target.value })}
+                  onChange={(e) => updateField("nama_lengkap", e.target.value)}
                 />
               </div>
+              {errorText("nama_lengkap")}
             </div>
 
             <div>
-              <label htmlFor="no_telepon" className="block text-sm font-semibold text-gray-700 mb-1.5">
+              <label
+                htmlFor="no_telepon"
+                className="block text-sm font-semibold text-gray-700 mb-1.5"
+              >
                 No. Telepon
               </label>
               <div className="relative">
@@ -178,15 +235,24 @@ function RegisterForm() {
                   inputMode="tel"
                   autoComplete="tel"
                   placeholder="812..."
-                  className="w-full pl-20 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  maxLength={15}
+                  className={inputClass(
+                    !!fieldErrors.no_telepon,
+                    "pl-20",
+                    "pr-4",
+                  )}
                   value={formData.no_telepon}
-                  onChange={(e) => setFormData({ ...formData, no_telepon: e.target.value })}
+                  onChange={(e) => updateField("no_telepon", e.target.value)}
                 />
               </div>
+              {errorText("no_telepon")}
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
+              <label
+                htmlFor="email"
+                className="block text-sm font-semibold text-gray-700 mb-1.5"
+              >
                 Email
               </label>
               <div className="relative">
@@ -200,15 +266,20 @@ function RegisterForm() {
                   autoCapitalize="none"
                   autoComplete="email"
                   placeholder="Email"
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  maxLength={254}
+                  className={inputClass(!!fieldErrors.email, "pl-12", "pr-4")}
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) => updateField("email", e.target.value)}
                 />
               </div>
+              {errorText("email")}
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1.5">
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold text-gray-700 mb-1.5"
+              >
                 Password
               </label>
               <div className="relative">
@@ -220,9 +291,14 @@ function RegisterForm() {
                   type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
                   placeholder="Password (min. 8 karakter)"
-                  className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  maxLength={72}
+                  className={inputClass(
+                    !!fieldErrors.password,
+                    "pl-12",
+                    "pr-12",
+                  )}
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) => updateField("password", e.target.value)}
                 />
                 <button
                   type="button"
@@ -232,10 +308,14 @@ function RegisterForm() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {errorText("password")}
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-1.5">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-semibold text-gray-700 mb-1.5"
+              >
                 Konfirmasi Password
               </label>
               <div className="relative">
@@ -247,18 +327,30 @@ function RegisterForm() {
                   type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
                   placeholder="Konfirmasi Password"
-                  className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  maxLength={72}
+                  className={inputClass(
+                    !!fieldErrors.confirmPassword,
+                    "pl-12",
+                    "pr-12",
+                  )}
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  onChange={(e) =>
+                    updateField("confirmPassword", e.target.value)
+                  }
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 p-1 active:scale-90 transition-transform"
                 >
-                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={18} />}
+                  {showConfirmPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
               </div>
+              {errorText("confirmPassword")}
             </div>
           </div>
 
@@ -269,9 +361,25 @@ function RegisterForm() {
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
                 Mendaftar...
               </span>
@@ -282,7 +390,14 @@ function RegisterForm() {
 
           <p className="text-center text-sm text-gray-500">
             Sudah punya akun?{" "}
-            <Link href={redirectUrl ? `/auth/login?redirect=${encodeURIComponent(redirectUrl)}` : "/auth/login"} className="text-[#8dc63f] font-semibold active:opacity-70 transition-opacity">
+            <Link
+              href={
+                redirectUrl
+                  ? `/auth/login?redirect=${encodeURIComponent(redirectUrl)}`
+                  : "/auth/login"
+              }
+              className="text-[#8dc63f] font-semibold active:opacity-70 transition-opacity"
+            >
               Masuk
             </Link>
           </p>
@@ -294,11 +409,13 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin h-8 w-8 border-4 border-[#84CC16] border-t-transparent rounded-full"></div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <div className="animate-spin h-8 w-8 border-4 border-[#84CC16] border-t-transparent rounded-full"></div>
+        </div>
+      }
+    >
       <RegisterForm />
     </Suspense>
   );

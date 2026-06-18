@@ -8,6 +8,8 @@ import AuthLayout from "../../../components/Layout/AuthLayout";
 import { setAuth } from "@/lib/auth";
 import { realtimeClient } from "@/lib/useRealtime";
 
+type FieldErrors = Partial<Record<"login" | "password", string>>;
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -15,6 +17,7 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [loading, setLoading] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState("");
 
@@ -25,13 +28,17 @@ function LoginForm() {
     }
   }, [searchParams]);
 
+  const clearFieldError = (field: keyof FieldErrors) =>
+    setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
+
   const handleLogin = async () => {
     setError("");
 
-    if (!login.trim() || !password.trim()) {
-      setError("Email/No. HP dan password wajib diisi");
-      return;
-    }
+    const errors: FieldErrors = {};
+    if (!login.trim()) errors.login = "Email atau No. HP wajib diisi";
+    if (!password.trim()) errors.password = "Password wajib diisi";
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) return;
 
     setLoading(true);
 
@@ -80,6 +87,13 @@ function LoginForm() {
     }
   };
 
+  const inputClass = (hasError: boolean, extra = "") =>
+    `w-full pl-12 ${extra} py-4 bg-gray-50 border rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all ${
+      hasError
+        ? "border-red-300 focus:ring-red-400"
+        : "border-gray-200 focus:ring-[#8dc63f]"
+    }`;
+
   return (
     <AuthLayout>
       <div className="flex flex-col min-h-[calc(100vh-8rem)] bg-white px-5 pt-safe-top pb-safe-bottom text-black">
@@ -116,12 +130,21 @@ function LoginForm() {
                   autoCapitalize="none"
                   autoComplete="username"
                   placeholder="Email atau No. HP"
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  maxLength={254}
+                  className={inputClass(!!fieldErrors.login, "pr-4")}
                   value={login}
-                  onChange={(e) => setLogin(e.target.value)}
+                  onChange={(e) => {
+                    setLogin(e.target.value);
+                    if (fieldErrors.login) clearFieldError("login");
+                  }}
                   onKeyDown={(e) => e.key === "Enter" && handleLogin()}
                 />
               </div>
+              {fieldErrors.login && (
+                <p className="text-red-500 text-xs mt-1.5">
+                  {fieldErrors.login}
+                </p>
+              )}
             </div>
 
             <div>
@@ -140,9 +163,13 @@ function LoginForm() {
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   placeholder="Password"
-                  className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8dc63f] focus:border-transparent transition-all"
+                  maxLength={72}
+                  className={inputClass(!!fieldErrors.password, "pr-12")}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (fieldErrors.password) clearFieldError("password");
+                  }}
                   onKeyDown={(e) => e.key === "Enter" && handleLogin()}
                 />
                 <button
@@ -153,6 +180,11 @@ function LoginForm() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {fieldErrors.password && (
+                <p className="text-red-500 text-xs mt-1.5">
+                  {fieldErrors.password}
+                </p>
+              )}
             </div>
           </div>
 
