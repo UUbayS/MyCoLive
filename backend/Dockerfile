@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 # ---------- Stage 1: deps ----------
-FROM oven/bun:1.1.42-alpine AS deps
+FROM oven/bun:1.3-alpine AS deps
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY package.json bun.lock* ./
 RUN bun install --frozen-lockfile
 
 # ---------- Stage 2: build ----------
-FROM oven/bun:1.1.42-alpine AS build
+FROM oven/bun:1.3-alpine AS build
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ COPY . .
 RUN bunx prisma generate
 
 # ---------- Stage 3: runtime ----------
-FROM oven/bun:1.1.42-alpine AS runtime
+FROM oven/bun:1.3-alpine AS runtime
 
 WORKDIR /app
 
