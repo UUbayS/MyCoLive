@@ -5,4 +5,10 @@ NEXT_SESSION_PLAN.md
 whatsapp-session/
 qr.png
 .env
+.env.*
+!.env.example
 .mimocode
+
+# deployment
+docker-compose.override.yml
+*.log

@@ -1,0 +1,17 @@
+node_modules
+dist
+build
+.env
+.env.*
+!.env.example
+*.log
+.git
+.gitignore
+Dockerfile
+.dockerignore
+README.md
+POSTMAN_TESTING_GUIDE.md
+NEXT_SESSION_PLAN.md
+whatsapp-session
+qr.png
+bun.lockb
