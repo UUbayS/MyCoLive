@@ -131,9 +131,12 @@ function LoginForm() {
             </div>
           </div>
 
-          <p className="text-right text-[#8dc63f] text-sm font-medium select-none cursor-pointer active:opacity-70 transition-opacity">
+          <Link
+            href="/auth/forgot-password"
+            className="text-right text-[#8dc63f] text-sm font-medium select-none active:opacity-70 transition-opacity block"
+          >
             Lupa password?
-          </p>
+          </Link>
 
           <button
             onClick={handleLogin}

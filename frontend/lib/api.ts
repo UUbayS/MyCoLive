@@ -1134,3 +1134,51 @@ export async function disconnectWhatsapp(): Promise<{ message: string } | null> 
     return null;
   }
 }
+
+// ─── FORGOT PASSWORD ───
+
+export type VerifyOtpResponse = {
+  resetToken: string;
+  expiresIn: number;
+};
+
+export async function requestForgotPassword(
+  login: string
+): Promise<{ status: string; message: string }> {
+  const res = await apiFetch<{ status: string; message: string }>(
+    "/api/auth/forgot-password",
+    {
+      method: "POST",
+      body: JSON.stringify({ login }),
+    }
+  );
+  return res;
+}
+
+export async function verifyOtp(
+  login: string,
+  otp: string
+): Promise<VerifyOtpResponse> {
+  const res = await apiFetch<{ status: string; data: VerifyOtpResponse; message: string }>(
+    "/api/auth/verify-otp",
+    {
+      method: "POST",
+      body: JSON.stringify({ login, otp }),
+    }
+  );
+  return res.data;
+}
+
+export async function resetPassword(
+  resetToken: string,
+  newPassword: string
+): Promise<{ status: string; message: string }> {
+  const res = await apiFetch<{ status: string; message: string }>(
+    "/api/auth/reset-password",
+    {
+      method: "POST",
+      body: JSON.stringify({ resetToken, newPassword }),
+    }
+  );
+  return res;
+}

@@ -133,6 +133,17 @@ exports.Prisma.UserScalarFieldEnum = {
   deleted_at: 'deleted_at'
 };
 
+exports.Prisma.PasswordResetScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  identifier: 'identifier',
+  otp_hash: 'otp_hash',
+  expires_at: 'expires_at',
+  used_at: 'used_at',
+  attempts: 'attempts',
+  created_at: 'created_at'
+};
+
 exports.Prisma.AdminSettingsScalarFieldEnum = {
   id: 'id',
   qris_image: 'qris_image',
@@ -410,6 +421,7 @@ exports.StatusPengajuanCheckout = exports.$Enums.StatusPengajuanCheckout = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  PasswordReset: 'PasswordReset',
   AdminSettings: 'AdminSettings',
   BankAccount: 'BankAccount',
   PengelolaBankAccount: 'PengelolaBankAccount',

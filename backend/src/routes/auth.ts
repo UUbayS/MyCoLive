@@ -1,8 +1,56 @@
 import { Hono } from "hono";
 import { prisma } from "../config/db";
 import { hashPassword, verifyPassword } from "../utils/password";
-import { generateAccessToken, generateRefreshToken, verifyToken } from "../utils/jwt";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  generateResetToken,
+  verifyResetToken,
+  verifyToken,
+} from "../utils/jwt";
 import { authMiddleware, AppEnv } from "../middleware/auth";
+import { baileysProvider } from "../services/whatsapp/providers/baileys";
+import { templateWa } from "../utils/template-wa";
+import crypto from "crypto";
+
+const OTP_TTL_MINUTES = 10;
+const OTP_TTL_MS = OTP_TTL_MINUTES * 60 * 1000;
+const RESET_TOKEN_TTL_SECONDS = OTP_TTL_MINUTES * 60;
+const MAX_VERIFY_ATTEMPTS = 5;
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const RATE_LIMIT_MAX = 3;
+
+const rateLimitMap = new Map<string, number[]>();
+
+function checkRateLimit(identifier: string): boolean {
+  const now = Date.now();
+  const window = rateLimitMap.get(identifier) || [];
+  const recent = window.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  if (recent.length >= RATE_LIMIT_MAX) {
+    rateLimitMap.set(identifier, recent);
+    return false;
+  }
+  recent.push(now);
+  rateLimitMap.set(identifier, recent);
+  return true;
+}
+
+function hashOtp(otp: string): string {
+  return crypto.createHash("sha256").update(otp).digest("hex");
+}
+
+function timingSafeEqualOtp(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
+function generateOtp(): string {
+  const buf = crypto.randomBytes(4);
+  const n = buf.readUInt32BE(0) % 1_000_000;
+  return n.toString().padStart(6, "0");
+}
 
 const app = new Hono<AppEnv>();
 
@@ -630,6 +678,309 @@ app.delete("/me", authMiddleware, async (c) => {
     console.error("Delete me error:", error);
     return c.json(
       { status: "error", message: "Gagal menghapus akun" },
+      500
+    );
+  }
+});
+
+app.post("/forgot-password", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { login } = body;
+
+    if (!login || typeof login !== "string" || !login.trim()) {
+      return c.json(
+        { status: "error", message: "Email atau nomor telepon wajib diisi" },
+        400
+      );
+    }
+
+    const loginValue = login.toLowerCase().trim();
+    const isEmail = loginValue.includes("@");
+    const phone = isEmail ? null : convertPhone(login);
+    const identifier = isEmail ? loginValue : phone;
+
+    if (!identifier) {
+      return c.json(
+        { status: "error", message: "Email atau nomor telepon tidak valid" },
+        400
+      );
+    }
+
+    if (!checkRateLimit(identifier)) {
+      return c.json(
+        {
+          status: "error",
+          message: `Terlalu banyak percobaan. Coba lagi dalam ${Math.ceil(RATE_LIMIT_WINDOW_MS / 60000)} menit.`,
+        },
+        429
+      );
+    }
+
+    const user = isEmail
+      ? await prisma.user.findUnique({ where: { email: loginValue } })
+      : await prisma.user.findUnique({ where: { no_telepon: phone! } });
+
+    if (!user || user.deleted_at) {
+      return c.json({
+        status: "success",
+        message: "Jika akun terdaftar, kode OTP telah dikirim ke WhatsApp Anda.",
+      });
+    }
+
+    if (!user.no_telepon) {
+      return c.json(
+        {
+          status: "error",
+          message: "Akun Anda belum memiliki nomor telepon. Hubungi administrator.",
+        },
+        400
+      );
+    }
+
+    if (!baileysProvider.isConnected()) {
+      return c.json(
+        {
+          status: "error",
+          message: "Layanan WhatsApp sedang tidak tersedia. Coba lagi nanti.",
+        },
+        503
+      );
+    }
+
+    await prisma.passwordReset.deleteMany({
+      where: { user_id: user.id, used_at: null },
+    });
+
+    const otp = generateOtp();
+    const otpHash = hashOtp(otp);
+    const expiresAt = new Date(Date.now() + OTP_TTL_MS);
+
+    await prisma.passwordReset.create({
+      data: {
+        user_id: user.id,
+        identifier,
+        otp_hash: otpHash,
+        expires_at: expiresAt,
+      },
+    });
+
+    const pesan = templateWa.forgotPasswordOtp(user.nama, otp, OTP_TTL_MINUTES);
+    const result = await baileysProvider.sendMessage(user.no_telepon, pesan);
+
+    if (!result.success) {
+      await prisma.passwordReset.deleteMany({
+        where: { user_id: user.id, used_at: null },
+      });
+      console.error("Failed to send OTP WA:", result.error);
+      return c.json(
+        {
+          status: "error",
+          message: "Gagal mengirim OTP via WhatsApp. Coba lagi nanti.",
+        },
+        502
+      );
+    }
+
+    return c.json({
+      status: "success",
+      message: "Jika akun terdaftar, kode OTP telah dikirim ke WhatsApp Anda.",
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    return c.json(
+      { status: "error", message: "Gagal memproses permintaan" },
+      500
+    );
+  }
+});
+
+app.post("/verify-otp", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { login, otp } = body;
+
+    if (!login || !otp) {
+      return c.json(
+        { status: "error", message: "Login dan OTP wajib diisi" },
+        400
+      );
+    }
+
+    if (typeof otp !== "string" || !/^\d{6}$/.test(otp)) {
+      return c.json(
+        { status: "error", message: "OTP harus 6 digit angka" },
+        400
+      );
+    }
+
+    const loginValue = login.toLowerCase().trim();
+    const isEmail = loginValue.includes("@");
+    const phone = isEmail ? null : convertPhone(login);
+    const identifier = isEmail ? loginValue : phone;
+
+    if (!identifier) {
+      return c.json(
+        { status: "error", message: "Email atau nomor telepon tidak valid" },
+        400
+      );
+    }
+
+    const user = isEmail
+      ? await prisma.user.findUnique({ where: { email: loginValue } })
+      : await prisma.user.findUnique({ where: { no_telepon: phone! } });
+
+    if (!user || user.deleted_at) {
+      return c.json(
+        { status: "error", message: "Kode OTP tidak valid" },
+        400
+      );
+    }
+
+    const reset = await prisma.passwordReset.findFirst({
+      where: {
+        user_id: user.id,
+        identifier,
+        used_at: null,
+      },
+      orderBy: { created_at: "desc" },
+    });
+
+    if (!reset) {
+      return c.json(
+        { status: "error", message: "Kode OTP tidak valid" },
+        400
+      );
+    }
+
+    if (reset.expires_at < new Date()) {
+      await prisma.passwordReset.delete({ where: { id: reset.id } });
+      return c.json(
+        { status: "error", message: "Kode OTP sudah kedaluwarsa. Minta kode baru." },
+        400
+      );
+    }
+
+    if (reset.attempts >= MAX_VERIFY_ATTEMPTS) {
+      await prisma.passwordReset.delete({ where: { id: reset.id } });
+      return c.json(
+        {
+          status: "error",
+          message: "Terlalu banyak percobaan. Minta kode OTP baru.",
+        },
+        400
+      );
+    }
+
+    const providedHash = hashOtp(otp);
+    const isValid = timingSafeEqualOtp(providedHash, reset.otp_hash);
+
+    if (!isValid) {
+      await prisma.passwordReset.update({
+        where: { id: reset.id },
+        data: { attempts: { increment: 1 } },
+      });
+      return c.json(
+        { status: "error", message: "Kode OTP tidak valid" },
+        400
+      );
+    }
+
+    const resetToken = generateResetToken({
+      userId: user.id,
+      scope: "password-reset",
+      rid: reset.id,
+    });
+
+    return c.json({
+      status: "success",
+      data: {
+        resetToken,
+        expiresIn: RESET_TOKEN_TTL_SECONDS,
+      },
+    });
+  } catch (error) {
+    console.error("Verify OTP error:", error);
+    return c.json(
+      { status: "error", message: "Gagal memverifikasi OTP" },
+      500
+    );
+  }
+});
+
+app.post("/reset-password", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { resetToken, newPassword } = body;
+
+    if (!resetToken || !newPassword) {
+      return c.json(
+        { status: "error", message: "Reset token dan password baru wajib diisi" },
+        400
+      );
+    }
+
+    if (typeof newPassword !== "string" || newPassword.length < 8) {
+      return c.json(
+        { status: "error", message: "Password baru minimal 8 karakter" },
+        400
+      );
+    }
+
+    const payload = verifyResetToken(resetToken);
+    if (!payload) {
+      return c.json(
+        { status: "error", message: "Token reset tidak valid atau sudah kedaluwarsa" },
+        400
+      );
+    }
+
+    const reset = await prisma.passwordReset.findUnique({
+      where: { id: payload.rid },
+    });
+
+    if (!reset || reset.used_at || reset.user_id !== payload.userId) {
+      return c.json(
+        { status: "error", message: "Token reset tidak valid" },
+        400
+      );
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+    });
+
+    if (!user || user.deleted_at) {
+      return c.json(
+        { status: "error", message: "User tidak ditemukan" },
+        404
+      );
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: user.id },
+        data: { password: hashedPassword },
+      }),
+      prisma.passwordReset.update({
+        where: { id: reset.id },
+        data: { used_at: new Date() },
+      }),
+      prisma.passwordReset.deleteMany({
+        where: { user_id: user.id, id: { not: reset.id }, used_at: null },
+      }),
+    ]);
+
+    return c.json({
+      status: "success",
+      message: "Password berhasil direset. Silakan login dengan password baru.",
+    });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mereset password" },
       500
     );
   }

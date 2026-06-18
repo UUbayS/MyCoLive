@@ -99,4 +99,8 @@ export const templateWa = {
   operatorBaru(nama: string, properti: string) {
     return `*Selamat Datang!*\n\nHalo ${nama}, Anda telah ditambahkan sebagai Operator/Pengelola di ${properti}.\n\nSilakan login ke aplikasi dengan akun yang telah diberikan.`;
   },
+
+  forgotPasswordOtp(nama: string, otp: string, ttlMinutes: number) {
+    return `*Reset Password MyCoLive*\n\nHalo ${nama},\n\nKode OTP Anda: *${otp}*\n\nKode berlaku selama ${ttlMinutes} menit. Jangan berikan kode ini kepada siapa pun.\n\nJika Anda tidak meminta reset password, abaikan pesan ini.`;
+  },
 };
