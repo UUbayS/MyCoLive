@@ -18,7 +18,9 @@ export default function DaftarKamarPage() {
   const [propertiNama, setPropertiNama] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus] = useState<string>("all");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
   const fetchData = useCallback(async () => {
@@ -79,12 +81,27 @@ export default function DaftarKamarPage() {
       result = result.filter((r) => r.status === filterStatus);
     }
 
+    const min = minPrice ? parseInt(minPrice) : null;
+    const max = maxPrice ? parseInt(maxPrice) : null;
+    if (min !== null || max !== null) {
+      result = result.filter((r) => {
+        if (typeof r.harga !== "number") return false;
+        if (min !== null && r.harga < min) return false;
+        if (max !== null && r.harga > max) return false;
+        return true;
+      });
+    }
+
     return result;
-  }, [searchQuery, filterStatus, rooms]);
+  }, [searchQuery, filterStatus, minPrice, maxPrice, rooms]);
 
   const totalKamar = rooms.length;
   const totalKosong = rooms.filter((r) => r.status === "KOSONG").length;
   const totalTerisi = rooms.filter((r) => r.status === "TERISI").length;
+
+  const formatPrice = (v: string) =>
+    v ? "Rp " + parseInt(v).toLocaleString("id-ID") : "";
+  const parsePrice = (v: string) => v.replace(/\D/g, "");
 
   if (loading) {
     return (
@@ -126,11 +143,11 @@ export default function DaftarKamarPage() {
           </span>
           <span className="text-gray-300 hidden sm:inline">|</span>
           <span className="text-green-600">
-            Kosong: <strong>{totalKosong}/{totalKamar}</strong>
+            Kosong: <strong>{totalKosong}</strong>
           </span>
           <span className="text-gray-300 hidden sm:inline">|</span>
           <span className="text-red-600">
-            Terisi: <strong>{totalTerisi}/{totalKamar}</strong>
+            Terisi: <strong>{totalTerisi}</strong>
           </span>
         </div>
 
@@ -142,18 +159,83 @@ export default function DaftarKamarPage() {
               placeholder="Cari Kamar"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16]"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent transition-all"
             />
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`p-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 ${
+            className={`p-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all active:scale-95 ${
               showFilters ? "bg-[#84CC16]/10 border-[#84CC16]" : ""
             }`}
           >
             <SlidersHorizontal className="w-5 h-5 text-gray-600" />
           </button>
         </div>
+
+        {showFilters && (
+          <div className="mb-4 p-4 bg-gray-50 rounded-xl space-y-4 animate-reveal-top">
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-2">Status</p>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { val: "all", label: "Semua" },
+                  { val: "KOSONG", label: "Tersedia" },
+                  { val: "TERISI", label: "Terisi" },
+                ].map((opt) => (
+                  <button
+                    key={opt.val}
+                    onClick={() => setFilterStatus(opt.val)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      filterStatus === opt.val
+                        ? "bg-[#84CC16] text-white"
+                        : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-2">
+                Rentang Harga (per bulan)
+              </p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Min"
+                  value={formatPrice(minPrice)}
+                  onChange={(e) => setMinPrice(parsePrice(e.target.value))}
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16]"
+                />
+                <span className="text-gray-400">&mdash;</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Max"
+                  value={formatPrice(maxPrice)}
+                  onChange={(e) => setMaxPrice(parsePrice(e.target.value))}
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16]"
+                />
+              </div>
+            </div>
+
+            {(filterStatus !== "all" || minPrice || maxPrice) && (
+              <button
+                onClick={() => {
+                  setFilterStatus("all");
+                  setMinPrice("");
+                  setMaxPrice("");
+                }}
+                className="text-sm text-gray-500 hover:text-gray-700 underline"
+              >
+                Reset filter
+              </button>
+            )}
+          </div>
+        )}
 
         <RoomList rooms={filteredRooms} />
       </div>
