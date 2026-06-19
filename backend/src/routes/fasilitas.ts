@@ -86,6 +86,61 @@ app.post("/", authMiddleware, requireRole("PEMILIK"), async (c) => {
   }
 });
 
+app.put("/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
+  try {
+    const id = c.req.param("id");
+    const body = await c.req.json();
+    const { nama } = body;
+
+    if (!nama || !nama.trim()) {
+      return c.json(
+        { status: "error", message: "Nama fasilitas wajib diisi" },
+        400
+      );
+    }
+
+    const fasilitas = await prisma.fasilitas.findUnique({ where: { id } });
+
+    if (!fasilitas) {
+      return c.json(
+        { status: "error", message: "Fasilitas tidak ditemukan" },
+        404
+      );
+    }
+
+    const existing = await prisma.fasilitas.findFirst({
+      where: {
+        nama: { equals: nama.trim(), mode: "insensitive" },
+        jenis: fasilitas.jenis,
+        id: { not: id },
+      },
+    });
+
+    if (existing) {
+      return c.json(
+        { status: "error", message: "Fasilitas dengan nama dan jenis tersebut sudah ada" },
+        400
+      );
+    }
+
+    const updated = await prisma.fasilitas.update({
+      where: { id },
+      data: { nama: nama.trim() },
+    });
+
+    return c.json({
+      status: "success",
+      data: updated,
+    });
+  } catch (error) {
+    console.error("Update fasilitas error:", error);
+    return c.json(
+      { status: "error", message: "Gagal mengupdate fasilitas" },
+      500
+    );
+  }
+});
+
 // Delete fasilitas (PEMILIK only) - with dependency check
 app.delete("/:id", authMiddleware, requireRole("PEMILIK"), async (c) => {
   try {

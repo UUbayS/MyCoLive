@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, Building2, Wind, Loader2, Check } from "lucide-react";
+import { Plus, Trash2, Building2, Wind, Loader2, Check, Edit, X } from "lucide-react";
 import MainLayout from "../../../components/Layout/MainLayout";
 import ConfirmDialog from "../../../components/ConfirmDialog";
 import { getUser, isAuthenticated } from "../../../lib/auth";
-import { getFasilitasList, createFasilitas, deleteFasilitas, FasilitasData } from "../../../lib/api";
+import { getFasilitasList, createFasilitas, updateFasilitas, deleteFasilitas, FasilitasData } from "../../../lib/api";
 import PropertiTabs from "@/components/PropertiTabs";
 
 export default function AdminFasilitasPage() {
@@ -18,6 +18,8 @@ export default function AdminFasilitasPage() {
   const [submitting, setSubmitting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -50,6 +52,29 @@ export default function AdminFasilitasPage() {
       setNewFacilityName("");
     }
     setSubmitting(false);
+  };
+
+  const startEdit = (f: FasilitasData) => {
+    setEditingId(f.id);
+    setEditValue(f.nama);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditValue("");
+  };
+
+  const handleUpdate = async () => {
+    if (!editValue.trim() || !editingId) return;
+    const result = await updateFasilitas(editingId, editValue.trim());
+    if (result) {
+      setFacilities((prev) =>
+        prev
+          .map((f) => (f.id === result.id ? result : f))
+          .sort((a, b) => a.nama.localeCompare(b.nama))
+      );
+      cancelEdit();
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -147,19 +172,62 @@ export default function AdminFasilitasPage() {
                 key={f.id}
                 className="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 shadow-sm"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-[#84CC16]/10 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="w-8 h-8 bg-[#84CC16]/10 rounded-lg flex items-center justify-center shrink-0">
                     <Check className="w-4 h-4 text-[#84CC16]" />
                   </div>
-                  <span className="text-sm font-medium text-gray-900">{f.nama}</span>
+                  {editingId === f.id ? (
+                    <input
+                      type="text"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleUpdate();
+                        if (e.key === "Escape") cancelEdit();
+                      }}
+                      autoFocus
+                      className="flex-1 min-w-0 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#84CC16]"
+                    />
+                  ) : (
+                    <span className="text-sm font-medium text-gray-900 truncate">{f.nama}</span>
+                  )}
                 </div>
-                <button
-                  onClick={() => handleDelete(f.id)}
-                  className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                  title="Hapus fasilitas"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                {editingId === f.id ? (
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={handleUpdate}
+                      disabled={!editValue.trim()}
+                      className="p-2 text-[#84CC16] hover:bg-[#84CC16]/10 rounded-lg transition-colors disabled:opacity-50"
+                      title="Simpan"
+                    >
+                      <Check className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={cancelEdit}
+                      className="p-2 text-gray-400 hover:bg-gray-100 rounded-lg transition-colors"
+                      title="Batal"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => startEdit(f)}
+                      className="p-2 text-gray-400 hover:bg-gray-100 rounded-lg transition-colors"
+                      title="Edit fasilitas"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(f.id)}
+                      className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Hapus fasilitas"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>

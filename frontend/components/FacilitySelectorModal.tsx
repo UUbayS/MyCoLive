@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Search, Plus, Trash2, Loader2, Check } from "lucide-react";
+import { Search, Plus, Trash2, Loader2, Edit, Check, X } from "lucide-react";
 import Modal from "./ui/Modal";
 import ConfirmDialog from "./ConfirmDialog";
-import { getFasilitasList, createFasilitas, deleteFasilitas, FasilitasData } from "../lib/api";
+import { getFasilitasList, createFasilitas, updateFasilitas, deleteFasilitas, FasilitasData } from "../lib/api";
 import { getUser } from "../lib/auth";
 
 interface FacilitySelectorModalProps {
@@ -32,6 +32,8 @@ export default function FacilitySelectorModal({
   const [isAdmin, setIsAdmin] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
 
   useEffect(() => {
     const user = getUser();
@@ -78,6 +80,29 @@ export default function FacilitySelectorModal({
         [...prev, result].sort((a, b) => a.nama.localeCompare(b.nama))
       );
       setNewFacility("");
+    }
+  };
+
+  const startEdit = (facility: FasilitasData) => {
+    setEditingId(facility.id);
+    setEditValue(facility.nama);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditValue("");
+  };
+
+  const handleUpdateFacility = async () => {
+    if (!editValue.trim() || !editingId) return;
+    const result = await updateFasilitas(editingId, editValue.trim());
+    if (result) {
+      setFacilities((prev) =>
+        prev
+          .map((f) => (f.id === result.id ? result : f))
+          .sort((a, b) => a.nama.localeCompare(b.nama))
+      );
+      cancelEdit();
     }
   };
 
@@ -174,24 +199,70 @@ export default function FacilitySelectorModal({
                     : "border-gray-200 bg-white"
                 }`}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
                   <input
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => toggleFacility(facility.id)}
                     className="w-4 h-4 shrink-0 rounded border-2 border-gray-300 accent-[#84CC16] checked:border-[#84CC16] cursor-pointer"
                   />
-                  <span className="text-sm text-gray-700 cursor-pointer select-none">{facility.nama}</span>
+                  {editingId === facility.id ? (
+                    <input
+                      type="text"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleUpdateFacility();
+                        if (e.key === "Escape") cancelEdit();
+                      }}
+                      autoFocus
+                      className="flex-1 min-w-0 px-2 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#84CC16]"
+                    />
+                  ) : (
+                    <span className="text-sm text-gray-700 cursor-pointer select-none truncate">{facility.nama}</span>
+                  )}
                 </div>
                 {showManagement && isAdmin && (
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteFacility(facility.id)}
-                    className="text-red-500 hover:text-red-600 p-1"
-                    aria-label={`Hapus ${facility.nama}`}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  editingId === facility.id ? (
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        type="button"
+                        onClick={handleUpdateFacility}
+                        disabled={!editValue.trim()}
+                        className="text-[#84CC16] hover:text-[#73b814] p-1 disabled:opacity-50"
+                        aria-label="Simpan"
+                      >
+                        <Check className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={cancelEdit}
+                        className="text-gray-400 hover:text-gray-600 p-1"
+                        aria-label="Batal"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => startEdit(facility)}
+                        className="text-gray-400 hover:text-gray-600 p-1"
+                        aria-label={`Edit ${facility.nama}`}
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteFacility(facility.id)}
+                        className="text-red-500 hover:text-red-600 p-1"
+                        aria-label={`Hapus ${facility.nama}`}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )
                 )}
               </div>
             );
