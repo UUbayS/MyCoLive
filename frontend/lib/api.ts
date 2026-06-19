@@ -270,6 +270,18 @@ export async function createFasilitas(nama: string, jenis: "RUANGAN" | "UMUM"): 
   }
 }
 
+export async function updateFasilitas(id: string, nama: string): Promise<FasilitasData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: FasilitasData }>("/api/fasilitas/" + id, {
+      method: "PUT",
+      body: JSON.stringify({ nama }),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
 export async function deleteFasilitas(id: string): Promise<boolean> {
   try {
     await apiFetch<{ status: string }>("/api/fasilitas/" + id, {
@@ -868,6 +880,21 @@ export async function createOperator(data: {
     const res = await apiFetch<{ status: string; data: OperatorUserData }>("/api/users", {
       method: "POST",
       body: JSON.stringify({ ...data, role: "PENGELOLA" }),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateOperator(
+  id: string,
+  data: { username: string; nama: string; no_telepon?: string | null }
+): Promise<OperatorUserData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: OperatorUserData }>("/api/users/" + id, {
+      method: "PUT",
+      body: JSON.stringify(data),
     });
     return res.data || null;
   } catch {
