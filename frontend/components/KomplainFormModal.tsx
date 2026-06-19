@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { apiFetch } from "../lib/auth";
 import Modal from "./ui/Modal";
 
@@ -7,6 +7,12 @@ interface KomplainFormModalProps {
   onClose: () => void;
   onSuccess: () => void;
   propertiId: string;
+  komplain?: {
+    id: string;
+    masalah: string;
+    jenis: string;
+    deskripsi: string;
+  } | null;
 }
 
 const jenisOptions = [
@@ -16,12 +22,22 @@ const jenisOptions = [
   { value: "LAINNYA", label: "Lainnya" },
 ];
 
-export default function KomplainFormModal({ isOpen, onClose, onSuccess, propertiId }: KomplainFormModalProps) {
+export default function KomplainFormModal({ isOpen, onClose, onSuccess, propertiId, komplain }: KomplainFormModalProps) {
+  const isEdit = !!komplain;
   const [masalah, setMasalah] = useState("");
   const [jenis, setJenis] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      setMasalah(komplain?.masalah ?? "");
+      setJenis(komplain?.jenis ?? "");
+      setDeskripsi(komplain?.deskripsi ?? "");
+      setError("");
+    }
+  }, [isOpen, komplain]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,15 +50,22 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
 
     setLoading(true);
     try {
-      await apiFetch("/api/komplain", {
-        method: "POST",
-        body: JSON.stringify({
-          masalah,
-          jenis,
-          deskripsi,
-          properti_id: propertiId,
-        }),
-      });
+      if (isEdit) {
+        await apiFetch(`/api/komplain/${komplain!.id}`, {
+          method: "PUT",
+          body: JSON.stringify({ masalah, jenis, deskripsi }),
+        });
+      } else {
+        await apiFetch("/api/komplain", {
+          method: "POST",
+          body: JSON.stringify({
+            masalah,
+            jenis,
+            deskripsi,
+            properti_id: propertiId,
+          }),
+        });
+      }
       onSuccess();
       onClose();
       setMasalah("");
@@ -60,7 +83,7 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Tambahkan Komplain"
+      title={isEdit ? "Edit Komplain" : "Tambahkan Komplain"}
       size="md"
     >
       {error && (
@@ -110,7 +133,7 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
             disabled={loading}
             className="w-full bg-[#84CC16] text-white font-semibold py-3 rounded-full hover:bg-[#73B814] transition-colors disabled:opacity-50"
           >
-            {loading ? "Mengirim..." : "Kirim Komplain"}
+            {loading ? "Menyimpan..." : isEdit ? "Simpan Perubahan" : "Kirim Komplain"}
           </button>
           <button
             type="button"

@@ -21,6 +21,7 @@ interface Komplain {
 export default function Komplain() {
   const [komplainList, setKomplainList] = useState<Komplain[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [editKomplain, setEditKomplain] = useState<Komplain | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [propertiId, setPropertiId] = useState("");
@@ -93,7 +94,7 @@ export default function Komplain() {
           <h1 className="text-2xl font-bold">Komplain</h1>
           {!noRoom && (
             <button
-              onClick={() => setShowModal(true)}
+              onClick={() => { setEditKomplain(null); setShowModal(true); }}
               className="hidden md:flex items-center gap-2 bg-[#84CC16] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#84CC16]/90 transition-colors"
             >
               <Plus className="w-5 h-5" />
@@ -121,7 +122,11 @@ export default function Komplain() {
             {activeKomplain.length > 0 && (
               <div className="space-y-3 mb-6">
                 {activeKomplain.map((k) => (
-                  <KomplainCard key={k.id} komplain={k} />
+                  <KomplainCard
+                    key={k.id}
+                    komplain={k}
+                    onEdit={() => { setEditKomplain(k); setShowModal(true); }}
+                  />
                 ))}
               </div>
             )}
@@ -144,7 +149,7 @@ export default function Komplain() {
             )}
 
             <button
-              onClick={() => setShowModal(true)}
+              onClick={() => { setEditKomplain(null); setShowModal(true); }}
               className="md:hidden fixed bottom-24 right-4 bg-[#84CC16] text-white p-4 rounded-full shadow-lg z-40 flex items-center justify-center hover:bg-[#84CC16]/90 transition-colors"
               aria-label="Tambah Komplain"
             >
@@ -156,9 +161,10 @@ export default function Komplain() {
 
       <KomplainFormModal
         isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={() => { setShowModal(false); setEditKomplain(null); }}
         onSuccess={handleSuccess}
         propertiId={propertiId}
+        komplain={editKomplain}
       />
     </MainLayout>
   );
