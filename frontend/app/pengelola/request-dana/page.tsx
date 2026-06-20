@@ -298,6 +298,16 @@ export default function RequestDanaPengelolaPage() {
                       Lihat Foto
                     </button>
                   )}
+
+                  {d.bukti_transfer && (
+                    <button
+                      onClick={() => setSelectedFoto(d.bukti_transfer!)}
+                      className="flex items-center gap-2 text-sm text-[#84CC16] hover:underline mb-3"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Lihat Bukti Transfer
+                    </button>
+                  )}
                 </div>
               );
             })}

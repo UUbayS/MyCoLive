@@ -910,6 +910,7 @@ export type PengajuanDanaData = {
   jumlah: number;
   no_rekening: string;
   foto?: string | null;
+  bukti_transfer?: string | null;
   status: string;
   created_at: string;
   updated_at?: string;
@@ -938,11 +939,15 @@ export async function getPengajuanDanaList(): Promise<PengajuanDanaData[]> {
   }
 }
 
-export async function updatePengajuanDanaStatus(id: string, status: "DITERIMA" | "DITOLAK"): Promise<PengajuanDanaData | null> {
+export async function updatePengajuanDanaStatus(
+  id: string,
+  status: "DITERIMA" | "DITOLAK",
+  bukti_transfer?: string,
+): Promise<PengajuanDanaData | null> {
   try {
     const res = await apiFetch<{ status: string; data: PengajuanDanaData }>("/api/dana/" + id, {
       method: "PUT",
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ status, ...(bukti_transfer ? { bukti_transfer } : {}) }),
     });
     return res.data || null;
   } catch {
