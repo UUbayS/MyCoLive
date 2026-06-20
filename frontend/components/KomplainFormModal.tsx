@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { apiFetch } from "../lib/auth";
 import Modal from "./ui/Modal";
+import ImageUploader from "./ImageUploader";
 
 interface KomplainFormModalProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface KomplainFormModalProps {
     masalah: string;
     jenis: string;
     deskripsi: string;
+    foto?: string | null;
   } | null;
 }
 
@@ -27,6 +29,7 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
   const [masalah, setMasalah] = useState("");
   const [jenis, setJenis] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
+  const [foto, setFoto] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -35,6 +38,7 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
       setMasalah(komplain?.masalah ?? "");
       setJenis(komplain?.jenis ?? "");
       setDeskripsi(komplain?.deskripsi ?? "");
+      setFoto(komplain?.foto ?? "");
       setError("");
     }
   }, [isOpen, komplain]);
@@ -53,7 +57,7 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
       if (isEdit) {
         await apiFetch(`/api/komplain/${komplain!.id}`, {
           method: "PUT",
-          body: JSON.stringify({ masalah, jenis, deskripsi }),
+          body: JSON.stringify({ masalah, jenis, deskripsi, foto: foto || null }),
         });
       } else {
         await apiFetch("/api/komplain", {
@@ -62,6 +66,7 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
             masalah,
             jenis,
             deskripsi,
+            foto: foto || null,
             properti_id: propertiId,
           }),
         });
@@ -71,6 +76,7 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
       setMasalah("");
       setJenis("");
       setDeskripsi("");
+      setFoto("");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Gagal mengirim komplain";
       setError(message);
@@ -125,6 +131,13 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
           onChange={(e) => setDeskripsi(e.target.value)}
           rows={4}
           className="w-full border border-gray-300 rounded-2xl px-4 py-3 text-sm resize-none focus:border-[#84CC16] focus:outline-none placeholder-gray-400"
+        />
+
+        <ImageUploader
+          label="Foto (opsional)"
+          images={foto ? [foto] : []}
+          onChange={(imgs) => setFoto(imgs[0] ?? "")}
+          maxImages={1}
         />
 
         <div className="space-y-3 pt-2">

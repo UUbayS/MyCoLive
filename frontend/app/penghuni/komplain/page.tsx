@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import MainLayout from "../../../components/Layout/MainLayout";
 import KomplainCard from "../../../components/KomplainCard";
 import KomplainFormModal from "../../../components/KomplainFormModal";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 import { apiFetch } from "../../../lib/auth";
 import { useRealtime } from "../../../lib/useRealtime";
 import { Plus, CheckCircle } from "lucide-react";
@@ -13,6 +14,7 @@ interface Komplain {
   masalah: string;
   jenis: string;
   deskripsi: string;
+  foto?: string | null;
   status: string;
   created_at: string;
   properti: { nama: string };
@@ -22,6 +24,8 @@ export default function Komplain() {
   const [komplainList, setKomplainList] = useState<Komplain[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editKomplain, setEditKomplain] = useState<Komplain | null>(null);
+  const [deleteKomplain, setDeleteKomplain] = useState<Komplain | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [propertiId, setPropertiId] = useState("");
@@ -84,6 +88,20 @@ export default function Komplain() {
     }, 3000);
   };
 
+  const handleDelete = async () => {
+    if (!deleteKomplain) return;
+    setDeleteLoading(true);
+    try {
+      await apiFetch(`/api/komplain/${deleteKomplain.id}`, { method: "DELETE" });
+      setDeleteKomplain(null);
+      fetchKomplain();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   const activeKomplain = komplainList.filter((k) => k.status !== "SELESAI");
   const historyKomplain = komplainList.filter((k) => k.status === "SELESAI");
 
@@ -126,6 +144,7 @@ export default function Komplain() {
                     key={k.id}
                     komplain={k}
                     onEdit={() => { setEditKomplain(k); setShowModal(true); }}
+                    onDelete={() => setDeleteKomplain(k)}
                   />
                 ))}
               </div>
@@ -165,6 +184,17 @@ export default function Komplain() {
         onSuccess={handleSuccess}
         propertiId={propertiId}
         komplain={editKomplain}
+      />
+
+      <ConfirmDialog
+        isOpen={!!deleteKomplain}
+        title="Hapus Komplain?"
+        message={`Komplain "${deleteKomplain?.masalah ?? ""}" akan dihapus secara permanen.`}
+        confirmLabel={deleteLoading ? "Menghapus..." : "Hapus"}
+        cancelLabel="Batal"
+        danger
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteKomplain(null)}
       />
     </MainLayout>
   );

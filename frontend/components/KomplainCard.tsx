@@ -1,4 +1,4 @@
-import { Edit } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 
 interface KomplainCardProps {
   komplain: {
@@ -9,6 +9,7 @@ interface KomplainCardProps {
     status: string;
   };
   onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 const statusConfig: Record<string, { label: string; class: string }> = {
@@ -24,7 +25,7 @@ const jenisLabel: Record<string, string> = {
   LAINNYA: "Lainnya",
 };
 
-export default function KomplainCard({ komplain, onEdit }: KomplainCardProps) {
+export default function KomplainCard({ komplain, onEdit, onDelete }: KomplainCardProps) {
   const status = statusConfig[komplain.status] || statusConfig.BARU;
   const tanggal = new Date(komplain.created_at).toLocaleDateString("id-ID", {
     day: "numeric",
@@ -48,14 +49,25 @@ export default function KomplainCard({ komplain, onEdit }: KomplainCardProps) {
           <span className={`px-3 py-1 rounded-full text-xs font-medium ${status.class}`}>
             {status.label}
           </span>
-          {komplain.status !== "SELESAI" && onEdit && (
-            <button
-              onClick={onEdit}
-              className="text-gray-400 hover:text-gray-600 p-1"
-              aria-label="Edit komplain"
-            >
-              <Edit className="w-5 h-5" />
-            </button>
+          {komplain.status !== "SELESAI" && (
+            <div className="flex items-center gap-1">
+              {onEdit && (
+                <button
+                  onClick={onEdit}
+                  className="text-gray-400 hover:text-gray-600 p-1"
+                  aria-label="Edit komplain"
+                >
+                  <Edit className="w-5 h-5" />
+                </button>
+              )}
+              <button
+                onClick={onDelete}
+                className="text-red-500 hover:text-red-600 p-1"
+                aria-label="Hapus komplain"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            </div>
           )}
         </div>
       </div>

@@ -469,4 +469,39 @@ app.put("/:id", async (c) => {
   }
 });
 
+// Delete komplain (PENGHUNI - own komplain, only while not SELESAI)
+app.delete("/:id", requireRole("PENGHUNI"), async (c) => {
+  try {
+    const id = c.req.param("id");
+    const user = c.get("user");
+
+    const komplain = await prisma.komplain.findUnique({
+      where: { id },
+      include: { penghuni: true },
+    });
+
+    if (!komplain) {
+      return c.json({ status: "error", message: "Komplain tidak ditemukan" }, 404);
+    }
+
+    if (komplain.penghuni.user_id !== user.userId) {
+      return c.json({ status: "error", message: "Akses ditolak" }, 403);
+    }
+
+    if (komplain.status === "SELESAI") {
+      return c.json(
+        { status: "error", message: "Komplain yang sudah selesai tidak dapat dihapus" },
+        400,
+      );
+    }
+
+    await prisma.komplain.delete({ where: { id } });
+
+    return c.json({ status: "success", message: "Komplain berhasil dihapus" });
+  } catch (error) {
+    console.error("Delete komplain error:", error);
+    return c.json({ status: "error", message: "Gagal menghapus komplain" }, 500);
+  }
+});
+
 export default app;
