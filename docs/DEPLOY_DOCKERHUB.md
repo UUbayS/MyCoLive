@@ -94,7 +94,7 @@ Buka terminal di laptop (folder project):
 docker login
 
 # Build + push backend
-export DOCKER_USER=<username-docker-hub>
+set DOCKER_USER=<username-docker-hub>
 docker compose -f docker-compose.prod.yml build backend
 docker compose -f docker-compose.prod.yml push backend
 
@@ -106,7 +106,7 @@ docker compose -f docker-compose.prod.yml push frontend
 Atau build semua sekaligus:
 
 ```bash
-export DOCKER_USER=<username-docker-hub>
+set DOCKER_USER=<username-docker-hub>
 docker compose -f docker-compose.prod.yml build
 docker compose -f docker-compose.prod.yml push
 ```
