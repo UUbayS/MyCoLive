@@ -1,0 +1,134 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main, deployment]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login ke GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ─── Backend ──────────────────────────────────────────────
+      - name: Backend — metadata
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}-backend
+          tags: |
+            type=sha,prefix=,format=short
+            type=ref,event=branch
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Backend — build & push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # ─── Frontend ─────────────────────────────────────────────
+      - name: Frontend — metadata
+        id: meta-frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}-frontend
+          tags: |
+            type=sha,prefix=,format=short
+            type=ref,event=branch
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Frontend — build & push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ─── Deploy ke VPS ────────────────────────────────────────────
+  deploy:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/deployment'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Kirim compose + Caddyfile ke VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          source: "docker-compose.prod.yml,Caddyfile"
+          target: "~/mycolive"
+          strip_components: 0
+
+      - name: Eksekusi deploy di VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          envs: GHCR_TOKEN,GITHUB_REPOSITORY,GITHUB_ACTOR
+          script: |
+            set -e
+
+            cd ~/mycolive
+
+            # Cek .env
+            if [ ! -f .env ]; then
+              echo "╔══════════════════════════════════════════════╗"
+              echo "║  ERROR: .env tidak ditemukan!                ║"
+              echo "║  Buat dulu: cp .env.example .env            ║"
+              echo "║  lalu isi semua variabelnya.                 ║"
+              echo "╚══════════════════════════════════════════════╝"
+              exit 1
+            fi
+
+            # Login GHCR (butuh PAT dengan read:packages)
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
+            # Export image vars untuk docker-compose.prod.yml
+            export BACKEND_IMAGE="ghcr.io/${GITHUB_REPOSITORY}-backend:latest"
+            export FRONTEND_IMAGE="ghcr.io/${GITHUB_REPOSITORY}-frontend:latest"
+
+            # Pull image terbaru
+            docker compose -f docker-compose.prod.yml pull
+
+            # Restart stack
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
+
+            # Bersihin image lama
+            docker image prune -f
+
+            echo "✅ Deploy sukses!"
