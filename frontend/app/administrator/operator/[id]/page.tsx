@@ -15,6 +15,7 @@ import {
   Calendar,
   AlertCircle,
   Lock,
+  Edit,
   Eye,
   EyeOff,
 } from "lucide-react";
@@ -124,8 +125,20 @@ export default function DetailOperatorPage() {
   return (
     <MainLayout>
       <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Operator Properti</h1>
-        <h2 className="hidden md:block text-base font-medium text-gray-600 mb-4">Operator Properti â€” Detail Operator</h2>
+        <div className="flex items-start justify-between gap-3 mb-4">
+          <div>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">Operator Properti</h1>
+            <h2 className="hidden md:block text-base font-medium text-gray-600 mt-1">Operator Properti — Detail Operator</h2>
+          </div>
+          <Link
+            href={`/administrator/operator/${operatorId}/edit`}
+            className="flex items-center gap-2 md:px-4 md:py-4 px-2 py-2 bg-[#84CC16] text-white rounded-lg hover:bg-[#65a30d] transition-colors text-sm font-medium shadow-sm shrink-0"
+          >
+            <Edit className="w-4 h-4" />
+            <span className="hidden sm:inline">Edit Operator</span>
+            <span className="md:hidden">Edit</span>
+          </Link>
+        </div>
         <div className="md:hidden">
           <OperatorTabs />
         </div>
@@ -237,7 +250,7 @@ export default function DetailOperatorPage() {
                         </span>
                       </div>
                       <p className="text-xs text-gray-500">
-                        {d.properti?.nama || "-"} â€¢ {new Date(d.created_at).toLocaleDateString("id-ID", {
+                        {d.properti?.nama || "-"} • {new Date(d.created_at).toLocaleDateString("id-ID", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",

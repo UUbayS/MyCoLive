@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { apiFetch } from "../lib/auth";
 import Modal from "./ui/Modal";
+import ImageUploader from "./ImageUploader";
 
 interface KomplainFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
   propertiId: string;
+  komplain?: {
+    id: string;
+    masalah: string;
+    jenis: string;
+    deskripsi: string;
+    foto?: string | null;
+  } | null;
 }
 
 const jenisOptions = [
@@ -16,12 +24,24 @@ const jenisOptions = [
   { value: "LAINNYA", label: "Lainnya" },
 ];
 
-export default function KomplainFormModal({ isOpen, onClose, onSuccess, propertiId }: KomplainFormModalProps) {
+export default function KomplainFormModal({ isOpen, onClose, onSuccess, propertiId, komplain }: KomplainFormModalProps) {
+  const isEdit = !!komplain;
   const [masalah, setMasalah] = useState("");
   const [jenis, setJenis] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
+  const [foto, setFoto] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      setMasalah(komplain?.masalah ?? "");
+      setJenis(komplain?.jenis ?? "");
+      setDeskripsi(komplain?.deskripsi ?? "");
+      setFoto(komplain?.foto ?? "");
+      setError("");
+    }
+  }, [isOpen, komplain]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,20 +54,29 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
 
     setLoading(true);
     try {
-      await apiFetch("/api/komplain", {
-        method: "POST",
-        body: JSON.stringify({
-          masalah,
-          jenis,
-          deskripsi,
-          properti_id: propertiId,
-        }),
-      });
+      if (isEdit) {
+        await apiFetch(`/api/komplain/${komplain!.id}`, {
+          method: "PUT",
+          body: JSON.stringify({ masalah, jenis, deskripsi, foto: foto || null }),
+        });
+      } else {
+        await apiFetch("/api/komplain", {
+          method: "POST",
+          body: JSON.stringify({
+            masalah,
+            jenis,
+            deskripsi,
+            foto: foto || null,
+            properti_id: propertiId,
+          }),
+        });
+      }
       onSuccess();
       onClose();
       setMasalah("");
       setJenis("");
       setDeskripsi("");
+      setFoto("");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Gagal mengirim komplain";
       setError(message);
@@ -60,7 +89,7 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Tambahkan Komplain"
+      title={isEdit ? "Edit Komplain" : "Tambahkan Komplain"}
       size="md"
     >
       {error && (
@@ -104,13 +133,20 @@ export default function KomplainFormModal({ isOpen, onClose, onSuccess, properti
           className="w-full border border-gray-300 rounded-2xl px-4 py-3 text-sm resize-none focus:border-[#84CC16] focus:outline-none placeholder-gray-400"
         />
 
+        <ImageUploader
+          label="Foto (opsional)"
+          images={foto ? [foto] : []}
+          onChange={(imgs) => setFoto(imgs[0] ?? "")}
+          maxImages={1}
+        />
+
         <div className="space-y-3 pt-2">
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-[#84CC16] text-white font-semibold py-3 rounded-full hover:bg-[#73B814] transition-colors disabled:opacity-50"
           >
-            {loading ? "Mengirim..." : "Kirim Komplain"}
+            {loading ? "Menyimpan..." : isEdit ? "Simpan Perubahan" : "Kirim Komplain"}
           </button>
           <button
             type="button"

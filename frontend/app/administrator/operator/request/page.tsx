@@ -18,6 +18,7 @@ import MainLayout from "@/components/Layout/MainLayout";
 import OperatorTabs from "@/components/OperatorTabs";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import Modal from "@/components/ui/Modal";
+import ImageUploader from "@/components/ImageUploader";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getPengajuanDanaList, updatePengajuanDanaStatus, PengajuanDanaData } from "@/lib/api";
 import { useRealtime } from "@/lib/useRealtime";
@@ -41,6 +42,9 @@ export default function RequestDanaPage() {
     status: "DITERIMA" | "DITOLAK";
     label: string;
   } | null>(null);
+  const [approveTarget, setApproveTarget] = useState<PengajuanDanaData | null>(null);
+  const [buktiTransfer, setBuktiTransfer] = useState("");
+  const [buktiError, setBuktiError] = useState("");
   const fetchedRef = useRef(false);
   const { success, error } = useToast();
 
@@ -93,10 +97,14 @@ export default function RequestDanaPage() {
     }
   }, [activeTab, danaList]);
 
-  const handleUpdateStatus = async (id: string, status: "DITERIMA" | "DITOLAK") => {
+  const handleUpdateStatus = async (
+    id: string,
+    status: "DITERIMA" | "DITOLAK",
+    bukti?: string,
+  ) => {
     setProcessingId(id);
     try {
-      await updatePengajuanDanaStatus(id, status);
+      await updatePengajuanDanaStatus(id, status, bukti);
       const updated = await getPengajuanDanaList();
       setDanaList(updated);
       success(status === "DITERIMA" ? "Request dana disetujui" : "Request dana ditolak");
@@ -107,6 +115,18 @@ export default function RequestDanaPage() {
       setProcessingId(null);
       setConfirmAction(null);
     }
+  };
+
+  const handleApproveConfirm = async () => {
+    if (!approveTarget) return;
+    if (!buktiTransfer) {
+      setBuktiError("Bukti transfer wajib diunggah");
+      return;
+    }
+    await handleUpdateStatus(approveTarget.id, "DITERIMA", buktiTransfer);
+    setApproveTarget(null);
+    setBuktiTransfer("");
+    setBuktiError("");
   };
 
   const pendingCount = danaList.filter((d) => d.status === "MENUNGGU").length;
@@ -228,11 +248,22 @@ export default function RequestDanaPage() {
                     </button>
                   )}
 
+                  {/* Bukti Transfer */}
+                  {d.bukti_transfer && (
+                    <button
+                      onClick={() => setSelectedFoto(d.bukti_transfer!)}
+                      className="flex items-center gap-2 text-sm text-[#84CC16] hover:underline mb-3"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Lihat Bukti Transfer
+                    </button>
+                  )}
+
                   {/* Actions */}
                   {isPending && (
                     <div className="flex flex-col sm:flex-row gap-2">
                       <button
-                        onClick={() => setConfirmAction({ id: d.id, status: "DITERIMA", label: "menerima" })}
+                        onClick={() => { setApproveTarget(d); setBuktiTransfer(""); setBuktiError(""); }}
                         disabled={processingId === d.id}
                         className="flex items-center justify-center gap-1.5 px-4 py-3 sm:py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
                       >
@@ -278,6 +309,46 @@ export default function RequestDanaPage() {
         }}
         onCancel={() => setConfirmAction(null)}
       />
+
+      {/* Modal Setujui + Bukti Transfer */}
+      <Modal
+        isOpen={!!approveTarget}
+        onClose={() => { setApproveTarget(null); setBuktiTransfer(""); setBuktiError(""); }}
+        title="Setujui Pengajuan Dana"
+        size="md"
+      >
+        <p className="text-sm text-gray-500 mb-4">
+          Unggah bukti transfer untuk menyetujui pengajuan{" "}
+          <span className="font-medium text-gray-700">{approveTarget?.tujuan}</span> sebesar{" "}
+          <span className="font-medium text-gray-700">
+            Rp {(approveTarget?.jumlah || 0).toLocaleString("id-ID")}
+          </span>.
+        </p>
+
+        <ImageUploader
+          label="Bukti Transfer"
+          images={buktiTransfer ? [buktiTransfer] : []}
+          onChange={(imgs) => { setBuktiTransfer(imgs[0] ?? ""); setBuktiError(""); }}
+          maxImages={1}
+        />
+        {buktiError && <p className="text-xs text-red-500 -mt-2 mb-2">{buktiError}</p>}
+
+        <div className="flex gap-3 pt-2">
+          <button
+            onClick={() => { setApproveTarget(null); setBuktiTransfer(""); setBuktiError(""); }}
+            className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Batal
+          </button>
+          <button
+            onClick={handleApproveConfirm}
+            disabled={processingId === approveTarget?.id}
+            className="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700 transition-colors disabled:opacity-50"
+          >
+            {processingId === approveTarget?.id ? "Memproses..." : "Setujui"}
+          </button>
+        </div>
+      </Modal>
 
       {/* Modal Foto */}
       <Modal

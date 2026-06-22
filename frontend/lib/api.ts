@@ -270,6 +270,18 @@ export async function createFasilitas(nama: string, jenis: "RUANGAN" | "UMUM"): 
   }
 }
 
+export async function updateFasilitas(id: string, nama: string): Promise<FasilitasData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: FasilitasData }>("/api/fasilitas/" + id, {
+      method: "PUT",
+      body: JSON.stringify({ nama }),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
 export async function deleteFasilitas(id: string): Promise<boolean> {
   try {
     await apiFetch<{ status: string }>("/api/fasilitas/" + id, {
@@ -875,6 +887,21 @@ export async function createOperator(data: {
   }
 }
 
+export async function updateOperator(
+  id: string,
+  data: { username: string; nama: string; no_telepon?: string | null }
+): Promise<OperatorUserData | null> {
+  try {
+    const res = await apiFetch<{ status: string; data: OperatorUserData }>("/api/users/" + id, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
 // ─── PENGAJUAN DANA ───
 
 export type PengajuanDanaData = {
@@ -883,6 +910,7 @@ export type PengajuanDanaData = {
   jumlah: number;
   no_rekening: string;
   foto?: string | null;
+  bukti_transfer?: string | null;
   status: string;
   created_at: string;
   updated_at?: string;
@@ -911,11 +939,15 @@ export async function getPengajuanDanaList(): Promise<PengajuanDanaData[]> {
   }
 }
 
-export async function updatePengajuanDanaStatus(id: string, status: "DITERIMA" | "DITOLAK"): Promise<PengajuanDanaData | null> {
+export async function updatePengajuanDanaStatus(
+  id: string,
+  status: "DITERIMA" | "DITOLAK",
+  bukti_transfer?: string,
+): Promise<PengajuanDanaData | null> {
   try {
     const res = await apiFetch<{ status: string; data: PengajuanDanaData }>("/api/dana/" + id, {
       method: "PUT",
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ status, ...(bukti_transfer ? { bukti_transfer } : {}) }),
     });
     return res.data || null;
   } catch {

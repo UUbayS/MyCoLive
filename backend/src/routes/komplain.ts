@@ -338,7 +338,51 @@ app.put("/:id", async (c) => {
     const { status } = body;
 
     if (user.role === "PENGHUNI") {
-      return c.json({ status: "error", message: "Akses tidak diizinkan" }, 403);
+      const { masalah, jenis, deskripsi, foto } = body;
+
+      if (!masalah || !jenis || !deskripsi) {
+        return c.json(
+          { status: "error", message: "masalah, jenis, dan deskripsi wajib diisi" },
+          400,
+        );
+      }
+
+      const validJenis = ["FASILITAS", "LINGKUNGAN", "PENGHUNI_LAIN", "LAINNYA"];
+      if (!validJenis.includes(jenis)) {
+        return c.json({ status: "error", message: "Jenis tidak valid" }, 400);
+      }
+
+      const existing = await prisma.komplain.findUnique({
+        where: { id },
+        include: { penghuni: true },
+      });
+
+      if (!existing) {
+        return c.json({ status: "error", message: "Komplain tidak ditemukan" }, 404);
+      }
+
+      if (existing.penghuni.user_id !== user.userId) {
+        return c.json({ status: "error", message: "Akses ditolak" }, 403);
+      }
+
+      if (existing.status === "SELESAI") {
+        return c.json(
+          { status: "error", message: "Komplain yang sudah selesai tidak dapat diubah" },
+          400,
+        );
+      }
+
+      const updated = await prisma.komplain.update({
+        where: { id },
+        data: {
+          masalah,
+          jenis: jenis as any,
+          deskripsi,
+          ...(foto !== undefined ? { foto } : {}),
+        },
+      });
+
+      return c.json({ status: "success", data: updated });
     }
 
     if (!["DIPROSES", "SELESAI"].includes(status)) {
@@ -422,6 +466,41 @@ app.put("/:id", async (c) => {
   } catch (error) {
     console.error("Update komplain error:", error);
     return c.json({ status: "error", message: "Gagal update komplain" }, 500);
+  }
+});
+
+// Delete komplain (PENGHUNI - own komplain, only while not SELESAI)
+app.delete("/:id", requireRole("PENGHUNI"), async (c) => {
+  try {
+    const id = c.req.param("id");
+    const user = c.get("user");
+
+    const komplain = await prisma.komplain.findUnique({
+      where: { id },
+      include: { penghuni: true },
+    });
+
+    if (!komplain) {
+      return c.json({ status: "error", message: "Komplain tidak ditemukan" }, 404);
+    }
+
+    if (komplain.penghuni.user_id !== user.userId) {
+      return c.json({ status: "error", message: "Akses ditolak" }, 403);
+    }
+
+    if (komplain.status === "SELESAI") {
+      return c.json(
+        { status: "error", message: "Komplain yang sudah selesai tidak dapat dihapus" },
+        400,
+      );
+    }
+
+    await prisma.komplain.delete({ where: { id } });
+
+    return c.json({ status: "success", message: "Komplain berhasil dihapus" });
+  } catch (error) {
+    console.error("Delete komplain error:", error);
+    return c.json({ status: "error", message: "Gagal menghapus komplain" }, 500);
   }
 });
 

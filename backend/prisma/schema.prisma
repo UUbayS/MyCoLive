@@ -329,6 +329,7 @@ model PengajuanDana {
   jumlah      Int
   no_rekening String
   foto        String?
+  bukti_transfer String?
   status      StatusDana @default(MENUNGGU)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

@@ -282,11 +282,18 @@ app.put("/:id", requireRole("PEMILIK"), async (c) => {
     const id = c.req.param("id");
     const user = c.get("user");
     const body = await c.req.json();
-    const { status } = body;
+    const { status, bukti_transfer } = body;
 
     if (!["DITERIMA", "DITOLAK"].includes(status)) {
       return c.json(
         { status: "error", message: "Status harus DITERIMA atau DITOLAK" },
+        400,
+      );
+    }
+
+    if (status === "DITERIMA" && (!bukti_transfer || !bukti_transfer.trim())) {
+      return c.json(
+        { status: "error", message: "Bukti transfer wajib diunggah untuk menyetujui pengajuan" },
         400,
       );
     }
@@ -316,7 +323,10 @@ app.put("/:id", requireRole("PEMILIK"), async (c) => {
 
     const updated = await prisma.pengajuanDana.update({
       where: { id },
-      data: { status: status as any },
+      data: {
+        status: status as any,
+        ...(status === "DITERIMA" ? { bukti_transfer } : {}),
+      },
     });
 
     // Notifikasi ke PENGELOLA

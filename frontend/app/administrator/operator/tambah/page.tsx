@@ -8,11 +8,8 @@ import MainLayout from "../../../../components/Layout/MainLayout";
 import { getUser, isAuthenticated } from "../../../../lib/auth";
 import { getPropertiList, createOperator, PropertiData } from "../../../../lib/api";
 
-function validatePhone(phone: string): boolean {
-  if (!phone) return true; // optional
-  const cleaned = phone.replace(/\s/g, "");
-  return cleaned.startsWith("08") || cleaned.startsWith("62") || cleaned.startsWith("+62");
-}
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^\d{9,15}$/;
 
 export default function TambahOperatorPage() {
   const router = useRouter();
@@ -74,15 +71,19 @@ export default function TambahOperatorPage() {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.username.trim()) newErrors.username = "Username wajib diisi";
+    if (!formData.username.trim()) {
+      newErrors.username = "Username wajib diisi";
+    } else if (!/^[a-zA-Z0-9._]+$/.test(formData.username.trim())) {
+      newErrors.username = "Username hanya boleh huruf, angka, titik, dan garis bawah";
+    }
     if (!formData.nama.trim()) newErrors.nama = "Nama lengkap wajib diisi";
     if (!formData.email.trim()) {
       newErrors.email = "Email wajib diisi";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!EMAIL_RE.test(formData.email.trim())) {
       newErrors.email = "Format email tidak valid";
     }
-    if (formData.no_telepon && !validatePhone(formData.no_telepon)) {
-      newErrors.no_telepon = "Format nomor telepon tidak valid (gunakan 08... atau 62...)";
+    if (formData.no_telepon.trim() && !PHONE_RE.test(formData.no_telepon.trim())) {
+      newErrors.no_telepon = "Nomor HP harus 9-15 digit angka";
     }
     if (!formData.password) {
       newErrors.password = "Password wajib diisi";
@@ -139,6 +140,19 @@ export default function TambahOperatorPage() {
     }
   };
 
+  const updateField = (
+    field: "username" | "nama" | "email" | "no_telepon" | "password" | "konfirmasi_password",
+    value: string
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const { [field]: _, ...rest } = prev;
+        return rest;
+      });
+    }
+  };
+
   const toggleProperti = (id: string) => {
     setFormData((prev) => {
       const exists = prev.properti_ids.includes(id);
@@ -171,14 +185,15 @@ export default function TambahOperatorPage() {
           <h1 className="text-xl font-semibold">Tambah Operator</h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
+        <form onSubmit={handleSubmit} noValidate className="space-y-4 max-w-xl">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
             <input
               type="text"
               value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              onChange={(e) => updateField("username", e.target.value)}
               placeholder="johndoe"
+              maxLength={50}
               className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent ${
                 errors.username ? "border-red-500" : "border-gray-300"
               }`}
@@ -191,8 +206,9 @@ export default function TambahOperatorPage() {
             <input
               type="text"
               value={formData.nama}
-              onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+              onChange={(e) => updateField("nama", e.target.value)}
               placeholder="John Doe"
+              maxLength={100}
               className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent ${
                 errors.nama ? "border-red-500" : "border-gray-300"
               }`}
@@ -205,8 +221,9 @@ export default function TambahOperatorPage() {
             <input
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) => updateField("email", e.target.value)}
               placeholder="john@example.com"
+              maxLength={254}
               className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent ${
                 errors.email ? "border-red-500" : "border-gray-300"
               }`}
@@ -219,8 +236,9 @@ export default function TambahOperatorPage() {
             <input
               type="text"
               value={formData.no_telepon}
-              onChange={(e) => setFormData({ ...formData, no_telepon: e.target.value })}
+              onChange={(e) => updateField("no_telepon", e.target.value)}
               placeholder="08123456789"
+              maxLength={15}
               className={`w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent ${
                 errors.no_telepon ? "border-red-500" : "border-gray-300"
               }`}
@@ -286,8 +304,9 @@ export default function TambahOperatorPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) => updateField("password", e.target.value)}
                 placeholder="Minimal 8 karakter"
+                maxLength={72}
                 className={`w-full px-4 pr-10 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent ${
                   errors.password ? "border-red-500" : "border-gray-300"
                 }`}
@@ -310,8 +329,9 @@ export default function TambahOperatorPage() {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 value={formData.konfirmasi_password}
-                onChange={(e) => setFormData({ ...formData, konfirmasi_password: e.target.value })}
+                onChange={(e) => updateField("konfirmasi_password", e.target.value)}
                 placeholder="Ulangi password"
+                maxLength={72}
                 className={`w-full px-4 pr-10 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent ${
                   errors.konfirmasi_password ? "border-red-500" : "border-gray-300"
                 }`}
