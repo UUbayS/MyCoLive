@@ -26,7 +26,7 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN bun run build
 
 # ---------- Stage 3: runtime ----------
-FROM oven/bun:1.3-distroless AS runtime
+FROM oven/bun:1.3-alpine AS runtime
 
 WORKDIR /app
 

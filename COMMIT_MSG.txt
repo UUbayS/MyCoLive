@@ -1,7 +1,7 @@
-fix: remove bun.lock from .dockerignore (broke Docker COPY)
+fix: switch frontend runtime from bun:distroless to bun:alpine
 
-The previous fix changed bun.lockb -> bun.lock in .dockerignore,
-which excluded the actual lockfile from the build context. Docker
-COPY needs the lockfile for bun install --frozen-lockfile to work.
+Next.js standalone server needs Node.js builtins (v8, child_process)
+that are unavailable in the distroless bun image. Alpine has the
+full runtime environment required for Next.js to work properly.
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>
