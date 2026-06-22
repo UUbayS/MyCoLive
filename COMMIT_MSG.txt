@@ -1,10 +1,7 @@
-fix: improve Docker deployment config & docs
+fix: remove bun.lock from .dockerignore (broke Docker COPY)
 
-- Remove NEXT_PUBLIC_API_URL from frontend runtime env (build-time only)
-- Add service_healthy condition to Caddy depends_on
-- Remove 5 redundant DB env vars from backend (DATABASE_URL is sufficient)
-- Update .dockerignore: bun.lockb -> bun.lock (new Bun format)
-- Fix DEPLOY.md: backup/restore use env vars instead of hardcoded values
-- Add P1000 authentication troubleshooting section to DEPLOY.md
+The previous fix changed bun.lockb -> bun.lock in .dockerignore,
+which excluded the actual lockfile from the build context. Docker
+COPY needs the lockfile for bun install --frozen-lockfile to work.
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>

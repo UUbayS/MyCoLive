@@ -13,7 +13,6 @@ Dockerfile
 .dockerignore
 README.md
 package-lock.json
-bun.lock
 .DS_Store
 coverage
 .vercel
