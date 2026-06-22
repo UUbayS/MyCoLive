@@ -15,8 +15,7 @@ import {
   Wrench,
   Plus,
 } from "lucide-react";
-import MainLayout from "@/components/Layout/MainLayout";
-import OperatorTabs from "@/components/OperatorTabs";
+import { useRealtime } from "@/lib/useRealtime";
 import { getUser, isAuthenticated } from "@/lib/auth";
 import { getUserList, deleteUser, OperatorUserData } from "@/lib/api";
 
@@ -78,16 +77,9 @@ export default function DaftarOperatorPage() {
   }, [search, operatorList]);
 
   return (
-    <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 pt-6 pb-20 md:px-6 md:pt-8 md:pb-8">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Operator Properti</h1>
-        <h2 className="hidden md:block text-base font-medium text-gray-600 mb-4">Operator Properti — Daftar Operator</h2>
-        <div className="md:hidden">
-          <OperatorTabs />
-        </div>
-
-        {/* Actions + Search */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-4 mt-4">
+    <>
+      {/* Actions + Search */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
@@ -173,7 +165,6 @@ export default function DaftarOperatorPage() {
             ))}
           </div>
         )}
-      </div>
-    </MainLayout>
+    </>
   );
 }

@@ -184,6 +184,7 @@ export default function SingleDatePickerModal({
       <div className="pt-4 pb-2">
         <div className="flex items-center justify-between mb-3">
           <button
+            type="button"
             onClick={prevMonth}
             disabled={isPrevMonthDisabled()}
             className={`p-1 rounded-lg transition-colors ${
@@ -198,6 +199,7 @@ export default function SingleDatePickerModal({
             </span>
           </div>
           <button
+            type="button"
             onClick={nextMonth}
             disabled={isNextMonthDisabled()}
             className={`p-1 rounded-lg transition-colors ${
@@ -216,7 +218,7 @@ export default function SingleDatePickerModal({
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-1 min-h-[240px]">
+        <div className="grid grid-cols-7 gap-1 min-h-240px">
           {Array.from({ length: firstDay }).map((_, i) => (
             <div key={`empty-${i}`} className="h-8 w-8" />
           ))}
@@ -228,6 +230,7 @@ export default function SingleDatePickerModal({
 
             return (
               <button
+                type="button"
                 key={day}
                 onClick={() => !disabled && handleDateClick(day)}
                 disabled={disabled}
@@ -250,12 +253,14 @@ export default function SingleDatePickerModal({
 
       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
         <button
+          type="button"
           onClick={handleClear}
           className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
         >
           Clear
         </button>
         <button
+          type="button"
           onClick={handleApply}
           disabled={!selectedDate}
           className={`px-4 py-2 text-sm font-medium rounded-xl transition-colors ${

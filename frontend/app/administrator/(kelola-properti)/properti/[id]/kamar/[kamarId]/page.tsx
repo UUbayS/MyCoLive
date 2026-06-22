@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useToast } from "../../../../../../lib/ToastContext";
+import { useToast } from "@/lib/ToastContext";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -17,17 +17,16 @@ import {
   Plus,
   AlertCircle
 } from "lucide-react";
-import ImageCarousel from "../../../../../../components/ImageCarousel";
-import ConfirmDialog from "../../../../../../components/ConfirmDialog";
-import { getUser } from "../../../../../../lib/auth";
+import ImageCarousel from "@/components/ImageCarousel";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import { getUser } from "@/lib/auth";
 import {
   getKamarById,
   deleteKamar,
   updateKamarStatus,
   KamarData,
   PropertiData,
-} from "../../../../../../lib/api";
-import MainLayout from "../../../../../../components/Layout/MainLayout";
+} from "@/lib/api";
 import TarifSelector from "@/components/TarifSelector";
 
 const statusConfig = {
@@ -125,19 +124,19 @@ export default function AdminDetailKamarPage() {
 
   if (loading) {
     return (
-      <MainLayout>
+      <>
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 bg-gray-200 rounded" />
           <div className="h-64 bg-gray-200 rounded-xl" />
           <div className="h-4 w-3/4 bg-gray-200 rounded" />
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   if (!kamar) {
     return (
-      <MainLayout>
+      <>
         <div className="text-center py-12">
           <p className="text-lg text-gray-500">Kamar tidak ditemukan</p>
           <Link
@@ -147,7 +146,7 @@ export default function AdminDetailKamarPage() {
             Kembali ke Daftar Kamar
           </Link>
         </div>
-      </MainLayout>
+      </>
     );
   }
 
@@ -155,9 +154,9 @@ export default function AdminDetailKamarPage() {
   const Icon = status.icon;
 
   return (
-    <MainLayout>
+    <>
       {/* Header */}
-      <div className="mb-4 md:mb-6">
+      <div className="mt-6 mb-4 md:mb-6">
         <div className="flex items-center justify-between w-full">
           <div className="flex-1 flex justify-start">
             <button
@@ -394,6 +393,6 @@ export default function AdminDetailKamarPage() {
         cancelLabel="Batal"
         danger
       />
-    </MainLayout>
+    </>
   );
 }

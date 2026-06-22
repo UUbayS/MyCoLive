@@ -101,6 +101,7 @@ export default function Modal({
             )}
             {showCloseButton && (
               <button
+                type="button"
                 onClick={onClose}
                 className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${title ? "" : "ml-auto"}`}
                 aria-label="Tutup"

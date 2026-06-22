@@ -19,7 +19,7 @@ export default function PropertiTabs() {
 
   return (
     <div className="mb-6">
-      <div className="flex items-center justify-center gap-6 sm:gap-8 overflow-x-auto scrollbar-hide">
+      <div className="flex items-center justify-start sm:justify-center gap-6 sm:gap-8 overflow-x-auto scrollbar-hide px-4 md:px-6 -mx-4 md:-mx-6 border-b border-gray-200">
         {tabs.map((tab) => {
           const active = isActive(tab.href);
 
@@ -27,16 +27,13 @@ export default function PropertiTabs() {
             <Link
               key={tab.href}
               href={tab.href}
-              className={`relative flex items-center gap-1.5 py-2 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors ${
+              className={`flex items-center gap-1.5 py-2 -mb-px border-b-2 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors ${
                 active
-                  ? "text-[#84CC16]"
-                  : "text-slate-500 hover:text-slate-700"
+                  ? "border-[#84CC16] text-[#84CC16]"
+                  : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
               }`}
             >
               <span>{tab.label}</span>
-              {active && (
-                <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-[#84CC16] rounded-full" />
-              )}
             </Link>
           );
         })}

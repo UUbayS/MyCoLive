@@ -44,7 +44,11 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="antialiased">
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="overflow-x-clip w-full flex flex-col min-h-screen relative">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

@@ -865,7 +865,7 @@ export default function KeuanganPage() {
         </div>
 
         {/* Properti Filter Chips + Periode Dropdown */}
-        <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedProperti("SEMUA")}
@@ -892,16 +892,16 @@ export default function KeuanganPage() {
             ))}
           </div>
 
-          <div className="relative shrink-0" ref={dropdownRef}>
+          <div className="relative shrink-0 self-start sm:self-auto w-full sm:w-auto" ref={dropdownRef}>
             <button
               onClick={() => setShowPeriodeDropdown(!showPeriodeDropdown)}
-              className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 hover:border-gray-300 transition-colors"
+              className="flex items-center justify-between sm:justify-start w-full sm:w-auto gap-1.5 px-3 py-1.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-700 hover:border-gray-300 transition-colors"
             >
-              <span className="truncate max-w-140px">{getDropdownLabel()}</span>
+              <span className="truncate max-w-full sm:max-w-[140px]">{getDropdownLabel()}</span>
               <ChevronDown className="w-3.5 h-3.5 text-gray-400 shrink-0" />
             </button>
             {showPeriodeDropdown && (
-              <div className="absolute right-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 overflow-hidden">
+              <div className="absolute left-0 sm:left-auto sm:right-0 mt-1 w-full sm:w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 overflow-hidden">
                 {["SEBULAN", "SETAHUN", "KUSTOM"].map((p) => (
                   <button
                     key={p}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useToast } from "../../../../lib/ToastContext";
+import { useToast } from "@/lib/ToastContext";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -20,11 +20,10 @@ import {
   Wrench,
   ExternalLink
 } from "lucide-react";
-import ImageCarousel from "../../../../components/ImageCarousel";
-import ConfirmDialog from "../../../../components/ConfirmDialog";
-import { getUser } from "../../../../lib/auth";
-import { getPropertiById, deleteProperti, PropertiData } from "../../../../lib/api";
-import MainLayout from "../../../../components/Layout/MainLayout";
+import ImageCarousel from "@/components/ImageCarousel";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import { getUser } from "@/lib/auth";
+import { getPropertiById, deleteProperti, PropertiData } from "@/lib/api";
 
 
 export default function AdminDetailPropertiPage() {
@@ -144,19 +143,19 @@ export default function AdminDetailPropertiPage() {
 
   if (loading) {
     return (
-      <MainLayout>
+      <>
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 bg-gray-200 rounded" />
           <div className="h-64 bg-gray-200 rounded-xl" />
           <div className="h-4 w-3/4 bg-gray-200 rounded" />
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   if (!properti) {
     return (
-      <MainLayout>
+      <>
         <div className="text-center py-12">
           <p className="text-lg text-gray-500">Properti tidak ditemukan</p>
           <Link
@@ -166,14 +165,14 @@ export default function AdminDetailPropertiPage() {
             Kembali ke Daftar Properti
           </Link>
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   return (
-    <MainLayout>
+    <>
       {/* Header */}
-      <div className="mb-6">
+      <div className="mt-6 md:mt-0 mb-6">
         <div className="flex items-center justify-between mb-1">
           <button
             onClick={() => router.push("/administrator/properti")}
@@ -347,14 +346,14 @@ export default function AdminDetailPropertiPage() {
       {/* Delete Dialog */}
       <ConfirmDialog
         isOpen={showDeleteDialog}
-        onCancel={() => setShowDeleteDialog(false)}
-        onConfirm={handleDelete}
-        title="Hapus Properti"
-        message={`Properti "${properti.nama}" akan dihapus secara permanen. Pastikan tidak ada kamar atau penghuni aktif.`}
+        title="Hapus Properti?"
+        message="Properti ini akan dihapus permanen beserta seluruh datanya. Tindakan ini tidak bisa dibatalkan."
         confirmLabel="Hapus"
         cancelLabel="Batal"
         danger
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteDialog(false)}
       />
-    </MainLayout>
+    </>
   );
 }

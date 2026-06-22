@@ -2,10 +2,10 @@
 
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useToast } from "../../../../../lib/ToastContext";
+import { useToast } from "@/lib/ToastContext";
 import Link from "next/link";
 import { ArrowLeft, Search, SlidersHorizontal, Plus, Trash2, Pencil, ChevronDown, Users, Wrench, BedDouble } from "lucide-react";
-import { getUser } from "../../../../../lib/auth";
+import { getUser } from "@/lib/auth";
 import {
   getKamarByProperti,
   getPropertiById,
@@ -13,10 +13,9 @@ import {
   updateKamarStatus,
   KamarData,
   PropertiData,
-} from "../../../../../lib/api";
-import { useRealtime } from "../../../../../lib/useRealtime";
-import MainLayout from "../../../../../components/Layout/MainLayout";
-import ConfirmDialog from "../../../../../components/ConfirmDialog";
+} from "@/lib/api";
+import { useRealtime } from "@/lib/useRealtime";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 const statusConfig = {
   KOSONG: { label: "Kosong", color: "bg-green-100 text-green-700" },
@@ -138,7 +137,7 @@ export default function AdminDaftarKamarPage() {
 
   if (loading) {
     return (
-      <MainLayout>
+      <>
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 bg-gray-200 rounded" />
           <div className="h-12 bg-gray-200 rounded-xl" />
@@ -148,13 +147,13 @@ export default function AdminDaftarKamarPage() {
             ))}
           </div>
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   return (
-    <MainLayout>
-      <div className="mb-6">
+    <>
+      <div className="mt-6 md:mt-0 mb-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <button
@@ -343,6 +342,6 @@ export default function AdminDaftarKamarPage() {
         cancelLabel="Batal"
         danger
       />
-    </MainLayout>
+    </>
   );
 }

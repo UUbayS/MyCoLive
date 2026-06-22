@@ -11,6 +11,7 @@ import MainLayout from "../../../../components/Layout/MainLayout";
 import SingleDatePickerModal from "../../../../components/ui/SingleDatePickerModal";
 
 export default function PesanKamarPage() {
+  console.log("PesanKamarPage rendered");
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();

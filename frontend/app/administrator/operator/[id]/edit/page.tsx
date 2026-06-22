@@ -148,7 +148,7 @@ export default function EditOperatorPage() {
   }
 
   return (
-    <MainLayout>
+    <>
       <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
         <div className="flex items-center gap-3 mb-6">
           <button
@@ -226,6 +226,6 @@ export default function EditOperatorPage() {
           </button>
         </form>
       </div>
-    </MainLayout>
+    </>
   );
 }
