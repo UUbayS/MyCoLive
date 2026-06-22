@@ -18,6 +18,7 @@ import {
   Edit,
   Eye,
   EyeOff,
+  ArrowLeft,
 } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
 import OperatorTabs from "@/components/OperatorTabs";
@@ -94,19 +95,19 @@ export default function DetailOperatorPage() {
 
   if (loading) {
     return (
-      <MainLayout>
+      <>
         <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8 animate-pulse space-y-4">
           <div className="h-8 w-48 bg-gray-200 rounded" />
           <div className="h-40 bg-gray-200 rounded-xl" />
           <div className="h-32 bg-gray-200 rounded-xl" />
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   if (!operator) {
     return (
-      <MainLayout>
+      <>
         <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8 text-center text-gray-500">
           <Shield className="w-12 h-12 mx-auto mb-2 text-gray-300" />
           <p>Operator tidak ditemukan</p>
@@ -118,17 +119,22 @@ export default function DetailOperatorPage() {
             Kembali ke Daftar Operator
           </Link>
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   return (
-    <MainLayout>
+    <>
       <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <div>
-            <h1 className="text-xl md:text-2xl font-bold text-gray-900">Operator Properti</h1>
-            <h2 className="hidden md:block text-base font-medium text-gray-600 mt-1">Operator Properti — Detail Operator</h2>
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.back()}
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">Detail Operator</h1>
           </div>
           <Link
             href={`/administrator/operator/${operatorId}/edit`}
@@ -139,18 +145,6 @@ export default function DetailOperatorPage() {
             <span className="md:hidden">Edit</span>
           </Link>
         </div>
-        <div className="md:hidden">
-          <OperatorTabs />
-        </div>
-
-        {/* Back Button */}
-        <Link
-          href="/administrator/operator/daftar"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          Kembali
-        </Link>
 
         {/* Profile Card */}
         <div className="bg-white rounded-xl shadow-sm p-4 md:p-5 mb-4">
@@ -320,7 +314,7 @@ export default function DetailOperatorPage() {
         onConfirm={handleDelete}
         onCancel={() => setShowDeleteConfirm(false)}
       />
-    </MainLayout>
+    </>
   );
 }
 

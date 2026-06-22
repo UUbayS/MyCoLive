@@ -12,6 +12,7 @@ import {
   MapPin,
   Calendar,
   Megaphone,
+  SlidersHorizontal,
 } from "lucide-react";
 import MainLayout from "@/components/Layout/MainLayout";
 import PenghuniTabs from "@/components/PenghuniTabs";
@@ -37,6 +38,7 @@ export default function DaftarPenghuniPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [propertiFilter, setPropertiFilter] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const fetchedRef = useRef(false);
 
   const fetchData = useCallback(async () => {
@@ -105,33 +107,37 @@ export default function DaftarPenghuniPage() {
   }, [search, statusFilter, propertiFilter, penghuniList]);
 
   return (
-    <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
-        <h1 className="md:hidden text-xl md:text-2xl font-bold text-gray-900 mb-2">Penghuni Properti</h1>
-        <h1 className="hidden md:block text-xl md:text-2xl font-bold text-gray-900 mb-2">Daftar Penghuni</h1>
-        <div className="md:hidden">
-          <PenghuniTabs />
-        </div>
-
-        {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-4 mt-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Cari nama, email, atau no. telepon..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent"
-            />
+    <>
+      {/* Filters */}
+        <div className="flex flex-col md:flex-row gap-3 mb-4 mt-4 items-start md:items-center">
+          <div className="flex flex-row gap-3 w-full md:flex-1">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Cari nama, email, atau no. telepon..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] focus:border-transparent"
+              />
+            </div>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`md:hidden p-2 border rounded-xl hover:bg-gray-50 flex-shrink-0 flex items-center justify-center ${
+                showFilters ? "bg-[#84CC16]/10 border-[#84CC16] text-[#84CC16]" : "border-gray-300 text-gray-600"
+              }`}
+            >
+              <SlidersHorizontal className="w-5 h-5" />
+            </button>
           </div>
-          <div className="flex gap-2">
-            <div className="relative">
+
+          <div className={`${showFilters ? "flex" : "hidden"} md:flex flex-row gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 w-full md:w-auto md:overflow-visible`}>
+            <div className="relative shrink-0">
               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] bg-white appearance-none cursor-pointer"
+                className="pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] bg-white appearance-none cursor-pointer min-w-[140px]"
               >
                 <option value="">Semua Status</option>
                 <option value="Menyewa">Menyewa</option>
@@ -140,12 +146,12 @@ export default function DaftarPenghuniPage() {
                 <option value="PENGAJUAN_CHECKOUT">Pengajuan Checkout</option>
               </select>
             </div>
-            <div className="relative">
+            <div className="relative shrink-0">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <select
                 value={propertiFilter}
                 onChange={(e) => setPropertiFilter(e.target.value)}
-                className="pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] bg-white appearance-none cursor-pointer"
+                className="pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#84CC16] bg-white appearance-none cursor-pointer min-w-[150px]"
               >
                 <option value="">Semua Properti</option>
                 {propertiList.map((p) => (
@@ -233,7 +239,6 @@ export default function DaftarPenghuniPage() {
           <Megaphone className="w-6 h-6" />
           <span>Pengumuman</span>
         </Link>
-      </div>
-    </MainLayout>
+    </>
   );
 }

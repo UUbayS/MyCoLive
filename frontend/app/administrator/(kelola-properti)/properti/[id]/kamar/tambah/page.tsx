@@ -2,23 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useToast } from "../../../../../../../lib/ToastContext";
+import { useToast } from "@/lib/ToastContext";
 import { ArrowLeft } from "lucide-react";
-import ImageUploader from "../../../../../../../components/ImageUploader";
-import FacilityChips from "../../../../../../../components/FacilityChips";
-import FacilitySelectorModal from "../../../../../../../components/FacilitySelectorModal";
-import { getKamarById, updateKamar, KamarData, getFasilitasList, FasilitasData } from "../../../../../../../lib/api";
-import { getUser, isAuthenticated } from "../../../../../../../lib/auth";
-import MainLayout from "../../../../../../../components/Layout/MainLayout";
+import ImageUploader from "@/components/ImageUploader";
+import FacilityChips from "@/components/FacilityChips";
+import FacilitySelectorModal from "@/components/FacilitySelectorModal";
+import { createKamar, getFasilitasList, FasilitasData } from "@/lib/api";
+import { getUser, isAuthenticated } from "@/lib/auth";
 
-export default function EditKamarPage() {
+export default function TambahKamarPage() {
   const router = useRouter();
   const params = useParams();
-  const kamarId = params.kamarId as string;
   const propertiId = params.id as string;
 
   const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
   const [formData, setFormData] = useState({
     nomor: "",
     lantai: "",
@@ -46,46 +43,10 @@ export default function EditKamarPage() {
     if (user && user.role !== "PEMILIK") {
       router.push("/public/katalog-properti");
     }
+
+    // Load fasilitas untuk chips
+    getFasilitasList("RUANGAN").then(setFacilities);
   }, [router]);
-
-  useEffect(() => {
-    if (!kamarId) return;
-
-    const fetchKamar = async () => {
-      try {
-        const [data, fasilitasData] = await Promise.all([
-          getKamarById(kamarId),
-          getFasilitasList("RUANGAN"),
-        ]);
-        if (data) {
-          const luasParts = data.luas?.split(" - ") || [];
-          const lantai = luasParts[0] || "";
-          const ukuran = luasParts[1] || data.luas || "";
-          const tarif = typeof data.tarif === "object" && data.tarif ? data.tarif : {};
-
-          setFormData({
-            nomor: data.nomor || "",
-            lantai: lantai,
-            luas: ukuran,
-            fasilitas_ids: data.fasilitas_ruangan?.map((f) => f.id) || [],
-            deskripsi: data.deskripsi || "",
-            tarif1Bulan: tarif["1_bulan"] ? String(tarif["1_bulan"]) : "",
-            tarif3Bulan: tarif["3_bulan"] ? String(tarif["3_bulan"]) : "",
-            tarif6Bulan: tarif["6_bulan"] ? String(tarif["6_bulan"]) : "",
-            tarif12Bulan: tarif["12_bulan"] ? String(tarif["12_bulan"]) : "",
-            gambar: data.gambar || [],
-          });
-        }
-        setFacilities(fasilitasData);
-      } catch (err) {
-        console.error("Failed to fetch kamar:", err);
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    fetchKamar();
-  }, [kamarId]);
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -110,7 +71,7 @@ export default function EditKamarPage() {
 
       const luas = formData.luas ? `${formData.lantai} - ${formData.luas}` : formData.lantai;
 
-      const result = await updateKamar(kamarId, {
+      const result = await createKamar(propertiId, {
         nomor: formData.nomor,
         tipe: "REGULER",
         luas,
@@ -121,13 +82,13 @@ export default function EditKamarPage() {
       });
 
       if (result) {
-        router.push(`/administrator/properti/${propertiId}/kamar/${kamarId}`);
+        router.push(`/administrator/properti/${propertiId}/kamar`);
       } else {
-        error("Gagal mengupdate kamar. Silakan coba lagi.");
+        error("Gagal menambahkan kamar. Silakan coba lagi.");
       }
     } catch (err) {
-      console.error("Update kamar error:", err);
-      error("Terjadi kesalahan saat mengupdate kamar.");
+      console.error("Create kamar error:", err);
+      error("Terjadi kesalahan saat menambahkan kamar.");
     } finally {
       setLoading(false);
     }
@@ -143,24 +104,9 @@ export default function EditKamarPage() {
     return value.replace(/\D/g, "");
   };
 
-  if (fetching) {
-    return (
-      <MainLayout>
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 w-48 bg-gray-200 rounded" />
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-12 bg-gray-200 rounded-xl" />
-            ))}
-          </div>
-        </div>
-      </MainLayout>
-    );
-  }
-
   return (
-    <MainLayout>
-      <div className="mb-6">
+    <>
+      <div className="mt-6 md:mt-0 mb-6">
         <div className="flex items-center gap-3 mb-6">
           <button
             onClick={() => router.back()}
@@ -168,7 +114,7 @@ export default function EditKamarPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-xl font-semibold">Edit Kamar</h1>
+          <h1 className="text-xl font-semibold">Tambah Kamar</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -314,10 +260,10 @@ export default function EditKamarPage() {
             disabled={loading}
             className="w-full bg-[#84CC16] text-white py-3 rounded-xl font-medium hover:bg-[#73b814] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Menyimpan..." : "Simpan Perubahan"}
+            {loading ? "Menyimpan..." : "Tambah Kamar Kos"}
           </button>
         </form>
       </div>
-    </MainLayout>
+    </>
   );
 }

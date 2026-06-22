@@ -194,7 +194,7 @@ export default function RequestDanaPengelolaPage() {
           <h1 className="text-xl md:text-2xl font-bold text-gray-900">Request Dana</h1>
           <button
             onClick={() => setShowModal(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#84CC16] text-white text-sm font-medium rounded-xl hover:bg-[#73b814] transition-colors"
+            className="hidden md:flex items-center gap-1.5 px-4 py-2 bg-[#84CC16] text-white text-sm font-medium rounded-xl hover:bg-[#73b814] transition-colors"
           >
             <Plus className="w-4 h-4" />
             Ajukan Dana
@@ -266,21 +266,21 @@ export default function RequestDanaPengelolaPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mb-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 p-3 bg-gray-50 rounded-lg">
                     <div>
                       <p className="text-xs text-gray-500">Jumlah</p>
                       <p className="text-base md:text-lg font-bold text-gray-900">
                         Rp {(d.jumlah || 0).toLocaleString("id-ID")}
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right border-t border-gray-200 pt-2 sm:border-0 sm:pt-0">
                       <p className="text-xs text-gray-500">No. Rekening</p>
-                      <div className="flex items-center gap-2 justify-end mt-1">
-                        <p className="text-sm font-medium text-gray-900">{d.no_rekening}</p>
+                      <div className="flex items-center gap-2 justify-start sm:justify-end mt-1">
+                        <p className="text-sm font-medium text-gray-900 break-all sm:break-normal">{d.no_rekening}</p>
                         <button
                           type="button"
                           onClick={() => handleCopy(d.no_rekening)}
-                          className="text-[#84CC16] hover:text-[#73b814] p-1 rounded hover:bg-[#84CC16]/10 transition-colors"
+                          className="text-[#84CC16] hover:text-[#73b814] p-1 rounded hover:bg-[#84CC16]/10 transition-colors shrink-0"
                           title="Salin No. Rekening"
                         >
                           <Copy className="w-4 h-4" />
@@ -314,6 +314,14 @@ export default function RequestDanaPengelolaPage() {
           </div>
         )}
       </div>
+
+      <button
+        onClick={() => setShowModal(true)}
+        className="md:hidden fixed bottom-24 right-4 p-4 bg-[#84CC16] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#73b814] transition-colors z-40"
+      >
+        <Plus className="w-4 h-4" />
+        Ajukan Dana
+      </button>
 
       {/* Modal Ajukan Dana */}
       <Modal

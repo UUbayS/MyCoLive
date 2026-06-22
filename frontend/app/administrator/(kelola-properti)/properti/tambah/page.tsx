@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useToast } from "../../../../lib/ToastContext";
+import { useToast } from "@/lib/ToastContext";
 import { ArrowLeft } from "lucide-react";
-import ImageUploader from "../../../../components/ImageUploader";
-import AddressFields from "../../../../components/AddressFields";
-import FacilityChips from "../../../../components/FacilityChips";
-import FacilitySelectorModal from "../../../../components/FacilitySelectorModal";
-import { createProperti, getFasilitasList, FasilitasData } from "../../../../lib/api";
-import { getUser, isAuthenticated } from "../../../../lib/auth";
-import MainLayout from "../../../../components/Layout/MainLayout";
+import ImageUploader from "@/components/ImageUploader";
+import AddressFields from "@/components/AddressFields";
+import FacilityChips from "@/components/FacilityChips";
+import FacilitySelectorModal from "@/components/FacilitySelectorModal";
+import { createProperti, getFasilitasList, FasilitasData } from "@/lib/api";
+import { getUser, isAuthenticated } from "@/lib/auth";
 
 export default function TambahPropertiPage() {
   const router = useRouter();
@@ -96,8 +95,8 @@ export default function TambahPropertiPage() {
   };
 
   return (
-    <MainLayout>
-      <div className="mb-6">
+    <>
+      <div className="mt-6 md:mt-0 mb-6">
         <div className="flex items-center gap-3 mb-6">
           <button
             onClick={() => router.back()}
@@ -213,6 +212,6 @@ export default function TambahPropertiPage() {
           </button>
         </form>
       </div>
-    </MainLayout>
+    </>
   );
 }

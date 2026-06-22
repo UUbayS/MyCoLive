@@ -82,19 +82,19 @@ export default function DetailPenghuniPage() {
 
   if (loading) {
     return (
-      <MainLayout>
+      <>
         <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8 animate-pulse space-y-4">
           <div className="h-8 w-48 bg-gray-200 rounded" />
           <div className="h-40 bg-gray-200 rounded-xl" />
           <div className="h-32 bg-gray-200 rounded-xl" />
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   if (!penghuni) {
     return (
-      <MainLayout>
+      <>
         <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8 text-center text-gray-500">
           <User className="w-12 h-12 mx-auto mb-2 text-gray-300" />
           <p>Penghuni tidak ditemukan</p>
@@ -106,7 +106,7 @@ export default function DetailPenghuniPage() {
             Kembali ke Daftar Penghuni
           </Link>
         </div>
-      </MainLayout>
+      </>
     );
   }
 
@@ -118,7 +118,7 @@ export default function DetailPenghuniPage() {
   const pemesananList = (penghuni as any).pemesanan || [];
 
   return (
-    <MainLayout>
+    <>
       <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
         {/* Header: Back + Title */}
         <div className="flex items-center justify-between mb-4">
@@ -291,6 +291,6 @@ export default function DetailPenghuniPage() {
           )}
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }

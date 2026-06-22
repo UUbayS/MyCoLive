@@ -3,11 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, Building2, Wind, Loader2, Check, Edit, X } from "lucide-react";
-import MainLayout from "../../../components/Layout/MainLayout";
-import ConfirmDialog from "../../../components/ConfirmDialog";
-import { getUser, isAuthenticated } from "../../../lib/auth";
-import { getFasilitasList, createFasilitas, updateFasilitas, deleteFasilitas, FasilitasData } from "../../../lib/api";
-import PropertiTabs from "@/components/PropertiTabs";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import { getUser, isAuthenticated } from "@/lib/auth";
+import { getFasilitasList, createFasilitas, updateFasilitas, deleteFasilitas, FasilitasData } from "@/lib/api";
 
 export default function AdminFasilitasPage() {
   const router = useRouter();
@@ -91,21 +89,8 @@ export default function AdminFasilitasPage() {
   };
 
   return (
-    <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
-        <div className="md:hidden flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Properti Saya</h1>
-            <p className="text-sm text-gray-500 mt-1">Kelola semua properti dan kamar Anda</p>
-          </div> 
-        </div>
-        <div className="hidden md:block items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Kelola Fasilitas</h1>
-        </div>
-        <div className="md:hidden">
-          <PropertiTabs />
-        </div>
-
+    <>
+      <div className="max-w-7xl">
         {/* Tabs */}
         <div className="flex gap-2 mb-6">
           {["UMUM", "RUANGAN"].map((tab) => (
@@ -140,12 +125,12 @@ export default function AdminFasilitasPage() {
             value={newFacilityName}
             onChange={(e) => setNewFacilityName(e.target.value)}
             placeholder={`Tambah fasilitas ${activeTab === "UMUM" ? "umum" : "ruangan"}...`}
-            className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16]"
+            className="flex-1 min-w-0 px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16]"
           />
           <button
             type="submit"
             disabled={submitting || !newFacilityName.trim()}
-            className="flex items-center gap-2 px-4 py-2.5 bg-[#84CC16] text-white rounded-xl text-sm font-medium hover:bg-[#73b814] transition-colors disabled:opacity-50"
+            className="shrink-0 flex items-center gap-2 px-4 py-2.5 bg-[#84CC16] text-white rounded-xl text-sm font-medium hover:bg-[#73b814] transition-colors disabled:opacity-50"
           >
             {submitting ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -236,13 +221,16 @@ export default function AdminFasilitasPage() {
       <ConfirmDialog
         isOpen={showConfirmDialog}
         title="Hapus Fasilitas?"
-        message="Fasilitas ini akan dihapus secara permanen."
+        message="Fasilitas ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan."
         confirmLabel="Hapus"
         cancelLabel="Batal"
-        danger={true}
+        danger
         onConfirm={() => { actualDelete(itemToDelete); setShowConfirmDialog(false); }}
-        onCancel={() => setShowConfirmDialog(false)}
+        onCancel={() => {
+          setShowConfirmDialog(false);
+          setItemToDelete(null);
+        }}
       />
-    </MainLayout>
+    </>
   );
 }

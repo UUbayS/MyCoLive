@@ -157,16 +157,17 @@ export default function FacilitySelectorModal({
               value={newFacility}
               onChange={(e) => setNewFacility(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddFacility()}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16]"
+              className="flex-1 min-w-0 px-4 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#84CC16]"
             />
             <button
               type="button"
               onClick={handleAddFacility}
               disabled={!newFacility.trim()}
-              className="flex items-center gap-2 px-4 py-2 bg-[#84CC16] text-white rounded-xl text-sm font-medium hover:bg-[#73b814] transition-colors disabled:opacity-50"
+              className="shrink-0 flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-[#84CC16] text-white rounded-xl text-sm font-medium hover:bg-[#73b814] transition-colors disabled:opacity-50"
             >
               <Plus className="w-4 h-4" />
-              Tambah
+              <span className="hidden sm:inline">Tambah</span>
+              <span className="sm:hidden">Tambah</span>
             </button>
           </div>
 

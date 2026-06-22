@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check } from "lucide-react";
-import { getPropertiById } from "../../../../../lib/api";
-import MainLayout from "../../../../../components/Layout/MainLayout";
+import { getPropertiById } from "@/lib/api";
 
 export default function FasilitasPropertiPage() {
   const router = useRouter();
@@ -39,7 +38,7 @@ export default function FasilitasPropertiPage() {
 
   if (loading) {
     return (
-      <MainLayout>
+      <>
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 bg-gray-200 rounded" />
           <div className="space-y-2">
@@ -48,12 +47,12 @@ export default function FasilitasPropertiPage() {
             ))}
           </div>
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   return (
-    <MainLayout>
+    <>
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-6">
           <button
@@ -88,6 +87,6 @@ export default function FasilitasPropertiPage() {
           </div>
         )}
       </div>
-    </MainLayout>
+    </>
   );
 }

@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useToast } from "../../../../../lib/ToastContext";
+import { useToast } from "@/lib/ToastContext";
 import { ArrowLeft } from "lucide-react";
-import ImageUploader from "../../../../../components/ImageUploader";
-import AddressFields from "../../../../../components/AddressFields";
-import FacilityChips from "../../../../../components/FacilityChips";
-import FacilitySelectorModal from "../../../../../components/FacilitySelectorModal";
-import { getPropertiById, updateProperti, getFasilitasList, FasilitasData } from "../../../../../lib/api";
-import { getUser, isAuthenticated } from "../../../../../lib/auth";
-import MainLayout from "../../../../../components/Layout/MainLayout";
+import ImageUploader from "@/components/ImageUploader";
+import AddressFields from "@/components/AddressFields";
+import FacilityChips from "@/components/FacilityChips";
+import FacilitySelectorModal from "@/components/FacilitySelectorModal";
+import { getPropertiById, updateProperti, getFasilitasList, FasilitasData } from "@/lib/api";
+import { getUser, isAuthenticated } from "@/lib/auth";
 
 export default function EditPropertiPage() {
   const router = useRouter();
@@ -133,7 +132,7 @@ export default function EditPropertiPage() {
 
   if (fetching) {
     return (
-      <MainLayout>
+      <>
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 bg-gray-200 rounded" />
           <div className="space-y-3">
@@ -142,13 +141,13 @@ export default function EditPropertiPage() {
             ))}
           </div>
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   return (
-    <MainLayout>
-      <div className="mb-6">
+    <>
+      <div className="mt-6 md:mt-0 mb-6">
         <div className="flex items-center gap-3 mb-6">
           <button
             onClick={() => router.back()}
@@ -264,6 +263,6 @@ export default function EditPropertiPage() {
           </button>
         </form>
       </div>
-    </MainLayout>
+    </>
   );
 }

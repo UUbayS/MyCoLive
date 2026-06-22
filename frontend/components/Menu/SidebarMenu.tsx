@@ -118,7 +118,7 @@ export default function SidebarMenu() {
   }
 
   return (
-    <aside className="hidden md:flex md:flex-col md:sticky md:top-20 md:h-[calc(100vh-4rem)] md:w-64 md:border-r md:border-slate-100 md:bg-white md:pt-safe-top">
+    <aside className="hidden md:flex md:flex-col md:sticky md:top-21 md:self-start md:h-[calc(100vh-4rem)] md:w-64 md:border-r md:border-slate-100 md:bg-white md:pt-safe-top">
       <div className="flex flex-col h-full">
         <nav className="flex-1 overflow-y-auto py-4 px-3">
           <ul className="space-y-1">
