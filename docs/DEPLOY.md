@@ -309,13 +309,17 @@ docker compose up -d --build
 ### Backup database
 
 ```bash
-docker compose exec -T db pg_dump -U mycolive comprodb > backup_$(date +%F).sql
+# Load env vars dari .env dulu, lalu backup
+set -a && source .env && set +a
+docker compose exec -T db pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB" > backup_$(date +%F).sql
 ```
 
 ### Restore database
 
 ```bash
-cat backup_2026-06-18.sql | docker compose exec -T db psql -U mycolive comprodb
+# Load env vars, lalu restore
+set -a && source .env && set +a
+cat backup_2026-06-18.sql | docker compose exec -T db psql -U "$POSTGRES_USER" "$POSTGRES_DB"
 ```
 
 ### Hapus semua (termasuk data)
@@ -380,7 +384,7 @@ docker compose build --no-cache backend
 ### 8.5 Koneksi database ditolak
 
 ```bash
-docker compose exec db pg_isready -U mycolive
+docker compose exec db pg_isready -U ${POSTGRES_USER:-mycolive}
 ```
 
 Kalau tidak ready, restart db:
@@ -389,7 +393,28 @@ Kalau tidak ready, restart db:
 docker compose restart db
 ```
 
-### 8.6 Disk penuh
+### 8.6 Error P1000: Authentication failed (password mismatch)
+
+**Gejala**: Backend restart loop dengan log `Error: P1000: Authentication failed against database server`.
+
+**Penyebab**: Password di `.env` berbeda dengan yang tersimpan di PostgreSQL. Ini terjadi kalau `.env` diubah setelah container `db` pertama kali dibuat — password tersimpan di volume `pgdata` dan tidak otomatis sinkron.
+
+**Fix A — Reset total (data hilang)**:
+
+```bash
+docker compose down -v
+docker compose up -d --build
+```
+
+Flag `-v` menghapus volume `pgdata`. DB akan dibuat ulang dengan password dari `.env` saat ini.
+
+**Fix B — Reset password DB (data aman)**:
+
+```bash
+docker compose exec db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "ALTER USER \"$POSTGRES_USER\" WITH PASSWORD '$POSTGRES_PASSWORD';"
+```
+
+### 8.7 Disk penuh
 
 ```bash
 docker system df

@@ -26,11 +26,6 @@ services:
     container_name: mycolive-backend
     restart: unless-stopped
     environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: ${POSTGRES_USER}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
-      DB_NAME: ${POSTGRES_DB}
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public
       JWT_SECRET: ${JWT_SECRET}
       WHATSAPP_PROVIDER: ${WHATSAPP_PROVIDER:-}
@@ -58,7 +53,6 @@ services:
     container_name: mycolive-frontend
     restart: unless-stopped
     environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
       NODE_ENV: production
     depends_on:
       backend:
@@ -83,8 +77,10 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - backend
-      - frontend
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
     networks:
       - internal
 
