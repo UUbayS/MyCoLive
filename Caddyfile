@@ -1,12 +1,8 @@
-# Caddyfile - reverse proxy untuk MyCoLive
-# HTTP only (akses via IP publik, tanpa domain/TLS)
-
-:80 {
+mycolive.my.id {
     log {
         output stdout
     }
 
-    # /api/* diteruskan ke backend (Hono)
     handle /api/* {
         reverse_proxy backend:3000 {
             header_up Host {host}
@@ -16,7 +12,6 @@
         }
     }
 
-    # Sisanya ke frontend (Next.js)
     handle {
         reverse_proxy frontend:3000 {
             header_up Host {host}
