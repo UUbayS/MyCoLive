@@ -324,14 +324,15 @@ model Komplain {
 }
 
 model PengajuanDana {
-  id          String     @id @default(cuid())
-  tujuan      String
-  jumlah      Int
-  no_rekening String
-  foto        String?
-  status      StatusDana @default(MENUNGGU)
-  created_at  DateTime   @default(now())
-  updated_at  DateTime   @updatedAt
+  id             String     @id @default(cuid())
+  tujuan         String
+  jumlah         Int
+  no_rekening    String
+  foto           String?
+  bukti_transfer String?
+  status         StatusDana @default(MENUNGGU)
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
 
   operator_id String
   operator    Operator @relation(fields: [operator_id], references: [id])

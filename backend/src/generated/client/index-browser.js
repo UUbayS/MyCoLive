@@ -278,6 +278,7 @@ exports.Prisma.PengajuanDanaScalarFieldEnum = {
   jumlah: 'jumlah',
   no_rekening: 'no_rekening',
   foto: 'foto',
+  bukti_transfer: 'bukti_transfer',
   status: 'status',
   created_at: 'created_at',
   updated_at: 'updated_at',

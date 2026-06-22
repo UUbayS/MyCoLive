@@ -2,8 +2,10 @@
   "name": "backend",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
+    "start": "bun run src/index.ts",
     "db:generate": "bunx prisma generate",
     "db:migrate": "bunx prisma migrate dev",
+    "db:migrate:deploy": "bunx prisma migrate deploy",
     "db:push": "bunx prisma db push",
     "db:seed": "bun run prisma/seed.ts",
     "db:studio": "bunx prisma studio"
@@ -13,6 +15,7 @@
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "@whiskeysockets/baileys": "^7.0.0-rc13",
     "bcryptjs": "^2.4.3",
     "hono": "^4.12.15",
@@ -22,7 +25,6 @@
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
-    "@prisma/client": "^7.8.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/bun": "latest",
     "@types/jsonwebtoken": "^9.0.6",

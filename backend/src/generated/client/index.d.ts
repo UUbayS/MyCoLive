@@ -18274,6 +18274,7 @@ export namespace Prisma {
     jumlah: number | null
     no_rekening: string | null
     foto: string | null
+    bukti_transfer: string | null
     status: $Enums.StatusDana | null
     created_at: Date | null
     updated_at: Date | null
@@ -18287,6 +18288,7 @@ export namespace Prisma {
     jumlah: number | null
     no_rekening: string | null
     foto: string | null
+    bukti_transfer: string | null
     status: $Enums.StatusDana | null
     created_at: Date | null
     updated_at: Date | null
@@ -18300,6 +18302,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: number
     foto: number
+    bukti_transfer: number
     status: number
     created_at: number
     updated_at: number
@@ -18323,6 +18326,7 @@ export namespace Prisma {
     jumlah?: true
     no_rekening?: true
     foto?: true
+    bukti_transfer?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -18336,6 +18340,7 @@ export namespace Prisma {
     jumlah?: true
     no_rekening?: true
     foto?: true
+    bukti_transfer?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -18349,6 +18354,7 @@ export namespace Prisma {
     jumlah?: true
     no_rekening?: true
     foto?: true
+    bukti_transfer?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -18449,6 +18455,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto: string | null
+    bukti_transfer: string | null
     status: $Enums.StatusDana
     created_at: Date
     updated_at: Date
@@ -18481,6 +18488,7 @@ export namespace Prisma {
     jumlah?: boolean
     no_rekening?: boolean
     foto?: boolean
+    bukti_transfer?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -18496,6 +18504,7 @@ export namespace Prisma {
     jumlah?: boolean
     no_rekening?: boolean
     foto?: boolean
+    bukti_transfer?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -18511,6 +18520,7 @@ export namespace Prisma {
     jumlah?: boolean
     no_rekening?: boolean
     foto?: boolean
+    bukti_transfer?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -18526,6 +18536,7 @@ export namespace Prisma {
     jumlah?: boolean
     no_rekening?: boolean
     foto?: boolean
+    bukti_transfer?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -18533,7 +18544,7 @@ export namespace Prisma {
     properti_id?: boolean
   }
 
-  export type PengajuanDanaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tujuan" | "jumlah" | "no_rekening" | "foto" | "status" | "created_at" | "updated_at" | "operator_id" | "properti_id", ExtArgs["result"]["pengajuanDana"]>
+  export type PengajuanDanaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tujuan" | "jumlah" | "no_rekening" | "foto" | "bukti_transfer" | "status" | "created_at" | "updated_at" | "operator_id" | "properti_id", ExtArgs["result"]["pengajuanDana"]>
   export type PengajuanDanaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     operator?: boolean | OperatorDefaultArgs<ExtArgs>
     properti?: boolean | PropertiDefaultArgs<ExtArgs>
@@ -18559,6 +18570,7 @@ export namespace Prisma {
       jumlah: number
       no_rekening: string
       foto: string | null
+      bukti_transfer: string | null
       status: $Enums.StatusDana
       created_at: Date
       updated_at: Date
@@ -18994,6 +19006,7 @@ export namespace Prisma {
     readonly jumlah: FieldRef<"PengajuanDana", 'Int'>
     readonly no_rekening: FieldRef<"PengajuanDana", 'String'>
     readonly foto: FieldRef<"PengajuanDana", 'String'>
+    readonly bukti_transfer: FieldRef<"PengajuanDana", 'String'>
     readonly status: FieldRef<"PengajuanDana", 'StatusDana'>
     readonly created_at: FieldRef<"PengajuanDana", 'DateTime'>
     readonly updated_at: FieldRef<"PengajuanDana", 'DateTime'>
@@ -22976,6 +22989,7 @@ export namespace Prisma {
     jumlah: 'jumlah',
     no_rekening: 'no_rekening',
     foto: 'foto',
+    bukti_transfer: 'bukti_transfer',
     status: 'status',
     created_at: 'created_at',
     updated_at: 'updated_at',
@@ -24391,6 +24405,7 @@ export namespace Prisma {
     jumlah?: IntFilter<"PengajuanDana"> | number
     no_rekening?: StringFilter<"PengajuanDana"> | string
     foto?: StringNullableFilter<"PengajuanDana"> | string | null
+    bukti_transfer?: StringNullableFilter<"PengajuanDana"> | string | null
     status?: EnumStatusDanaFilter<"PengajuanDana"> | $Enums.StatusDana
     created_at?: DateTimeFilter<"PengajuanDana"> | Date | string
     updated_at?: DateTimeFilter<"PengajuanDana"> | Date | string
@@ -24406,6 +24421,7 @@ export namespace Prisma {
     jumlah?: SortOrder
     no_rekening?: SortOrder
     foto?: SortOrderInput | SortOrder
+    bukti_transfer?: SortOrderInput | SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -24424,6 +24440,7 @@ export namespace Prisma {
     jumlah?: IntFilter<"PengajuanDana"> | number
     no_rekening?: StringFilter<"PengajuanDana"> | string
     foto?: StringNullableFilter<"PengajuanDana"> | string | null
+    bukti_transfer?: StringNullableFilter<"PengajuanDana"> | string | null
     status?: EnumStatusDanaFilter<"PengajuanDana"> | $Enums.StatusDana
     created_at?: DateTimeFilter<"PengajuanDana"> | Date | string
     updated_at?: DateTimeFilter<"PengajuanDana"> | Date | string
@@ -24439,6 +24456,7 @@ export namespace Prisma {
     jumlah?: SortOrder
     no_rekening?: SortOrder
     foto?: SortOrderInput | SortOrder
+    bukti_transfer?: SortOrderInput | SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -24460,6 +24478,7 @@ export namespace Prisma {
     jumlah?: IntWithAggregatesFilter<"PengajuanDana"> | number
     no_rekening?: StringWithAggregatesFilter<"PengajuanDana"> | string
     foto?: StringNullableWithAggregatesFilter<"PengajuanDana"> | string | null
+    bukti_transfer?: StringNullableWithAggregatesFilter<"PengajuanDana"> | string | null
     status?: EnumStatusDanaWithAggregatesFilter<"PengajuanDana"> | $Enums.StatusDana
     created_at?: DateTimeWithAggregatesFilter<"PengajuanDana"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"PengajuanDana"> | Date | string
@@ -25857,6 +25876,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto?: string | null
+    bukti_transfer?: string | null
     status?: $Enums.StatusDana
     created_at?: Date | string
     updated_at?: Date | string
@@ -25870,6 +25890,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto?: string | null
+    bukti_transfer?: string | null
     status?: $Enums.StatusDana
     created_at?: Date | string
     updated_at?: Date | string
@@ -25883,6 +25904,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25896,6 +25918,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25909,6 +25932,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto?: string | null
+    bukti_transfer?: string | null
     status?: $Enums.StatusDana
     created_at?: Date | string
     updated_at?: Date | string
@@ -25922,6 +25946,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25933,6 +25958,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27218,6 +27244,7 @@ export namespace Prisma {
     jumlah?: SortOrder
     no_rekening?: SortOrder
     foto?: SortOrder
+    bukti_transfer?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -27235,6 +27262,7 @@ export namespace Prisma {
     jumlah?: SortOrder
     no_rekening?: SortOrder
     foto?: SortOrder
+    bukti_transfer?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -27248,6 +27276,7 @@ export namespace Prisma {
     jumlah?: SortOrder
     no_rekening?: SortOrder
     foto?: SortOrder
+    bukti_transfer?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -30734,6 +30763,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto?: string | null
+    bukti_transfer?: string | null
     status?: $Enums.StatusDana
     created_at?: Date | string
     updated_at?: Date | string
@@ -30746,6 +30776,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto?: string | null
+    bukti_transfer?: string | null
     status?: $Enums.StatusDana
     created_at?: Date | string
     updated_at?: Date | string
@@ -31013,6 +31044,7 @@ export namespace Prisma {
     jumlah?: IntFilter<"PengajuanDana"> | number
     no_rekening?: StringFilter<"PengajuanDana"> | string
     foto?: StringNullableFilter<"PengajuanDana"> | string | null
+    bukti_transfer?: StringNullableFilter<"PengajuanDana"> | string | null
     status?: EnumStatusDanaFilter<"PengajuanDana"> | $Enums.StatusDana
     created_at?: DateTimeFilter<"PengajuanDana"> | Date | string
     updated_at?: DateTimeFilter<"PengajuanDana"> | Date | string
@@ -32317,6 +32349,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto?: string | null
+    bukti_transfer?: string | null
     status?: $Enums.StatusDana
     created_at?: Date | string
     updated_at?: Date | string
@@ -32329,6 +32362,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto?: string | null
+    bukti_transfer?: string | null
     status?: $Enums.StatusDana
     created_at?: Date | string
     updated_at?: Date | string
@@ -33957,6 +33991,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto?: string | null
+    bukti_transfer?: string | null
     status?: $Enums.StatusDana
     created_at?: Date | string
     updated_at?: Date | string
@@ -34141,6 +34176,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34153,6 +34189,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34165,6 +34202,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34523,6 +34561,7 @@ export namespace Prisma {
     jumlah: number
     no_rekening: string
     foto?: string | null
+    bukti_transfer?: string | null
     status?: $Enums.StatusDana
     created_at?: Date | string
     updated_at?: Date | string
@@ -34535,6 +34574,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34547,6 +34587,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34559,6 +34600,7 @@ export namespace Prisma {
     jumlah?: IntFieldUpdateOperationsInput | number
     no_rekening?: StringFieldUpdateOperationsInput | string
     foto?: NullableStringFieldUpdateOperationsInput | string | null
+    bukti_transfer?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStatusDanaFieldUpdateOperationsInput | $Enums.StatusDana
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string

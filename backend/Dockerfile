@@ -4,7 +4,7 @@ FROM oven/bun:1.3-alpine AS deps
 
 WORKDIR /app
 
-COPY package.json bun.lock* ./
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 # ---------- Stage 2: build ----------
@@ -36,9 +36,12 @@ COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/prisma.config.ts ./prisma.config.ts
 
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
   CMD curl -fsS http://localhost:3000/ || exit 1
 
-CMD ["bun", "run", "src/index.ts"]
+ENTRYPOINT ["docker-entrypoint.sh"]
